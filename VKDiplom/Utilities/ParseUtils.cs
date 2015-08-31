@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
-namespace VKDiplom.Utils
+namespace VKDiplom.Utilities
 {
     public static class ParseUtils
     {
@@ -83,7 +83,7 @@ namespace VKDiplom.Utils
         {
             //const int KEYCODE_Hyphen_OnKeyboard = 189;
 
-
+            
             e.Handled = !(
                 (!( //No modifier key must be pressed
                     (System.Windows.Input.Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift

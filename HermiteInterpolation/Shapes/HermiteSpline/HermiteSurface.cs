@@ -15,84 +15,47 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
     public class HermiteSurface : ISurface
     {
         //private readonly float _meshDensity;
-        private readonly List<ISurface> _segments;
         // private readonly HermiteType _type;
-        private readonly int _uCount;
-        private readonly double _uMax;
-        private readonly double _uMin;
-        private readonly int _vCount;
-        private readonly double _vMax;
-        private readonly double _vMin;
         private DrawStyle _drawStyle;
 //        public HermiteType Type {
 //            get { return _type; }
 //        }
 
+        private readonly SurfaceDimension _uDimension;
+        private readonly SurfaceDimension _vDimension;
+
         private float? _maxHeight;
         private float? _minHeight;
+    
 
-        internal HermiteSurface(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount,
+        internal HermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
             List<ISurface> segments, Derivation derivation)
         {
-            _segments = segments;
+            Segments = segments;
             //_meshDensity = 0.1f;
-            _uMin = uMin;
-            _uMax = uMax;
-
-            _uCount = uCount;
-            _vMin = vMin;
-            _vMax = vMax;
-
-
-            _vCount = vCount;
-
+            _uDimension = uDimension;
+            _vDimension = vDimension;
             Derivation = derivation;
         }
 
-        public double UMinKnot
-        {
-            get { return _uMin; }
-        }
 
-        public double UMaxKnot
-        {
-            get { return _uMax; }
-        }
+        public double UMinKnot => _uDimension.Min;
 
-        public int UKnotsCount
-        {
-            get { return _uCount; }
-        }
+        public double UMaxKnot => _uDimension.Max;
 
-        public double VMinKnot
-        {
-            get { return _vMin; }
-        }
+        public int UKnotsCount => _uDimension.KnotCount;
 
-        public double VMaxKnot
-        {
-            get { return _vMax; }
-        }
+        public double VMinKnot => _vDimension.Min;
+        public double VMaxKnot => _vDimension.Max;
 
-        public int VKnotsCount
-        {
-            get { return _vCount; }
-        }
+        public int VKnotsCount => _vDimension.KnotCount;
 
-        public double UKnotsDistance
-        {
-            get { return Math.Abs(_uMax - _uMin)/(_uCount - 1); }
-        }
 
-        public double VKnotsDistance
-        {
-            get { return Math.Abs(_vMax - _vMin)/(_vCount - 1); }
-        }
+        public double UKnotsDistance => Math.Abs(UMaxKnot - UMinKnot)/(UKnotsCount - 1);
 
-        protected List<ISurface> Segments
-        {
-            get { return _segments; }
-        }
+        public double VKnotsDistance => Math.Abs(VMaxKnot - VMinKnot)/(VKnotsCount - 1);
+
+        protected List<ISurface> Segments { get; }
 
         public Derivation Derivation { get; protected set; }
 //        public float MeshDensity

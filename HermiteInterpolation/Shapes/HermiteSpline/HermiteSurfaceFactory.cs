@@ -8,46 +8,46 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
     public static class HermiteSurfaceFactory
     {
 
-        public static HermiteSurface CreateBicubic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction interpolatedFunction)
+        public static HermiteSurface CreateBicubic(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolatedFunction interpolatedFunction)
         {
-            return new BicubicMeshGenerator(uMin, uMax, uCount, vMin, vMax, vCount, KnotsGeneratorFactory.DefaultImplementation(interpolatedFunction), Derivation.Zero).CreateSurface();
+            return new BicubicMeshGenerator(uDimension, vDimension, KnotsGeneratorFactory.DefaultImplementation(interpolatedFunction), Derivation.Zero).CreateSurface();
         }
 
-        public static HermiteSurface CreateBicubic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, IKnotsGenerator knotsGenerator)
+        public static HermiteSurface CreateBicubic(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotsGenerator knotsGenerator)
         {
-            return new BicubicMeshGenerator(uMin, uMax, uCount, vMin, vMax, vCount, knotsGenerator, Derivation.Zero).CreateSurface();
+            return new BicubicMeshGenerator(uDimension, vDimension, knotsGenerator, Derivation.Zero).CreateSurface();
         }
 
-        public static HermiteSurface CreateBicubic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction interpolatedFunction, Derivation derivation)
+        public static HermiteSurface CreateBicubic(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolatedFunction interpolatedFunction, Derivation derivation)
         {
-            var gen = new BicubicMeshGenerator(uMin, uMax, uCount, vMin, vMax, vCount, KnotsGeneratorFactory.DefaultImplementation(interpolatedFunction), derivation);
+            var gen = new BicubicMeshGenerator(uDimension, vDimension, KnotsGeneratorFactory.DefaultImplementation(interpolatedFunction), derivation);
             return gen.CreateSurface();
         }
-        public static HermiteSurface CreateBicubic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, IKnotsGenerator knotsGenerator, Derivation derivation)
+        public static HermiteSurface CreateBicubic(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotsGenerator knotsGenerator, Derivation derivation)
         {
-            var gen = new BicubicMeshGenerator(uMin, uMax, uCount, vMin, vMax, vCount, knotsGenerator, derivation);
-            return gen.CreateSurface();
-        }
-
-        public static HermiteSurface CreateBiquartic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction interpolatedFunction)
-        {
-            return new BiquarticMeshGenerator(uMin, uMax, uCount, vMin, vMax, vCount, interpolatedFunction, KnotsGeneratorFactory.DefaultImplementation(interpolatedFunction), Derivation.Zero).CreateSurface();
-        }
-
-        public static HermiteSurface CreateBiquartic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction interpolatedFunction, IKnotsGenerator knotsGenerator)
-        {
-            return new BiquarticMeshGenerator(uMin, uMax, uCount, vMin, vMax, vCount, interpolatedFunction, knotsGenerator, Derivation.Zero).CreateSurface();
-        }
-
-        public static HermiteSurface CreateBiquartic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction interpolatedFunction, Derivation derivation)
-        {
-            var gen = new BiquarticMeshGenerator(uMin, uMax, uCount, vMin, vMax, vCount, interpolatedFunction, KnotsGeneratorFactory.DefaultImplementation(interpolatedFunction), derivation);
+            var gen = new BicubicMeshGenerator(uDimension, vDimension, knotsGenerator, derivation);
             return gen.CreateSurface();
         }
 
-        public static HermiteSurface CreateBiquartic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction interpolatedFunction, IKnotsGenerator knotsGenerator, Derivation derivation)
+        public static HermiteSurface CreateBiquartic(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolatedFunction interpolatedFunction)
         {
-            var gen = new BiquarticMeshGenerator(uMin, uMax, uCount, vMin, vMax, vCount, interpolatedFunction, knotsGenerator, derivation);
+            return new BiquarticMeshGenerator(uDimension, vDimension, interpolatedFunction, KnotsGeneratorFactory.DefaultImplementation(interpolatedFunction), Derivation.Zero).CreateSurface();
+        }
+
+        public static HermiteSurface CreateBiquartic(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolatedFunction interpolatedFunction, KnotsGenerator knotsGenerator)
+        {
+            return new BiquarticMeshGenerator(uDimension, vDimension, interpolatedFunction, knotsGenerator, Derivation.Zero).CreateSurface();
+        }
+
+        public static HermiteSurface CreateBiquartic(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolatedFunction interpolatedFunction, Derivation derivation)
+        {
+            var gen = new BiquarticMeshGenerator(uDimension, vDimension, interpolatedFunction, KnotsGeneratorFactory.DefaultImplementation(interpolatedFunction), derivation);
+            return gen.CreateSurface();
+        }
+
+        public static HermiteSurface CreateBiquartic(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolatedFunction interpolatedFunction, KnotsGenerator knotsGenerator, Derivation derivation)
+        {
+            var gen = new BiquarticMeshGenerator(uDimension, vDimension, interpolatedFunction, knotsGenerator, derivation);
             return gen.CreateSurface();
         }
     }

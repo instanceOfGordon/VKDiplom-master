@@ -7,34 +7,26 @@ using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
 {
-    public class DirectKnotsGenerator : IKnotsGenerator
+    public class DirectKnotsGenerator : KnotsGenerator
     {
-        public InterpolatedFunction Function { get; protected set; }
 
-        public DirectKnotsGenerator(InterpolatedFunction function)
+        public DirectKnotsGenerator(InterpolatedFunction function) : base(function)
         {
-            Function = function;
         }
 
-        public Knot[][] ComputeKnots(HermiteSurface surface)
-        {
-            return ComputeKnots(surface.UMinKnot, surface.UMaxKnot, surface.UKnotsCount, surface.VMinKnot, surface.VMaxKnot,
-                surface.VKnotsCount);
-        }
 
-        public virtual Knot[][] ComputeKnots(double uMin, double uMax, int uCount, double vMin,
-            double vMax, int vCount)
+        public override Knot[][] GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
-            var values = MyArrays.JaggedArray<Knot>(uCount, vCount);
-            var uSize = Math.Abs(uMax - uMin) / (uCount - 1);
-            var vSize = Math.Abs(vMax - vMin) / (vCount - 1);
-            var u = uMin;
+            var values = MyArrays.JaggedArray<Knot>(uDimension.KnotCount, vDimension.KnotCount);
+            var uSize = Math.Abs(uDimension.Max - uDimension.Min) / (uDimension.KnotCount - 1);
+            var vSize = Math.Abs(vDimension.Max - vDimension.Min) / (vDimension.KnotCount - 1);
+            var u = uDimension.Min;
            
-            //for (int i = 0; i < uCount; i++, u += uSize)
-            Parallel.For(0, uCount, i =>
+            //for (int i = 0; i < uDimension.KnotCount; i++, u += uSize)
+            Parallel.For(0, uDimension.KnotCount, i =>
             {
-                var v = vMin;
-                for (int j = 0; j < vCount; j++, v += vSize)
+                var v = vDimension.Min;
+                for (int j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
                     var z = Functions.Functions.NaNSafeCall(Function.Z, u, v); //Z(u, v);
                     var dx = Functions.Functions.NaNSafeCall(Function.Dx, u, v); //Dx(u, v);
@@ -47,6 +39,7 @@ namespace HermiteInterpolation.SplineKnots
             });
             return values;
         }
+
 
         
     }

@@ -13,7 +13,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
         }
 
         internal Knot[][] Knots { get; private set; }
-        internal Derivation Derivation { get; private set; }
+        internal Derivation Derivation { get; }
         //internal delegate Vector<double> BasisVector(double t, double t0, double t1);
 
         internal Vector<double> Vector(double t, double t0, double t1)

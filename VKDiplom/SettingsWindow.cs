@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using VKDiplom.Engine;
 
@@ -8,10 +7,10 @@ namespace VKDiplom
     public class SettingsWindow : ChildWindow
     {
         private readonly Grid _grid;
+        private readonly MainPage _page;
         private ComboBox _lightingChooser;
         private ComboBox _msaaChooser;
         private Button _okButton;
-        private MainPage _page;
 
         public SettingsWindow(MainPage page)
         {
@@ -20,7 +19,6 @@ namespace VKDiplom
             Title = "Settings";
             InitializeFields();
         }
-
 
         private void InitializeFields()
         {
@@ -41,16 +39,27 @@ namespace VKDiplom
             Grid.SetColumn(lightingLabel, 0);
             _grid.Children.Add(lightingLabel);
 
-            _msaaChooser = new ComboBox {DataContext = new[] {0, 2, 4, 8}, Margin = new Thickness(5)};
+            // _msaaChooser = new ComboBox {DataContext = new[] {"Disabled", "Enabled" }, Margin = new Thickness(5)};
+            _msaaChooser = new ComboBox {Margin = new Thickness(5)};
+           
+            _msaaChooser.Items.Add("Disabled");
+            _msaaChooser.Items.Add("Enabled");
+            _msaaChooser.SelectedIndex = 1;
+
             Grid.SetRow(_msaaChooser, 0);
             Grid.SetColumn(_msaaChooser, 1);
             _grid.Children.Add(_msaaChooser);
 
             _lightingChooser = new ComboBox
             {
-                DataContext = Enum.GetNames(typeof (Scene.LightingQuality)),
+                //DataContext = Enum.GetNames(typeof (Scene.LightingQuality)),
                 Margin = new Thickness(5)
             };
+            _lightingChooser.Items.Add("Low");
+            _lightingChooser.Items.Add("Medium");
+            _lightingChooser.Items.Add("High");
+            _lightingChooser.SelectedIndex = 2;
+
             Grid.SetRow(_lightingChooser, 1);
             Grid.SetColumn(_lightingChooser, 1);
             _grid.Children.Add(_lightingChooser);
@@ -65,6 +74,22 @@ namespace VKDiplom
 
         private void OButton_Click(object sender, RoutedEventArgs args)
         {
+            _page.SetMultiSampleAntialiasing(_msaaChooser.SelectedItem.Equals("Enabled") ? 4 : 0);
+            if (_lightingChooser.SelectedItem.Equals("Low"))
+            {
+                _page.SetLighting(Scene.LightingQuality.Low);
+            }
+            else if (_lightingChooser.SelectedItem.Equals("Medium"))
+            {
+                _page.SetLighting(Scene.LightingQuality.Medium);
+            }
+            else
+            {
+                _page.SetLighting(Scene.LightingQuality.High);
+            }
+
+            //_page.SetLighting((Scene.LightingQuality)_lightingChooser.SelectedItem);
+
             Close();
         }
     }

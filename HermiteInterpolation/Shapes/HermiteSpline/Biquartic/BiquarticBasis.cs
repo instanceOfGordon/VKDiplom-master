@@ -65,16 +65,6 @@ namespace HermiteInterpolation.Shapes.HermiteSpline.Biquartic
                    four_mul_cube_h;
             m[4] = (-2*h*t_min_t0 + 3*sqr_t_min_t0 - 1)/
                    four_mul_cube_h;
-//            m[0] = t_min_t2*(h*(3*t - 2*t1 - t2) + 2*(t*(2*(2*t - t2) - 3*(t0 - t1))+t0*(2*t1+t2)+t1*t2))/
-//                   pow4_h_mul_4;
-//            m[1] = (4*t_min_t0*t_min_t2*t_min_t1)/
-//                   pow4_h;
-//            m[2] = (-t_min_t0*(2*(5*sqr_h + 4*sqr_t_min_t0) - 21*h*t_min_t0))/
-//                   pow4_h_mul_4;
-//            m[3] = (-t_min_t2*(2*(sqr_h + 2*sqr_t_min_t0) - 7*h*t_min_t0))/
-//                   four_mul_cube_h;
-//            m[4] = (-2*h*t_min_t0 + 3*sqr_t_min_t0 - 1)/
-//                   four_mul_cube_h;
 
             return m;
         }
@@ -82,11 +72,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline.Biquartic
         protected override Vector<double> SecondDerivationVector(double t, double t0, double h)
         {
             var m = Vector<double>.Build.Random(5, 0);
-            var t1 = t0 + h;
-            var t2 = t0 + 2*h;
             var t_min_t0 = t - t0;
-            var t_min_t1 = t - t1;
-            var t_min_t2 = t - t2;
             var sqr_t_min_t0 = Math.Pow(t_min_t0, 2);
 
             var two_mul_cube_h = 2*Math.Pow(h, 3);

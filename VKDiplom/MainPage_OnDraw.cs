@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using HermiteInterpolation.Functions;
@@ -44,16 +45,20 @@ namespace VKDiplom
         private void DrawButton_OnClick(object sender, RoutedEventArgs e)
         {
             InterpolatedFunction function;
-            double umin, umax, vmin, vmax;
-            int ucount, vcount;
+            SurfaceDimension uDim, vDim;
+          
             try
             {
-                umin = double.Parse(HermiteUMinTextBox.Text);
-                umax = double.Parse(HermiteUMaxTextBox.Text);
-                ucount = int.Parse(HermiteUCountTextBox.Text);
-                vmin = double.Parse(HermiteVMinTextBox.Text);
-                vmax = double.Parse(HermiteVMaxTextBox.Text);
-                vcount = int.Parse(HermiteVCountTextBox.Text);
+                uDim = new SurfaceDimension(
+                    double.Parse(HermiteUMinTextBox.Text), 
+                    double.Parse(HermiteUMaxTextBox.Text),
+                    int.Parse(HermiteUCountTextBox.Text)
+                    );
+
+                vDim = new SurfaceDimension(
+               double.Parse(HermiteVMinTextBox.Text),
+                double.Parse(HermiteVMaxTextBox.Text),
+                int.Parse(HermiteVCountTextBox.Text));
                 function = InterpolatedFunction.FromString(FunctionExpressionTextBox.Text, XVariableTextBox.Text,
                     YVariableTextBox.Text);
             }
@@ -67,54 +72,47 @@ namespace VKDiplom
             switch (selectedItem)
             {
                 case HermiteType.Bicubic:
-                    shape = HermiteSurfaceFactory.CreateBicubic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    shape = HermiteSurfaceFactory.CreateBicubic(uDim, vDim,
                         function);
-                    fdshape = HermiteSurfaceFactory.CreateBicubic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    fdshape = HermiteSurfaceFactory.CreateBicubic(uDim, vDim,
                         function, Derivation.First);
-                    sdshape = HermiteSurfaceFactory.CreateBicubic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    sdshape = HermiteSurfaceFactory.CreateBicubic(uDim, vDim,
                         function, Derivation.Second);
                     break;
 
                 case HermiteType.Biquartic:
-                    shape = HermiteSurfaceFactory.CreateBiquartic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    shape = HermiteSurfaceFactory.CreateBiquartic(uDim, vDim,
                         function);
-                    fdshape = HermiteSurfaceFactory.CreateBiquartic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    fdshape = HermiteSurfaceFactory.CreateBiquartic(uDim, vDim,
                         function, Derivation.First);
-                    sdshape = HermiteSurfaceFactory.CreateBiquartic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    sdshape = HermiteSurfaceFactory.CreateBiquartic(uDim, vDim,
                         function, Derivation.Second);
                     break;
                 default:
-                    shape = HermiteSurfaceFactory.CreateBicubic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    shape = HermiteSurfaceFactory.CreateBicubic(uDim, vDim,
                         function);
-                    fdshape = HermiteSurfaceFactory.CreateBicubic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    fdshape = HermiteSurfaceFactory.CreateBicubic(uDim, vDim,
                         function, Derivation.First);
-                    sdshape = HermiteSurfaceFactory.CreateBicubic(umin, umax, ucount, vmin,
-                        vmax, vcount,
+                    sdshape = HermiteSurfaceFactory.CreateBicubic(uDim, vDim,
                         function, Derivation.Second);
                     break;
             }
             shape.ColoredBySegment();
             shape.DrawStyle = DrawStyle.Surface;
-            _functionScene.Add(shape);
+            _functionScene.Shapes.Add(shape);
 
             fdshape.ColoredBySegment();
             fdshape.DrawStyle = DrawStyle.Surface;
-            _firstDerScene.Add(fdshape);
+            _firstDerScene.Shapes.Add(fdshape);
             sdshape.ColoredBySegment();
             sdshape.DrawStyle = DrawStyle.Surface;
-            _secondDerScene.Add(sdshape);
+            _secondDerScene.Shapes.Add(sdshape);
         }
 
         private void DrawHermiteSurface(Scene scene, HermiteSurface surface)
         {
+            new Thread(() => { });
+
             surface.ColoredHeight();
             surface.DrawStyle = _drawStyle;
             switch (_textureStyle)
@@ -126,7 +124,7 @@ namespace VKDiplom
                     surface.ColoredHeight();
                     break;
             }
-            scene.Add(surface);
+            scene.Shapes.Add(surface);
         }
     }
 }

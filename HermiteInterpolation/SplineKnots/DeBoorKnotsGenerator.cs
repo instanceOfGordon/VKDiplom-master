@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Threading.Tasks;
 using HermiteInterpolation.Functions;
 using HermiteInterpolation.Numerics;
+using HermiteInterpolation.Shapes.HermiteSpline;
 using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
 {
-    public class DeBoorKnotsGenerator : DirectKnotsGenerator
+    public class DeBoorKnotsGenerator : KnotsGenerator
     {
-        
-
         public DeBoorKnotsGenerator(InterpolatedFunction function)
             : base(function)
         {
@@ -30,53 +28,58 @@ namespace HermiteInterpolation.SplineKnots
             return MyArrays.InitalizedArray<double>(equationsCount, 1);
         }
 
-        protected virtual double[] RightSide(Func<int, double> rightSide, double h, double dfirst, double dlast, int equationsCount, bool even = false)
+        protected virtual double[] RightSide(Func<int, double> rightSide, double h, double dfirst, double dlast,
+            int equationsCount, bool even = false)
         {
             var rs = new double[equationsCount];
             h = 3/h;
             rs[0] = h*(rightSide(2) - rightSide(0)) - dfirst;
-            rs[equationsCount-1] = h * (rightSide(equationsCount+1) - rightSide(equationsCount-1)) - dlast;
-            for (var i = 1; i < equationsCount-1; i++)
+            rs[equationsCount - 1] = h*(rightSide(equationsCount + 1) - rightSide(equationsCount - 1)) - dlast;
+            for (var i = 1; i < equationsCount - 1; i++)
             {
-                rs[i] = h * (rightSide(i+2) - rightSide(i));
+                rs[i] = h*(rightSide(i + 2) - rightSide(i));
             }
             return rs;
         }
 
-        public override Knot[][] ComputeKnots(double uMin, double uMax, int uCount, double vMin,
-            double vMax, int vCount)
+        public override Knot[][] GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
-            var values = MyArrays.JaggedArray<Knot>(uCount, vCount);
-            var uSize = Math.Abs(uMax - uMin)/(uCount - 1);
-            var vSize = Math.Abs(vMax - vMin)/(vCount - 1);
-            var u = uMin;
-            for (var i = 0; i < uCount; i++, u += uSize)
-            //Parallel.For(0,uCount,i=>)
+            var values = MyArrays.JaggedArray<Knot>(uDimension.KnotCount, vDimension.KnotCount);
+            var uSize = Math.Abs(uDimension.Max - uDimension.Min)/(uDimension.KnotCount - 1);
+            var vSize = Math.Abs(vDimension.Max - vDimension.Min)/(vDimension.KnotCount - 1);
+            var u = uDimension.Min;
+            for (var i = 0; i < uDimension.KnotCount; i++, u += uSize)
+                //Parallel.For(0,uDimension.KnotCount,i=>)
             {
-                var v = vMin;
-                for (var j = 0; j < vCount; j++, v += vSize)
+                var v = vDimension.Min;
+                for (var j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
                     var z = Functions.Functions.NaNSafeCall(Function.Z, u, v); //Z(u, v);
 
                     values[i][j] = new Knot(u, v, z);
                 }
             }
-            var uCountMin1 = uCount - 1;
-            for (var j = 0; j < vCount; j++)
+            var uKnotCountMin1 = uDimension.KnotCount - 1;
+            for (var j = 0; j < vDimension.KnotCount; j++)
             {
                 values[0][j].Dx = Functions.Functions.NaNSafeCall(Function.Dx, values[0][j].X, values[0][j].Y);
-                values[uCountMin1][j].Dx = Functions.Functions.NaNSafeCall(Function.Dx, values[uCountMin1][j].X, values[uCountMin1][j].Y);
+                values[uKnotCountMin1][j].Dx = Functions.Functions.NaNSafeCall(Function.Dx, values[uKnotCountMin1][j].X,
+                    values[uKnotCountMin1][j].Y);
             }
-            var vCountMin1 = vCount - 1;
-            for (var i = 0; i < uCount; i++)
+            var vKnotCountMin1 = vDimension.KnotCount - 1;
+            for (var i = 0; i < uDimension.KnotCount; i++)
             {
                 values[i][0].Dy = Functions.Functions.NaNSafeCall(Function.Dy, values[i][0].X, values[i][0].Y);
-                values[i][vCountMin1].Dy = Functions.Functions.NaNSafeCall(Function.Dy, values[i][vCountMin1].X, values[i][vCountMin1].Y);
+                values[i][vKnotCountMin1].Dy = Functions.Functions.NaNSafeCall(Function.Dy, values[i][vKnotCountMin1].X,
+                    values[i][vKnotCountMin1].Y);
             }
             values[0][0].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[0][0].X, values[0][0].Y);
-            values[uCountMin1][0].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[uCountMin1][0].X, values[uCountMin1][0].Y);
-            values[0][vCountMin1].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[0][vCountMin1].X, values[0][vCountMin1].Y);
-            values[uCountMin1][vCountMin1].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[uCountMin1][vCountMin1].X, values[uCountMin1][vCountMin1].Y);
+            values[uKnotCountMin1][0].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[uKnotCountMin1][0].X,
+                values[uKnotCountMin1][0].Y);
+            values[0][vKnotCountMin1].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[0][vKnotCountMin1].X,
+                values[0][vKnotCountMin1].Y);
+            values[uKnotCountMin1][vKnotCountMin1].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy,
+                values[uKnotCountMin1][vKnotCountMin1].X, values[uKnotCountMin1][vKnotCountMin1].Y);
 
             FillXDerivations(values);
             FillDxyDerivations(values);
@@ -114,7 +117,6 @@ namespace HermiteInterpolation.SplineKnots
             {
                 FillDyxDerivations(i, values);
             }
-
         }
 
         protected virtual void FillXDerivations(int rowOrColumnIdx, Knot[][] values)
@@ -168,7 +170,9 @@ namespace HermiteInterpolation.SplineKnots
 
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
-         protected void SolveTridiagonal(Func<int, double> rget, double h, double dfirst, double dlast, int equationsCount, Action<int, double> dset)
+
+        protected void SolveTridiagonal(Func<int, double> rget, double h, double dfirst, double dlast,
+            int equationsCount, Action<int, double> dset)
         {
             var result = RightSide(rget, h, dfirst, dlast, equationsCount);
             LinearSystemSolver.TridiagonalSystem(UpperDiagonal(equationsCount), MainDiagonal(equationsCount),
@@ -179,8 +183,5 @@ namespace HermiteInterpolation.SplineKnots
                 dset(i + 1, result[i]);
             }
         }
-
-
-        
     }
 }

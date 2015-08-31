@@ -2,9 +2,9 @@
 
 namespace HermiteInterpolation.Primitives
 {
-    internal class VertexNormals
+    public static class VertexNormals
     {
-        internal void CalculateTriangleNormals(VertexPositionNormalColor[] vertices, short[] indices)
+        public static void CalculateTriangleNormals(VertexPositionNormalColor[] vertices, short[] indices)
         {
             //if (_drawStyle != DrawStyle.Triangles) return;
 
@@ -25,7 +25,7 @@ namespace HermiteInterpolation.Primitives
             }
         }
 
-        private void ZeroNormals(VertexPositionNormalColor[] vertices)
+        public static void ZeroNormals(VertexPositionNormalColor[] vertices)
         {
             for (var i = 0; i < vertices.Length; i++)
             {

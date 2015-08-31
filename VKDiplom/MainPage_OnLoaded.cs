@@ -7,7 +7,6 @@ using HermiteInterpolation.Functions;
 using HermiteInterpolation.Shapes.HermiteSpline;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
-using VKDiplom.Utils;
 
 #endregion
 
@@ -45,14 +44,14 @@ namespace VKDiplom
                 //  aproximationFunction, derivation);
                 //var shape = new ClassicHermiteSurface(new double[] { -2, -1, 0, 1 }, new double[] { -2, -1, 0, 1 },
                 // var shape = new HermiteShape(new double[] { -2, -1 }, new double[] { -2, -1 },
-            var shape = HermiteSurfaceFactory.CreateBiquartic(-3,3,7,-3,3,7,
+            var shape = HermiteSurfaceFactory.CreateBiquartic(new SurfaceDimension(-3,3,7), new SurfaceDimension(-3, 3, 7),
             //var shape = HermiteSurfaceFactory.CreateBiquartic(-3, 1, 7, -3, 1, 7,
                 aproximationFunction, derivation);
             //shape.ColoredHeight();
             //shape.ColoredSimple(Color.FromNonPremultiplied(96,72,128,255));
             shape.ColoredBySegment();
             //shape.DrawStyle = DrawStyle.Wireframe;
-            scene.Add(shape);
+            scene.Shapes.Add(shape);
         }
 
         private void FirstDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)

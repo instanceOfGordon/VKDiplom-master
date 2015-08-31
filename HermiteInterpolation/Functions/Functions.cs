@@ -11,36 +11,36 @@ namespace HermiteInterpolation.Functions
         /// <summary>
         ///     Parse function from string.        /// 
         /// </summary>
-        /// <param name="expression">String form of aproximated function.</param>
-        /// <param name="varX">Substring of expression used as first variable.</param>
-        /// <param name="varY">Substring of expression used as second variable.</param>
+        /// <param name="mathExpression">String form of aproximated function.</param>
+        /// <param name="variableX">Substring of mathExpression used as first variable.</param>
+        /// <param name="variableY">Substring of mathExpression used as second variable.</param>
         /// <returns>
-        ///     Anonymous delegate if expression is correct math function, othervise
+        ///     Function delegate if mathExpression is correct math function, othervise
         ///     returns null;
         /// </returns>
-        internal static Func<double, double, double> FromString(string expression, string varX, string varY)
+        internal static Function FromString(string mathExpression, string variableX, string variableY)
         {
             var engine = new CalcEngine
             {
                 Variables =
                 {
-                    [varX] = 0.0d,
-                    [varY] = 0.0d
+                    [variableX] = 0.0d,
+                    [variableY] = 0.0d
                 }
             };
             try
             {
-                engine.Evaluate(expression);
+                engine.Evaluate(mathExpression);
             }
             catch (Exception)
             {
                 return null;
             }
-            Func<double, double, double> function = (x, y) =>
+            Function function = (x, y) =>
             {
-                engine.Variables[varX] = x;
-                engine.Variables[varY] = y;
-                var result = (double) engine.Evaluate(expression);
+                engine.Variables[variableX] = x;
+                engine.Variables[variableY] = y;
+                var result = (double) engine.Evaluate(mathExpression);
                 return result;
             };
             return function;
@@ -49,18 +49,14 @@ namespace HermiteInterpolation.Functions
 
         //Za toto sa hanbim. 
 
-        internal static double NaNSafeCall(Func<double, double, double> func, double p0, double p1)
+        internal static double NaNSafeCall(Function function, double x, double y)
         {
             //float offset = _meshDensity/10;
-            var value = func(p0, p1);
-            if (Double.IsNaN(value) || Double.IsInfinity(value))
-            {
-                value = func(p0, p1 - 0.5);
-                if (Double.IsNaN(value) || Double.IsInfinity(value))
-                {
-                    value = func(p0 - 0.5, p1 - 0.5);
-                }
-            }
+            var value = function(x, y);
+            if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
+            value = function(x, y - 0.05);
+            if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
+            value = function(x - 0.05, y - 0.05);
 
 
             return value;

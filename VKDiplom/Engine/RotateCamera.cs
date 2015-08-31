@@ -15,7 +15,7 @@ namespace VKDiplom.Engine
         public RotateCamera()
         {
             MaxDistance = 100f;
-            _distance = 20;
+            _distance = 10;
             _verticalAngle = MathHelper.PiOver4;
             _horizontalAngle = MathHelper.PiOver2;
             Position = CoordinateSystems.FromSphericalToCartesian(_distance, _verticalAngle, _horizontalAngle);

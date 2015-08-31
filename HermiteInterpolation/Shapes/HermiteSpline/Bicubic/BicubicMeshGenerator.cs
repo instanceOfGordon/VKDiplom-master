@@ -8,25 +8,16 @@ namespace HermiteInterpolation.Shapes.HermiteSpline.Bicubic
 {
     public class BicubicMeshGenerator : HermiteMeshGenerator
     {
-        //        private readonly HermiteShape _shape;
+        
 
-//        public BicubicMeshGenerator(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount,
-//            InterpolatedFunction interpolatedFunction, Derivation derivation):base(uMin,uMax,uCount,vMin,vMax,vCount,interpolatedFunction,derivation)
-//        {
-//        }
-
-        public BicubicMeshGenerator(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount,
-            IKnotsGenerator knotsGenerator, Derivation derivation)
-            : base(uMin, uMax, uCount, vMin, vMax, vCount, knotsGenerator, derivation)
+        public BicubicMeshGenerator(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotsGenerator knotsGenerator, Derivation derivation) 
+            : base(uDimension, vDimension, knotsGenerator, derivation)
         {
         }
 
-      
-//        protected BicubicMeshGenerator(HermiteSurface surface, InterpolatedFunction InterpolatedFunction, Knot[][] knots)
-//            : base(surface, InterpolatedFunction, knots)
-//        {
-//        }
-        
+
+     
+
 
         /// <summary>
         /// </summary>
@@ -82,5 +73,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline.Bicubic
             return new SimpleSurface(segmentMeshVertices, (int)xCount, (int)yCount);
           
         }
+
+        
     }
 }

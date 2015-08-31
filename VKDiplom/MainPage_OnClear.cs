@@ -6,9 +6,9 @@ namespace VKDiplom
     {
         private void ClearButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _functionScene.Clear();
-            _firstDerScene.Clear();
-            _secondDerScene.Clear();
+            _functionScene.Shapes.Clear();
+            _firstDerScene.Shapes.Clear();
+            _secondDerScene.Shapes.Clear();
         }
     }
 }

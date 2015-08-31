@@ -17,7 +17,6 @@ namespace VKDiplom
         private static void SetMultiSampleAntialiasing(DrawingSurface drawingSurface, int samples)
         {
             drawingSurface.CompositionMode = new OffscreenCompositionMode
-
             {
                 PreferredMultiSampleCount = samples,
                 RenderTargetUsage = RenderTargetUsage.DiscardContents,

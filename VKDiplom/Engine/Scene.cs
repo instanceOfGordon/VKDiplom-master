@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Graphics;
 using HermiteInterpolation.Shapes;
 using Microsoft.Xna.Framework;
@@ -10,10 +11,12 @@ namespace VKDiplom.Engine
     /// <summary>
     ///     Defines entire world.
     /// </summary>
-    public partial class Scene
+    public class Scene
     {
         public enum LightingQuality
         {
+            //[Display(Name = "Software Engineer")]
+            //[Description("Software engineer responsible for core development.")]
             Low,
             Medium,
             High,
@@ -22,9 +25,7 @@ namespace VKDiplom.Engine
         // Avoid allocating in Draw method as it is called each frame.
         private static readonly Color BackgroundColor = new Color(244, 244, 240, 255);
 
-        private readonly Camera _camera;// = new Camera();
         // List of every shape in scene.
-        private readonly List<IDrawable> _shapes = new List<IDrawable>();
         // Rotation matrix for z-axe facing up.
         private readonly Matrix _zAxeFacingUpRotation = Matrix.CreateRotationZ(MathHelper.ToRadians(-135))*
                                                         Matrix.CreateRotationX(MathHelper.ToRadians(-90));
@@ -34,20 +35,19 @@ namespace VKDiplom.Engine
         // Shader used for rendering
         private BasicEffect _effect;
 
-        private Vector3 _position = Vector3.Up;
         private Matrix _scale = Matrix.CreateScale(1.0f);
         private float _zoom = 1.0f;
 
 
         public Scene()
         {
-            _camera = new Camera();
+            Camera = new Camera();
             InitializeComponent();
         }
 
         public Scene(Camera camera)
         {
-            _camera = camera;
+            Camera = camera;
             InitializeComponent();
         }
 
@@ -68,21 +68,14 @@ namespace VKDiplom.Engine
 //            _rotationAngle = 0;
 //        }
 
-        public Camera Camera
-        {
-            get { return _camera; }
-        }
+        public Camera Camera { get; }
 
 //        public List<IDrawable> Shapes
 //        {
 //            get { return _shapes; }
 //        }
 
-        public Vector3 Position
-        {
-            get { return _position; }
-            set { _position = value; }
-        }
+        public Vector3 Position { get; set; } = Vector3.Up;
 
         public float Zoom
         {
@@ -99,6 +92,8 @@ namespace VKDiplom.Engine
         {
             set { _effect.PreferPerPixelLighting = value; }
         }
+
+        public List<IDrawable> Shapes { get; } = new List<IDrawable>();
 
 
         private void InitializeComponent()
@@ -216,8 +211,8 @@ namespace VKDiplom.Engine
                             //* Matrix.CreateTranslation(-1,-1,0)
                             //*Matrix.CreateTranslation(_position)
                             *_zAxeFacingUpRotation;
-            _effect.View = _camera.ViewTransform;
-            _effect.Projection = _camera.ProjectionTransform;
+            _effect.View = Camera.ViewTransform;
+            _effect.Projection = Camera.Projection;
 
 
             // Apply all shader rendering passes.
@@ -225,9 +220,9 @@ namespace VKDiplom.Engine
             for (var i = 0; i < effectTechniquePasses.Count; i++)
             {
                 effectTechniquePasses[i].Apply();
-                for (var j = 0; j < _shapes.Count; j++)
+                for (var j = 0; j < Shapes.Count; j++)
                 {
-                    _shapes[j].Draw();
+                    Shapes[j].Draw();
                 } 
                 _axes.Draw();
             }

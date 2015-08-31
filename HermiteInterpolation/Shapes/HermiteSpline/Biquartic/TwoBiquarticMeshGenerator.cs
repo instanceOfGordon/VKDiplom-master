@@ -13,7 +13,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline.Biquartic
         private readonly double _vSize;
         //private readonly Knot[][] _newAproximationValues;
         internal TwoBiquarticMeshGenerator(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount,
-            InterpolatedFunction interpolatedFunction, IKnotsGenerator knotsGenerator, Derivation derivation)
+            InterpolatedFunction interpolatedFunction, KnotsGenerator knotsGenerator, Derivation derivation)
             : base(uMin, uMax, uCount, vMin, vMax, vCount, knotsGenerator, derivation)
         {
             _interpolatedFunction = interpolatedFunction;

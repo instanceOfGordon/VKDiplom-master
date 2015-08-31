@@ -25,12 +25,8 @@ namespace VKDiplom
         private Scene _firstDerScene;
         private Scene _functionScene; //= new Scene();
         private Scene _secondDerScene;
-        private double _mouseDeltaScale;
         private Point _mouseDownPosition;
-        private Point _mouseMoveDelta;
-        private float _orbitX = 0;
-        private float _orbitY = 0;
-      
+
 
         //private readonly InterpolatedFunction _aproximationFunction = new InterpolatedFunction();
 

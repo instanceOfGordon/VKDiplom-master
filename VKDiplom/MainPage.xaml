@@ -17,40 +17,12 @@
             <RowDefinition MinHeight="300" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <!--        <Grid.ColumnDefinitions>-->
-        <!--            <ColumnDefinition Width="100"/>-->
-        <!--            <ColumnDefinition Width="*"/>-->
-        <!--        </Grid.ColumnDefinitions>-->
+       
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Style="{StaticResource TopStackPanelBackground}">
-
-<!--            <dc:MenuBar UseLayoutRounding="True">-->
-<!--                <dc:MenuBarItem MenuText="File" Template="{StaticResource MenuBarItemControlTemplate}">-->
-<!--                    <dc:MenuItem MenuText="Open" Template="{StaticResource MenuItemControlTemplate}"-->
-<!--                                 Click="LoadFromFile_OnClick" />-->
-<!--                    <dc:MenuItem MenuText="Save" Template="{StaticResource MenuItemControlTemplate}"-->
-<!--                                 Click="SaveToFile_OnClick" />-->
-<!--                </dc:MenuBarItem>-->
-<!--                <dc:MenuBarItem MenuText="Settings" Template="{StaticResource MenuBarItemControlTemplate}" />-->
-<!---->
-<!--            </dc:MenuBar>-->
-<!--                        <Button Name="FileMenuBarButton" Content="File" HorizontalAlignment="Left" Style="{StaticResource TopStackPanelButton}" Click="FileButton_OnClick" >-->
-<!--                            <toolkit:ContextMenuService.ContextMenu>-->
-<!--                                <toolkit:ContextMenu>-->
-<!--                                    <toolkit:MenuItem Header="Open" Click="LoadFromFile_OnClick" />-->
-<!--                                    <toolkit:MenuItem Header="Save" Click="SaveToFile_OnClick"/>-->
-<!--                                </toolkit:ContextMenu>-->
-<!--                            </toolkit:ContextMenuService.ContextMenu>-->
-<!--                        </Button>-->
             <Button Name="OpenButton" Content="Open" Style="{StaticResource TopStackPanelButton}" Click="LoadFromFile_OnClick"/>
             <Button Name="SaveButton" Content="Save" Style="{StaticResource TopStackPanelButton}" Click="SaveToFile_OnClick"/>
             <Button Name="SettingsButton" Content="Settings" Style="{StaticResource TopStackPanelButton}" Click="SettingsButton_OnCLick"/>
-<!--                <toolkit:ContextMenuService.ContextMenu>-->
-<!--                    <toolkit:ContextMenu Name="SettingsContextMenu">-->
-<!--                        <toolkit:MenuItem Header="Open" Click="LoadFromFile_OnClick"/>-->
-<!--                        <toolkit:MenuItem Header="Save" Click="SaveToFile_OnClick"/>-->
-<!--                    </toolkit:ContextMenu>-->
-<!--                </toolkit:ContextMenuService.ContextMenu>-->
             
             <Button Name="AboutButton" Content="Help" Style="{StaticResource TopStackPanelButton}" Click="HelpButton_OnCLick"/>
         </StackPanel>
@@ -115,7 +87,7 @@
 
             </Grid>
         </Grid>
-        <Grid Style="{StaticResource GridBackground}" Grid.Row="2" Grid.Column="0" Height="Auto">
+        <Grid Style="{StaticResource GridBackground}" Grid.Row="2" Grid.Column="0" Height="auto">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
@@ -126,13 +98,7 @@
                             Style="{StaticResource TabControlStyle}">
                 <sdk:TabItem Header="Hermite spline" Style="{StaticResource TabItemStyle}">
                     <Grid Style="{StaticResource TabItemGridBackground}">
-                        <!--                        <Grid.ColumnDefinitions>-->
-                        <!--                            <ColumnDefinition Width="55" />-->
-                        <!--                            <ColumnDefinition Width="60" />-->
-                        <!--                            <ColumnDefinition Width="65" />-->
-                        <!--                            <ColumnDefinition Width="65" />-->
-                        <!--                            <ColumnDefinition Width="*" />-->
-                        <!--                        </Grid.ColumnDefinitions>-->
+                   
                         <Grid.RowDefinitions>                          
                             <RowDefinition Height="2*" />
                             <RowDefinition Height="*" />
@@ -155,12 +121,12 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="HermiteUMinTextBox"
                                  Height="25"
                                  Margin="0,10,0,0" Text="-3"/>
-                            <sdk:Label Grid.Row="0" Grid.Column="2" Content="U max: " Margin="10,10,10,0"
+                            <sdk:Label Grid.Row="0" Grid.Column="2" Content="U MaxKnot: " Margin="10,10,10,0"
                                    Style="{StaticResource LabelForeground}" />
                             <TextBox Grid.Row="0" Grid.Column="3" x:Name="HermiteUMaxTextBox"
                                  Height="25"
                                  Margin="0,10,0,0" Text="3"/>
-                            <sdk:Label Grid.Row="0" Grid.Column="4" Content="U count: " Margin="10,10,10,0"
+                            <sdk:Label Grid.Row="0" Grid.Column="4" Content="U KnotCount: " Margin="10,10,10,0"
                                    Style="{StaticResource LabelForeground}" />
                             <TextBox Grid.Row="0" Grid.Column="5" x:Name="HermiteUCountTextBox"
                                  Height="25"
@@ -171,12 +137,12 @@
                             <TextBox  Grid.Row="1" Grid.Column="1" x:Name="HermiteVMinTextBox"
                                  Height="25"
                                   Text="-3" />
-                            <sdk:Label  Grid.Row="1" Grid.Column="2" Content="V max: " Margin="10,0,0,0"
+                            <sdk:Label  Grid.Row="1" Grid.Column="2" Content="V MaxKnot: " Margin="10,0,0,0"
                                    Style="{StaticResource LabelForeground}" />
                             <TextBox  Grid.Row="1" Grid.Column="3" x:Name="HermiteVMaxTextBox"
                                  Height="25"
                                   Text="3" />
-                            <sdk:Label  Grid.Row="1" Grid.Column="4" Content="V count: " Margin="10,0,0,0"
+                            <sdk:Label  Grid.Row="1" Grid.Column="4" Content="V KnotCount: " Margin="10,0,0,0"
                                    Style="{StaticResource LabelForeground}" />
                             <TextBox  Grid.Row="1" Grid.Column="5" x:Name="HermiteVCountTextBox"
                                  Height="25"
@@ -199,7 +165,7 @@
                 </sdk:TabItem>
             </sdk:TabControl>
 
-            <Grid Grid.Row="1" Grid.Column="0" Style="{StaticResource GridBackground}" Height="Auto">
+            <Grid Grid.Row="1" Grid.Column="0" Style="{StaticResource GridBackground}" Height="auto">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="102" />
                     <ColumnDefinition Width="*" />
@@ -234,11 +200,7 @@
                         Style="{StaticResource CommonButton}" />
                 <TextBox Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="143,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="160" Name="DebugBox"/>
             </Grid>
-            <!--            <StackPanel Grid.Row="2" Background="#402060" Orientation="Horizontal">-->
-            <!--                <sdk:Label></sdk:Label>-->
-            <!--                -->
-            <!--                <Button Name="DrawButton" Content="Draw" Click="DrawButton_OnClick" Margin="10"  HorizontalAlignment="Right"/>-->
-            <!--            </StackPanel>-->
+           
         </Grid>
 
 

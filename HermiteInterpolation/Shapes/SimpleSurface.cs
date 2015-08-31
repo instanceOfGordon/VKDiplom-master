@@ -29,6 +29,7 @@ namespace HermiteInterpolation.Shapes
 
         public SimpleSurface(VertexPositionNormalColor[] vertices, int xDimension, int yDimension)
         {
+            
             _xDimension = xDimension;
             _yDimension = yDimension;
             _vertices = vertices;
@@ -160,20 +161,20 @@ namespace HermiteInterpolation.Shapes
 
         public void CalculateLightingNormals()
         {
-            var normalCalc = new VertexNormals();
+            //var normalCalc = new VertexNormals();
             switch (_drawStyle)
             {
                 case DrawStyle.Wireframe:
                     // TODO: Not supported yet
                     break;
                 case DrawStyle.Surface:
-                    normalCalc.CalculateTriangleNormals(_vertices,_indices);
+                    VertexNormals.CalculateTriangleNormals(_vertices,_indices);
                     break;
                 case DrawStyle.Contour:
                     // TODO: Not supported yet
                     break;
                 case DrawStyle.Triangles:
-                    normalCalc.CalculateTriangleNormals(_vertices, _indices);
+                    VertexNormals.CalculateTriangleNormals(_vertices, _indices);
                     break;
             }
             for (var i = 0; i < _vertices.Length; i++)

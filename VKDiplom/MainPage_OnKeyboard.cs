@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
-using Keyboard = VKDiplom.Utils.Keyboard;
+using Keyboard = VKDiplom.Utilities.Keyboard;
 
 namespace VKDiplom
 {

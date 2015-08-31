@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace HermiteInterpolation.Shapes
 {
+    
     public interface ISurface : IDrawable
     {
         DrawStyle DrawStyle { get; set; }

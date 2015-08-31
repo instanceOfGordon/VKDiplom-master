@@ -26,6 +26,6 @@ namespace HermiteInterpolation.Primitives
             new VertexElement(24, VertexElementFormat.Color, VertexElementUsage.Color, 0)
         );
 
-        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
+        VertexDeclaration IVertexType.VertexDeclaration => VertexDeclaration;
     }
 }

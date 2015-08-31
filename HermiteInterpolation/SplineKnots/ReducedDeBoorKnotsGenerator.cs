@@ -1,5 +1,6 @@
 ﻿using System;
 using HermiteInterpolation.Functions;
+using HermiteInterpolation.Shapes.HermiteSpline;
 using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
@@ -72,8 +73,7 @@ namespace HermiteInterpolation.SplineKnots
             throw new NotImplementedException();
         }
 
-        public override Knot[][] ComputeKnots(double uMin, double uMax, int uCount, double vMin,
-            double vMax, int vCount)
+        public override Knot[][] GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
             return null;
         }

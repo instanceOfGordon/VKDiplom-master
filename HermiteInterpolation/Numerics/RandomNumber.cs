@@ -5,7 +5,7 @@ namespace HermiteInterpolation.Numerics
     public static class RandomNumber
     {
         private static volatile Random _instance;
-        private static readonly object SyncRoot = new Object();
+        private static readonly object SyncRoot = new object();
 
         public static Random Instance
         {

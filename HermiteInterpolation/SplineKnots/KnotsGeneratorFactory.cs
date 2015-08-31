@@ -6,10 +6,10 @@ namespace HermiteInterpolation.SplineKnots
 {
     internal static class KnotsGeneratorFactory
     {
-        internal static IKnotsGenerator DefaultImplementation(InterpolatedFunction function)
+        internal static KnotsGenerator DefaultImplementation(InterpolatedFunction function)
         {
-            return new DeBoorKnotsGenerator(function);
-            //return new DirectKnotsGenerator(function);
+           // return new DeBoorKnotsGenerator(function);
+            return new DirectKnotsGenerator(function);
         }
     }
 }

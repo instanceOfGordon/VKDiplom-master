@@ -6,7 +6,6 @@ namespace VKDiplom.Engine
     {
         private readonly Vector3 _upVector = Vector3.Up;
         private Vector3 _position;
-        private Matrix _projection; // The projection transform to convert 3D space to 2D screen space
         private Vector3 _target;
         private Matrix _view; // The _view or camera transform
         private float _renderDistance = 200f;
@@ -28,10 +27,7 @@ namespace VKDiplom.Engine
         /// <summary>
         ///     Projection transform to convert 3D space to 2D screen space
         /// </summary>
-        public Matrix ProjectionTransform
-        {
-            get { return _projection; }
-        }
+        public Matrix Projection { get; private set; }
 
         /// <summary>
         ///     Aspect ratio of the viewport for this camera
@@ -42,7 +38,7 @@ namespace VKDiplom.Engine
             {
                 _aspectRatio = value;
                 // update the screen space transform every time the aspect ratio changes
-                _projection = Matrix.CreatePerspectiveFieldOfView(0.85f, _aspectRatio, 0.01f, _renderDistance);
+                Projection = Matrix.CreatePerspectiveFieldOfView(0.85f, _aspectRatio, 0.01f, _renderDistance);
             }
         }
 
@@ -52,7 +48,7 @@ namespace VKDiplom.Engine
             set
             {
                 _renderDistance = value;
-                _projection = Matrix.CreatePerspectiveFieldOfView(0.85f, _aspectRatio, 0.01f, _renderDistance);
+                Projection = Matrix.CreatePerspectiveFieldOfView(0.85f, _aspectRatio, 0.01f, _renderDistance);
             }
         }
 

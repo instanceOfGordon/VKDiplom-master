@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace VKDiplom.Utils
+namespace VKDiplom.Utilities
 {
     public class Keyboard
     {
