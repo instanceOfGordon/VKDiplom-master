@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Primitives\VertexNormals.cs" />
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
+    <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticMeshGenerator2.cs" />
     <Compile Include="Shapes\HermiteSpline\SurfaceIndexer.cs" />
     <Compile Include="Shapes\HermiteSpline\SurfaceDimension.cs" />
     <Compile Include="SplineKnots\KnotsGenerator.cs" />

@@ -121,12 +121,12 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="HermiteUMinTextBox"
                                  Height="25"
                                  Margin="0,10,0,0" Text="-3"/>
-                            <sdk:Label Grid.Row="0" Grid.Column="2" Content="U MaxKnot: " Margin="10,10,10,0"
+                            <sdk:Label Grid.Row="0" Grid.Column="2" Content="U max: " Margin="10,10,10,0"
                                    Style="{StaticResource LabelForeground}" />
                             <TextBox Grid.Row="0" Grid.Column="3" x:Name="HermiteUMaxTextBox"
                                  Height="25"
                                  Margin="0,10,0,0" Text="3"/>
-                            <sdk:Label Grid.Row="0" Grid.Column="4" Content="U KnotCount: " Margin="10,10,10,0"
+                            <sdk:Label Grid.Row="0" Grid.Column="4" Content="U knots: " Margin="10,10,10,0"
                                    Style="{StaticResource LabelForeground}" />
                             <TextBox Grid.Row="0" Grid.Column="5" x:Name="HermiteUCountTextBox"
                                  Height="25"
@@ -137,12 +137,12 @@
                             <TextBox  Grid.Row="1" Grid.Column="1" x:Name="HermiteVMinTextBox"
                                  Height="25"
                                   Text="-3" />
-                            <sdk:Label  Grid.Row="1" Grid.Column="2" Content="V MaxKnot: " Margin="10,0,0,0"
+                            <sdk:Label  Grid.Row="1" Grid.Column="2" Content="V max: " Margin="10,0,0,0"
                                    Style="{StaticResource LabelForeground}" />
                             <TextBox  Grid.Row="1" Grid.Column="3" x:Name="HermiteVMaxTextBox"
                                  Height="25"
                                   Text="3" />
-                            <sdk:Label  Grid.Row="1" Grid.Column="4" Content="V KnotCount: " Margin="10,0,0,0"
+                            <sdk:Label  Grid.Row="1" Grid.Column="4" Content="V knots: " Margin="10,0,0,0"
                                    Style="{StaticResource LabelForeground}" />
                             <TextBox  Grid.Row="1" Grid.Column="5" x:Name="HermiteVCountTextBox"
                                  Height="25"

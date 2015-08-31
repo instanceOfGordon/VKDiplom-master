@@ -1,3 +1,5 @@
+using System;
+
 namespace HermiteInterpolation.Shapes.HermiteSpline
 {
     public struct SurfaceDimension
@@ -12,6 +14,19 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
             Min = min;
             Max = max;
             KnotCount = knotCount;
+        }
+
+        public static SurfaceDimension operator /(SurfaceDimension surfaceDimension, int countDivider)
+        {
+            var count = surfaceDimension.KnotCount%2 == 0
+                ? surfaceDimension.KnotCount/2
+                : surfaceDimension.KnotCount/2 + 1;
+            return new SurfaceDimension(surfaceDimension.Min,surfaceDimension.Max,count);
+        }
+
+        public static SurfaceDimension operator *(SurfaceDimension surfaceDimension, int countMultiplier)
+        {
+            return new SurfaceDimension(surfaceDimension.Min, surfaceDimension.Max, surfaceDimension.KnotCount * countMultiplier);
         }
     }
 }
