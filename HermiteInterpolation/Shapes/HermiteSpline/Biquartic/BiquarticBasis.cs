@@ -127,7 +127,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline.Biquartic
             m[2, 4] = k22.Dy; //NaNSafeCall(dy, u2, v2);
 
             m[2, 0] = k00.Dx; //NaNSafeCall(dx, u0, v0);
-            m[2, 1] = k01.Dx; //NaNSafeCall(dx, u0, v1);
+            m[2, 1] = k01.Dx; //NaNSafeCall(dx, u0, v1); 
             m[2, 2] = k02.Dx; //NaNSafeCall(dx, u0, v2);
             m[2, 3] = k00.Dxy; //NaNSafeCall(dxy, u0, v0);
             m[2, 4] = k02.Dxy; //NaNSafeCall(dxy, u0, v2);

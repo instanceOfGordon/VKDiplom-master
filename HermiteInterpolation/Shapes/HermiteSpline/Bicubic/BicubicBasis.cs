@@ -26,7 +26,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline.Bicubic
             m[3] = sqr_t_min_t0*t_min_t1/sqr_h;
             return m;
         }
-
+        
         protected override Vector<double> FirstDerivationVector(double t, double t0, double t1)
         {
             var m = Vector<double>.Build.Random(4, 0);

@@ -11,7 +11,7 @@ namespace HermiteInterpolation.Primitives
         public Vector3 Position;
         public Vector3 Normal;
         public Color Color;
-
+        
         public VertexPositionNormalColor(Vector3 position, Vector3 normal, Color color)
         {
             Position = position;
