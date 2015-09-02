@@ -1,6 +1,9 @@
-﻿using HermiteInterpolation.Shapes;
+﻿using System.Collections.Generic;
+using HermiteInterpolation.Shapes;
+using HermiteInterpolation.Shapes.HermiteSpline;
 using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
+using VKDiplom.Utilities;
 using Point = System.Windows.Point;
 
 namespace VKDiplom
@@ -27,6 +30,11 @@ namespace VKDiplom
         private Scene _secondDerScene;
         private Point _mouseDownPosition;
 
+        private ColorWheel _colors = new ColorWheel();
+
+        private Dictionary<string, HermiteSurfaceFactory> _hermiteChoices;
+        private Dictionary<string, HermiteSurfaceFactory> _knotsChoices;
+
 
         //private readonly InterpolatedFunction _aproximationFunction = new InterpolatedFunction();
 
@@ -35,7 +43,10 @@ namespace VKDiplom
         public MainPage()
         {
             InitializeComponent();
+           // var 
         }
+
+        
 
        
     }

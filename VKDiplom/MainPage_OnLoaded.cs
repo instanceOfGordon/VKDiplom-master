@@ -5,6 +5,8 @@ using System.Windows.Browser;
 using System.Windows.Controls;
 using HermiteInterpolation.Functions;
 using HermiteInterpolation.Shapes.HermiteSpline;
+using HermiteInterpolation.Shapes.HermiteSpline.Biquartic;
+using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
 
@@ -18,7 +20,7 @@ namespace VKDiplom
         {
             LoadScene(sender as DrawingSurface, out _functionScene);
 
-            MexicanHatDemo(_functionScene, Derivation.Zero);
+           // MexicanHatDemo(_functionScene, Derivation.Zero);
         }
         
         private void MexicanHatDemo(Scene scene, Derivation derivation)
@@ -39,17 +41,17 @@ namespace VKDiplom
             //var aproximationFunction = new InterpolatedFunction(f);
             var aproximationFunction = InterpolatedFunction.FromString("sin(sqrt(x^2+y^2))", "x", "y");
             //var aproximationFunction = InterpolatedFunction.FromString("x^4+y^4", "x", "y");
-//            var shape = new HermiteSurface(new double[] {-3, -2, -1, 0, 1, 2, 3},
+//            var shape = new SegmentSurface(new double[] {-3, -2, -1, 0, 1, 2, 3},
 //                new double[] {-3, -2, -1, 0, 1, 2, 3},
                 //  aproximationFunction, derivation);
                 //var shape = new ClassicHermiteSurface(new double[] { -2, -1, 0, 1 }, new double[] { -2, -1, 0, 1 },
                 // var shape = new HermiteShape(new double[] { -2, -1 }, new double[] { -2, -1 },
-            var shape = HermiteSurfaceFactory.CreateBiquartic(new SurfaceDimension(-3,3,7), new SurfaceDimension(-3, 3, 7),
-            //var shape = HermiteSurfaceFactory.CreateBiquartic(-3, 1, 7, -3, 1, 7,
-                aproximationFunction, derivation);
+            var shape = new BiquarticHermiteSurface(new SurfaceDimension(-3,3,7), new SurfaceDimension(-3, 3, 7),
+            //var shape = HermiteSurfaceFactoryHolder.CreateBiquartic(-3, 1, 7, -3, 1, 7,
+                new DirectKnotsGenerator(aproximationFunction), derivation);
             //shape.ColoredHeight();
             //shape.ColoredSimple(Color.FromNonPremultiplied(96,72,128,255));
-            shape.ColoredBySegment();
+            shape.ColoredByShades(_colors.Next());
             //shape.DrawStyle = DrawStyle.Wireframe;
             scene.Shapes.Add(shape);
         }
@@ -57,13 +59,13 @@ namespace VKDiplom
         private void FirstDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)
         {
             LoadScene(sender as DrawingSurface, out _firstDerScene);
-            MexicanHatDemo(_firstDerScene, Derivation.First);
+            //MexicanHatDemo(_firstDerScene, Derivation.First);
         }
 
         private void SecondDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)
         {
             LoadScene(sender as DrawingSurface, out _secondDerScene);
-            MexicanHatDemo(_secondDerScene, Derivation.Second);
+            //MexicanHatDemo(_secondDerScene, Derivation.Second);
         }
 
 

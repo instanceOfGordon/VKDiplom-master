@@ -153,8 +153,14 @@
                             <sdk:Label Content="Spline type: " Margin="10,5,0,10"
                                    Style="{StaticResource LabelForeground}" />
                             <ComboBox Name="HermiteTypeComboBox" Margin="10,5,0,10" HorizontalAlignment="Right" Width="100" SelectedIndex="0">
-                                <ComboBoxItem Content="Bicubic"/>
-                                <ComboBoxItem Content="Biquartic"/>
+                                <!--<ComboBoxItem Content="Bicubic"/>
+                                <ComboBoxItem Content="Biquartic"/>-->
+                            </ComboBox>
+                            <sdk:Label Content="Knots generator: " Margin="10,5,0,10"
+                                   Style="{StaticResource LabelForeground}" />
+                            <ComboBox Name="KnotsGeneratorComboBox" Margin="10,5,0,10" HorizontalAlignment="Right" Width="100" SelectedIndex="0">
+                                <!--<ComboBoxItem Content="Bicubic"/>
+                                <ComboBoxItem Content="Biquartic"/>-->
                             </ComboBox>
                         </StackPanel>                     
 

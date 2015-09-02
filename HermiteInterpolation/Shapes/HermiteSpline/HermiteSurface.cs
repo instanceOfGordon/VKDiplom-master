@@ -1,1 +1,123 @@
-﻿using System; using System.Collections.Generic; using System.Linq; using HermiteInterpolation.Utils; using Microsoft.Xna.Framework;  namespace HermiteInterpolation.Shapes.HermiteSpline {     public enum HermiteType     {         Bicubic,         Biquartic     }      public class HermiteSurface : ISurface     {         //private readonly float _meshDensity;         // private readonly HermiteType _type;         private DrawStyle _drawStyle; //        public HermiteType Type { //            get { return _type; } //        }          private readonly SurfaceDimension _uDimension;         private readonly SurfaceDimension _vDimension;          private float? _maxHeight;         private float? _minHeight;               internal HermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,             List<ISurface> segments, Derivation derivation)         {             Segments = segments;             //_meshDensity = 0.1f;             _uDimension = uDimension;             _vDimension = vDimension;             Derivation = derivation;         }           public double UMinKnot => _uDimension.Min;          public double UMaxKnot => _uDimension.Max;          public int UKnotsCount => _uDimension.KnotCount;          public double VMinKnot => _vDimension.Min;         public double VMaxKnot => _vDimension.Max;          public int VKnotsCount => _vDimension.KnotCount;           public double UKnotsDistance => Math.Abs(UMaxKnot - UMinKnot)/(UKnotsCount - 1);          public double VKnotsDistance => Math.Abs(VMaxKnot - VMinKnot)/(VKnotsCount - 1);          protected List<ISurface> Segments { get; }          public Derivation Derivation { get; protected set; } //        public float MeshDensity //        { //            get { return _meshDensity; } ////            set ////            { ////                _meshDensity = value; ////                GenerateMesh(); ////            } //        }          public DrawStyle DrawStyle         {             get { return _drawStyle; }             set             {                 _drawStyle = value;                 foreach (var segment in Segments)                 {                     segment.DrawStyle = value;                 }             }         }  //        public static HermiteSurface CreateBicubic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction aproximationFunction) //        { //            return new HermiteSurface(uMin, uMax, uCount, vMin, vMax, vCount, aproximationFunction, Derivation.Zero, HermiteType.Bicubic); //        } // //        public static HermiteSurface CreateBiquartic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction aproximationFunction) //        { //            return new HermiteSurface(uMin, uMax, uCount, vMin, vMax, vCount, aproximationFunction, Derivation.Zero, HermiteType.Biquartic); //        } // //        public static HermiteSurface CreateBicubic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction aproximationFunction, Derivation derivation) //        { //            return new HermiteSurface(uMin, uMax, uCount, vMin, vMax, vCount, aproximationFunction, derivation, HermiteType.Bicubic); //        } // //        public static HermiteSurface CreateBiquartic(double uMin, double uMax, int uCount, double vMin, double vMax, int vCount, InterpolatedFunction aproximationFunction, Derivation derivation) //        { //            return new HermiteSurface(uMin, uMax, uCount, vMin, vMax, vCount, aproximationFunction, derivation, HermiteType.Biquartic); //        }   //        protected HermiteSurface(double uMin, double uKnotsDistance, int uCount, double vMin,double vKnotsDistance, int vCount, InterpolatedFunction aproximationFunction, //            Derivation derivation, HermiteType type) //        { //            _meshDensity = 0.1f; //            _uMin = uMin; //            _uKnotsDistance = uKnotsDistance; //            _uCount = uCount; //            _vMin = vMin; //            _vKnotsDistance = vKnotsDistance; // //            _vCount = vCount; //            _type = type; //            Derivation = derivation; //            GenerateMesh(aproximationFunction); //        }          public void ColoredSimple(Color color)         {             foreach (var segment in Segments)             {                 segment.ColoredSimple(color);             }         }          public void ColoredHeight()         {             var minZ = MinHeight;             var maxZ = MaxHeight;              var dZ = maxZ - minZ;              foreach (var segment in Segments)             {                 var fromHue = ((segment.MinHeight - minZ)/dZ)*300f;                 var toHue = ((segment.MaxHeight - minZ)/dZ)*300f;                 segment.ColoredHeight(fromHue, toHue);             }         }          public void ColoredHeight(float fromHue, float toHue)         {             var minZ = MinHeight;             var maxZ = MaxHeight;              var dZ = maxZ - minZ;              foreach (var segment in Segments)             {                 var frHue = ((segment.MinHeight - minZ)/dZ)*toHue - fromHue;                 var tHue = ((segment.MaxHeight - minZ)/dZ)*toHue;                 segment.ColoredHeight(frHue, tHue);             }         }          public float MinHeight         {             get             {                 if (!_minHeight.HasValue)                     _minHeight = Segments.Min(segment => segment.MinHeight);                 //_vertices.Min(vertex => vertex.Position.Z);                 return _minHeight.Value;             }             protected set { _minHeight = value; }         }          public float MaxHeight         {             get             {                 if (!_maxHeight.HasValue) _maxHeight = Segments.Max(segment => segment.MaxHeight);                 return _maxHeight.Value;             }             protected set { _maxHeight = value; }         }          public virtual void Draw()         {             for (var i = 0; i < Segments.Count; i++)             {                 Segments[i].Draw();             }         }  //        protected void GenerateMesh(InterpolatedFunction aproximationFunction) //        { //            var generator = HermiteMeshGeneratorFactory.CreateHermiteMeshGenerator(this,aproximationFunction); //            Segments = generator.CreateMesh(); // //            //Segments = HermiteMeshGeneratorFactory.CreateHermiteMeshGenerator(this, aproximationFunction).CreateMesh(); //        }          public virtual void ColoredBySegment()         {             //            var colors = new[] { new Color(237, 28, 36), new Color(255, 127, 39), new Color(255,242,0), new Color(34, 177, 76),              //                new Color(63, 72, 204), new Color(163, 73, 164)};              //new Color(255, 201, 14)};             //var colors = new[] { new Color(237, 28, 36), new Color(6, 128, 64), new Color(63, 72, 204), new Color(255, 201, 14) };             // new Color(63, 72, 204), new Color(163, 73, 164)};              Segments.ForEach(segment => segment.ColoredSimple(ColorUtils.Random()));  //            var colors = new[] { new Color(255, 6, 6), new Color(6, 255, 6), new Color(6, 6, 255), new Color(255, 6, 255) }; //            var ccount = colors.Length; //            var cidx = 0; //            for (var i = 0; i < ukcmo; i++) //            { //                for (var j = 0; j < vkcmo; j++) //                { //                    var idx = i*vkcmo + j; //                    var idxcolor = cidx%ccount; //                    Segments[idx].ColoredSimple(colors[idxcolor]); //                    ++cidx; //                } //                cidx = vkcmo != ccount ? cidx:cidx+1; //            }         }          public void ColoredSimple(int r, int g, int b, int a)         {             ColoredSimple(Color.FromNonPremultiplied(r, g, b, a));         }     } }
+﻿using System.Collections.Generic;
+using System.Linq;
+using HermiteInterpolation.Functions;
+using HermiteInterpolation.SplineKnots;
+using MathNet.Numerics.LinearAlgebra;
+using Microsoft.Xna.Framework;
+
+namespace HermiteInterpolation.Shapes.HermiteSpline
+{
+
+
+    public abstract class HermiteSurface : ISurface
+    {
+       
+
+        protected static readonly Color DefaultColor = Color.FromNonPremultiplied(128, 128, 128, 255);
+        protected static readonly Vector3 DefaultNormal = Vector3.Zero;
+
+        private readonly SegmentSurface _segments;
+
+        protected HermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
+            string functionExpression,string variableX,string variableY, Derivation derivation = Derivation.Zero)
+            : this(uDimension, vDimension, new DirectKnotsGenerator(InterpolatedFunction.FromString(functionExpression,variableX,variableY)), derivation)
+        {
+
+        }
+
+
+        protected HermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
+            InterpolatedFunction function, Derivation derivation = Derivation.Zero)
+            : this(uDimension, vDimension, new DirectKnotsGenerator(function), derivation)
+        {
+            
+        }
+
+        protected HermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
+            KnotsGenerator knotsGenerator, Derivation derivation = Derivation.Zero) 
+        {
+            MeshDensity = 0.1f;
+
+            //            _uKnotsDistance = Math.Abs(uMax - uMin) / uCount;
+            //            
+            //  _vKnotsDistance = Math.Abs(vMax - vMin) / vCount;
+            //_interpolatedFunction = InterpolatedFunction;
+            Knots = knotsGenerator.GenerateKnots(uDimension, vDimension);
+
+            Derivation = derivation;
+            _segments = CreateMesh();
+        }
+
+        public float MeshDensity { get; }
+
+
+//        protected double UKnotsDistance { get { return _uKnotsDistance; } }
+//        protected double VKnotsDistance { get { return _vKnotsDistance; } }
+
+        public Derivation Derivation { get; protected set; }
+        
+
+        protected Knot[][] Knots { get; set; }
+
+
+        internal virtual List<ISurface> CreateSegments()
+        {
+            //var surface = Surface;
+            var uCount_min_1 = Knots.Length-1;//surface.UKnotsCount-1;
+            var vCount_min_1 = Knots[0].Length - 1;//surface.VKnotsCount-1;
+        
+            var segments = new List<ISurface>(uCount_min_1 * vCount_min_1);
+
+            for (int i = 0; i < uCount_min_1; i++)
+            {
+                for (int j = 0; j < vCount_min_1; j++)
+                {
+                    var segment = CreateSegment(i, j);
+                    segments.Add(segment);
+                }
+            }
+
+            return segments;
+        }
+
+        protected SegmentSurface CreateMesh()
+        {
+            var segments = CreateSegments();
+            
+            return new SegmentSurface(segments);
+        }
+
+        protected abstract ISurface CreateSegment(int uIdx, int vIdx);
+
+        protected delegate Vector<double> BasisVector(double t, double t0, double t1);
+
+
+        public void Draw()
+        {
+            _segments.Draw();
+        }
+
+        public DrawStyle DrawStyle { get; set; }
+        public float MinHeight => _segments.MinHeight;
+        public float MaxHeight => _segments.MaxHeight ;
+        public void ColoredSimple(Color color)
+        {
+           _segments.ColoredSimple(color);
+        }
+
+        public void ColoredHeight()
+        {
+            _segments.ColoredHeight();
+        }
+
+        public void ColoredHeight(float fromHue, float toHue)
+        {
+           _segments.ColoredHeight(fromHue,toHue);
+        }
+
+        public void ColoredByShades(Color baseColor)
+        {
+            _segments.ColoredByShades(baseColor);
+        }
+    }
+}

@@ -66,6 +66,7 @@ namespace VKDiplom
 
         private void FirstDerivationDrawingSurface_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
+
         }
 
         /////////////////////

@@ -17,5 +17,6 @@ namespace HermiteInterpolation.Shapes
 
         void ColoredHeight();
         void ColoredHeight(float fromHue, float toHue);
+       
     }
 }

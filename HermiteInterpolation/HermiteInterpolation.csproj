@@ -80,7 +80,7 @@
   <ItemGroup>
     <Compile Include="Primitives\VertexNormals.cs" />
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
-    <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticMeshGenerator2.cs" />
+    <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticHermiteSurface2.cs" />
     <Compile Include="Shapes\HermiteSpline\SurfaceIndexer.cs" />
     <Compile Include="Shapes\HermiteSpline\SurfaceDimension.cs" />
     <Compile Include="SplineKnots\KnotsGenerator.cs" />
@@ -97,12 +97,12 @@
     <Compile Include="Shapes\DrawStyle.cs" />
     <Compile Include="Shapes\HermiteSpline\Basis.cs" />
     <Compile Include="Shapes\HermiteSpline\Bicubic\BicubicBasis.cs" />
-    <Compile Include="Shapes\HermiteSpline\Bicubic\BicubicMeshGenerator.cs" />
+    <Compile Include="Shapes\HermiteSpline\Bicubic\BicubicHermiteSurface.cs" />
     <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticBasis.cs" />
-    <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticMeshGenerator.cs" />
+    <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticHermiteSurface.cs" />
     <Compile Include="Shapes\HermiteSpline\Derivation.cs" />
-    <Compile Include="Shapes\HermiteSpline\HermiteMeshGenerator.cs" />
     <Compile Include="Shapes\HermiteSpline\HermiteSurface.cs" />
+    <Compile Include="Shapes\HermiteSpline\SegmentSurface.cs" />
     <Compile Include="Shapes\HermiteSpline\HermiteSurfaceFactory.cs" />
     <Compile Include="Shapes\IDrawable.cs" />
     <Compile Include="Shapes\ISurface.cs" />

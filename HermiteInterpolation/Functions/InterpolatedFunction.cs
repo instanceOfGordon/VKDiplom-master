@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using MathNet.Numerics;
 
 namespace HermiteInterpolation.Functions
@@ -20,6 +22,7 @@ namespace HermiteInterpolation.Functions
         /// <param name="z"></param>
         public InterpolatedFunction(Function z)
         {
+           
             //const double h2 = 0.0001;
             Z = z;
             // Partial derivations 
