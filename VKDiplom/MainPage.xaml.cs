@@ -13,7 +13,7 @@ using VKDiplom.Engine.Utils;
 using VKDiplom.Utilities;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = System.Windows.Point;
-using UIColor = System.Windows.Media.Color();
+using UIColor = System.Windows.Media.Color;
 
 namespace VKDiplom
 {
