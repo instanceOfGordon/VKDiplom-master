@@ -9,16 +9,16 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
 {
 
 
-    public abstract class HermiteSurface : ISurface
+    public abstract class Spline : ISurface
     {
        
 
         protected static readonly Color DefaultColor = Color.FromNonPremultiplied(128, 128, 128, 255);
         protected static readonly Vector3 DefaultNormal = Vector3.Zero;
 
-        private readonly SegmentSurface _segments;
+        private readonly CompositeSurface _segments;
 
-        protected HermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
+        protected Spline(SurfaceDimension uDimension, SurfaceDimension vDimension,
             string functionExpression,string variableX,string variableY, Derivation derivation = Derivation.Zero)
             : this(uDimension, vDimension, new DirectKnotsGenerator(InterpolatedFunction.FromString(functionExpression,variableX,variableY)), derivation)
         {
@@ -26,14 +26,14 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
         }
 
 
-        protected HermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
+        protected Spline(SurfaceDimension uDimension, SurfaceDimension vDimension,
             InterpolatedFunction function, Derivation derivation = Derivation.Zero)
             : this(uDimension, vDimension, new DirectKnotsGenerator(function), derivation)
         {
             
         }
 
-        protected HermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
+        protected Spline(SurfaceDimension uDimension, SurfaceDimension vDimension,
             KnotsGenerator knotsGenerator, Derivation derivation = Derivation.Zero) 
         {
             MeshDensity = 0.1f;
@@ -80,11 +80,11 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
             return segments;
         }
 
-        protected SegmentSurface CreateMesh()
+        protected CompositeSurface CreateMesh()
         {
             var segments = CreateSegments();
             
-            return new SegmentSurface(segments);
+            return new CompositeSurface(segments);
         }
 
         protected abstract ISurface CreateSegment(int uIdx, int vIdx);
@@ -118,6 +118,11 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
         public void ColoredByShades(Color baseColor)
         {
             _segments.ColoredByShades(baseColor);
+        }
+
+        public void ColoredByShades(float baseHue)
+        {
+            _segments.ColoredByShades(baseHue);
         }
     }
 }

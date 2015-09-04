@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using HermiteInterpolation.Utils;
-using MathNet.Numerics.Random;
 using Microsoft.Xna.Framework;
 
-namespace HermiteInterpolation.Shapes.HermiteSpline
+namespace HermiteInterpolation.Shapes
 {
-    public enum HermiteType
-    {
-        Bicubic,
-        Biquartic
-    }
-
-    public class SegmentSurface : ISurface
+ 
+    public class CompositeSurface : ISurface
     {
         //private readonly float _meshDensity;
         // private readonly HermiteType _type;
@@ -28,7 +21,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
         private float? _minHeight;
     
 
-        public SegmentSurface(List<ISurface> segments)
+        public CompositeSurface(IEnumerable<ISurface> segments)
         {
             Segments = segments;
             //_meshDensity = 0.1f;
@@ -36,7 +29,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
            
         }
 
-        protected List<ISurface> Segments { get; }
+        protected IEnumerable<ISurface> Segments { get; }
 
      
 
@@ -116,9 +109,13 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
 
         public virtual void Draw()
         {
-            for (var i = 0; i < Segments.Count; i++)
+            //for (var i = 0; i < Segments.Count; i++)
+            //{
+            //    Segments[i].Draw();
+            //}
+            foreach (var segment in Segments)
             {
-                Segments[i].Draw();
+                segment.Draw();
             }
         }
 
@@ -132,9 +129,11 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
 
         public virtual void ColoredBySegment(ColorUtils.SeedColor seedFunction, params object[] parameters)
         {
-      
-            Segments.ForEach(segment => segment.ColoredSimple(seedFunction(parameters)));
-
+            foreach (var segment in Segments)
+            {
+                segment.ColoredSimple(seedFunction(parameters));
+            }
+            //Segments.ForEach(segment => segment.ColoredSimple(seedFunction(parameters)));
         }
 
         public void ColoredBySegment()
@@ -167,6 +166,11 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
         public void ColoredByShades(Color baseColor)
         {
             ColoredBySegment(color => ColorUtils.RandomShade((Color) color[0]), baseColor);
+        }
+
+        public void ColoredByShades(float baseHue)
+        {
+            ColoredBySegment(hue => ColorUtils.RandomShade((float)hue[0]), baseHue);
         }
 
         public void ColoredSimple(int r, int g, int b, int a)

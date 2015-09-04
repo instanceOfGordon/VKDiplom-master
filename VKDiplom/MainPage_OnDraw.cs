@@ -7,6 +7,7 @@ using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.HermiteSpline;
 using HermiteInterpolation.Shapes.HermiteSpline.Bicubic;
 using HermiteInterpolation.Shapes.HermiteSpline.Biquartic;
+using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
 
 namespace VKDiplom
@@ -69,36 +70,42 @@ namespace VKDiplom
                 MessageBox.Show("Invalid input.");
                 return;
             }
-            HermiteSurface shape, fdshape, sdshape;
-            var selectedItem = (HermiteType) HermiteTypeComboBox.SelectedIndex;
-            switch (selectedItem)
-            {
-                case HermiteType.Bicubic:
-                    shape = new BicubicHermiteSurface(uDim, vDim,
-                        function);
-                    fdshape = new BicubicHermiteSurface(uDim, vDim,
-                        function, Derivation.First);
-                    sdshape = new BicubicHermiteSurface(uDim, vDim,
-                        function, Derivation.Second);
-                    break;
+            //Spline shape, fdshape, sdshape;
+            //var selectedItem = (HermiteType) HermiteTypeComboBox.SelectedIndex;
+            //switch (selectedItem)
+            //{
+            //    case HermiteType.Bicubic:
+            //        shape = new BicubicHermiteSurface(uDim, vDim,
+            //            function);
+            //        fdshape = new BicubicHermiteSurface(uDim, vDim,
+            //            function, Derivation.First);
+            //        sdshape = new BicubicHermiteSurface(uDim, vDim,
+            //            function, Derivation.Second);
+            //        break;
 
-                case HermiteType.Biquartic:
-                    shape = new BiquarticHermiteSurface(uDim, vDim,
-                        function);
-                    fdshape = new BiquarticHermiteSurface(uDim, vDim,
-                        function, Derivation.First);
-                    sdshape = new BiquarticHermiteSurface(uDim, vDim,
-                        function, Derivation.Second);
-                    break;
-                default:
-                    shape = new BicubicHermiteSurface(uDim, vDim,
-                        function);
-                    fdshape = new BicubicHermiteSurface(uDim, vDim,
-                        function, Derivation.First);
-                    sdshape = new BicubicHermiteSurface(uDim, vDim,
-                        function, Derivation.Second);
-                    break;
-            }
+            //    case HermiteType.Biquartic:
+            //        shape = new BiquarticHermiteSurface(uDim, vDim,
+            //            function);
+            //        fdshape = new BiquarticHermiteSurface(uDim, vDim,
+            //            function, Derivation.First);
+            //        sdshape = new BiquarticHermiteSurface(uDim, vDim,
+            //            function, Derivation.Second);
+            //        break;
+            //    default:
+            //        shape = new BicubicHermiteSurface(uDim, vDim,
+            //            function);
+            //        fdshape = new BicubicHermiteSurface(uDim, vDim,
+            //            function, Derivation.First);
+            //        sdshape = new BicubicHermiteSurface(uDim, vDim,
+            //            function, Derivation.Second);
+            //        break;
+            //}
+            var createSpline = (HermiteSurfaceFactory) HermiteTypeComboBox.SelectedValue;
+            var createKnotsGenerator = (KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue;
+            var shape = createSpline(uDim, vDim, createKnotsGenerator(function));
+            var fdshape = createSpline(uDim, vDim, createKnotsGenerator(function), Derivation.First);
+            var sdshape = createSpline(uDim, vDim, createKnotsGenerator(function), Derivation.Second);
+
             var color = _colors.Next();
             shape.ColoredByShades(color);
             shape.DrawStyle = DrawStyle.Surface;
@@ -112,7 +119,7 @@ namespace VKDiplom
             _secondDerScene.Shapes.Add(sdshape);
         }
 
-        private void DrawHermiteSurface(Scene scene, SegmentSurface surface)
+        private void DrawHermiteSurface(Scene scene, CompositeSurface surface)
         {
             new Thread(() => { });
 

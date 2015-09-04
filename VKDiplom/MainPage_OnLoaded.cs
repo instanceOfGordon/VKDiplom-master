@@ -1,10 +1,12 @@
 ﻿#region
 
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Browser;
 using System.Windows.Controls;
 using HermiteInterpolation.Functions;
 using HermiteInterpolation.Shapes.HermiteSpline;
+using HermiteInterpolation.Shapes.HermiteSpline.Bicubic;
 using HermiteInterpolation.Shapes.HermiteSpline.Biquartic;
 using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
@@ -20,12 +22,12 @@ namespace VKDiplom
         {
             LoadScene(sender as DrawingSurface, out _functionScene);
 
-           // MexicanHatDemo(_functionScene, Derivation.Zero);
+            // MexicanHatDemo(_functionScene, Derivation.Zero);
         }
-        
+
         private void MexicanHatDemo(Scene scene, Derivation derivation)
         {
-            if(scene==null)return;
+            if (scene == null) return;
 //            Func<double, double, double> f = (x, y) => Math.Sin(Math.Sqrt(x*x + y*y));
 //            Func<double, double, double> xd = (x, y) => (x*Math.Cos(Math.Sqrt(x*x + y*y)))
 //                                                        /(Math.Sqrt(x*x + y*y));
@@ -43,11 +45,11 @@ namespace VKDiplom
             //var aproximationFunction = InterpolatedFunction.FromString("x^4+y^4", "x", "y");
 //            var shape = new SegmentSurface(new double[] {-3, -2, -1, 0, 1, 2, 3},
 //                new double[] {-3, -2, -1, 0, 1, 2, 3},
-                //  aproximationFunction, derivation);
-                //var shape = new ClassicHermiteSurface(new double[] { -2, -1, 0, 1 }, new double[] { -2, -1, 0, 1 },
-                // var shape = new HermiteShape(new double[] { -2, -1 }, new double[] { -2, -1 },
-            var shape = new BiquarticHermiteSurface(new SurfaceDimension(-3,3,7), new SurfaceDimension(-3, 3, 7),
-            //var shape = HermiteSurfaceFactoryHolder.CreateBiquartic(-3, 1, 7, -3, 1, 7,
+            //  aproximationFunction, derivation);
+            //var shape = new ClassicHermiteSurface(new double[] { -2, -1, 0, 1 }, new double[] { -2, -1, 0, 1 },
+            // var shape = new HermiteShape(new double[] { -2, -1 }, new double[] { -2, -1 },
+            var shape = new BiquarticHermiteSpline(new SurfaceDimension(-3, 3, 7), new SurfaceDimension(-3, 3, 7),
+                //var shape = HermiteSurfaceFactoryHolder.CreateBiquartic(-3, 1, 7, -3, 1, 7,
                 new DirectKnotsGenerator(aproximationFunction), derivation);
             //shape.ColoredHeight();
             //shape.ColoredSimple(Color.FromNonPremultiplied(96,72,128,255));
@@ -68,12 +70,11 @@ namespace VKDiplom
             //MexicanHatDemo(_secondDerScene, Derivation.Second);
         }
 
-
         private void LoadScene(DrawingSurface drawingSurface, out Scene scene)
         {
             if (VkDiplomGraphicsInitializationUtils.Is3DBlocked())
             {
-                VkDiplomGraphicsInitializationUtils.ShowReport();
+               // VkDiplomGraphicsInitializationUtils.ShowReport();
                 scene = null;
                 return;
             }
@@ -90,7 +91,6 @@ namespace VKDiplom
                 HtmlPage.Plugin.Focus();
             }
         }
-
 
         private void LoadFromFile_OnClick(object sender, RoutedEventArgs e)
         {
@@ -115,6 +115,49 @@ namespace VKDiplom
 
         private void HelpButton_OnCLick(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void InittializeComboBoxes()
+        {
+            _hermiteChoices = new Dictionary<string, HermiteSurfaceFactory>
+            {
+                {
+                    "Bicubic",
+                    (uDimension, vDimension, knotsGenerator, derivation) =>
+                        new BicubicHermiteSpline(uDimension, vDimension, knotsGenerator, derivation)                    
+                },
+                {
+                    "Biquartic",
+                    (uDimension, vDimension, knotsGenerator, derivation) =>
+                        new BiquarticHermiteSpline(uDimension, vDimension, knotsGenerator, derivation)
+                }
+            };
+            _knotsChoices = new Dictionary<string, KnotsGeneratorFactory>
+            {
+                {
+                    "Direct",
+                    function => new DirectKnotsGenerator(function)
+                },
+                {
+                    "De Boor",
+                    function => new DeBoorKnotsGenerator(function)
+                },
+                {
+                    "Reduced de Boor",
+                    function => new ReducedDeBoorKnotsGenerator(function)
+                }
+            };
+
+            HermiteTypeComboBox.ItemsSource = _hermiteChoices;
+            HermiteTypeComboBox.DisplayMemberPath = "Key";
+            HermiteTypeComboBox.SelectedValuePath = "Value";
+            HermiteTypeComboBox.SelectedIndex = 0;
+
+            KnotsGeneratorComboBox.ItemsSource = _knotsChoices;
+            KnotsGeneratorComboBox.DisplayMemberPath = "Key";
+            KnotsGeneratorComboBox.SelectedValuePath = "Value";
+            KnotsGeneratorComboBox.SelectedIndex = 0;
+
         }
     }
 }

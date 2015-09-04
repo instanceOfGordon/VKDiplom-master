@@ -44,6 +44,11 @@ namespace HermiteInterpolation.SplineKnots
 
         public override Knot[][] GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
+            if (uDimension.KnotCount < 4 || vDimension.KnotCount < 4)
+            {
+                return new DirectKnotsGenerator(Function).GenerateKnots(uDimension, vDimension);
+            }
+
             var values = MyArrays.JaggedArray<Knot>(uDimension.KnotCount, vDimension.KnotCount);
             var uSize = Math.Abs(uDimension.Max - uDimension.Min)/(uDimension.KnotCount - 1);
             var vSize = Math.Abs(vDimension.Max - vDimension.Min)/(vDimension.KnotCount - 1);

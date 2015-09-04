@@ -3,7 +3,7 @@ using HermiteInterpolation.SplineKnots;
 
 namespace HermiteInterpolation.Shapes.HermiteSpline.Biquartic
 {
-    public class BiquarticHermiteSurface2 : HermiteSurface
+    public class BiquarticHermiteSurface2 : Spline
     {
         public BiquarticHermiteSurface2(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotsGenerator knotsGenerator, Derivation derivation) 
             : base(uDimension, vDimension, knotsGenerator, derivation)

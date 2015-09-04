@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
     xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" x:Class="VKDiplom.MainPage"
     mc:Ignorable="d"
@@ -17,14 +17,18 @@
             <RowDefinition MinHeight="300" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-       
+
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Style="{StaticResource TopStackPanelBackground}">
-            <Button Name="OpenButton" Content="Open" Style="{StaticResource TopStackPanelButton}" Click="LoadFromFile_OnClick"/>
-            <Button Name="SaveButton" Content="Save" Style="{StaticResource TopStackPanelButton}" Click="SaveToFile_OnClick"/>
-            <Button Name="SettingsButton" Content="Settings" Style="{StaticResource TopStackPanelButton}" Click="SettingsButton_OnCLick"/>
-            
-            <Button Name="AboutButton" Content="Help" Style="{StaticResource TopStackPanelButton}" Click="HelpButton_OnCLick"/>
+            <Button Name="OpenButton" Content="Open" Style="{StaticResource TopStackPanelButton}"
+                    Click="LoadFromFile_OnClick" />
+            <Button Name="SaveButton" Content="Save" Style="{StaticResource TopStackPanelButton}"
+                    Click="SaveToFile_OnClick" />
+            <Button Name="SettingsButton" Content="Settings" Style="{StaticResource TopStackPanelButton}"
+                    Click="SettingsButton_OnCLick" />
+
+            <Button Name="AboutButton" Content="Help" Style="{StaticResource TopStackPanelButton}"
+                    Click="HelpButton_OnCLick" />
         </StackPanel>
 
         <Grid Grid.Row="1" Grid.Column="0" Style="{StaticResource DrawingGridBackground}">
@@ -89,87 +93,97 @@
         </Grid>
         <Grid Style="{StaticResource GridBackground}" Grid.Row="2" Grid.Column="0" Height="auto">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
 
             </Grid.RowDefinitions>
-            <sdk:TabControl Grid.Row="0" Height="150" Margin="10" x:Name="TabControl"
+            <!--<sdk:TabControl Grid.Row="0" Height="150" Margin="10" x:Name="TabControl"
                             Style="{StaticResource TabControlStyle}">
-                <sdk:TabItem Header="Hermite spline" Style="{StaticResource TabItemStyle}">
-                    <Grid Style="{StaticResource TabItemGridBackground}">
-                   
-                        <Grid.RowDefinitions>                          
-                            <RowDefinition Height="2*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="56"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="56"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="66"/>
-                                <ColumnDefinition Width="60"/>
-                            </Grid.ColumnDefinitions>
-                            <sdk:Label Grid.Row="0" Grid.Column="0" Content="U min: " Margin="10,10,10,0"
-                                   Style="{StaticResource LabelForeground}" />
-                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="HermiteUMinTextBox"
-                                 Height="25"
-                                 Margin="0,10,0,0" Text="-3"/>
-                            <sdk:Label Grid.Row="0" Grid.Column="2" Content="U max: " Margin="10,10,10,0"
-                                   Style="{StaticResource LabelForeground}" />
-                            <TextBox Grid.Row="0" Grid.Column="3" x:Name="HermiteUMaxTextBox"
-                                 Height="25"
-                                 Margin="0,10,0,0" Text="3"/>
-                            <sdk:Label Grid.Row="0" Grid.Column="4" Content="U knots: " Margin="10,10,10,0"
-                                   Style="{StaticResource LabelForeground}" />
-                            <TextBox Grid.Row="0" Grid.Column="5" x:Name="HermiteUCountTextBox"
-                                 Height="25"
-                                     
-                                 Margin="0,10,0,0" Text="3" Width="60"/>
-                            <sdk:Label  Grid.Row="1" Grid.Column="0" Content="V min: " Margin="10,0,0,0"
-                                   Style="{StaticResource LabelForeground}" />                                                     
-                            <TextBox  Grid.Row="1" Grid.Column="1" x:Name="HermiteVMinTextBox"
-                                 Height="25"
-                                  Text="-3" />
-                            <sdk:Label  Grid.Row="1" Grid.Column="2" Content="V max: " Margin="10,0,0,0"
-                                   Style="{StaticResource LabelForeground}" />
-                            <TextBox  Grid.Row="1" Grid.Column="3" x:Name="HermiteVMaxTextBox"
-                                 Height="25"
-                                  Text="3" />
-                            <sdk:Label  Grid.Row="1" Grid.Column="4" Content="V knots: " Margin="10,0,0,0"
-                                   Style="{StaticResource LabelForeground}" />
-                            <TextBox  Grid.Row="1" Grid.Column="5" x:Name="HermiteVCountTextBox"
-                                 Height="25"
-                                 Text="3" />
-                        </Grid>
-                        
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <sdk:Label Content="Spline type: " Margin="10,5,0,10"
-                                   Style="{StaticResource LabelForeground}" />
-                            <ComboBox Name="HermiteTypeComboBox" Margin="10,5,0,10" HorizontalAlignment="Right" Width="100" SelectedIndex="0">
-                                <!--<ComboBoxItem Content="Bicubic"/>
-                                <ComboBoxItem Content="Biquartic"/>-->
-                            </ComboBox>
-                            <sdk:Label Content="Knots generator: " Margin="10,5,0,10"
-                                   Style="{StaticResource LabelForeground}" />
-                            <ComboBox Name="KnotsGeneratorComboBox" Margin="10,5,0,10" HorizontalAlignment="Right" Width="100" SelectedIndex="0">
-                                <!--<ComboBoxItem Content="Bicubic"/>
-                                <ComboBoxItem Content="Biquartic"/>-->
-                            </ComboBox>
-                        </StackPanel>                     
+                <sdk:TabItem Header="Hermite spline" Style="{StaticResource TabItemStyle}">-->
+            <Grid Style="{StaticResource TabItemGridBackground}">
 
-                    </Grid>
-                </sdk:TabItem>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid  Grid.Row="0" Margin="0,0,0,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="56" />
+                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="56" />
+                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="66" />
+                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="125" />
+                        <ColumnDefinition Width="115" />
+                        <ColumnDefinition />
+
+                    </Grid.ColumnDefinitions>
+                    <sdk:Label Grid.Row="0" Grid.Column="0" Content="U min: " Margin="10,10,10,0"
+                               Style="{StaticResource LabelForeground}" />
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="HermiteUMinTextBox"
+                             Margin="0,10,0,0" Text="-3" />
+                    <sdk:Label Grid.Row="0" Grid.Column="2" Content="U max: " Margin="10,10,10,0"
+                               Style="{StaticResource LabelForeground}" />
+                    <TextBox Grid.Row="0" Grid.Column="3" x:Name="HermiteUMaxTextBox"
+                             Margin="0,10,0,0" Text="3" />
+                    <sdk:Label Grid.Row="0" Grid.Column="4" Content="U knots: " Margin="10,10,10,0"
+                               Style="{StaticResource LabelForeground}" />
+                    <TextBox Grid.Row="0" Grid.Column="5" x:Name="HermiteUCountTextBox"
+
+                             Margin="0,10,0,0" Text="3" />
+                    <sdk:Label Grid.Row="1" Grid.Column="0" Content="V min: " Margin="10,5,0,0"
+                               Style="{StaticResource LabelForeground}" />
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="HermiteVMinTextBox" Margin="0,5,0,0"
+                             Text="-3" />
+                    <sdk:Label Grid.Row="1" Grid.Column="2" Content="V max: " Margin="10,5,0,0"
+                               Style="{StaticResource LabelForeground}" />
+                    <TextBox Grid.Row="1" Grid.Column="3" x:Name="HermiteVMaxTextBox" Margin="0,5,0,0"
+                             Text="3" />
+                    <sdk:Label Grid.Row="1" Grid.Column="4" Content="V knots: " Margin="10,5,0,0"
+                               Style="{StaticResource LabelForeground}" />
+                    <TextBox Grid.Row="1" Grid.Column="5" x:Name="HermiteVCountTextBox" Margin="0,5,0,0"
+                             Text="3" />
+
+                    <sdk:Label Grid.Row="0" Grid.Column="6" Content="Spline type: " Margin="0,10,0,0" HorizontalAlignment="Right"
+                               Style="{StaticResource LabelForeground}" Width="71" />
+                    <ComboBox Name="HermiteTypeComboBox" Grid.Row="0" Grid.Column="7" Margin="5,10,0,0" HorizontalAlignment="Left" Width="100"
+                              SelectedIndex="0" Style="{StaticResource ComboBox}">
+                    </ComboBox>
+                    <sdk:Label Content="Knots generator: " Grid.Row="1" Grid.Column="6" Margin="0,5,0,0" HorizontalAlignment="Right"
+                               Style="{StaticResource LabelForeground}" Width="98" />
+                    <ComboBox Name="KnotsGeneratorComboBox" Margin="5,5,0,0" Grid.Row="1" Grid.Column="7" HorizontalAlignment="Left" Width="100"
+                              SelectedIndex="0" Style="{StaticResource ComboBox}">
+                        <!--<ComboBoxItem Content="Bicubic"/>
+                                <ComboBoxItem Content="Biquartic"/>-->
+                    </ComboBox>
+
+                    <!-- COLOR PICKER -->
+                    <CheckBox Name="ColorCheckBox" Grid.Row="0" Grid.Column="8" Margin="0,10,10,0" HorizontalAlignment="Right" Content="Auto color" IsChecked="True" IsEnabledChanged="ColorCheckBox_OnIsEnabledChanged" Style="{StaticResource CheckBox}" Width="77" ></CheckBox>
+                    <StackPanel Name="ColorStackPanel" Background="DarkGray" Grid.Row="1" Grid.Column="8" Margin="0,5,10,0" Orientation="Horizontal" HorizontalAlignment="Right" Width="100">
+                        <Slider Width="100" IsEnabled="False" Minimum="0" Maximum="360" Name="ColorSlider" ValueChanged="ColorSlider_OnValueChanged"></Slider>
+                    </StackPanel>
+
+
+                </Grid>
+
+
+                <!--<StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <sdk:Label Content="Splines: " Padding="10"
+                           Style="{StaticResource LabelForeground}" />
+                </StackPanel>-->
+
+            </Grid>
+            <!--</sdk:TabItem>
                 <sdk:TabItem Header="Settings" Style="{StaticResource TabItemStyle}">
                     <Grid Style="{StaticResource TabItemGridBackground}" />
                 </sdk:TabItem>
-            </sdk:TabControl>
+            </sdk:TabControl>-->
 
             <Grid Grid.Row="1" Grid.Column="0" Style="{StaticResource GridBackground}" Height="auto">
                 <Grid.ColumnDefinitions>
@@ -204,9 +218,10 @@
                 <Button Grid.Column="4" x:Name="ClearButton" Content="Clear" Click="ClearButton_OnClick"
                         Margin="10"
                         Style="{StaticResource CommonButton}" />
-                <TextBox Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="143,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="160" Name="DebugBox"/>
+                <TextBox Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="143,11,0,0" TextWrapping="Wrap"
+                         Text="" VerticalAlignment="Top" Width="160" Name="DebugBox" />
             </Grid>
-           
+
         </Grid>
 
 
