@@ -59,7 +59,7 @@ namespace HermiteInterpolation.SplineKnots
                 var v = vDimension.Min;
                 for (var j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
-                    var z = Functions.Functions.NaNSafeCall(Function.Z, u, v); //Z(u, v);
+                    var z = Functions.Functions.SafeCall(Function.Z, u, v); //Z(u, v);
 
                     values[i][j] = new Knot(u, v, z);
                 }
@@ -67,23 +67,23 @@ namespace HermiteInterpolation.SplineKnots
             var uKnotCountMin1 = uDimension.KnotCount - 1;
             for (var j = 0; j < vDimension.KnotCount; j++)
             {
-                values[0][j].Dx = Functions.Functions.NaNSafeCall(Function.Dx, values[0][j].X, values[0][j].Y);
-                values[uKnotCountMin1][j].Dx = Functions.Functions.NaNSafeCall(Function.Dx, values[uKnotCountMin1][j].X,
+                values[0][j].Dx = Functions.Functions.SafeCall(Function.Dx, values[0][j].X, values[0][j].Y);
+                values[uKnotCountMin1][j].Dx = Functions.Functions.SafeCall(Function.Dx, values[uKnotCountMin1][j].X,
                     values[uKnotCountMin1][j].Y);
             }
             var vKnotCountMin1 = vDimension.KnotCount - 1;
             for (var i = 0; i < uDimension.KnotCount; i++)
             {
-                values[i][0].Dy = Functions.Functions.NaNSafeCall(Function.Dy, values[i][0].X, values[i][0].Y);
-                values[i][vKnotCountMin1].Dy = Functions.Functions.NaNSafeCall(Function.Dy, values[i][vKnotCountMin1].X,
+                values[i][0].Dy = Functions.Functions.SafeCall(Function.Dy, values[i][0].X, values[i][0].Y);
+                values[i][vKnotCountMin1].Dy = Functions.Functions.SafeCall(Function.Dy, values[i][vKnotCountMin1].X,
                     values[i][vKnotCountMin1].Y);
             }
-            values[0][0].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[0][0].X, values[0][0].Y);
-            values[uKnotCountMin1][0].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[uKnotCountMin1][0].X,
+            values[0][0].Dxy = Functions.Functions.SafeCall(Function.Dxy, values[0][0].X, values[0][0].Y);
+            values[uKnotCountMin1][0].Dxy = Functions.Functions.SafeCall(Function.Dxy, values[uKnotCountMin1][0].X,
                 values[uKnotCountMin1][0].Y);
-            values[0][vKnotCountMin1].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy, values[0][vKnotCountMin1].X,
+            values[0][vKnotCountMin1].Dxy = Functions.Functions.SafeCall(Function.Dxy, values[0][vKnotCountMin1].X,
                 values[0][vKnotCountMin1].Y);
-            values[uKnotCountMin1][vKnotCountMin1].Dxy = Functions.Functions.NaNSafeCall(Function.Dxy,
+            values[uKnotCountMin1][vKnotCountMin1].Dxy = Functions.Functions.SafeCall(Function.Dxy,
                 values[uKnotCountMin1][vKnotCountMin1].X, values[uKnotCountMin1][vKnotCountMin1].Y);
 
             FillXDerivations(values);

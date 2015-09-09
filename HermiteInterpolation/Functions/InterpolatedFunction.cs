@@ -23,18 +23,20 @@ namespace HermiteInterpolation.Functions
         public InterpolatedFunction(Function z)
         {
            
-            //const double h2 = 0.0001;
+            const double h2 = 1;
             Z = z;
             // Partial derivations 
             //const double h2 = 2*H;
             Dx = new Function(Differentiate.FirstPartialDerivative2Func(new Func<double, double, double>(z), 0));
-                //(a,b)=>Differentiate.FirstPartialDerivative2Func((x,y)=>z(x,y), 0)(a,b);//(x, y) => (z(x + H, y) - z(x - H, y)) / h2;
+                //(a,b)=>Differentiate.FirstPartialDerivative2Func((x,y)=>z(x,y), 0)(a,b);
+                //(x, y) => (z(x + h2, y) - z(x - h2, y)) / h2;
 
             Dy = new Function(Differentiate.FirstPartialDerivative2Func(new Func<double, double, double>(z), 1));
-                //(x, y) => (z(x, y + H) - z(x, y - H)) / h2;//
+                //(x, y) => (z(x, y + h2) - z(x, y - h2)) / h2;//
 
             Dxy = new Function(Differentiate.FirstPartialDerivative2Func(new Func<double, double, double>(Dx), 1));
-                //Differentiate.FirstPartialDerivative2Func(Dx, 1);//(x, y) => (Dx(x, y + H) - Dx(x, y - H)) / h2;//
+                //Differentiate.FirstPartialDerivative2Func(Dx, 1);
+                //(x, y) => (Dx(x, y + h2) - Dx(x, y - h2)) / h2;//
         }
 
         /// <summary>

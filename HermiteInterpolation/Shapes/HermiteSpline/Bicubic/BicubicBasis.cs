@@ -63,23 +63,23 @@ namespace HermiteInterpolation.Shapes.HermiteSpline.Bicubic
             var k01 = Knots[uIdx][vIdx + 1];
             var k10 = Knots[uIdx + 1][vIdx];
             var k11 = Knots[uIdx + 1][vIdx + 1];
-            m[0, 0] = k00.Z; //NaNSafeCall(f, u0, v0);
-            m[0, 1] = k01.Z; //NaNSafeCall(f, u0, v1);
-            m[0, 2] = k00.Dy; //NaNSafeCall(dy, u0, v0);
-            m[0, 3] = k01.Dy; //NaNSafeCall(dy, u0, v1);
-            m[1, 0] = k10.Z; //NaNSafeCall(f, u1, v0);
-            m[1, 1] = k11.Z; //NaNSafeCall(f, u1, v1);
-            m[1, 2] = k10.Dy; //NaNSafeCall(dy, u1, v0);
-            m[1, 3] = k11.Dy; //NaNSafeCall(dy, u1, v1);
+            m[0, 0] = k00.Z; //SafeCall(f, u0, v0);
+            m[0, 1] = k01.Z; //SafeCall(f, u0, v1);
+            m[0, 2] = k00.Dy; //SafeCall(dy, u0, v0);
+            m[0, 3] = k01.Dy; //SafeCall(dy, u0, v1);
+            m[1, 0] = k10.Z; //SafeCall(f, u1, v0);
+            m[1, 1] = k11.Z; //SafeCall(f, u1, v1);
+            m[1, 2] = k10.Dy; //SafeCall(dy, u1, v0);
+            m[1, 3] = k11.Dy; //SafeCall(dy, u1, v1);
 
-            m[2, 0] = k00.Dx; //NaNSafeCall(dx, u0, v0);
-            m[2, 1] = k01.Dx; //NaNSafeCall(dx, u0, v1);
-            m[2, 2] = k00.Dxy; //NaNSafeCall(dxy, u0, v0);
-            m[2, 3] = k01.Dxy; //NaNSafeCall(dxy, u0, v1);
-            m[3, 0] = k10.Dx; //NaNSafeCall(dx, u1, v0);
-            m[3, 1] = k11.Dx; //NaNSafeCall(dx, u1, v1);
-            m[3, 2] = k10.Dxy; //NaNSafeCall(dxy, u1, v0);
-            m[3, 3] = k11.Dxy; //NaNSafeCall(dxy, u1, v1);
+            m[2, 0] = k00.Dx; //SafeCall(dx, u0, v0);
+            m[2, 1] = k01.Dx; //SafeCall(dx, u0, v1);
+            m[2, 2] = k00.Dxy; //SafeCall(dxy, u0, v0);
+            m[2, 3] = k01.Dxy; //SafeCall(dxy, u0, v1);
+            m[3, 0] = k10.Dx; //SafeCall(dx, u1, v0);
+            m[3, 1] = k11.Dx; //SafeCall(dx, u1, v1);
+            m[3, 2] = k10.Dxy; //SafeCall(dxy, u1, v0);
+            m[3, 3] = k11.Dxy; //SafeCall(dxy, u1, v1);
 
             return m;
         }

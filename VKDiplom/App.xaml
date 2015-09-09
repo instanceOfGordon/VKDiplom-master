@@ -26,6 +26,9 @@
         <Style x:Key="TopStackPanelBackground" TargetType="StackPanel">
             <Setter Property="Background" Value="#301848"/>
         </Style>
+        <Style x:Key="TopGridBackground" TargetType="Grid">
+            <Setter Property="Background" Value="#301848"/>
+        </Style>
         <Style x:Key="GridBackground" TargetType="Grid">
             <Setter Property="Background" Value="#402060"/>
         </Style>

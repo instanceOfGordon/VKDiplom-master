@@ -28,10 +28,10 @@ namespace HermiteInterpolation.SplineKnots
                 var v = vDimension.Min;
                 for (int j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
-                    var z = Functions.Functions.NaNSafeCall(Function.Z, u, v); //Z(u, v);
-                    var dx = Functions.Functions.NaNSafeCall(Function.Dx, u, v); //Dx(u, v);
-                    var dy = Functions.Functions.NaNSafeCall(Function.Dy, u, v); //Dy(u, v);
-                    var dxy = Functions.Functions.NaNSafeCall(Function.Dxy, u, v); //Dxy(u, v);
+                    var z = Functions.Functions.SafeCall(Function.Z, u, v); //Z(u, v);
+                    var dx = Functions.Functions.SafeCall(Function.Dx, u, v); //Dx(u, v);
+                    var dy = Functions.Functions.SafeCall(Function.Dy, u, v); //Dy(u, v);
+                    var dxy = Functions.Functions.SafeCall(Function.Dxy, u, v); //Dxy(u, v);
                     values[i][j] = new Knot(u, v, z, dx, dy, dxy);
 
                 }

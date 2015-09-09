@@ -6,7 +6,7 @@ namespace VKDiplom
     {
         private void ClearButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ScenesAction(scene=> scene.Shapes.Clear());
+            ScenesAction(scene=> scene.Clear());
 
         }
     }

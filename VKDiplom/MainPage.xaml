@@ -19,17 +19,43 @@
         </Grid.RowDefinitions>
 
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Style="{StaticResource TopStackPanelBackground}">
-            <Button Name="OpenButton" Content="Open" Style="{StaticResource TopStackPanelButton}"
+        <Grid HorizontalAlignment="Stretch" Grid.Row="0" Style="{StaticResource TopGridBackground}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Name="OpenButton" Content="Open" Style="{StaticResource TopStackPanelButton}"
                     Click="LoadFromFile_OnClick" />
-            <Button Name="SaveButton" Content="Save" Style="{StaticResource TopStackPanelButton}"
+            <Button Grid.Column="1" Name="SaveButton" Content="Save" Style="{StaticResource TopStackPanelButton}"
                     Click="SaveToFile_OnClick" />
-            <Button Name="SettingsButton" Content="Settings" Style="{StaticResource TopStackPanelButton}"
+            <Button Grid.Column="2" Name="SettingsButton" Content="Settings"
+                    Style="{StaticResource TopStackPanelButton}"
                     Click="SettingsButton_OnCLick" />
 
-            <Button Name="AboutButton" Content="Help" Style="{StaticResource TopStackPanelButton}"
+            <Button Grid.Column="3" Name="AboutButton" Content="Help" Style="{StaticResource TopStackPanelButton}"
                     Click="HelpButton_OnCLick" />
-        </StackPanel>
+
+
+            <Border Grid.Column="5" Margin="10,0,0,0" Name="FdxdyBackground" BorderBrush="Black" BorderThickness="0"
+                    Height="auto" Width="auto" Background="Purple" HorizontalAlignment="Right">
+                <Image Source="Resources/Images/fdxdy.png" Name="FDxDyIcon" MouseLeftButtonUp="FocusDrawingSurface_OnClick" />
+            </Border>
+            <Border Grid.Column="6" Margin="5,0,0,0" Name="DxfdyBackground" BorderBrush="Black" BorderThickness="0"
+                    Height="auto" Width="auto" Background="Transparent" HorizontalAlignment="Right">
+                <Image Source="Resources/Images/dxfdy.png" Name="DxFDyIcon" MouseLeftButtonUp="FocusDrawingSurface_OnClick" />
+            </Border>
+            <Border Grid.Column="7" Margin="5,0,0,0" Name="DydxfBackground" BorderBrush="Black" BorderThickness="0"
+                    Height="auto" Width="auto" Background="Transparent" HorizontalAlignment="Right">
+                <Image Source="Resources/Images/dydxf.png" Name="DyDxFIcon" MouseLeftButtonUp="FocusDrawingSurface_OnClick"/>
+            </Border>
+
+        </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" Style="{StaticResource DrawingGridBackground}">
             <Grid.ColumnDefinitions>
@@ -107,7 +133,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Grid  Grid.Row="0" Margin="0,0,0,5">
+                <Grid Grid.Row="0" Margin="0,0,0,5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
@@ -136,7 +162,7 @@
                                Style="{StaticResource LabelForeground}" />
                     <TextBox Grid.Row="0" Grid.Column="5" x:Name="HermiteUCountTextBox"
 
-                             Margin="0,10,0,0" Text="3" />
+                             Margin="0,10,0,0" Text="4" />
                     <sdk:Label Grid.Row="1" Grid.Column="0" Content="V min: " Margin="10,5,0,0"
                                Style="{StaticResource LabelForeground}" />
                     <TextBox Grid.Row="1" Grid.Column="1" x:Name="HermiteVMinTextBox" Margin="0,5,0,0"
@@ -148,25 +174,33 @@
                     <sdk:Label Grid.Row="1" Grid.Column="4" Content="V knots: " Margin="10,5,0,0"
                                Style="{StaticResource LabelForeground}" />
                     <TextBox Grid.Row="1" Grid.Column="5" x:Name="HermiteVCountTextBox" Margin="0,5,0,0"
-                             Text="3" />
+                             Text="4" />
 
-                    <sdk:Label Grid.Row="0" Grid.Column="6" Content="Spline type: " Margin="0,10,0,0" HorizontalAlignment="Right"
+                    <sdk:Label Grid.Row="0" Grid.Column="6" Content="Spline type: " Margin="0,10,0,0"
+                               HorizontalAlignment="Right"
                                Style="{StaticResource LabelForeground}" Width="71" />
-                    <ComboBox Name="HermiteTypeComboBox" Grid.Row="0" Grid.Column="7" Margin="5,10,0,0" HorizontalAlignment="Left" Width="100"
-                              SelectedIndex="0" Style="{StaticResource ComboBox}">
-                    </ComboBox>
-                    <sdk:Label Content="Knots generator: " Grid.Row="1" Grid.Column="6" Margin="0,5,0,0" HorizontalAlignment="Right"
+                    <ComboBox Name="HermiteTypeComboBox" Grid.Row="0" Grid.Column="7" Margin="5,10,0,0"
+                              HorizontalAlignment="Left" Width="100"
+                              SelectedIndex="0" Style="{StaticResource ComboBox}" />
+                    <sdk:Label Content="Knots generator: " Grid.Row="1" Grid.Column="6" Margin="0,5,0,0"
+                               HorizontalAlignment="Right"
                                Style="{StaticResource LabelForeground}" Width="98" />
-                    <ComboBox Name="KnotsGeneratorComboBox" Margin="5,5,0,0" Grid.Row="1" Grid.Column="7" HorizontalAlignment="Left" Width="100"
+                    <ComboBox Name="KnotsGeneratorComboBox" Margin="5,5,0,0" Grid.Row="1" Grid.Column="7"
+                              HorizontalAlignment="Left" Width="100"
                               SelectedIndex="0" Style="{StaticResource ComboBox}">
                         <!--<ComboBoxItem Content="Bicubic"/>
                                 <ComboBoxItem Content="Biquartic"/>-->
                     </ComboBox>
 
                     <!-- COLOR PICKER -->
-                    <CheckBox Name="ColorCheckBox" Grid.Row="0" Grid.Column="8" Margin="0,10,10,0" HorizontalAlignment="Right" Content="Auto color" IsChecked="True" IsEnabledChanged="ColorCheckBox_OnIsEnabledChanged" Style="{StaticResource CheckBox}" Width="77" ></CheckBox>
-                    <StackPanel Name="ColorStackPanel" Background="DarkGray" Grid.Row="1" Grid.Column="8" Margin="0,5,10,0" Orientation="Horizontal" HorizontalAlignment="Right" Width="100">
-                        <Slider Width="100" IsEnabled="False" Minimum="0" Maximum="360" Name="ColorSlider" ValueChanged="ColorSlider_OnValueChanged"></Slider>
+                    <CheckBox Name="ColorCheckBox" Grid.Row="0" Grid.Column="8" Margin="0,10,10,0"
+                              HorizontalAlignment="Right" Content="Auto color" IsChecked="True"
+                              IsEnabledChanged="ColorCheckBox_OnIsEnabledChanged" Style="{StaticResource CheckBox}"
+                              Width="77" />
+                    <StackPanel Name="ColorStackPanel" Background="DarkGray" Grid.Row="1" Grid.Column="8"
+                                Margin="0,5,10,0" Orientation="Horizontal" HorizontalAlignment="Right" Width="100">
+                        <Slider Width="100" IsEnabled="False" Minimum="0" Maximum="360" Name="ColorSlider"
+                                ValueChanged="ColorSlider_OnValueChanged" />
                     </StackPanel>
 
 
@@ -218,8 +252,8 @@
                 <Button Grid.Column="4" x:Name="ClearButton" Content="Clear" Click="ClearButton_OnClick"
                         Margin="10"
                         Style="{StaticResource CommonButton}" />
-                <TextBox Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="143,11,0,0" TextWrapping="Wrap"
-                         Text="" VerticalAlignment="Top" Width="160" Name="DebugBox" />
+                <TextBox Grid.Column="3" HorizontalAlignment="Center" Height="23" Margin="10" TextWrapping="Wrap"
+                         Text="" VerticalAlignment="Top" Width="200" Name="DebugBox" />
             </Grid>
 
         </Grid>

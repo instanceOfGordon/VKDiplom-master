@@ -49,7 +49,7 @@ namespace HermiteInterpolation.Functions
 
         //Za toto sa hanbim. 
 
-        internal static double NaNSafeCall(Function function, double x, double y)
+        internal static double SafeCall(Function function, double x, double y)
         {
             //float offset = _meshDensity/10;
             var value = function(x, y);

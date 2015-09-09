@@ -62,6 +62,8 @@ namespace HermiteInterpolation.Shapes
              Dispose(false);
         }
 
+        //public BlendState BlendState { get; set; } => BlendState.O
+
         public void Draw()
         {
             var graphicsDevice = GraphicsDeviceManager.Current.GraphicsDevice;

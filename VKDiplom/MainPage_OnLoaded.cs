@@ -55,7 +55,7 @@ namespace VKDiplom
             //shape.ColoredSimple(Color.FromNonPremultiplied(96,72,128,255));
             shape.ColoredByShades(_colors.Next());
             //shape.DrawStyle = DrawStyle.Wireframe;
-            scene.Shapes.Add(shape);
+            scene.Add(shape);
         }
 
         private void FirstDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)

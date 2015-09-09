@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -100,6 +101,8 @@ namespace VKDiplom
             //            function, Derivation.Second);
             //        break;
             //}
+           
+
             var createSpline = (HermiteSurfaceFactory) HermiteTypeComboBox.SelectedValue;
             var createKnotsGenerator = (KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue;
             var shape = createSpline(uDim, vDim, createKnotsGenerator(function));
@@ -109,14 +112,14 @@ namespace VKDiplom
             var color = _colors.Next();
             shape.ColoredByShades(color);
             shape.DrawStyle = DrawStyle.Surface;
-            _functionScene.Shapes.Add(shape);
+            _functionScene.Add(shape);
 
             fdshape.ColoredByShades(color);
             fdshape.DrawStyle = DrawStyle.Surface;
-            _firstDerScene.Shapes.Add(fdshape);
+            _firstDerScene.Add(fdshape);
             sdshape.ColoredByShades(color);
             sdshape.DrawStyle = DrawStyle.Surface;
-            _secondDerScene.Shapes.Add(sdshape);
+            _secondDerScene.Add(sdshape);
         }
 
         private void DrawHermiteSurface(Scene scene, CompositeSurface surface)
@@ -134,7 +137,7 @@ namespace VKDiplom
                     surface.ColoredHeight();
                     break;
             }
-            scene.Shapes.Add(surface);
+            scene.Add(surface);
         }
     }
 }
