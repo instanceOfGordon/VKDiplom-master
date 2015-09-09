@@ -183,6 +183,10 @@ namespace VKDiplom
 
             SplinesComboBox.ItemsSource = _functionScene;
             SplinesComboBox.DisplayMemberPath = "Name";
+            //var item = new ComboBoxItem();
+            //item.Content = "Name";
+            //item.Foreground = 
+            //SplinesComboBox.ItemTemplate.DataType = new ComboBoxItem();
 
         }
 
