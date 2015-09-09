@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Browser;
 using System.Windows.Controls;
+using System.Windows.Graphics;
 using HermiteInterpolation.Functions;
+using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.HermiteSpline;
 using HermiteInterpolation.Shapes.HermiteSpline.Bicubic;
 using HermiteInterpolation.Shapes.HermiteSpline.Biquartic;
@@ -20,6 +22,12 @@ namespace VKDiplom
     {
         private void FunctionDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (_isSoftwareRendered)
+            {
+                var drawer = sender as DrawingSurface;
+                drawer.Draw -= FirstDerivationDrawingSurface_OnDraw;
+                drawer.Draw += (s, darg) => { };
+            }
             LoadScene(sender as DrawingSurface, out _functionScene);
 
             // MexicanHatDemo(_functionScene, Derivation.Zero);
@@ -60,31 +68,46 @@ namespace VKDiplom
 
         private void FirstDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (_isSoftwareRendered)
+            {
+                var drawer = sender as DrawingSurface;
+                drawer.Draw -= FirstDerivationDrawingSurface_OnDraw;
+                drawer.Draw += (s, darg) => { };
+            }
             LoadScene(sender as DrawingSurface, out _firstDerScene);
             //MexicanHatDemo(_firstDerScene, Derivation.First);
         }
 
         private void SecondDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (_isSoftwareRendered)
+            {
+                var drawer = sender as DrawingSurface;
+                drawer.Draw -= FirstDerivationDrawingSurface_OnDraw;
+                drawer.Draw += (s, darg) => { };
+            }
             LoadScene(sender as DrawingSurface, out _secondDerScene);
             //MexicanHatDemo(_secondDerScene, Derivation.Second);
         }
 
+       
+
         private void LoadScene(DrawingSurface drawingSurface, out Scene scene)
         {
-            if (VkDiplomGraphicsInitializationUtils.Is3DBlocked())
-            {
-               // VkDiplomGraphicsInitializationUtils.ShowReport();
-                scene = null;
-                return;
-            }
+            //if (VkDiplomGraphicsInitializationUtils.IsHardwareAccelerated()
+            //{
+             
+            //    scene = null;
+            //    return;
+            //}
             scene = new Scene(_camera);
 
 
             //_functionScene.Camera.AspectRatio =1.0f;
             //GraphicsDeviceManager.Current.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise; 
 
-            SetMultiSampleAntialiasing(drawingSurface, 8);
+            if (!_isSoftwareRendered)
+                SetMultiSampleAntialiasing(drawingSurface, 8);
 
             if (!Application.Current.IsRunningOutOfBrowser)
             {
@@ -158,6 +181,18 @@ namespace VKDiplom
             KnotsGeneratorComboBox.SelectedValuePath = "Value";
             KnotsGeneratorComboBox.SelectedIndex = 0;
 
+            SplinesComboBox.ItemsSource = _functionScene;
+            SplinesComboBox.DisplayMemberPath = "Name";
+
+        }
+
+        private void SplineComboBox_OnSelectedItem(object sender, SelectionChangedEventArgs e)
+        {
+            
+            var splineSelector = sender as ComboBox;
+            if (splineSelector == null) return;
+            if (splineSelector.ItemsSource==null) return;
+            ScenesAction(scene=> scene.HighlightedShapeIndex=splineSelector.SelectedIndex);
         }
     }
 }

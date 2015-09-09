@@ -5,9 +5,11 @@ namespace VKDiplom.Engine.Utils
 {
     public static class VkDiplomGraphicsInitializationUtils
     {
-        public static bool Is3DBlocked()
+        //public static readonly bool IsHardwareAccelerated = GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware;
+
+        public static bool IsHardwareAccelerated()
         {
-            return GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware;
+            return GraphicsDeviceManager.Current.RenderMode == RenderMode.Hardware;
         }
 
         public static void ShowReport()

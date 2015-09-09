@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Graphics;
 using System.Windows.Input;
 using System.Windows.Media;
 using HermiteInterpolation.Shapes;
@@ -33,6 +34,7 @@ namespace VKDiplom
         private readonly ColorWheel _colors = new ColorWheel();
         private readonly SolidColorBrush _disabledColorBrush = new SolidColorBrush(Colors.DarkGray);
         private readonly DrawStyle _drawStyle = DrawStyle.Surface;
+        
         //private readonly InterpolatedFunction _aproximationFunction = new InterpolatedFunction();
 
         private readonly TextureStyle _textureStyle = TextureStyle.HeightColored;
@@ -45,10 +47,13 @@ namespace VKDiplom
         private Dictionary<string, KnotsGeneratorFactory> _knotsChoices;
         private Point _mouseDownPosition;
         private Scene _secondDerScene;
+        private bool _isSoftwareRendered = false;
 
         public MainPage()
         {
-            if (VkDiplomGraphicsInitializationUtils.Is3DBlocked())
+            _isSoftwareRendered = GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware;
+              
+            if (_isSoftwareRendered)
                 VkDiplomGraphicsInitializationUtils.ShowReport();
 
             InitializeComponent();

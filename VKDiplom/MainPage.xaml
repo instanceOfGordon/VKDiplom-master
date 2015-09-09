@@ -41,6 +41,7 @@
             <Button Grid.Column="3" Name="AboutButton" Content="Help" Style="{StaticResource TopStackPanelButton}"
                     Click="HelpButton_OnCLick" />
 
+            <ComboBox Name="SplinesComboBox" Grid.Column="4" Margin="4" Style="{StaticResource ComboBox}" SelectionChanged="SplineComboBox_OnSelectedItem" Background="#FF3F003F"></ComboBox>
 
             <Border Grid.Column="5" Margin="10,0,0,0" Name="FdxdyBackground" BorderBrush="Black" BorderThickness="0"
                     Height="auto" Width="auto" Background="Purple" HorizontalAlignment="Right">

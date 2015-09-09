@@ -16,13 +16,28 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
         protected static readonly Color DefaultColor = Color.FromNonPremultiplied(128, 128, 128, 255);
         protected static readonly Vector3 DefaultNormal = Vector3.Zero;
 
+
+        private Color _color = DefaultColor;
+
+        public Color Color
+        {
+            get { return _color; }
+            set
+            {
+                _color = value;
+                ColoredByShades(value);
+            }
+        }
         private readonly CompositeSurface _segments;
+
+        public string Name { get; set; } = null;
 
         protected Spline(SurfaceDimension uDimension, SurfaceDimension vDimension,
             string functionExpression,string variableX,string variableY, Derivation derivation = Derivation.Zero)
             : this(uDimension, vDimension, new DirectKnotsGenerator(InterpolatedFunction.FromString(functionExpression,variableX,variableY)), derivation)
         {
-
+            if (Name == null)
+                Name = functionExpression;
         }
 
 
@@ -102,6 +117,7 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
         public float MaxHeight => _segments.MaxHeight ;
         public void ColoredSimple(Color color)
         {
+            _color = color;
            _segments.ColoredSimple(color);
         }
 
@@ -112,11 +128,13 @@ namespace HermiteInterpolation.Shapes.HermiteSpline
 
         public void ColoredHeight(float fromHue, float toHue)
         {
+
            _segments.ColoredHeight(fromHue,toHue);
         }
 
         public void ColoredByShades(Color baseColor)
         {
+            _color = baseColor;
             _segments.ColoredByShades(baseColor);
         }
 

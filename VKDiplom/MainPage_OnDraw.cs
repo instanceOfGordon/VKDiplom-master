@@ -10,6 +10,7 @@ using HermiteInterpolation.Shapes.HermiteSpline.Bicubic;
 using HermiteInterpolation.Shapes.HermiteSpline.Biquartic;
 using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
+using VKDiplom.Engine.Utils;
 
 namespace VKDiplom
 {
@@ -35,7 +36,7 @@ namespace VKDiplom
         {
             //ProcessKeyboardInput();                              
             // _functionScene.SetupView(_graphicsDevice);
-            if (scene == null) return;
+            if (_isSoftwareRendered) return;
 
             ProcessKeyboardInput(scene);
             //_functionScene.Camera.SetViewToZero(new Vector3(State.SliderYawVal, State.SliderPitchVal, State.SliderRollVal));
@@ -48,6 +49,7 @@ namespace VKDiplom
 
         private void DrawButton_OnClick(object sender, RoutedEventArgs e)
         {
+           
             InterpolatedFunction function;
             SurfaceDimension uDim, vDim;
           
@@ -112,14 +114,25 @@ namespace VKDiplom
             var color = _colors.Next();
             shape.ColoredByShades(color);
             shape.DrawStyle = DrawStyle.Surface;
-            _functionScene.Add(shape);
+            shape.Name = FunctionExpressionTextBox.Text;
+
+            _functionScene.Add(shape,false);
+
+            //if (SplinesComboBox.SelectedIndex == _functionScene.Count - 2)
+            //{
+            SplinesComboBox.ItemsSource = null;
+            SplinesComboBox.ItemsSource = _functionScene;
+           // SplinesComboBox.SelectedIndex = _functionScene.HighlightedShapeIndex;
+            //    ++SplinesComboBox.SelectedIndex;
+
+            //}       
 
             fdshape.ColoredByShades(color);
             fdshape.DrawStyle = DrawStyle.Surface;
-            _firstDerScene.Add(fdshape);
+            _firstDerScene.Add(fdshape,false);
             sdshape.ColoredByShades(color);
             sdshape.DrawStyle = DrawStyle.Surface;
-            _secondDerScene.Add(sdshape);
+            _secondDerScene.Add(sdshape,false);
         }
 
         private void DrawHermiteSurface(Scene scene, CompositeSurface surface)

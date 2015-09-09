@@ -17,6 +17,7 @@ namespace HermiteInterpolation.Shapes
 
         public CoordinateAxes()
         {
+            
             CreateShape();
         }
 
@@ -235,6 +236,7 @@ namespace HermiteInterpolation.Shapes
             axes[19] = new VertexPositionColor(new Vector3(0, 0.1f, axisLength + 0.2f), color2d);
             axes[20] = new VertexPositionColor(new Vector3(0, 0.1f, axisLength + 0.2f), color2d);
             axes[21] = new VertexPositionColor(new Vector3(0, 0.4f, axisLength + 0.2f), color2d);
+            if (GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware) return;
 
             var g = GraphicsDeviceManager.Current.GraphicsDevice;
             _axesVertexBuffer = new VertexBuffer(g, typeof (VertexPositionColor), NumberOfVerts, BufferUsage.WriteOnly);

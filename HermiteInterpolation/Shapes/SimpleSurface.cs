@@ -30,15 +30,18 @@ namespace HermiteInterpolation.Shapes
 
         public SimpleSurface(VertexPositionNormalColor[] vertices, int xDimension, int yDimension)
         {
-            
+           
             _xDimension = xDimension;
             _yDimension = yDimension;
             _vertices = vertices;
+           
+            if (GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware) return;
             _vertexBuffer = new VertexBuffer(GraphicsDeviceManager.Current.GraphicsDevice,
-                typeof (VertexPositionNormalColor), vertices.Length, BufferUsage.WriteOnly);
+            typeof (VertexPositionNormalColor), vertices.Length, BufferUsage.WriteOnly);
             _vertexBuffer.SetData(_vertices);
-            //_indices = new short[_xDimension]; //_vertices.Length];
             DrawStyle = DrawStyle.Surface;
+            //_indices = new short[_xDimension]; //_vertices.Length];
+
             // SquareIndices();
             //_vertexBuffer = vertexBuffer;
         }
@@ -107,7 +110,7 @@ namespace HermiteInterpolation.Shapes
             {
                 _vertices[i].Color = color;
             }
-            _vertexBuffer.SetData(_vertices);
+            _vertexBuffer?.SetData(_vertices);
         }
 
         public void ColoredHeight()
