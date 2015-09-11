@@ -1,6 +1,6 @@
 ﻿using System;
-using HermiteInterpolation.Functions;
-using HermiteInterpolation.Shapes.HermiteSpline;
+using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
@@ -10,13 +10,13 @@ namespace HermiteInterpolation.SplineKnots
 //        private readonly int _uCount;
 //        private readonly int _vCount;
 //
-//        public ReducedDeBoorKnotsGenerator(InterpolatedFunction function, int uCount, int vCount) : base(function)
+//        public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function, int uCount, int vCount) : base(function)
 //        {
 //            _uCount = uCount;
 //            _vCount = vCount;
 //        }
 
-        public ReducedDeBoorKnotsGenerator(InterpolatedFunction function) : base(function)
+        public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function) : base(function)
         {
         }
 

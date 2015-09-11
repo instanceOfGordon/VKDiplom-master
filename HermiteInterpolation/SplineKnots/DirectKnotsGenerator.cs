@@ -1,8 +1,8 @@
 ﻿
 using System;
 using System.Threading.Tasks;
-using HermiteInterpolation.Functions;
-using HermiteInterpolation.Shapes.HermiteSpline;
+using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
@@ -10,7 +10,7 @@ namespace HermiteInterpolation.SplineKnots
     public class DirectKnotsGenerator : KnotsGenerator
     {
 
-        public DirectKnotsGenerator(InterpolatedFunction function) : base(function)
+        public DirectKnotsGenerator(InterpolativeMathFunction function) : base(function)
         {
         }
 
@@ -28,10 +28,10 @@ namespace HermiteInterpolation.SplineKnots
                 var v = vDimension.Min;
                 for (int j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
-                    var z = Functions.Functions.SafeCall(Function.Z, u, v); //Z(u, v);
-                    var dx = Functions.Functions.SafeCall(Function.Dx, u, v); //Dx(u, v);
-                    var dy = Functions.Functions.SafeCall(Function.Dy, u, v); //Dy(u, v);
-                    var dxy = Functions.Functions.SafeCall(Function.Dxy, u, v); //Dxy(u, v);
+                    var z = MathFunctions.MathFunctions.SafeCall(Function.Z, u, v); //Z(u, v);
+                    var dx = MathFunctions.MathFunctions.SafeCall(Function.Dx, u, v); //Dx(u, v);
+                    var dy = MathFunctions.MathFunctions.SafeCall(Function.Dy, u, v); //Dy(u, v);
+                    var dxy = MathFunctions.MathFunctions.SafeCall(Function.Dxy, u, v); //Dxy(u, v);
                     values[i][j] = new Knot(u, v, z, dx, dy, dxy);
 
                 }

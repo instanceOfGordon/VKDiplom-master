@@ -1,24 +1,24 @@
 ﻿using System;
 using CalculationEngine;
 
-namespace HermiteInterpolation.Functions
+namespace HermiteInterpolation.MathFunctions
 {
     /// <summary>
     /// Factory for creating anonymous delegates represents RxR->R math functions.
     /// </summary>
-    internal static class Functions
+    internal static class MathFunctions
     {
         /// <summary>
-        ///     Parse function from string.        /// 
+        ///     Parse MathFunction from string.        /// 
         /// </summary>
-        /// <param name="mathExpression">String form of aproximated function.</param>
+        /// <param name="mathExpression">String form of aproximated MathFunction.</param>
         /// <param name="variableX">Substring of mathExpression used as first variable.</param>
         /// <param name="variableY">Substring of mathExpression used as second variable.</param>
         /// <returns>
-        ///     Function delegate if mathExpression is correct math function, othervise
+        ///     MathFunction delegate if mathExpression is correct math MathFunction, othervise
         ///     returns null;
         /// </returns>
-        internal static Function FromString(string mathExpression, string variableX, string variableY)
+        internal static MathFunction FromString(string mathExpression, string variableX, string variableY)
         {
             var engine = new CalcEngine
             {
@@ -36,27 +36,27 @@ namespace HermiteInterpolation.Functions
             {
                 return null;
             }
-            Function function = (x, y) =>
+            MathFunction mathFunction = vars =>
             {
-                engine.Variables[variableX] = x;
-                engine.Variables[variableY] = y;
+                engine.Variables[variableX] = vars[0];
+                engine.Variables[variableY] = vars[1];
                 var result = (double) engine.Evaluate(mathExpression);
                 return result;
             };
-            return function;
+            return mathFunction;
         }
 
 
         //Za toto sa hanbim. 
 
-        internal static double SafeCall(Function function, double x, double y)
+        internal static double SafeCall(MathFunction mathFunction, double x, double y)
         {
             //float offset = _meshDensity/10;
-            var value = function(x, y);
+            var value = mathFunction(x, y);
             if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
-            value = function(x, y - 0.05);
+            value = mathFunction(x, y - y*double.Epsilon);
             if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
-            value = function(x - 0.05, y - 0.05);
+            value = mathFunction(x + x * double.Epsilon, y - y * double.Epsilon);
 
 
             return value;

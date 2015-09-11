@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Windows.Graphics;
 using HermiteInterpolation.Primitives;
-using HermiteInterpolation.Shapes.HermiteSpline;
+using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

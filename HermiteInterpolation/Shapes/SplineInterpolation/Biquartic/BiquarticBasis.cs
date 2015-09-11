@@ -1,9 +1,8 @@
 ﻿using System;
-using HermiteInterpolation.Functions;
 using HermiteInterpolation.SplineKnots;
 using MathNet.Numerics.LinearAlgebra;
 
-namespace HermiteInterpolation.Shapes.HermiteSpline.Biquartic
+namespace HermiteInterpolation.Shapes.SplineInterpolation.Biquartic
 {
     internal class BiquarticBasis : Basis
     {

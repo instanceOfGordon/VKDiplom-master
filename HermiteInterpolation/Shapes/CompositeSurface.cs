@@ -5,54 +5,72 @@ using Microsoft.Xna.Framework;
 
 namespace HermiteInterpolation.Shapes
 {
- 
-    public class CompositeSurface : ISurface
+    public abstract class CompositeSurface : ISurface
     {
-        //private readonly float _meshDensity;
-        // private readonly HermiteType _type;
-        private DrawStyle _drawStyle;
-//        public HermiteType Type {
-//            get { return _type; }
-//        }
+        protected static readonly Color DefaultColor = Color.FromNonPremultiplied(128, 128, 128, 255);
+        protected static readonly Vector3 DefaultNormal = Vector3.Zero;
 
-       
 
-        private float? _maxHeight;
-        private float? _minHeight;
-    
+        private Color _color = DefaultColor;
 
-        public CompositeSurface(IEnumerable<ISurface> segments)
+        public Color Color
         {
-            Segments = segments;
-            //_meshDensity = 0.1f;
-           
-           
-        }
-
-        protected IEnumerable<ISurface> Segments { get; }
-
-     
-
-        public DrawStyle DrawStyle
-        {
-            get { return _drawStyle; }
+            get { return _color; }
             set
             {
-                _drawStyle = value;
-                foreach (var segment in Segments)
-                {
-                    segment.DrawStyle = value;
-                }
+                _color = value;
+                ColoredByShades(value);
+            }
+        }
+        protected IEnumerable<ISurface> Segments { get; set; }
+        private float? _minHeight;
+        private float? _maxHeight;
+
+        public string Name { get; set; } = null;
+
+        
+
+        public void Draw()
+        {
+            //if (_segments == null)
+            //    _segments = CreateMesh();
+            //_segments.Draw();
+            foreach (var segment in Segments)
+            {
+                segment.Draw();
             }
         }
 
+        public DrawStyle DrawStyle { get; set; }
+        public float MinHeight
+        {
+            get
+            {
+                if (!_minHeight.HasValue)
+                    _minHeight = Segments.Min(segment => segment.MinHeight);
+                //_vertices.Min(vertex => vertex.Position.Z);
+                return _minHeight.Value;
+            }
+            //protected set { _minHeight = value; }
+        }
 
+        public float MaxHeight
+        {
+            get
+            {
+                if (!_maxHeight.HasValue) _maxHeight = Segments.Max(segment => segment.MaxHeight);
+                return _maxHeight.Value;
+            }
+            //  protected set { _maxHeight = value; }
+        }
         public void ColoredSimple(Color color)
         {
+            _color = color;
             foreach (var segment in Segments)
             {
                 segment.ColoredSimple(color);
             }
+
         }
 
         public void ColoredHeight()
@@ -64,8 +82,8 @@ namespace HermiteInterpolation.Shapes
 
             foreach (var segment in Segments)
             {
-                var fromHue = ((segment.MinHeight - minZ)/dZ)*300f;
-                var toHue = ((segment.MaxHeight - minZ)/dZ)*300f;
+                var fromHue = ((segment.MinHeight - minZ) / dZ) * 300f;
+                var toHue = ((segment.MaxHeight - minZ) / dZ) * 300f;
                 segment.ColoredHeight(fromHue, toHue);
             }
         }
@@ -79,53 +97,11 @@ namespace HermiteInterpolation.Shapes
 
             foreach (var segment in Segments)
             {
-                var frHue = ((segment.MinHeight - minZ)/dZ)*toHue - fromHue;
-                var tHue = ((segment.MaxHeight - minZ)/dZ)*toHue;
+                var frHue = ((segment.MinHeight - minZ) / dZ) * toHue - fromHue;
+                var tHue = ((segment.MaxHeight - minZ) / dZ) * toHue;
                 segment.ColoredHeight(frHue, tHue);
             }
         }
-
-        public float MinHeight
-        {
-            get
-            {
-                if (!_minHeight.HasValue)
-                    _minHeight = Segments.Min(segment => segment.MinHeight);
-                //_vertices.Min(vertex => vertex.Position.Z);
-                return _minHeight.Value;
-            }
-            protected set { _minHeight = value; }
-        }
-
-        public float MaxHeight
-        {
-            get
-            {
-                if (!_maxHeight.HasValue) _maxHeight = Segments.Max(segment => segment.MaxHeight);
-                return _maxHeight.Value;
-            }
-          //  protected set { _maxHeight = value; }
-        }
-
-        public virtual void Draw()
-        {
-            //for (var i = 0; i < Segments.Count; i++)
-            //{
-            //    Segments[i].Draw();
-            //}
-            foreach (var segment in Segments)
-            {
-                segment.Draw();
-            }
-        }
-
-//        protected void GenerateMesh(InterpolatedFunction aproximationFunction)
-//        {
-//            var generator = HermiteMeshGeneratorFactory.CreateHermiteMeshGenerator(this,aproximationFunction);
-//            Segments = generator.CreateSegments();
-//
-//            //Segments = HermiteMeshGeneratorFactory.CreateHermiteMeshGenerator(this, aproximationFunction).CreateSegments();
-//        }
 
         public virtual void ColoredBySegment(ColorUtils.SeedColor seedFunction, params object[] parameters)
         {
@@ -144,7 +120,7 @@ namespace HermiteInterpolation.Shapes
             //new Color(255, 201, 14)};
             //var colors = new[] { new Color(237, 28, 36), new Color(6, 128, 64), new Color(63, 72, 204), new Color(255, 201, 14) };
             // new Color(63, 72, 204), new Color(163, 73, 164)};
-            ColoredBySegment(x=>ColorUtils.Random());
+            ColoredBySegment(x => ColorUtils.Random());
             //Segments.ForEach(segment => segment.ColoredSimple(ColorUtils.Random()));
 
             //            var colors = new[] { new Color(255, 6, 6), new Color(6, 255, 6), new Color(6, 6, 255), new Color(255, 6, 255) };
@@ -165,7 +141,7 @@ namespace HermiteInterpolation.Shapes
 
         public void ColoredByShades(Color baseColor)
         {
-            ColoredBySegment(color => ColorUtils.RandomShade((Color) color[0]), baseColor);
+            ColoredBySegment(color => ColorUtils.RandomShade((Color)color[0]), baseColor);
         }
 
         public void ColoredByShades(float baseHue)
@@ -177,5 +153,6 @@ namespace HermiteInterpolation.Shapes
         {
             ColoredSimple(Color.FromNonPremultiplied(r, g, b, a));
         }
+
     }
 }

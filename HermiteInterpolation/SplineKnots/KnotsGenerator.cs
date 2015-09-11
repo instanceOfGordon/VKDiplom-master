@@ -1,13 +1,13 @@
-using HermiteInterpolation.Functions;
-using HermiteInterpolation.Shapes.HermiteSpline;
+using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Shapes.SplineInterpolation;
 
 namespace HermiteInterpolation.SplineKnots
 {
     public abstract class KnotsGenerator
     {
-        public InterpolatedFunction Function { get; }
+        public InterpolativeMathFunction Function { get; }
 
-        protected KnotsGenerator(InterpolatedFunction function)
+        protected KnotsGenerator(InterpolativeMathFunction function)
         {
             Function = function;
         }

@@ -3,11 +3,10 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using HermiteInterpolation.Functions;
+using HermiteInterpolation;
+using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Shapes;
-using HermiteInterpolation.Shapes.HermiteSpline;
-using HermiteInterpolation.Shapes.HermiteSpline.Bicubic;
-using HermiteInterpolation.Shapes.HermiteSpline.Biquartic;
+using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
@@ -50,7 +49,7 @@ namespace VKDiplom
         private void DrawButton_OnClick(object sender, RoutedEventArgs e)
         {
            
-            InterpolatedFunction function;
+            InterpolativeMathFunction function;
             SurfaceDimension uDim, vDim;
           
             try
@@ -65,7 +64,7 @@ namespace VKDiplom
                double.Parse(HermiteVMinTextBox.Text),
                 double.Parse(HermiteVMaxTextBox.Text),
                 int.Parse(HermiteVCountTextBox.Text));
-                function = InterpolatedFunction.FromString(FunctionExpressionTextBox.Text, XVariableTextBox.Text,
+                function = InterpolativeMathFunction.FromString(FunctionExpressionTextBox.Text, XVariableTextBox.Text,
                     YVariableTextBox.Text);
             }
             catch (Exception)
@@ -73,7 +72,7 @@ namespace VKDiplom
                 MessageBox.Show("Invalid input.");
                 return;
             }
-            //Spline shape, fdshape, sdshape;
+            //SplineSurface shape, fdshape, sdshape;
             //var selectedItem = (HermiteType) HermiteTypeComboBox.SelectedIndex;
             //switch (selectedItem)
             //{
@@ -105,7 +104,7 @@ namespace VKDiplom
             //}
            
 
-            var createSpline = (HermiteSurfaceFactory) HermiteTypeComboBox.SelectedValue;
+            var createSpline = (SplineFactory) HermiteTypeComboBox.SelectedValue;
             var createKnotsGenerator = (KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue;
             var shape = createSpline(uDim, vDim, createKnotsGenerator(function));
             var fdshape = createSpline(uDim, vDim, createKnotsGenerator(function), Derivation.First);
@@ -135,22 +134,22 @@ namespace VKDiplom
             _secondDerScene.Add(sdshape,false);
         }
 
-        private void DrawHermiteSurface(Scene scene, CompositeSurface surface)
-        {
-            new Thread(() => { });
+        //private void DrawHermiteSurface(Scene scene, CompositeSurface surface)
+        //{
+        //    new Thread(() => { });
 
-            surface.ColoredHeight();
-            surface.DrawStyle = _drawStyle;
-            switch (_textureStyle)
-            {
-                case TextureStyle.SingleColor:
-                    surface.ColoredSimple(_color);
-                    break;
-                case TextureStyle.HeightColored:
-                    surface.ColoredHeight();
-                    break;
-            }
-            scene.Add(surface);
-        }
+        //    surface.ColoredHeight();
+        //    surface.DrawStyle = _drawStyle;
+        //    switch (_textureStyle)
+        //    {
+        //        case TextureStyle.SingleColor:
+        //            surface.ColoredSimple(_color);
+        //            break;
+        //        case TextureStyle.HeightColored:
+        //            surface.ColoredHeight();
+        //            break;
+        //    }
+        //    scene.Add(surface);
+        //}
     }
 }

@@ -1,8 +1,7 @@
-﻿using HermiteInterpolation.Functions;
-using HermiteInterpolation.SplineKnots;
+﻿using HermiteInterpolation.SplineKnots;
 using MathNet.Numerics.LinearAlgebra;
 
-namespace HermiteInterpolation.Shapes.HermiteSpline
+namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
     internal abstract class Basis
     {

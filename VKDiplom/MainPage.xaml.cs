@@ -5,8 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Graphics;
 using System.Windows.Input;
 using System.Windows.Media;
+using HermiteInterpolation;
 using HermiteInterpolation.Shapes;
-using HermiteInterpolation.Shapes.HermiteSpline;
+using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
@@ -35,7 +36,7 @@ namespace VKDiplom
         private readonly SolidColorBrush _disabledColorBrush = new SolidColorBrush(Colors.DarkGray);
         private readonly DrawStyle _drawStyle = DrawStyle.Surface;
         
-        //private readonly InterpolatedFunction _aproximationFunction = new InterpolatedFunction();
+        //private readonly InterpolativeMathFunction _aproximationFunction = new InterpolativeMathFunction();
 
         private readonly TextureStyle _textureStyle = TextureStyle.HeightColored;
         private bool _canDrag;
@@ -43,7 +44,7 @@ namespace VKDiplom
         private Scene _firstDerScene;
         private Derivation _focusedDrawingSurface = Derivation.Zero;
         private Scene _functionScene; //= new Scene();
-        private Dictionary<string, HermiteSurfaceFactory> _hermiteChoices;
+        private Dictionary<string, SplineFactory> _hermiteChoices;
         private Dictionary<string, KnotsGeneratorFactory> _knotsChoices;
         private Point _mouseDownPosition;
         private Scene _secondDerScene;

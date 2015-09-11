@@ -1,4 +1,4 @@
-﻿namespace HermiteInterpolation.Shapes.HermiteSpline
+﻿namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
     public enum Derivation
     {

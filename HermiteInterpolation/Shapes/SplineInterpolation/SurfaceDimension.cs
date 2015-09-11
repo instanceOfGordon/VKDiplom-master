@@ -1,6 +1,4 @@
-using System;
-
-namespace HermiteInterpolation.Shapes.HermiteSpline
+namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
     public struct SurfaceDimension
     {

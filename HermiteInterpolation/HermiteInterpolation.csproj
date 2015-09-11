@@ -79,16 +79,19 @@
     <Reference Include="System.Windows.Xna" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MathFunctions\IFunctionDerivator.cs" />
     <Compile Include="Primitives\VertexNormals.cs" />
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
-    <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticHermiteSurface2.cs" />
-    <Compile Include="Shapes\HermiteSpline\SurfaceIndexer.cs" />
-    <Compile Include="Shapes\HermiteSpline\SurfaceDimension.cs" />
+    <Compile Include="Shapes\CompositeSurface.cs" />
+    <Compile Include="Shapes\MathFunctionSurface.cs" />
+    <Compile Include="Shapes\SplineInterpolation\SurfaceIndexer.cs" />
+    <Compile Include="Shapes\SplineInterpolation\SurfaceDimension.cs" />
+    <Compile Include="Shapes\SplineInterpolation\Spline.cs" />
     <Compile Include="SplineKnots\KnotsGenerator.cs" />
     <Compile Include="SplineKnots\Knot.cs" />
     <Compile Include="SplineKnots\DeBoorKnotsGenerator.cs" />
-    <Compile Include="Functions\Functions.cs" />
-    <Compile Include="Functions\InterpolatedFunction.cs" />
+    <Compile Include="MathFunctions\MathFunctions.cs" />
+    <Compile Include="MathFunctions\InterpolativeMathFunction.cs" />
     <Compile Include="SplineKnots\KnotsGeneratorFactory.cs" />
     <Compile Include="SplineKnots\ReducedDeBoorKnotsGenerator.cs" />
     <Compile Include="Numerics\LinearSystemSolver.cs" />
@@ -96,15 +99,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\CoordinateAxes.cs" />
     <Compile Include="Shapes\DrawStyle.cs" />
-    <Compile Include="Shapes\HermiteSpline\Basis.cs" />
-    <Compile Include="Shapes\HermiteSpline\Bicubic\BicubicBasis.cs" />
-    <Compile Include="Shapes\HermiteSpline\Bicubic\BicubicHermiteSpline.cs" />
-    <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticBasis.cs" />
-    <Compile Include="Shapes\HermiteSpline\Biquartic\BiquarticHermiteSpline.cs" />
-    <Compile Include="Shapes\HermiteSpline\Derivation.cs" />
-    <Compile Include="Shapes\HermiteSpline\Spline.cs" />
-    <Compile Include="Shapes\CompositeSurface.cs" />
-    <Compile Include="Shapes\HermiteSpline\SplineFactory.cs" />
+    <Compile Include="Shapes\SplineInterpolation\Basis.cs" />
+    <Compile Include="Shapes\SplineInterpolation\Bicubic\BicubicBasis.cs" />
+    <Compile Include="Shapes\SplineInterpolation\Bicubic\BicubicHermiteSurface.cs" />
+    <Compile Include="Shapes\SplineInterpolation\Biquartic\BiquarticBasis.cs" />
+    <Compile Include="Shapes\SplineInterpolation\Biquartic\BiquarticHermiteSurface.cs" />
+    <Compile Include="Shapes\SplineInterpolation\Derivation.cs" />
+    <Compile Include="Shapes\SplineInterpolation\SplineFactory.cs" />
     <Compile Include="Shapes\IDrawable.cs" />
     <Compile Include="Shapes\ISurface.cs" />
     <Compile Include="Shapes\SimpleSurface.cs" />

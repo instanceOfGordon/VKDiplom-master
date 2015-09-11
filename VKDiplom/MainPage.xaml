@@ -64,7 +64,7 @@
                 <ColumnDefinition MinWidth="300" MaxWidth="400" />
             </Grid.ColumnDefinitions>
             <sdk:Label Grid.Column="0" Height="23" Grid.ColumnSpan="2" VerticalAlignment="Top"
-                       HorizontalAlignment="Left" Margin="10" Content="Function"
+                       HorizontalAlignment="Left" Margin="10" Content="MathFunction"
                        x:Name="MainDrawingSurfaceLabel" />
             <DrawingSurface Grid.Column="0" x:Name="FunctionDrawingSurface"
                             Draw="FunctionDrawingSurface_OnDraw"
@@ -177,15 +177,15 @@
                     <TextBox Grid.Row="1" Grid.Column="5" x:Name="HermiteVCountTextBox" Margin="0,5,0,0"
                              Text="4" />
 
-                    <sdk:Label Grid.Row="0" Grid.Column="6" Content="Spline type: " Margin="0,10,0,0"
+                    <sdk:Label Grid.Row="0" Grid.Column="6" Content="Function type: " Margin="0,10,0,0"
                                HorizontalAlignment="Right"
-                               Style="{StaticResource LabelForeground}" Width="71" />
+                               Style="{StaticResource LabelForeground}" Width="auto" />
                     <ComboBox Name="HermiteTypeComboBox" Grid.Row="0" Grid.Column="7" Margin="5,10,0,0"
                               HorizontalAlignment="Left" Width="100"
                               SelectedIndex="0" Style="{StaticResource ComboBox}" />
                     <sdk:Label Content="Knots generator: " Grid.Row="1" Grid.Column="6" Margin="0,5,0,0"
                                HorizontalAlignment="Right"
-                               Style="{StaticResource LabelForeground}" Width="98" />
+                               Style="{StaticResource LabelForeground}" Width="auto" />
                     <ComboBox Name="KnotsGeneratorComboBox" Margin="5,5,0,0" Grid.Row="1" Grid.Column="7"
                               HorizontalAlignment="Left" Width="100"
                               SelectedIndex="0" Style="{StaticResource ComboBox}">
@@ -226,7 +226,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <sdk:Label Grid.Column="0" Content="Function input: " Padding="10"
+                <sdk:Label Grid.Column="0" Content="MathFunction input: " Padding="10"
                            Style="{StaticResource LabelForeground}" />
                 <TextBox Grid.Column="1" x:Name="FunctionExpressionTextBox" Height="25" Margin="5,5,10,5"
                          Text="sin(sqrt(x^2+y^2))" />

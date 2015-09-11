@@ -1,15 +1,17 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Browser;
 using System.Windows.Controls;
 using System.Windows.Graphics;
-using HermiteInterpolation.Functions;
+using HermiteInterpolation;
+using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Shapes;
-using HermiteInterpolation.Shapes.HermiteSpline;
-using HermiteInterpolation.Shapes.HermiteSpline.Bicubic;
-using HermiteInterpolation.Shapes.HermiteSpline.Biquartic;
+using HermiteInterpolation.Shapes.SplineInterpolation;
+using HermiteInterpolation.Shapes.SplineInterpolation.Bicubic;
+using HermiteInterpolation.Shapes.SplineInterpolation.Biquartic;
 using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
@@ -47,16 +49,16 @@ namespace VKDiplom
 //                                                         /(Math.Pow(x*x + y*y, 1.5));
 
 
-            //var aproximationFunction = new InterpolatedFunction(f, xd, yd, xyd);
-            //var aproximationFunction = new InterpolatedFunction(f);
-            var aproximationFunction = InterpolatedFunction.FromString("sin(sqrt(x^2+y^2))", "x", "y");
-            //var aproximationFunction = InterpolatedFunction.FromString("x^4+y^4", "x", "y");
+            //var aproximationFunction = new InterpolativeMathFunction(f, xd, yd, xyd);
+            //var aproximationFunction = new InterpolativeMathFunction(f);
+            var aproximationFunction = InterpolativeMathFunction.FromString("sin(sqrt(x^2+y^2))", "x", "y");
+            //var aproximationFunction = InterpolativeMathFunction.FromString("x^4+y^4", "x", "y");
 //            var shape = new SegmentSurface(new double[] {-3, -2, -1, 0, 1, 2, 3},
 //                new double[] {-3, -2, -1, 0, 1, 2, 3},
             //  aproximationFunction, derivation);
             //var shape = new ClassicHermiteSurface(new double[] { -2, -1, 0, 1 }, new double[] { -2, -1, 0, 1 },
             // var shape = new HermiteShape(new double[] { -2, -1 }, new double[] { -2, -1 },
-            var shape = new BiquarticHermiteSpline(new SurfaceDimension(-3, 3, 7), new SurfaceDimension(-3, 3, 7),
+            var shape = new BiquarticHermiteSurface(new SurfaceDimension(-3, 3, 7), new SurfaceDimension(-3, 3, 7),
                 //var shape = HermiteSurfaceFactoryHolder.CreateBiquartic(-3, 1, 7, -3, 1, 7,
                 new DirectKnotsGenerator(aproximationFunction), derivation);
             //shape.ColoredHeight();
@@ -142,17 +144,22 @@ namespace VKDiplom
 
         private void InittializeComboBoxes()
         {
-            _hermiteChoices = new Dictionary<string, HermiteSurfaceFactory>
+            _hermiteChoices = new Dictionary<string, SplineFactory>
             {
                 {
                     "Bicubic",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new BicubicHermiteSpline(uDimension, vDimension, knotsGenerator, derivation)                    
+                        new BicubicHermiteSurface(uDimension, vDimension, knotsGenerator, derivation)                    
                 },
                 {
                     "Biquartic",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new BiquarticHermiteSpline(uDimension, vDimension, knotsGenerator, derivation)
+                        new BiquarticHermiteSurface(uDimension, vDimension, knotsGenerator, derivation)
+                },
+                {
+                    "Direct function",
+                    (uDimension, vDimension, knotsGenerator, derivation) =>
+                        new MathFunctionSurface(uDimension, vDimension, FunctionExpressionTextBox.Text,XVariableTextBox.Text,YVariableTextBox.Text)
                 }
             };
             _knotsChoices = new Dictionary<string, KnotsGeneratorFactory>
