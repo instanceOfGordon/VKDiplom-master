@@ -72,8 +72,9 @@
       <HintPath>$(TargetFrameworkDirectory)System.Core.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Threading.Tasks.SL5">
+    <Reference Include="System.Threading.Tasks.SL5, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Unofficial.3.1\lib\sl50\System.Threading.Tasks.SL5.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Xna" />
   </ItemGroup>
@@ -111,6 +112,9 @@
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\CoordinateSystems.cs" />
     <Compile Include="Utils\MyArrays.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
