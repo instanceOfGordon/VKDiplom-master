@@ -48,7 +48,8 @@ namespace VKDiplom
         private Dictionary<string, KnotsGeneratorFactory> _knotsChoices;
         private Point _mouseDownPosition;
         private Scene _secondDerScene;
-        private bool _isSoftwareRendered = false;
+        private readonly bool _isSoftwareRendered = false;
+        //private readonly double _scaleTresholdToDefault;
 
         public MainPage()
         {
@@ -59,7 +60,7 @@ namespace VKDiplom
 
             InitializeComponent();
             InittializeComboBoxes();
-
+            //_scaleTresholdToDefault = 0.025 * (ZScaleSlider.Maximum - ZScaleSlider.Minimum);
             // var 
         }
 
@@ -198,5 +199,10 @@ namespace VKDiplom
 
             _focusedDrawingSurface = Derivation.Second;
         }
+
+        //private void ScaleSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<T> e)
+        //{
+
+        //}
     }
 }

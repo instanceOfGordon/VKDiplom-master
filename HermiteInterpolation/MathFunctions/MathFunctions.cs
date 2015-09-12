@@ -52,13 +52,17 @@ namespace HermiteInterpolation.MathFunctions
         internal static double SafeCall(MathFunction mathFunction, double x, double y)
         {
             //float offset = _meshDensity/10;
+            //var value = mathFunction(x, y);
+            //if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
+            //value = mathFunction(x, y - 0.05);
+            //if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
+            //value = mathFunction(x - 0.05, y - 0.05);
+
             var value = mathFunction(x, y);
             if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
-            value = mathFunction(x, y - y*double.Epsilon);
+            value = mathFunction(x, y +  double.Epsilon);
             if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
-            value = mathFunction(x + x * double.Epsilon, y - y * double.Epsilon);
-
-
+            value = mathFunction(x +  double.Epsilon, y + double.Epsilon);
             return value;
         }
     }

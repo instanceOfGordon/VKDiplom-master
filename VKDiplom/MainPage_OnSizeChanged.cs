@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
 
 namespace VKDiplom
@@ -33,6 +34,23 @@ namespace VKDiplom
                                        (float) drawingSurface.ActualHeight;
 
             //_mouseDeltaScale = 300.0/Math.Min(drawingSurface.ActualWidth, drawingSurface.ActualHeight);
+        }
+
+        //private readonly double TressholdToDefault = 0.025 * (ZScaleSlider.Maximum - scaler.Minimum);
+        private void ScaleSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var scaler = sender as Slider;
+            if (scaler == null) return;
+            if (_functionScene == null) return;
+            //if (scaler.Value < 2 && scaler.Value > -2)
+            //{
+            //    scaler.Value = 0;
+            //}
+            var tresholdToDefault = 0.025 * (ZScaleSlider.Maximum - scaler.Minimum);
+            //if ((e.OldValue < 1-tresholdToDefault && e.NewValue > 1-tresholdToDefault) || (e.OldValue > 1+tresholdToDefault && e.NewValue < 1+tresholdToDefault))
+            if (e.NewValue > 1 - tresholdToDefault && e.NewValue < 1 + tresholdToDefault)
+                scaler.Value = 1;
+            ScenesAction(scene=>scene.Scale = new Vector3(1,1,(float)scaler.Value));
         }
     }
 }

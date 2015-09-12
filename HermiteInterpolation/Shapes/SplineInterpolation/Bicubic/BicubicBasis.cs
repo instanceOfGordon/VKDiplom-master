@@ -8,6 +8,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation.Bicubic
 
         public BicubicBasis(Knot[][] knots, Derivation derivation) : base(knots,derivation)
         {
+          
         }
 
         protected override Vector<double> FunctionVector(double t, double t0, double t1)

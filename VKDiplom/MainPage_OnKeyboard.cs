@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using VKDiplom.Engine;
 using Keyboard = VKDiplom.Utilities.Keyboard;
 
@@ -72,5 +74,7 @@ namespace VKDiplom
             //if (DebugBox != null)
             //    DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
         }
+
+
     }
 }

@@ -87,7 +87,7 @@ namespace VKDiplom
 
             var currentPosition = e.GetPosition(null);
             DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
-            if (Keyboard.IsKeyDown(Key.Ctrl))
+            if (Keyboard.IsKeyDown(Key.V))
             {
                 var rotation = 0.02f*(float) (_mouseDownPosition.Y - currentPosition.Y);
 //                _functionScene.RotationY += rotation;

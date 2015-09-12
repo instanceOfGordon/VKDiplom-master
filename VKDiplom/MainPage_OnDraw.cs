@@ -102,8 +102,9 @@ namespace VKDiplom
             //            function, Derivation.Second);
             //        break;
             //}
-           
 
+            var startTime = DateTime.Now;
+            
             var createSpline = (SplineFactory) HermiteTypeComboBox.SelectedValue;
             var createKnotsGenerator = (KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue;
             var shape = createSpline(uDim, vDim, createKnotsGenerator(function));
@@ -132,6 +133,14 @@ namespace VKDiplom
             sdshape.ColoredByShades(color);
             sdshape.DrawStyle = DrawStyle.Surface;
             _secondDerScene.Add(sdshape,false);
+            var endTime = DateTime.Now;
+            SetCalcLabelContent((endTime - startTime).Milliseconds);
+            
+        }
+
+        private void SetCalcLabelContent(double time)
+        {
+            CalcTimeLabel.Content = "Function rendered in: " + $"{time:0.00}" + " ms";
         }
 
         //private void DrawHermiteSurface(Scene scene, CompositeSurface surface)

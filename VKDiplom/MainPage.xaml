@@ -6,7 +6,7 @@
     xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
     xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" x:Class="VKDiplom.MainPage"
     mc:Ignorable="d"
-    d:DesignHeight="600" d:DesignWidth="800"
+    d:DesignHeight="600" d:DesignWidth="900"
     KeyDown="MainPage_OnKeyDown"
     KeyUp="MainPage_OnKeyUp">
 
@@ -60,12 +60,12 @@
 
         <Grid Grid.Row="1" Grid.Column="0" Style="{StaticResource DrawingGridBackground}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="500" />
-                <ColumnDefinition MinWidth="300" MaxWidth="400" />
+                <ColumnDefinition MinWidth="500" Width="2*"/>
+                <ColumnDefinition  Width="*"/>
             </Grid.ColumnDefinitions>
-            <sdk:Label Grid.Column="0" Height="23" Grid.ColumnSpan="2" VerticalAlignment="Top"
+            <!--<sdk:Label Grid.Column="0" Height="23" Grid.ColumnSpan="2" VerticalAlignment="Top"
                        HorizontalAlignment="Left" Margin="10" Content="MathFunction"
-                       x:Name="MainDrawingSurfaceLabel" />
+                       x:Name="MainDrawingSurfaceLabel" />-->
             <DrawingSurface Grid.Column="0" x:Name="FunctionDrawingSurface"
                             Draw="FunctionDrawingSurface_OnDraw"
                             SizeChanged="FunctionDrawingSurface_OnSizeChanged"
@@ -78,15 +78,17 @@
 
                             Loaded="FunctionDrawingSurface_OnLoaded"
                             MinWidth="500" MinHeight="300" />
-
-            <Grid Grid.Column="1" MinWidth="300">
+            <Line Grid.Column="0" VerticalAlignment="Center" Fill="LightGray" Stroke="LightGray" HorizontalAlignment="Left" X1="0" X2="20" Margin="9" StrokeThickness="1" Y1="0" Y2="0"></Line>
+            <Slider MaxHeight="300" Grid.Column="0" Name="ZScaleSlider" Minimum="0" Maximum="2" Value="1" ValueChanged="ScaleSlider_OnValueChanged" Orientation="Vertical" HorizontalAlignment="Left" Margin="10,30,0,30"></Slider>
+            <sdk:Label Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5" Foreground="Gray" Content="Hold 'V' for vertical rotation"></sdk:Label>
+                <Grid Grid.Column="1" MinWidth="300">
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight="150" />
                     <RowDefinition MinHeight="150" />
                 </Grid.RowDefinitions>
-                <sdk:Label Grid.Row="0" Height="23" Content="1st derivation"
+                <!--<sdk:Label Grid.Row="0" Height="23" Content="1st derivation"
                            x:Name="SecondDrawingSurfaceLabel"
-                           VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" />
+                           VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" />-->
                 <DrawingSurface Grid.Row="0" x:Name="FirstDerivationDrawingSurface"
                                 Draw="FirstDerivationDrawingSurface_OnDraw"
                                 SizeChanged="FirstDerivationDrawingSurface_OnSizeChanged"
@@ -100,9 +102,9 @@
                                 Loaded="FirstDerivationDrawingSurface_OnLoaded"
                                 MinWidth="300" MinHeight="150" />
 
-                <sdk:Label Grid.Row="1" Height="23" Content="2nd derivation"
+                <!--<sdk:Label Grid.Row="1" Height="23" Content="2nd derivation"
                            x:Name="ThirdDrawingSurfaceLabel"
-                           VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" />
+                           VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" />-->
                 <DrawingSurface Grid.Row="1" x:Name="SecondDerivationDrawingSurface"
                                 Draw="SecondDerivationDrawingSurface_OnDraw"
                                 SizeChanged="SecondDerivationDrawingSurface_OnSizeChanged"
@@ -115,7 +117,7 @@
 
                                 Loaded="SecondDerivationDrawingSurface_OnLoaded"
                                 MinWidth="300" MinHeight="150" />
-
+                    <sdk:Label Grid.Column="0" Grid.Row="1" Name="CalcTimeLabel" Content="Spline calculated in: ms" Foreground="Gray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Width="auto" > </sdk:Label>
             </Grid>
         </Grid>
         <Grid Style="{StaticResource GridBackground}" Grid.Row="2" Grid.Column="0" Height="auto">
@@ -163,7 +165,7 @@
                                Style="{StaticResource LabelForeground}" />
                     <TextBox Grid.Row="0" Grid.Column="5" x:Name="HermiteUCountTextBox"
 
-                             Margin="0,10,0,0" Text="4" />
+                             Margin="0,10,0,0" Text="7" />
                     <sdk:Label Grid.Row="1" Grid.Column="0" Content="V min: " Margin="10,5,0,0"
                                Style="{StaticResource LabelForeground}" />
                     <TextBox Grid.Row="1" Grid.Column="1" x:Name="HermiteVMinTextBox" Margin="0,5,0,0"
@@ -175,7 +177,7 @@
                     <sdk:Label Grid.Row="1" Grid.Column="4" Content="V knots: " Margin="10,5,0,0"
                                Style="{StaticResource LabelForeground}" />
                     <TextBox Grid.Row="1" Grid.Column="5" x:Name="HermiteVCountTextBox" Margin="0,5,0,0"
-                             Text="4" />
+                             Text="7" />
 
                     <sdk:Label Grid.Row="0" Grid.Column="6" Content="Function type: " Margin="0,10,0,0"
                                HorizontalAlignment="Right"
