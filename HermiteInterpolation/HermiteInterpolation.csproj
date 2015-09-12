@@ -79,6 +79,7 @@
     <Reference Include="System.Windows.Xna" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MathFunctions\MathExpression.cs" />
     <Compile Include="MathFunctions\IFunctionDerivator.cs" />
     <Compile Include="Primitives\VertexNormals.cs" />
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="SplineKnots\KnotsGenerator.cs" />
     <Compile Include="SplineKnots\Knot.cs" />
     <Compile Include="SplineKnots\DeBoorKnotsGenerator.cs" />
-    <Compile Include="MathFunctions\MathFunctions.cs" />
+    <Compile Include="MathFunctions\MathFunction.cs" />
     <Compile Include="MathFunctions\InterpolativeMathFunction.cs" />
     <Compile Include="SplineKnots\KnotsGeneratorFactory.cs" />
     <Compile Include="SplineKnots\ReducedDeBoorKnotsGenerator.cs" />

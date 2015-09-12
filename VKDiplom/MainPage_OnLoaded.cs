@@ -32,7 +32,7 @@ namespace VKDiplom
             }
             LoadScene(sender as DrawingSurface, out _functionScene);
 
-            // MexicanHatDemo(_functionScene, Derivation.Zero);
+             //MexicanHatDemo(_functionScene, Derivation.Zero);
         }
 
         private void MexicanHatDemo(Scene scene, Derivation derivation)
@@ -51,8 +51,8 @@ namespace VKDiplom
 
             //var aproximationFunction = new InterpolativeMathFunction(f, xd, yd, xyd);
             //var aproximationFunction = new InterpolativeMathFunction(f);
-            var aproximationFunction = InterpolativeMathFunction.FromString("sin(sqrt(x^2+y^2))", "x", "y");
-            //var aproximationFunction = InterpolativeMathFunction.FromString("x^4+y^4", "x", "y");
+            var mathExpression = new MathExpression("sin(sqrt(x^2+y^2))", "x", "y");
+            //var aproximationFunction = InterpolativeMathFunction.CompileFromString("x^4+y^4", "x", "y");
 //            var shape = new SegmentSurface(new double[] {-3, -2, -1, 0, 1, 2, 3},
 //                new double[] {-3, -2, -1, 0, 1, 2, 3},
             //  aproximationFunction, derivation);
@@ -60,7 +60,7 @@ namespace VKDiplom
             // var shape = new HermiteShape(new double[] { -2, -1 }, new double[] { -2, -1 },
             var shape = new BiquarticHermiteSurface(new SurfaceDimension(-3, 3, 7), new SurfaceDimension(-3, 3, 7),
                 //var shape = HermiteSurfaceFactoryHolder.CreateBiquartic(-3, 1, 7, -3, 1, 7,
-                new DirectKnotsGenerator(aproximationFunction), derivation);
+                mathExpression, derivation);
             //shape.ColoredHeight();
             //shape.ColoredSimple(Color.FromNonPremultiplied(96,72,128,255));
             shape.ColoredByShades(_colors.Next());
@@ -149,17 +149,17 @@ namespace VKDiplom
                 {
                     "Bicubic",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new BicubicHermiteSurface(uDimension, vDimension, knotsGenerator, derivation)                    
+                        new BicubicHermiteSurface(uDimension, vDimension,knotsGenerator, derivation)                    
                 },
                 {
                     "Biquartic",
-                    (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new BiquarticHermiteSurface(uDimension, vDimension, knotsGenerator, derivation)
+                   (uDimension, vDimension, knotsGenerator, derivation) =>
+                        new BiquarticHermiteSurface(uDimension, vDimension,knotsGenerator, derivation)       
                 },
                 {
                     "Direct function",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new MathFunctionSurface(uDimension, vDimension, FunctionExpressionTextBox.Text,XVariableTextBox.Text,YVariableTextBox.Text)
+                        new MathFunctionSurface(uDimension, vDimension,new MathExpression(MathExpressionTextBox.Text,XVariableTextBox.Text,YVariableTextBox.Text))
                 }
             };
             _knotsChoices = new Dictionary<string, KnotsGeneratorFactory>

@@ -14,6 +14,10 @@ namespace HermiteInterpolation.SplineKnots
         {
         }
 
+        public DirectKnotsGenerator(MathExpression expression) : base(expression)
+        {
+        }
+
 
         public override Knot[][] GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
@@ -41,6 +45,6 @@ namespace HermiteInterpolation.SplineKnots
         }
 
 
-        
+       
     }
 }

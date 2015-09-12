@@ -49,7 +49,7 @@ namespace VKDiplom
         private void DrawButton_OnClick(object sender, RoutedEventArgs e)
         {
            
-            InterpolativeMathFunction function;
+            InterpolativeMathFunction mathFunction;
             SurfaceDimension uDim, vDim;
           
             try
@@ -64,8 +64,7 @@ namespace VKDiplom
                double.Parse(HermiteVMinTextBox.Text),
                 double.Parse(HermiteVMaxTextBox.Text),
                 int.Parse(HermiteVCountTextBox.Text));
-                function = InterpolativeMathFunction.FromString(FunctionExpressionTextBox.Text, XVariableTextBox.Text,
-                    YVariableTextBox.Text);
+                mathFunction = InterpolativeMathFunction.CompileFromString(MathExpressionTextBox.Text,XVariableTextBox.Text,YVariableTextBox.Text);
             }
             catch (Exception)
             {
@@ -107,14 +106,14 @@ namespace VKDiplom
             
             var createSpline = (SplineFactory) HermiteTypeComboBox.SelectedValue;
             var createKnotsGenerator = (KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue;
-            var shape = createSpline(uDim, vDim, createKnotsGenerator(function));
-            var fdshape = createSpline(uDim, vDim, createKnotsGenerator(function), Derivation.First);
-            var sdshape = createSpline(uDim, vDim, createKnotsGenerator(function), Derivation.Second);
+            var shape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction));
+            var fdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.First);
+            var sdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.Second);
 
             var color = _colors.Next();
             shape.ColoredByShades(color);
             shape.DrawStyle = DrawStyle.Surface;
-            shape.Name = FunctionExpressionTextBox.Text;
+            shape.Name = MathExpressionTextBox.Text;
 
             _functionScene.Add(shape,false);
 

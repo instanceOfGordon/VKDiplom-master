@@ -60,10 +60,10 @@ namespace HermiteInterpolation.Shapes
                 _drawStyle = value;
                 switch (value)
                 {
-                    case DrawStyle.Surface:
+                    case DrawStyle.Wireframe:
                         _rasterizerState = new RasterizerState
                         {
-                            FillMode = FillMode.Solid,
+                            FillMode = FillMode.WireFrame,
                             CullMode = CullMode.None
                         };
                         break;
@@ -73,10 +73,10 @@ namespace HermiteInterpolation.Shapes
                     default:
                         _rasterizerState = new RasterizerState
                         {
-                            FillMode = FillMode.WireFrame,
+                            FillMode = FillMode.Solid,
                             CullMode = CullMode.None
                         };
-                        break;
+                        break;                 
                 }
                 InitializeIndices();
                 CalculateLightingNormals();

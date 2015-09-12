@@ -8,10 +8,7 @@ namespace HermiteInterpolation.SplineKnots
 {
     public class DeBoorKnotsGenerator : KnotsGenerator
     {
-        public DeBoorKnotsGenerator(InterpolativeMathFunction function)
-            : base(function)
-        {
-        }
+       
 
         protected virtual double[] MainDiagonal(int equationsCount, bool even = false)
         {
@@ -212,6 +209,14 @@ namespace HermiteInterpolation.SplineKnots
             {
                 dset(i + 1, result[i]);
             }
+        }
+
+        public DeBoorKnotsGenerator(InterpolativeMathFunction function) : base(function)
+        {
+        }
+
+        public DeBoorKnotsGenerator(MathExpression expression) : base(expression)
+        {
         }
     }
 }

@@ -230,7 +230,7 @@
 
                 <sdk:Label Grid.Column="0" Content="MathFunction input: " Padding="10"
                            Style="{StaticResource LabelForeground}" />
-                <TextBox Grid.Column="1" x:Name="FunctionExpressionTextBox" Height="25" Margin="5,5,10,5"
+                <TextBox Grid.Column="1" x:Name="MathExpressionTextBox" Height="25" Margin="5,5,10,5"
                          Text="sin(sqrt(x^2+y^2))" />
 
 

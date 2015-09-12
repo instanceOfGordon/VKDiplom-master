@@ -3,10 +3,10 @@ using MathNet.Numerics;
 
 namespace HermiteInterpolation.MathFunctions
 {
-    public delegate double MathFunction(params double[] variables);
+   
 
     /// <summary>
-    ///     Defines function and it's derivations in form of delegates.
+    ///     Defines expression and it's derivations in form of delegates.
     /// </summary>
     public class InterpolativeMathFunction
     {
@@ -14,7 +14,7 @@ namespace HermiteInterpolation.MathFunctions
         //private const double H = 0.00001;
 
         /// <summary>
-        ///     Parameter z specifies function to be approximated Hermite spline.
+        ///     Parameter z specifies expression to be approximated Hermite spline.
         ///     All required derivations are calculated automatically.
         /// </summary>
         /// <param name="z"></param>
@@ -41,7 +41,7 @@ namespace HermiteInterpolation.MathFunctions
         }
 
         /// <summary>
-        ///     Parameter z specifies function to be approximated Hermite spline.
+        ///     Parameter z specifies expression to be approximated Hermite spline.
         ///     All required derivations are exactly specified.
         /// </summary>
         /// <param name="z"></param>
@@ -62,11 +62,32 @@ namespace HermiteInterpolation.MathFunctions
         public MathFunction Dy { get; }
         public MathFunction Dxy { get; }
 
+
+        public static InterpolativeMathFunction operator +(InterpolativeMathFunction f1, InterpolativeMathFunction f2)
+        {
+            return new InterpolativeMathFunction(vars=>f1.Z(vars)+f2.Z(vars));
+        }
+
+        public static InterpolativeMathFunction operator -(InterpolativeMathFunction f1, InterpolativeMathFunction f2)
+        {
+            return new InterpolativeMathFunction(vars => f1.Z(vars) - f2.Z(vars));
+        }
+
+        public static InterpolativeMathFunction operator *(InterpolativeMathFunction f1, InterpolativeMathFunction f2)
+        {
+            return new InterpolativeMathFunction(vars => f1.Z(vars) * f2.Z(vars));
+        }
+
+        public static InterpolativeMathFunction operator /(InterpolativeMathFunction f1, InterpolativeMathFunction f2)
+        {
+            return new InterpolativeMathFunction(vars => f1.Z(vars) / f2.Z(vars));
+        }
+
         //public MathFunction Get(Derivation derivation)
         //{
         //    switch (derivation)
         //    {
-                    
+
         //    }
         //}
 
@@ -78,15 +99,23 @@ namespace HermiteInterpolation.MathFunctions
         /// <param name="variableX">Substring of mathExpression used as first variable.</param>
         /// <param name="variableY">Substring of mathExpression used as second variable.</param>
         /// <returns>
-        ///     Instance of class if mathExpression is correct math Z, othervise
+        ///     Instance of class if mathExpression is correct expression Z, othervise
         ///     returns null;
         /// </returns>
-        public static InterpolativeMathFunction FromString(string mathExpression, string variableX, string variableY)
+        public static InterpolativeMathFunction CompileFromString(string mathExpression, string variableX, string variableY)
         {
             // TODO: osetrit vynimky pre neplatne vstupy
 
-            var function = MathFunctions.FromString(mathExpression, variableX, variableY);
+            var function = MathFunctions.CompileFromString(mathExpression, variableX, variableY);
             return function == null ? null : new InterpolativeMathFunction(function);
+        }
+    }
+
+    public static class MathExpressionExtensions
+    {
+        public static InterpolativeMathFunction CompileToMathFunction(this MathExpression expression)
+        {
+            return InterpolativeMathFunction.CompileFromString(expression.Expression,expression.Variables[0],expression.Variables[1]);
         }
     }
 }

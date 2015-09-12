@@ -7,18 +7,22 @@ namespace HermiteInterpolation.SplineKnots
 {
     public class ReducedDeBoorKnotsGenerator : DeBoorKnotsGenerator
     {
-//        private readonly int _uCount;
-//        private readonly int _vCount;
-//
-//        public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function, int uCount, int vCount) : base(function)
-//        {
-//            _uCount = uCount;
-//            _vCount = vCount;
-//        }
-
+        //        private readonly int _uCount;
+        //        private readonly int _vCount;
+        //
+        //        public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function, int uCount, int vCount) : base(function)
+        //        {
+        //            _uCount = uCount;
+        //            _vCount = vCount;
+        //        }
         public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function) : base(function)
         {
         }
+
+        public ReducedDeBoorKnotsGenerator(MathExpression expression) : base(expression)
+        {
+        }
+
 
         protected override double[] MainDiagonal(int equationsCount, bool even = false)
         {
@@ -117,5 +121,7 @@ namespace HermiteInterpolation.SplineKnots
             public int Eta { get; private set; }
             public int Upsilon { get; private set; }
         }
+
+        
     }
 }

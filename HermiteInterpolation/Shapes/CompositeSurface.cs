@@ -10,7 +10,7 @@ namespace HermiteInterpolation.Shapes
         protected static readonly Color DefaultColor = Color.FromNonPremultiplied(128, 128, 128, 255);
         protected static readonly Vector3 DefaultNormal = Vector3.Zero;
 
-
+        public string Name { get; set; } //= ToString();
         private Color _color = DefaultColor;
 
         public Color Color
@@ -26,7 +26,7 @@ namespace HermiteInterpolation.Shapes
         private float? _minHeight;
         private float? _maxHeight;
 
-        public string Name { get; set; } = null;
+      
 
         
 
@@ -87,6 +87,8 @@ namespace HermiteInterpolation.Shapes
                 segment.ColoredHeight(fromHue, toHue);
             }
         }
+
+        
 
         public void ColoredHeight(float fromHue, float toHue)
         {
