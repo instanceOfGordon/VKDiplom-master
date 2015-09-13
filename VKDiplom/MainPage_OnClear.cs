@@ -6,7 +6,7 @@ namespace VKDiplom
     {
         private void ClearButton_OnClick(object sender, RoutedEventArgs e)
         {
-           
+            _colorWheel.Reset();
             ScenesAction(scene=> scene.Clear());
             SplinesComboBox.ItemsSource = _functionScene;
         }

@@ -52,5 +52,10 @@ namespace VKDiplom.Utilities
                 _idx = 0;
             return color;
         }
+
+        public void Reset()
+        {
+            _idx = 0;
+        }
     }
 }

@@ -41,5 +41,9 @@
             
         }
 
+        public override string ToString()
+        {
+            return $"X: {X:0.00}, Y: {Y:0.00}, Z: {Z:0.00}, Dx: {Dx:0.00}, Dy: {Dy:0.00}, Dxy: {Dxy:0.00}";
+        }
     }
 }

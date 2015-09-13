@@ -50,6 +50,8 @@ namespace HermiteInterpolation.SplineKnots
             var uSize = Math.Abs(uDimension.Max - uDimension.Min)/(uDimension.KnotCount - 1);
             var vSize = Math.Abs(vDimension.Max - vDimension.Min)/(vDimension.KnotCount - 1);
             var u = uDimension.Min;
+
+            // Init Z
             for (var i = 0; i < uDimension.KnotCount; i++, u += uSize)
                 //Parallel.For(0,uDimension.KnotCount,i=>)
             {
@@ -61,6 +63,7 @@ namespace HermiteInterpolation.SplineKnots
                     values[i][j] = new Knot(u, v, z);
                 }
             }
+            // Init Dx
             var uKnotCountMin1 = uDimension.KnotCount - 1;
             for (var j = 0; j < vDimension.KnotCount; j++)
             {
@@ -69,6 +72,7 @@ namespace HermiteInterpolation.SplineKnots
                     values[uKnotCountMin1][j].Y);
                 //Function.Dx(values[uKnotCountMin1][j].X, values[uKnotCountMin1][j].Y);
             }
+            // Init Dy
             var vKnotCountMin1 = vDimension.KnotCount - 1;
             for (var i = 0; i < uDimension.KnotCount; i++)
             {
@@ -76,6 +80,7 @@ namespace HermiteInterpolation.SplineKnots
                 values[i][vKnotCountMin1].Dy = MathFunctions.MathFunctions.SafeCall(Function.Dy, values[i][vKnotCountMin1].X,
                     values[i][vKnotCountMin1].Y);
             }
+            // Init Dxy
             values[0][0].Dxy = MathFunctions.MathFunctions.SafeCall(Function.Dxy, values[0][0].X, values[0][0].Y);
             values[uKnotCountMin1][0].Dxy = MathFunctions.MathFunctions.SafeCall(Function.Dxy, values[uKnotCountMin1][0].X,
                 values[uKnotCountMin1][0].Y);
@@ -108,7 +113,7 @@ namespace HermiteInterpolation.SplineKnots
 
         protected void FillYDerivations(Knot[][] values)
         {
-            for (var i = 0; i < values[0].Length; i++)
+            for (var i = 0; i < values.Length; i++)
             {
                 FillYDerivations(i, values);
             }
@@ -116,7 +121,7 @@ namespace HermiteInterpolation.SplineKnots
 
         protected void FillDyxDerivations(Knot[][] values)
         {
-            for (var i = 0; i < values[0].Length; i++)
+            for (var i = 0; i < values.Length; i++)
             {
                 FillDyxDerivations(i, values);
             }
@@ -134,8 +139,8 @@ namespace HermiteInterpolation.SplineKnots
 
             //var equationsCount = values.Length - 2;
             //if (equationsCount == 0) return;
-            //Action<int, double> dset = (idx, value) => values[rowOrColumnIdx][idx].Dx = value;
-            //Func<int, double> rget = idx => values[rowOrColumnIdx][idx].Z;
+            //Action<int, double> unknownsToSet = (idx, value) => values[rowOrColumnIdx][idx].Dx = value;
+            //Func<int, double> rightSideValuesToGet = idx => values[rowOrColumnIdx][idx].Z;
             //var h = values[1][0].X - values[0][0].X;
             //var dlast = values[rowOrColumnIdx][values[0].Length-1].Dx;
             //var dfirst = values[rowOrColumnIdx][0].Dx;
@@ -143,26 +148,7 @@ namespace HermiteInterpolation.SplineKnots
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
 
-        protected virtual void FillDxyDerivations(int rowOrColumnIdx, Knot[][] values)
-        {
-            var equationsCount = values.Length - 2;
-            if (equationsCount == 0) return;
-            Action<int, double> dset = (idx, value) => values[idx][rowOrColumnIdx].Dxy = value;
-            Func<int, double> rget = idx => values[idx][rowOrColumnIdx].Dx;
-            var h = values[1][0].X - values[0][0].X;
-            var dlast = values[values.Length - 1][rowOrColumnIdx].Dxy;
-            var dfirst = values[0][rowOrColumnIdx].Dxy;
-
-            //var equationsCount = values.Length - 2;
-            //if (equationsCount == 0) return;
-            //Action<int, double> dset = (idx, value) => values[rowOrColumnIdx][idx].Dxy = value;
-            //Func<int, double> rget = idx => values[rowOrColumnIdx][idx].Dx;
-            //var h = values[1][0].X - values[0][0].X;
-            //var dlast = values[rowOrColumnIdx][values[0].Length - 1].Dxy;
-            //var dfirst = values[rowOrColumnIdx][0].Dxy;
-
-            SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
-        }
+       
 
         protected virtual void FillYDerivations(int rowOrColumnIdx, Knot[][] values)
         {
@@ -176,11 +162,32 @@ namespace HermiteInterpolation.SplineKnots
 
             //var equationsCount = values[0].Length - 2;
             //if (equationsCount == 0) return;
-            //Action<int, double> dset = (idx, value) => values[idx][rowOrColumnIdx].Dy = value;
-            //Func<int, double> rget = idx => values[idx][rowOrColumnIdx].Z;
+            //Action<int, double> unknownsToSet = (idx, value) => values[idx][rowOrColumnIdx].Dy = value;
+            //Func<int, double> rightSideValuesToGet = idx => values[idx][rowOrColumnIdx].Z;
             //var h = values[0][1].Y - values[0][0].Y;
             //var dfirst = values[0][rowOrColumnIdx].Dy;
             //var dlast = values[values.Length-1][rowOrColumnIdx].Dy;
+
+            SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
+        }
+
+        protected virtual void FillDxyDerivations(int rowOrColumnIdx, Knot[][] values)
+        {
+            var equationsCount = values.Length - 2;
+            if (equationsCount == 0) return;
+            Action<int, double> dset = (idx, value) => values[idx][rowOrColumnIdx].Dxy = value;
+            Func<int, double> rget = idx => values[idx][rowOrColumnIdx].Dy;
+            var h = values[1][0].X - values[0][0].X;
+            var dlast = values[values.Length - 1][rowOrColumnIdx].Dxy;
+            var dfirst = values[0][rowOrColumnIdx].Dxy;
+
+            //var equationsCount = values.Length - 2;
+            //if (equationsCount == 0) return;
+            //Action<int, double> unknownsToSet = (idx, value) => values[rowOrColumnIdx][idx].Dxy = value;
+            //Func<int, double> rightSideValuesToGet = idx => values[rowOrColumnIdx][idx].Dx;
+            //var h = values[1][0].X - values[0][0].X;
+            //var dlast = values[rowOrColumnIdx][values[0].Length - 1].Dxy;
+            //var dfirst = values[rowOrColumnIdx][0].Dxy;
 
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
@@ -189,25 +196,25 @@ namespace HermiteInterpolation.SplineKnots
         {
             var equationsCount = values[0].Length - 2;
             if (equationsCount == 0) return;
-            Action<int, double> dset = (idx, value) => values[rowOrColumnIdx][idx].Dy = value;
-            Func<int, double> rget = idx => values[rowOrColumnIdx][idx].Z;
+            Action<int, double> dset = (idx, value) => values[rowOrColumnIdx][idx].Dxy = value;
+            Func<int, double> rget = idx => values[rowOrColumnIdx][idx].Dx;
             var h = values[0][1].Y - values[0][0].Y;
-            var dfirst = values[rowOrColumnIdx][0].Dy;
-            var dlast = values[rowOrColumnIdx][values[0].Length - 1].Dy;
+            var dfirst = values[rowOrColumnIdx][0].Dxy;
+            var dlast = values[rowOrColumnIdx][values[0].Length - 1].Dxy;
 
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
 
-        protected void SolveTridiagonal(Func<int, double> rget, double h, double dfirst, double dlast,
-            int equationsCount, Action<int, double> dset)
+        protected void SolveTridiagonal(Func<int, double> rightSideValuesToGet, double h, double dfirst, double dlast,
+            int equationsCount, Action<int, double> unknownsToSet)
         {
-            var result = RightSide(rget, h, dfirst, dlast, equationsCount);
+            var result = RightSide(rightSideValuesToGet, h, dfirst, dlast, equationsCount);
             LinearSystemSolver.TridiagonalSystem(UpperDiagonal(equationsCount), MainDiagonal(equationsCount),
                 LowerDiagonal(equationsCount), result);
 
             for (var i = 0; i < result.Length; i++)
             {
-                dset(i + 1, result[i]);
+                unknownsToSet(i + 1, result[i]);
             }
         }
 

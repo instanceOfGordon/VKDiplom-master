@@ -57,6 +57,8 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation.Bicubic
 
         internal override Matrix<double> Matrix(int uIdx, int vIdx)
         {
+            
+
             var m = Matrix<double>.Build.Random(4, 4, 0);
 
             var k00 = Knots[uIdx][vIdx];

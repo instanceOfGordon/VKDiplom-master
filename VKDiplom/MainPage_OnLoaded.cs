@@ -63,7 +63,7 @@ namespace VKDiplom
                 mathExpression, derivation);
             //shape.ColoredHeight();
             //shape.ColoredSimple(Color.FromNonPremultiplied(96,72,128,255));
-            shape.ColoredByShades(_colors.Next());
+            shape.ColoredByShades(_colorWheel.Next());
             //shape.DrawStyle = DrawStyle.Wireframe;
             scene.Add(shape);
         }

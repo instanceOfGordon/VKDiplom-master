@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
@@ -50,7 +51,7 @@ namespace VKDiplom
             //if ((e.OldValue < 1-tresholdToDefault && e.NewValue > 1-tresholdToDefault) || (e.OldValue > 1+tresholdToDefault && e.NewValue < 1+tresholdToDefault))
             if (e.NewValue > 1 - tresholdToDefault && e.NewValue < 1 + tresholdToDefault)
                 scaler.Value = 1;
-            ScenesAction(scene=>scene.Scale = new Vector3(1,1,(float)scaler.Value));
+            ScenesAction(scene=>scene.Scale = new Vector3(1,1,(float)Math.Pow(scaler.Value,2)));
         }
     }
 }

@@ -32,7 +32,7 @@ namespace VKDiplom
         //private SceneTime _sceneTime;
         private readonly RotateCamera _camera = new RotateCamera();
         private readonly Color _color = DefaultColor;
-        private readonly ColorWheel _colors = new ColorWheel();
+        private readonly ColorWheel _colorWheel = new ColorWheel();
         private readonly SolidColorBrush _disabledColorBrush = new SolidColorBrush(Colors.DarkGray);
         private readonly DrawStyle _drawStyle = DrawStyle.Surface;
         
