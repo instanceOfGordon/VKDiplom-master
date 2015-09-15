@@ -72,7 +72,7 @@ namespace VKDiplom
                 return;
             }
             //SplineSurface shape, fdshape, sdshape;
-            //var selectedItem = (HermiteType) HermiteTypeComboBox.SelectedIndex;
+            //var selectedItem = (HermiteType) InterpolationTypeComboBox.SelectedIndex;
             //switch (selectedItem)
             //{
             //    case HermiteType.Bicubic:
@@ -104,7 +104,7 @@ namespace VKDiplom
 
             var startTime = DateTime.Now;
             
-            var createSpline = (SplineFactory) HermiteTypeComboBox.SelectedValue;
+            var createSpline = (SplineFactory) InterpolationTypeComboBox.SelectedValue;
             var createKnotsGenerator = (KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue;
             var shape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction));
             var fdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.First);

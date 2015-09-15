@@ -200,6 +200,21 @@ namespace VKDiplom
             _focusedDrawingSurface = Derivation.Second;
         }
 
+        private void InterpolationTypeComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var iBox = sender as ComboBox;
+            if (iBox == null) return;
+            //var selValue = (KeyValuePair<string, SplineFactory>) iBox.;//Dictionary<>
+            if (iBox.SelectedIndex == 0)
+            {
+                KnotsGeneratorComboBox.IsEnabled = false;
+            }
+            else
+            {
+                KnotsGeneratorComboBox.IsEnabled = true;
+            }
+        }
+
         //private void ScaleSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<T> e)
         //{
 

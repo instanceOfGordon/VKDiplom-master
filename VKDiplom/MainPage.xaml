@@ -182,7 +182,7 @@
                     <sdk:Label Grid.Row="0" Grid.Column="6" Content="Function type: " Margin="0,10,0,0"
                                HorizontalAlignment="Right"
                                Style="{StaticResource LabelForeground}" Width="auto" />
-                    <ComboBox Name="HermiteTypeComboBox" Grid.Row="0" Grid.Column="7" Margin="5,10,0,0"
+                    <ComboBox Name="InterpolationTypeComboBox" SelectionChanged="InterpolationTypeComboBox_OnSelectionChanged" Grid.Row="0" Grid.Column="7" Margin="5,10,0,0"
                               HorizontalAlignment="Left" Width="100"
                               SelectedIndex="0" Style="{StaticResource ComboBox}" />
                     <sdk:Label Content="Knots generator: " Grid.Row="1" Grid.Column="6" Margin="0,5,0,0"

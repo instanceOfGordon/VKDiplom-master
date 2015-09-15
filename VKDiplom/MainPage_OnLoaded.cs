@@ -147,6 +147,11 @@ namespace VKDiplom
             _hermiteChoices = new Dictionary<string, SplineFactory>
             {
                 {
+                    "Direct function",
+                    (uDimension, vDimension, knotsGenerator, derivation) =>
+                        new MathFunctionSurface(uDimension, vDimension,new MathExpression(MathExpressionTextBox.Text,XVariableTextBox.Text,YVariableTextBox.Text))
+                },
+                {
                     "Bicubic",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
                         new BicubicHermiteSurface(uDimension, vDimension,knotsGenerator, derivation)                    
@@ -155,12 +160,7 @@ namespace VKDiplom
                     "Biquartic",
                    (uDimension, vDimension, knotsGenerator, derivation) =>
                         new BiquarticHermiteSurface(uDimension, vDimension,knotsGenerator, derivation)       
-                },
-                {
-                    "Direct function",
-                    (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new MathFunctionSurface(uDimension, vDimension,new MathExpression(MathExpressionTextBox.Text,XVariableTextBox.Text,YVariableTextBox.Text))
-                }
+                }             
             };
             _knotsChoices = new Dictionary<string, KnotsGeneratorFactory>
             {
@@ -178,10 +178,10 @@ namespace VKDiplom
                 }
             };
 
-            HermiteTypeComboBox.ItemsSource = _hermiteChoices;
-            HermiteTypeComboBox.DisplayMemberPath = "Key";
-            HermiteTypeComboBox.SelectedValuePath = "Value";
-            HermiteTypeComboBox.SelectedIndex = 0;
+            InterpolationTypeComboBox.ItemsSource = _hermiteChoices;
+            InterpolationTypeComboBox.DisplayMemberPath = "Key";
+            InterpolationTypeComboBox.SelectedValuePath = "Value";
+            InterpolationTypeComboBox.SelectedIndex = 0;
 
             KnotsGeneratorComboBox.ItemsSource = _knotsChoices;
             KnotsGeneratorComboBox.DisplayMemberPath = "Key";
