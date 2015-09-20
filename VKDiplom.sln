@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermiteInterpolation", "Her
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine", "CalculationEngine\CalculationEngine.csproj", "{3ED6A5A6-B6BD-4C61-BA5F-7BF692F11C3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymbolicDifferentiation", "SymbolicDifferentiation\SymbolicDifferentiation.csproj", "{3F4739EC-1220-4BA8-A01A-DBCBC1B32DDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{E365F054-83D6-4BAB-9FF7-B0C5DD33A3FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{3ED6A5A6-B6BD-4C61-BA5F-7BF692F11C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ED6A5A6-B6BD-4C61-BA5F-7BF692F11C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ED6A5A6-B6BD-4C61-BA5F-7BF692F11C3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F4739EC-1220-4BA8-A01A-DBCBC1B32DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F4739EC-1220-4BA8-A01A-DBCBC1B32DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F4739EC-1220-4BA8-A01A-DBCBC1B32DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F4739EC-1220-4BA8-A01A-DBCBC1B32DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E365F054-83D6-4BAB-9FF7-B0C5DD33A3FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E365F054-83D6-4BAB-9FF7-B0C5DD33A3FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E365F054-83D6-4BAB-9FF7-B0C5DD33A3FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E365F054-83D6-4BAB-9FF7-B0C5DD33A3FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

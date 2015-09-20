@@ -46,14 +46,14 @@ namespace HermiteInterpolation.Shapes
 
         //protected InterpolativeMathFunction InterpolativeFunction { get; }
 
-        public float MeshDensity { get; set; } = 0.1f;
+        //public float MeshDensity { get; } = Constants.;
 
         private ISurface CreateSegment(int uIdx, int vIdx, SurfaceDimension uDimension, SurfaceDimension vDimension,
             MathFunction function)
         {
             //var afv = Knots;
 
-            var meshDensity = MeshDensity;
+            var meshDensity = Constants.MeshDensity;
             var uSize = Math.Abs(uDimension.Max - uDimension.Min)/(uDimension.KnotCount - 1);
             var vSize = Math.Abs(vDimension.Max - vDimension.Min)/(vDimension.KnotCount - 1);
 

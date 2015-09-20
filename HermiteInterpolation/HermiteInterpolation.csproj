@@ -79,8 +79,8 @@
     <Reference Include="System.Windows.Xna" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="MathFunctions\MathExpression.cs" />
-    <Compile Include="MathFunctions\IFunctionDerivator.cs" />
     <Compile Include="Primitives\VertexNormals.cs" />
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
     <Compile Include="Shapes\CompositeSurface.cs" />
@@ -117,6 +117,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SymbolicDifferentiation\SymbolicDifferentiation.csproj">
+      <Project>{3f4739ec-1220-4ba8-a01a-dbcbc1b32ddc}</Project>
+      <Name>SymbolicDifferentiation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
