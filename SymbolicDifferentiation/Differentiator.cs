@@ -60,6 +60,11 @@ namespace SymbolicDifferentiation
         private static string DifferentiateStack(List<ExpressionItem> vStack, string diffVar,ref int nExpression)
         {
             var pQI = vStack[nExpression++];
+            if (!pQI.MStrInput.Contains(diffVar))
+            {
+                pQI.MStrOutput = "0";
+                return "0";
+            }
             if (pQI.MCOperator != null)
             {
                 // get left operand
@@ -87,7 +92,10 @@ namespace SymbolicDifferentiation
                             pQI.MStrOutput = "(-" + u + '*' + dv + ")/(" + v + ")^2";
                             break;
                         case '^':   // d(u^v) = dv*u^v*ln(u)
-                            pQI.MStrOutput = dv + "*" + u + "^" + v + (u == "e" ? "" : "*ln(" + u + ")");
+                            //double un;
+                            //var success = double.TryParse(u,out un);
+                            //if(success)
+                                pQI.MStrOutput = dv + "*" + u + "^" + v + (u == "e" ? "" : "*ln(" + u + ")");
                             break;
                     }
                 else if (dv == "0") // v is constant
@@ -105,7 +113,13 @@ namespace SymbolicDifferentiation
                             break;
                         case '^':   // d(u^v) = v*u^(v-1)*du
                                     // pQI.MStrOutput.Format("%s*%s^%s*%s", v, u, TrimFloat(atof(v) - 1), du);
-                            pQI.MStrOutput = v + "*" + u + "^" + MathStack.TrimFloat(double.Parse(v) - 1) + "*" + du;
+                                    //pQI.MStrOutput = v + "*" + u + "^" + MathStack.TrimFloat(double.Parse(v) - 1) + "*" + du;
+                            double vn;
+                            var success = double.TryParse(v, out vn);
+                            if (success)
+                                pQI.MStrOutput = v + "*" + u + "^" + MathStack.TrimFloat(vn - 1) + "*" + du;
+                            else
+                                pQI.MStrOutput = v + "*" + u + "^" + "("+v+"-1)*" + du;
                             break;
                     }
                 else

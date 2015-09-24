@@ -43,8 +43,7 @@ namespace SymbolicDifferentiation
     "ln(",
 
     "sign(",
-    "abs(",
-    null
+    "abs("
 };
 
 
@@ -61,10 +60,11 @@ namespace SymbolicDifferentiation
         {
 
             // initialize parenthesis count to one
-            int nOpen = 1;
+            int nOpen = 0;
             // loop in the input to find the close parenthesis
-            var i = from;
-            while (++i < p.Length)
+            //var i = from;
+            //while (++i < p.Length)
+            for (int i = from; i < p.Length; i++)
                 if (p[i] == '(')
                     nOpen++;
                 else if (p[i] == ')')
@@ -88,9 +88,9 @@ namespace SymbolicDifferentiation
             }
             for (int nIndex = 0; nIndex < PFunctions.Length; nIndex++)
             {
-                if (!pOpen.StartsWith(PFunctions[nIndex]))
+                if (pOpen.StartsWith(PFunctions[nIndex]))
                 {
-                    if (GetClose(pOpen, PFunctions.Length - 1) == -1)
+                    if (GetClose(pOpen, PFunctions[nIndex].Length - 1) == -1)
                     {
                         return -1;
                     }

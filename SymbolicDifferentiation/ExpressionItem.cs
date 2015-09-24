@@ -57,6 +57,11 @@ namespace SymbolicDifferentiation
 
         public void GetDifferentiation(string diffVar)
         {
+            if (!MStrInput.Contains(diffVar))
+            {
+                MStrOutput = "0";
+                return;
+            }
             int nIndex;
             if (MNFunction != -1)
             {
@@ -107,7 +112,7 @@ namespace SymbolicDifferentiation
                     MStrOutput = "1";
                 else if (MStrInput == "-" + diffVar)
                     MStrOutput = "-1";
-                else if (MStrInput.IsNumeric()||!MStrInput.Contains(diffVar))
+                else if (MStrInput.IsNumeric())
                     // dc/dx = 0, where c is constant
                     MStrOutput = "0";
                 else
