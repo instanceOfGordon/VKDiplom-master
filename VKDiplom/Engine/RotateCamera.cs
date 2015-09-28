@@ -39,16 +39,40 @@ namespace VKDiplom.Engine
             }
         }
 
+        private bool IsMirrored { get; set; } = false;
+
+        private bool MirrorView {
+            set
+            {
+                if (!IsMirrored&&value)
+                {
+                    HorizontalAngle += MathHelper.Pi;
+                    IsMirrored = true;
+                }
+                else if(IsMirrored&&!value)
+                {
+                    HorizontalAngle -= MathHelper.Pi;
+                    IsMirrored = false;
+                }        
+            }
+        }
+
         public float VerticalAngle
         {
             get { return _verticalAngle; }
             set
             {
-                _verticalAngle = MathHelper.Clamp(value,0.01f,MathHelper.Pi-0.01f);
-                Position = CoordinateSystems.FromSphericalToCartesian(_distance, _verticalAngle, _horizontalAngle);
+                _verticalAngle = value>MathHelper.Pi?value-MathHelper.TwoPi: value<-MathHelper.Pi? value+MathHelper.TwoPi: value;
+                //_verticalAngle = value;//MathHelper.Clamp(value,0.01f,MathHelper.Pi-0.01f);
+                //MirrorView = value < 0;
+                //Position = CoordinateSystems.FromSphericalToCartesian(_distance, _verticalAngle, _horizontalAngle + 1);
+                //HorizontalAngle += MathHelper.Pi;
+                Position = CoordinateSystems.FromSphericalToCartesian(_distance, _verticalAngle, HorizontalAngle);
                 //Position = CoordinateSystems.FromSphericalToCartesian(_distance, _horizontalAngle, _verticalAngle);
             }
         }
+
+        
 
         public float HorizontalAngle
         {

@@ -19,7 +19,16 @@ namespace SymbolicDifferentiation
         public static string Differentiate(string input, string diffVar, bool bOptimize = false)
         {
             if (!input.Contains(diffVar)) return "0";
-            var strInput = input;
+            var strInput = input.RemoveConstants(diffVar);
+
+            // dirty hack 
+            // MUST REPAIR incorrect differentiation when diffVar!="x"
+            //if (diffVar != "x")
+            //{
+            //    strInput = strInput.Replace("x", "DUMMY");
+            //    strInput = strInput.Replace(diffVar, "x");
+            //    strInput = strInput.Replace("DUMMY", diffVar);
+            //}
             // remove spaces
             strInput = strInput.Replace(" ","");
             // make all characters lower case
@@ -29,12 +38,14 @@ namespace SymbolicDifferentiation
 
             var vStack = new List<ExpressionItem>();
             // parse input equation and fill stack with operators and operands
+            //if (MathStack.FillDerivationStack(strInput,diffVar, vStack) < 0)
             if (MathStack.FillStack(strInput, vStack) < 0)
                 return "Invalid input";
 
             int nExpression = 0;
             // apply operators to operands
             string strOutput = DifferentiateStack(vStack, diffVar,ref nExpression);
+            //string strOutput = DifferentiateStack(vStack, "x", ref nExpression);
 
             // loop to fill the stack string from the stack vector
             //foreach (var expressionItem in vStack)
@@ -54,25 +65,32 @@ namespace SymbolicDifferentiation
                 // optimize the equation from unneeded elements
                 strOutput = strOutput.Optimize();
             // return output differentiation
+            //if (diffVar != "x")
+            //{
+            //    strOutput = strOutput.Replace(diffVar, "DUMMY");
+            //    strOutput = strOutput.Replace("x", diffVar);
+            //    strOutput = strOutput.Replace("DUMMY", "x");
+            //}
             return strOutput;
         }
 
         private static string DifferentiateStack(List<ExpressionItem> vStack, string diffVar,ref int nExpression)
         {
             var pQI = vStack[nExpression++];
-            if (!pQI.MStrInput.Contains(diffVar))
-            {
-                pQI.MStrOutput = "0";
-                return "0";
-            }
+            //var pQI = vStack[nExpression];
+            //if (!pQI.MStrInput.Contains(diffVar))
+            //{
+            //    pQI.MStrOutput = "0";
+            //    return "0";
+            //}
             if (pQI.MCOperator != null)
             {
                 // get left operand
-                var u = vStack[nExpression].LeftOperand;//GetInput();
+                var u = vStack[nExpression].GetInput();
                 // get left operand differentiation
                 var du = DifferentiateStack(vStack, diffVar,ref nExpression);
                 // get right operand
-                var v = vStack[nExpression].RightOperand;//GetInput();
+                var v = vStack[nExpression].GetInput();//RightOperand;//GetInput();
                 // get right operand differentiation
                 var dv = DifferentiateStack(vStack, diffVar,ref nExpression);
 

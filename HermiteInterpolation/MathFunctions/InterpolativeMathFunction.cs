@@ -1,6 +1,6 @@
 ﻿using System;
 using MathNet.Numerics;
-using SymbolicDifferentiation;
+//using SymbolicDifferentiation;
 
 namespace HermiteInterpolation.MathFunctions
 {
@@ -111,13 +111,13 @@ namespace HermiteInterpolation.MathFunctions
             // TODO: osetrit vynimky pre neplatne vstupy
 
             var function = MathFunctions.CompileFromString(mathExpression, variableX, variableY);
-            var mathExpressionDx = Differentiator.Differentiate(mathExpression, variableX,
-                true);
-            var functionDx = MathFunctions.CompileFromString(mathExpressionDx);
-            var functionDy = MathFunctions.CompileFromString(Differentiator.Differentiate(mathExpression, variableY,
-                true));
-            var functionDxy = MathFunctions.CompileFromString(Differentiator.Differentiate(mathExpressionDx, variableY,
-                true));
+            //var mathExpressionDx = Differentiator.Differentiate(mathExpression, variableX,
+            //    true);
+            //var functionDx = MathFunctions.CompileFromString(mathExpressionDx);
+            //var functionDy = MathFunctions.CompileFromString(Differentiator.Differentiate(mathExpression, variableY,
+            //    true));
+            //var functionDxy = MathFunctions.CompileFromString(Differentiator.Differentiate(mathExpressionDx, variableY,
+            //    true));
             return function == null ? null : new InterpolativeMathFunction(function);
         }
     }

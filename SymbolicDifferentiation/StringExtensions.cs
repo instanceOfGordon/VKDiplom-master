@@ -1,12 +1,13 @@
 using System;
+using System.Text;
 
 namespace SymbolicDifferentiation
 {
-    static class StringExtensions
+    internal static class StringExtensions
     {
         public static int First(this string str, char character)
         {
-            for (int i = 0; i < str.Length; i++)
+            for (var i = 0; i < str.Length; i++)
             {
                 if (str[i] == character)
                     return i;
@@ -16,7 +17,7 @@ namespace SymbolicDifferentiation
 
         public static int Last(this string str, char character)
         {
-            for (int i = str.Length - 1; i >= 0; i--)
+            for (var i = str.Length - 1; i >= 0; i--)
             {
                 if (str[i] == character)
                     return i;
@@ -49,6 +50,81 @@ namespace SymbolicDifferentiation
             return str;
         }
 
+        public static string InsertValues(this string str, string[] vars, double[] values)
+        {
+            var res = str;
+            if (vars.Length != values.Length) throw new ArgumentOutOfRangeException("Variables length must be equal to Values length.");
+            for (int i = 0; i < vars.Length; i++)
+            {
+                //res = str.Replace("+" + vars[i], "+" + values[i]);
+                //res = str.Replace("-" + vars[i], "-" + values[i]);
+                //res = str.Replace("*" + vars[i], "*" + values[i]);
+                //res = str.Replace("/" + vars[i], "/" + values[i]);
+                //res = str.Replace(vars[i]+"+", values[i]+"+");
+                //res = str.Replace(vars[i] + "-", values[i] + "-");
+                //res = str.Replace(vars[i] + "*", values[i] + "*");
+                //res = str.Replace(vars[i] + "/", values[i] + "/");
+                //res = str.Replace("^" + vars[i], "^" + values[i]);             
+                //res = str.Replace(vars[i] + "^", values[i] + "^");
+                res = str.Replace(vars[i], values[i].ToString());
+
+            }
+            return res;
+        }
+
+        public static string RemoveConstants(this string str, string variable)
+        {
+
+            //if (!str.Contains(variable)) return "0";
+            //var leftOp = LeftOperand(str);
+            //var rightOp = RightOperand(str);
+            //string result="";
+            //if (leftOp != null && leftOp.Contains(variable))
+            //{
+            //    result += leftOp;
+            //}
+            if (!str.Contains(variable))
+                return "0";
+            var operIdx = MathStack.GetOperator(str, ExpressionItem.AdditionSubtractionOperator);
+            if (operIdx == -1) return str;
+            var leftOp = str.Substring(0, operIdx);
+            var rightOp = str.Substring(operIdx + 1);
+            //var result = ""//new StringBuilder("");
+            var varInLeftOp = leftOp.Contains(variable);
+            var varInRightOp = rightOp.Contains(variable);
+            if (varInLeftOp && varInRightOp)
+            {
+                return str;
+            }
+            if(varInLeftOp)
+            {
+                return leftOp;
+            }
+            if (varInRightOp)
+            {
+                return rightOp;
+            }
+            return "0";
+        }
+
+        public static string LeftOperand(this string str)
+        {
+            if (str.IsNumeric())
+                return null;
+            var operIdx = MathStack.GetOperator(str, ExpressionItem.Operators);
+            if (operIdx == -1) return null;
+            return str.Substring(0, operIdx);
+        }
+
+        public static string RightOperand(this string str)
+        {
+            if (str.IsNumeric())
+                return null;
+            var operIdx = MathStack.GetOperator(str, ExpressionItem.Operators);
+            if (operIdx == -1) return null;
+            return str.Substring(operIdx + 1);
+        }
+
         public static bool IsNumeric(this string lpcs)
         {
             var p = 0;
@@ -60,7 +136,7 @@ namespace SymbolicDifferentiation
                 return true;
             while (p < lpcs.Length)
             {
-                if (!Char.IsDigit(lpcs[p]))
+                if (!char.IsDigit(lpcs[p]))
                     return false;
                 p++;
             }
@@ -91,12 +167,14 @@ namespace SymbolicDifferentiation
             var pClose = 0;
             var nIndex = -1;
             // replace "((....))"  with "(....)"
-            while ((nIndex<str.Length)&&(nIndex = str.IndexOf("((", nIndex + 1, StringComparison.Ordinal)) != -1)
-                pClose = GetClose(str, nIndex + 1);
-            if (str[pClose] == ')')
+            while ((nIndex < str.Length) && (nIndex = str.IndexOf("((", nIndex + 1, StringComparison.Ordinal)) != -1)
             {
-                str = str.Remove(pClose,1);
-                str = str.Remove(nIndex,1);
+                
+                if (str[pClose = GetClose(str, nIndex + 1)] == ')')
+                {
+                    str = str.Remove(pClose, 1);
+                    str = str.Remove(nIndex, 1);
+                }
             }
 
             nIndex = -1;
@@ -104,7 +182,7 @@ namespace SymbolicDifferentiation
             while ((nIndex < str.Length) && (nIndex = str.IndexOf("1*", nIndex + 1, StringComparison.Ordinal)) != -1)
                 if (nIndex == 0 || "+-*(".Contains(str[nIndex - 1].ToString()))
                     str = str.Remove(nIndex, 2);
-
+            
             nIndex = -1;
             // remove any *1
             while ((nIndex < str.Length) && (nIndex = str.IndexOf("*1", nIndex + 1, StringComparison.Ordinal)) != -1)
@@ -140,13 +218,16 @@ namespace SymbolicDifferentiation
                     IsNumeric(str.Substring(nIndex + 1, nCloseIndex - nIndex - 1)))
                 {
                     // delete the far index of ')'
-                    str =str.Remove(nCloseIndex,1);
+                    str = str.Remove(nCloseIndex, 1);
                     // delete the near index of '('
-                    str =str.Remove(nIndex,1);
+                    str = str.Remove(nIndex, 1);
                 }
                 else
                     nIndex++;
             }
+
+            str = str.Replace("1*", "");
+            str = str.Replace("*1", "");
 
             if (nLength != str.Length)
                 return str.Optimize();

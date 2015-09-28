@@ -133,6 +133,10 @@ namespace SymbolicDifferentiation
 
         static bool IsRightSign(char c, string[] lpcsOperators, int nIndex)
         {
+            if (lpcsOperators.Length == 1)
+            {
+                return !lpcsOperators.Contains(c.ToString());
+            }
             for (; nIndex < lpcsOperators[nIndex].Length; nIndex++)
             {
                 if (lpcsOperators.Contains(c.ToString()))
@@ -162,9 +166,54 @@ namespace SymbolicDifferentiation
                     {   // split the Expression into two queries at the operator index
                         vStack[nIndex].MCOperator = str[nOpIndex];
                         // add the left operand of the operator as a new expression
-                        vStack.Insert(nIndex + 1, new ExpressionItem(str.Substring(0, nOpIndex)));
+                        var operand = str.Substring(0, nOpIndex);
+                        //if (!operand.Contains(diffVar)) operand = "0";
+                        vStack.Insert(nIndex + 1, new ExpressionItem(operand));
                         // add the right operand of the operator as a new expression
-                        vStack.Insert(nIndex + 2, new ExpressionItem(str.Substring(nOpIndex + 1)));
+                        operand = str.Substring(nOpIndex + 1);
+                        //if (!operand.Contains(diffVar)) operand = "0";
+                        vStack.Insert(nIndex + 2, new ExpressionItem(operand));
+                    }
+                    else    // check if Expression string starts with function or parenthesis
+                        if ((vStack[nIndex].MNFunction = GetFunction(str, ref sign)) == 0 && sign == 0)
+                    {
+                        vStack[nIndex].MNSign = sign;
+                        // remove parentheses and re-scan the Expression
+                        vStack[nIndex--].MStrInput = str.Substring(1, str.Length - 2);
+                    }
+                }
+
+            return 0;
+        }
+
+        public static int FillDerivationStack(string strInput,string diffVar, List<ExpressionItem> vStack)
+        {
+            // operators array from high to low priority
+            var lpcsOperators = ExpressionItem.Operators;//new [] { "+-", "*/", "^%"};
+
+            // insert first input into the stack
+            vStack.Add(new ExpressionItem(strInput));
+            // loop in Expression stack to check if any Expression can be divided to two queries
+            for (int nIndex = 0; nIndex < vStack.Count; nIndex++)
+                // check if Expression item is operator
+                if (vStack[nIndex].MCOperator == null)
+                {
+                    // copy Expression string
+                    var str = vStack[nIndex].MStrInput;
+                    // parse expression to find operators
+                    int nOpIndex = GetOperator(str, lpcsOperators);
+                    var sign = vStack[nIndex].MNSign;
+                    if (nOpIndex != -1)
+                    {   // split the Expression into two queries at the operator index
+                        vStack[nIndex].MCOperator = str[nOpIndex];
+                        // add the left operand of the operator as a new expression
+                        var operand = str.Substring(0, nOpIndex);
+                        if (!operand.Contains(diffVar)) operand = "0";
+                        vStack.Insert(nIndex + 1, new ExpressionItem(operand));
+                        // add the right operand of the operator as a new expression
+                        operand = str.Substring(nOpIndex + 1);
+                        if (!operand.Contains(diffVar)) operand = "0";
+                        vStack.Insert(nIndex + 2, new ExpressionItem(operand));
                     }
                     else    // check if Expression string starts with function or parenthesis
                         if ((vStack[nIndex].MNFunction = GetFunction(str, ref sign)) == 0 && sign == 0)

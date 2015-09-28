@@ -110,7 +110,7 @@ namespace VKDiplom
             var fdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.First);
             var sdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.Second);
 
-            var color = _colorWheel.Next();
+            var color = _colorWheel.Next;
             shape.ColoredByShades(color);
             shape.DrawStyle = DrawStyle.Surface;
             shape.Name = MathExpressionTextBox.Text;

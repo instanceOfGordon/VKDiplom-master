@@ -5,6 +5,7 @@ namespace SymbolicDifferentiation
     public class ExpressionItem
     {
         public static string[] Operators { get; } = { "+-", "*/", "^%" };
+        public static string[] AdditionSubtractionOperator { get; } = { "+-" };
         public ExpressionItem(string lpcsInput)
         {
             MStrInput = lpcsInput;
@@ -22,46 +23,46 @@ namespace SymbolicDifferentiation
         public string MStrOutput { get; set; }
 
 
-        //public string GetInput()
+        public string GetInput()
+        {
+            if (!MStrInput.IsNumeric() &&
+                (MStrInput.Contains("+") || MStrInput.Contains("-") || MStrInput.Contains("/") ||
+                 MStrInput.Contains("*") || MStrInput.Contains("^")))
+                return '(' + MStrInput + ')';
+            return MStrInput;
+        }
+
+        //public string LeftOperand
         //{
-        //    if (!MStrInput.IsNumeric() &&
-        //        (MStrInput.Contains("+") || MStrInput.Contains("-") || MStrInput.Contains("/") ||
-        //         MStrInput.Contains("*") || MStrInput.Contains("^")))
-        //        return '(' + MStrInput + ')';
-        //    return MStrInput;
+        //    get
+        //    {
+        //        if (MStrInput.IsNumeric())
+        //            return MStrInput;
+        //        var operIdx = MathStack.GetOperator(MStrInput, Operators);
+        //        if (operIdx == -1) return MStrInput;
+        //        return MStrInput.Substring(0, operIdx);
+        //    }
         //}
 
-        public string LeftOperand
-        {
-            get
-            {
-                if (MStrInput.IsNumeric())
-                    return MStrInput;
-                var operIdx = MathStack.GetOperator(MStrInput, Operators);
-                if (operIdx == -1) return MStrInput;
-                return MStrInput.Substring(0, operIdx);
-            }
-        }
-
-        public string RightOperand
-        {
-            get
-            {
-                if (MStrInput.IsNumeric())
-                    return MStrInput;
-                var operIdx = MathStack.GetOperator(MStrInput, Operators);
-                if (operIdx == -1) return MStrInput;
-                return MStrInput.Substring(operIdx + 1);
-            }
-        }
+        //public string RightOperand
+        //{
+        //    get
+        //    {
+        //        if (MStrInput.IsNumeric())
+        //            return MStrInput;
+        //        var operIdx = MathStack.GetOperator(MStrInput, Operators);
+        //        if (operIdx == -1) return MStrInput;
+        //        return MStrInput.Substring(operIdx + 1);
+        //    }
+        //}
 
         public void GetDifferentiation(string diffVar)
         {
-            if (!MStrInput.Contains(diffVar))
-            {
-                MStrOutput = "0";
-                return;
-            }
+            //if (!MStrInput.Contains(diffVar))
+            //{
+            //    MStrOutput = "0";
+            //    return;
+            //}
             int nIndex;
             if (MNFunction != -1)
             {
@@ -112,7 +113,7 @@ namespace SymbolicDifferentiation
                     MStrOutput = "1";
                 else if (MStrInput == "-" + diffVar)
                     MStrOutput = "-1";
-                else if (MStrInput.IsNumeric())
+                else if (MStrInput.IsNumeric()|| MStrInput!=diffVar)
                     // dc/dx = 0, where c is constant
                     MStrOutput = "0";
                 else
@@ -122,7 +123,7 @@ namespace SymbolicDifferentiation
         }
 
         // return error number, 0 on success
-        public int GetCalculation(bool bValue = false)
+        public int GetCalculation(string[] variables, double[] values,bool bValue = false)
         {
             var nIndex = MStrInput.First('(');
             var str = MStrInput.Substring(nIndex + 1);
@@ -130,7 +131,7 @@ namespace SymbolicDifferentiation
             str = str.Substring(0, str.Last(')'));
 
             double u = 0;
-            var nError = Calculator.Calculate(str, ref u);
+            var nError = Calculator.Calculate(str,variables,values, ref u);
             if (nError != 0 && bValue)
                 return nError;
             if (nError == 0)
@@ -270,7 +271,7 @@ namespace SymbolicDifferentiation
                     case 23: // acosech
                     case 24: // acoth
                         double result = 0;
-                        var err = Calculator.Calculate(str, ref result);
+                        var err = Calculator.Calculate(str, variables, values, ref result);
                         MNOutput = result;
                         if ((nError = err) < 0)
                             return nError;
@@ -289,97 +290,97 @@ namespace SymbolicDifferentiation
                 switch (MNFunction)
                 {
                     case 0:
-                        MStrOutput = SupportedCalculationFunctions.C(str);
+                        MStrOutput = SupportedCalculationFunctions.C(str,variables, values);
                         break;
                     case 1:
-                        MStrOutput = SupportedCalculationFunctions.CSin(str);
+                        MStrOutput = SupportedCalculationFunctions.CSin(str,variables, values);
                         break;
                     case 2:
-                        MStrOutput = SupportedCalculationFunctions.CCos(str);
+                        MStrOutput = SupportedCalculationFunctions.CCos(str,variables, values);
                         break;
                     case 3:
-                        MStrOutput = SupportedCalculationFunctions.CTan(str);
+                        MStrOutput = SupportedCalculationFunctions.CTan(str,variables, values);
                         break;
                     case 4:
-                        MStrOutput = SupportedCalculationFunctions.CSec(str);
+                        MStrOutput = SupportedCalculationFunctions.CSec(str,variables, values);
                         break;
                     case 5:
-                        MStrOutput = SupportedCalculationFunctions.CCosec(str);
+                        MStrOutput = SupportedCalculationFunctions.CCosec(str,variables, values);
                         break;
                     case 6:
-                        MStrOutput = SupportedCalculationFunctions.CCot(str);
+                        MStrOutput = SupportedCalculationFunctions.CCot(str,variables, values);
                         break;
                     case 7:
-                        MStrOutput = SupportedCalculationFunctions.CSinh(str);
+                        MStrOutput = SupportedCalculationFunctions.CSinh(str,variables, values);
                         break;
                     case 8:
-                        MStrOutput = SupportedCalculationFunctions.CCosh(str);
+                        MStrOutput = SupportedCalculationFunctions.CCosh(str,variables, values);
                         break;
                     case 9:
-                        MStrOutput = SupportedCalculationFunctions.CTanh(str);
+                        MStrOutput = SupportedCalculationFunctions.CTanh(str,variables, values);
                         break;
                     case 10:
-                        MStrOutput = SupportedCalculationFunctions.CSech(str);
+                        MStrOutput = SupportedCalculationFunctions.CSech(str,variables, values);
                         break;
                     case 11:
-                        MStrOutput = SupportedCalculationFunctions.CCosech(str);
+                        MStrOutput = SupportedCalculationFunctions.CCosech(str,variables, values);
                         break;
                     case 12:
-                        MStrOutput = SupportedCalculationFunctions.CCoth(str);
+                        MStrOutput = SupportedCalculationFunctions.CCoth(str,variables, values);
                         break;
                     case 13:
-                        MStrOutput = SupportedCalculationFunctions.CAsin(str);
+                        MStrOutput = SupportedCalculationFunctions.CAsin(str,variables, values);
                         break;
                     case 14:
-                        MStrOutput = SupportedCalculationFunctions.CAcos(str);
+                        MStrOutput = SupportedCalculationFunctions.CAcos(str,variables, values);
                         break;
                     case 15:
-                        MStrOutput = SupportedCalculationFunctions.CAtan(str);
+                        MStrOutput = SupportedCalculationFunctions.CAtan(str,variables, values);
                         break;
                     case 16:
-                        MStrOutput = SupportedCalculationFunctions.CAsec(str);
+                        MStrOutput = SupportedCalculationFunctions.CAsec(str,variables, values);
                         break;
                     case 17:
-                        MStrOutput = SupportedCalculationFunctions.CAcosec(str);
+                        MStrOutput = SupportedCalculationFunctions.CAcosec(str,variables, values);
                         break;
                     case 18:
-                        MStrOutput = SupportedCalculationFunctions.CAcot(str);
+                        MStrOutput = SupportedCalculationFunctions.CAcot(str,variables, values);
                         break;
                     case 19:
-                        MStrOutput = SupportedCalculationFunctions.CAsinh(str);
+                        MStrOutput = SupportedCalculationFunctions.CAsinh(str,variables, values);
                         break;
                     case 20:
-                        MStrOutput = SupportedCalculationFunctions.CAcosh(str);
+                        MStrOutput = SupportedCalculationFunctions.CAcosh(str,variables, values);
                         break;
                     case 21:
-                        MStrOutput = SupportedCalculationFunctions.CAtanh(str);
+                        MStrOutput = SupportedCalculationFunctions.CAtanh(str,variables, values);
                         break;
                     case 22:
-                        MStrOutput = SupportedCalculationFunctions.CAsech(str);
+                        MStrOutput = SupportedCalculationFunctions.CAsech(str,variables, values);
                         break;
                     case 23:
-                        MStrOutput = SupportedCalculationFunctions.CAcosech(str);
+                        MStrOutput = SupportedCalculationFunctions.CAcosech(str,variables, values);
                         break;
                     case 24:
-                        MStrOutput = SupportedCalculationFunctions.CAcoth(str);
+                        MStrOutput = SupportedCalculationFunctions.CAcoth(str,variables, values);
                         break;
                     case 25:
-                        MStrOutput = SupportedCalculationFunctions.CSqrt(str);
+                        MStrOutput = SupportedCalculationFunctions.CSqrt(str,variables, values);
                         break;
                     case 26:
-                        MStrOutput = SupportedCalculationFunctions.CLog10(str);
+                        MStrOutput = SupportedCalculationFunctions.CLog10(str,variables, values);
                         break;
                     case 27:
-                        MStrOutput = SupportedCalculationFunctions.CLog(str);
+                        MStrOutput = SupportedCalculationFunctions.CLog(str,variables, values);
                         break;
                     case 28:
-                        MStrOutput = SupportedCalculationFunctions.CLn(str);
+                        MStrOutput = SupportedCalculationFunctions.CLn(str,variables, values);
                         break;
                     case 29:
-                        MStrOutput = SupportedCalculationFunctions.CSign(str);
+                        MStrOutput = SupportedCalculationFunctions.CSign(str,variables, values);
                         break;
                     case 30:
-                        MStrOutput = SupportedCalculationFunctions.CAbs(str);
+                        MStrOutput = SupportedCalculationFunctions.CAbs(str,variables, values);
                         break;
                 }
                 MNOutput = MNSign * SupportedCalculationFunctions.Atof(MStrOutput);

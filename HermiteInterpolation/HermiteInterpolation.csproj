@@ -53,9 +53,6 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CalculationEngine">
-      <HintPath>..\packages\CalculationEngine\CalculationEngine.dll</HintPath>
-    </Reference>
     <Reference Include="MathNet.Numerics, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MathNet.Numerics.3.5.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\MathNet.Numerics.dll</HintPath>
@@ -85,7 +82,7 @@
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
     <Compile Include="Shapes\CompositeSurface.cs" />
     <Compile Include="Shapes\MathFunctionSurface.cs" />
-    <Compile Include="Shapes\SplineInterpolation\SurfaceIndexer.cs" />
+    <Compile Include="Shapes\SplineInterpolation\VertexIndexer.cs" />
     <Compile Include="Shapes\SplineInterpolation\SurfaceDimension.cs" />
     <Compile Include="Shapes\SplineInterpolation\Spline.cs" />
     <Compile Include="SplineKnots\KnotsGenerator.cs" />
@@ -119,9 +116,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SymbolicDifferentiation\SymbolicDifferentiation.csproj">
-      <Project>{3f4739ec-1220-4ba8-a01a-dbcbc1b32ddc}</Project>
-      <Name>SymbolicDifferentiation</Name>
+    <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj">
+      <Project>{3ed6a5a6-b6bd-4c61-ba5f-7bf692f11c3d}</Project>
+      <Name>CalculationEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

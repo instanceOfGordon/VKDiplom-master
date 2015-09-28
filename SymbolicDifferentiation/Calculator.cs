@@ -3,14 +3,15 @@ using System.Collections.Generic;
 
 namespace SymbolicDifferentiation
 {
-    class Calculator
+    public class Calculator
     {
-        public static int Calculate(string input, ref double output)
+        public static int Calculate(string input, string[] variables, double[] values, ref double output)
         {
+            if (variables.Length != values.Length) return -1;
             //output = -1;
             //string input = lpcsInput;
             // remove spaces
-            input = input.Remove(' ');
+            input = input.Replace(" ","");
             // make all characters lower case
             input = input.ToLower();
             // Optimize "--"
@@ -25,12 +26,12 @@ namespace SymbolicDifferentiation
 
             int nExpression = 0;
             // apply operators to operands
-            nError = CalculateStack(vStack, ref nExpression, ref output);
+            nError = CalculateStack(vStack, variables, values, ref nExpression, ref output);
 
             return nError;
         }
 
-        private static int CalculateStack(List<ExpressionItem> vStack, ref int nExpression, ref double output)
+        private static int CalculateStack(List<ExpressionItem> vStack, string[] variables, double[] values, ref int nExpression, ref double output)
         {
             // output = -1;
             var pQI = vStack[nExpression++];
@@ -39,10 +40,10 @@ namespace SymbolicDifferentiation
             {
                 double cu = 0, cv = 0;
                 // get left operand calculation
-                if ((nError = CalculateStack(vStack, ref nExpression, ref cu)) < 0)
+                if ((nError = CalculateStack(vStack, variables, values, ref nExpression, ref cu)) < 0)
                     return nError;
                 // get right operand calculation
-                if ((nError = CalculateStack(vStack, ref nExpression, ref cv)) < 0)
+                if ((nError = CalculateStack(vStack, variables, values, ref nExpression, ref cv)) < 0)
                     return nError;
 
                 switch (pQI.MCOperator)
@@ -73,14 +74,14 @@ namespace SymbolicDifferentiation
             }
             else
                 // get Expression calculation
-                if ((nError = pQI.GetCalculation(true)) < 0)
+                if ((nError = pQI.GetCalculation(variables, values, true)) < 0)
                 return nError;
             // return resultant calculation
             output = pQI.MNOutput;
 
             return 0;
         }
-        private static int CalculateStack(List<ExpressionItem> vStack, ref int nExpression, ref string output)
+        private static int CalculateStack(List<ExpressionItem> vStack, string[] variables, double[] values, ref int nExpression, ref string output)
         {
             var pQI = vStack[nExpression++];
             int nError;
@@ -89,10 +90,10 @@ namespace SymbolicDifferentiation
             {
                 string cu = "", cv = "";
                 // get left operand calculation
-                if ((nError = CalculateStack(vStack, ref nExpression, ref cu)) < 0)
+                if ((nError = CalculateStack(vStack, variables, values, ref nExpression, ref cu)) < 0)
                     return nError;
                 // get right operand calculation
-                if ((nError = CalculateStack(vStack, ref nExpression, ref cv)) < 0)
+                if ((nError = CalculateStack(vStack, variables, values, ref nExpression, ref cv)) < 0)
                     return nError;
 
                 if (!cu.IsNumeric() || !cv.IsNumeric())
@@ -152,7 +153,7 @@ namespace SymbolicDifferentiation
             }
             else
                 // get Expression calculation
-                if ((nError = pQI.GetCalculation()) < 0)
+                if ((nError = pQI.GetCalculation(variables,values)) < 0)
             {
                 output = "Error evaluating expression";
                 return nError;
@@ -164,7 +165,7 @@ namespace SymbolicDifferentiation
         }
 
 
-        public static string Calculate(string input, bool bOptimize = false)
+        public static string Calculate(string input,string[] variables,double[] values, bool bOptimize = false)
         {
             // remove spaces
             input = input.Remove(' ');
@@ -188,11 +189,11 @@ namespace SymbolicDifferentiation
             string output = "";
             double nOutput = 0;
             int nExpression = 0;
-            if (CalculateStack(vStack, ref nExpression, ref nOutput) < 0)
+            if (CalculateStack(vStack, variables, values, ref nExpression, ref nOutput) < 0)
             {
                 nExpression = 0;
                 // apply operators to operands
-                CalculateStack(vStack, ref nExpression, ref output);
+                CalculateStack(vStack, variables, values, ref nExpression, ref output);
             }
             else
             {
@@ -246,37 +247,37 @@ namespace SymbolicDifferentiation
         public static readonly Func<string, string> Acosh = x => "log(" + x + "+sqrt(" + x + "*" + x + "-1))";
         public static readonly Func<string, string> Atanh = x => "log((1+" + x + ")/(1-" + x + "))/2";
         // supported functions calculation
-        public static readonly Func<string, string> C = (u) => Calculator.Calculate(u);
-        public static readonly Func<string, string> CSin = (u) => "sin(" + C(u) + ")";
-        public static readonly Func<string, string> CCos = (u) => "cos(" + C(u) + ")";
-        public static readonly Func<string, string> CTan = (u) => "tan(" + C(u) + ")";
-        public static readonly Func<string, string> CSec = (u) => "sec(" + C(u) + ")";
-        public static readonly Func<string, string> CCosec = (u) => "cosec(" + C(u) + ")";
-        public static readonly Func<string, string> CCot = (u) => "cot(" + C(u) + ")";
-        public static readonly Func<string, string> CSinh = (u) => "sinh(" + C(u) + ")";
-        public static readonly Func<string, string> CCosh = (u) => "cosh(" + C(u) + ")";
-        public static readonly Func<string, string> CTanh = (u) => "tanh(" + C(u) + ")";
-        public static readonly Func<string, string> CSech = (u) => "sech(" + C(u) + ")";
-        public static readonly Func<string, string> CCosech = (u) => "cosech(" + C(u) + ")";
-        public static readonly Func<string, string> CCoth = (u) => "coth(" + C(u) + ")";
-        public static readonly Func<string, string> CAsin = (u) => "asin(" + C(u) + ")";
-        public static readonly Func<string, string> CAcos = (u) => "acos(" + C(u) + ")";
-        public static readonly Func<string, string> CAtan = (u) => "atan(" + C(u) + ")";
-        public static readonly Func<string, string> CAsec = (u) => "asec(" + C(u) + ")";
-        public static readonly Func<string, string> CAcosec = (u) => "acosec(" + C(u) + ")";
-        public static readonly Func<string, string> CAcot = (u) => "acot(" + C(u) + ")";
-        public static readonly Func<string, string> CAsinh = (u) => "asinh(" + C(u) + ")";
-        public static readonly Func<string, string> CAcosh = (u) => "acosh(" + C(u) + ")";
-        public static readonly Func<string, string> CAtanh = (u) => "atanh(" + C(u) + ")";
-        public static readonly Func<string, string> CAsech = (u) => "asech(" + C(u) + ")";
-        public static readonly Func<string, string> CAcosech = (u) => "acosech(" + C(u) + ")";
-        public static readonly Func<string, string> CAcoth = (u) => "acoth(" + C(u) + ")";
-        public static readonly Func<string, string> CSqrt = (u) => "sqrt(" + C(u) + ")";
-        public static readonly Func<string, string> CLog10 = (u) => "log10(" + C(u) + ")";
-        public static readonly Func<string, string> CLog = (u) => "log(" + C(u) + ")";
-        public static readonly Func<string, string> CLn = (u) => CLog(u);
-        public static readonly Func<string, string> CSign = (u) => "sign(" + C(u) + ")";
-        public static readonly Func<string, string> CAbs = (u) => "abs(" + C(u) + ")";
+        public static readonly Func<string,string[],double[], string> C = (u,vars,values) => Calculator.Calculate(u,vars,values);
+        public static readonly Func<string,string[],double[], string> CSin = (u,vars,values)=> "sin(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CCos = (u,vars,values)=> "cos(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CTan = (u,vars,values)=> "tan(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CSec = (u,vars,values)=> "sec(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CCosec = (u,vars,values)=> "cosec(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CCot = (u,vars,values)=> "cot(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CSinh = (u,vars,values)=> "sinh(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CCosh = (u,vars,values)=> "cosh(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CTanh = (u,vars,values)=> "tanh(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CSech = (u,vars,values)=> "sech(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CCosech = (u,vars,values)=> "cosech(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CCoth = (u,vars,values)=> "coth(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAsin = (u,vars,values)=> "asin(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAcos = (u,vars,values)=> "acos(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAtan = (u,vars,values)=> "atan(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAsec = (u,vars,values)=> "asec(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAcosec = (u,vars,values)=> "acosec(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAcot = (u,vars,values)=> "acot(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAsinh = (u,vars,values)=> "asinh(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAcosh = (u,vars,values)=> "acosh(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAtanh = (u,vars,values)=> "atanh(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAsech = (u,vars,values)=> "asech(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAcosech = (u,vars,values)=> "acosech(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAcoth = (u,vars,values)=> "acoth(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CSqrt = (u,vars,values)=> "sqrt(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CLog10 = (u,vars,values)=> "log10(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CLog = (u,vars,values)=> "log(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CLn = (u,vars,values)=> CLog(u, vars, values);
+        public static readonly Func<string,string[],double[], string> CSign = (u,vars,values)=> "sign(" + C(u,vars,values)+ ")";
+        public static readonly Func<string,string[],double[], string> CAbs = (u,vars,values)=> "abs(" + C(u,vars,values)+ ")";
         //public delegate string MathFunction(string x);
 
         //public MathFunction Atof = x => (((x) == "e") ? Math.E : ((x) == "pi" ? Math.PI : Atof(x)));

@@ -108,7 +108,6 @@
     <Compile Include="Utilities\ColorWheel.cs" />
     <Compile Include="Utilities\Keyboard.cs" />
     <Compile Include="Utilities\ParseUtils.cs" />
-    <Compile Include="Utilities\Serialization\ISerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

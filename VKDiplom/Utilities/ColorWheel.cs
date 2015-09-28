@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace VKDiplom.Utilities
@@ -41,21 +42,44 @@ namespace VKDiplom.Utilities
 
         private int _idx;
 
-        public Color this[int i] => Colors[i%Colors.Length];
+        public Color this[int i] => Colors[i % Colors.Length];
 
-        public Color Next()
+        public Color Next
         {
-            var color = this[_idx];
-            if (_idx < int.MaxValue)
-                ++_idx;
-            else
-                _idx = 0;
-            return color;
+            get
+            {
+                var color = this[_idx];
+                if (_idx < int.MaxValue)
+                    ++_idx;
+                else
+                    _idx = 0;
+                return color;
+            }
         }
 
         public void Reset()
         {
             _idx = 0;
         }
+
+        //public IEnumerable<Color> Next
+        //{
+        //    get
+        //    {
+        //        yield return Color.FromNonPremultiplied(165, 73, 78, 255);
+        //        //Cyan
+        //        yield return Color.FromNonPremultiplied(73, 147, 165, 255);
+
+        //        //Green
+        //        yield return Color.FromNonPremultiplied(73, 165, 101, 255);
+        //        //Purple
+        //        yield return Color.FromNonPremultiplied(119, 73, 165, 255);
+
+        //        //Yellow
+        //        yield return Color.FromNonPremultiplied(165, 145, 73, 255);
+        //        //Blue
+        //        yield return Color.FromNonPremultiplied(73, 80, 165, 255);
+        //    }
+        //}
     }
 }

@@ -27,6 +27,9 @@ namespace Test
             var d = Differentiator.Differentiate("x^2+y^2", "x", true);
             var res = Differentiator.Differentiate(d, "y", true);
 
+            d = Differentiator.Differentiate("x^2+y^2", "y", true);
+            res = Differentiator.Differentiate(d, "x", true);
+
             d = Differentiator.Differentiate("x^y", "x", true);
             // toto nezvladne t.j y*x^(y-1) podla y
             res = Differentiator.Differentiate(d, "y", true);
@@ -45,6 +48,8 @@ namespace Test
             res = Differentiator.Differentiate(dx, "x", true);
 
         }
+
+
 
     }
 }
