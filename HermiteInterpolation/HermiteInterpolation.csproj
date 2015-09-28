@@ -77,7 +77,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="MathFunctions\MathExpression.cs" />
+    <Compile Include="Numerics\NumericMathExpression.cs" />
+    <Compile Include="Numerics\MathExpression.cs" />
+    <Compile Include="Numerics\SymbolicMathExpression.cs" />
     <Compile Include="Primitives\VertexNormals.cs" />
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
     <Compile Include="Shapes\CompositeSurface.cs" />
@@ -88,8 +90,8 @@
     <Compile Include="SplineKnots\KnotsGenerator.cs" />
     <Compile Include="SplineKnots\Knot.cs" />
     <Compile Include="SplineKnots\DeBoorKnotsGenerator.cs" />
-    <Compile Include="MathFunctions\MathFunction.cs" />
-    <Compile Include="MathFunctions\InterpolativeMathFunction.cs" />
+    <Compile Include="Numerics\MathFunctions\MathFunction.cs" />
+    <Compile Include="Numerics\MathFunctions\InterpolativeMathFunction.cs" />
     <Compile Include="SplineKnots\KnotsGeneratorFactory.cs" />
     <Compile Include="SplineKnots\ReducedDeBoorKnotsGenerator.cs" />
     <Compile Include="Numerics\LinearSystemSolver.cs" />
@@ -119,6 +121,10 @@
     <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj">
       <Project>{3ed6a5a6-b6bd-4c61-ba5f-7bf692f11c3d}</Project>
       <Name>CalculationEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SymbolicDifferentiation\SymbolicDifferentiation.csproj">
+      <Project>{3f4739ec-1220-4ba8-a01a-dbcbc1b32ddc}</Project>
+      <Name>SymbolicDifferentiation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

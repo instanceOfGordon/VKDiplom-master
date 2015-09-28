@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Numerics;
+
 using HermiteInterpolation.Shapes.SplineInterpolation;
 
 namespace HermiteInterpolation.SplineKnots
@@ -20,7 +22,7 @@ namespace HermiteInterpolation.SplineKnots
         //}
 
         protected KnotsGenerator(MathExpression expression)
-            :this(expression.CompileToMathFunction())
+            :this(InterpolativeMathFunction.Create(expression))
         {
            
         }

@@ -6,7 +6,7 @@ using CalculationEngine;
 namespace HermiteInterpolation.MathFunctions
 {
 
-    public delegate double MathFunction(params double[] variables);
+    public delegate double MathFunction(params double[] variablesValues);
     /// <summary>
     /// Factory for creating anonymous delegates represents RxR->R math functions.
     /// </summary>
@@ -34,31 +34,6 @@ namespace HermiteInterpolation.MathFunctions
             return value;
         }
 
-        public static MathFunction CompileFromString(string mathExpression,params string[] variables)
-        {
-            var variablesValues = variables.ToDictionary<string, string, object>(t => t, t => 0.0d);
-
-            var engine = new CalcEngine { Variables = variablesValues };
-            try
-            {
-                engine.Evaluate(mathExpression);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            MathFunction mathFunction = variableValues =>
-            {
-                for (int i = 0; i < variableValues.Length; i++)
-                    engine.Variables[variables[i]] = variableValues[i];
-
-
-                //engine.Variables[Variables[0]] = variableValues[0];
-                //engine.Variables[Variables[1]] = variableValues[1];
-                var result = (double)engine.Evaluate(mathExpression);
-                return result;
-            };
-            return mathFunction;
-        }
+       
     }
 }

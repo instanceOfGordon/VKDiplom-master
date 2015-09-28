@@ -64,7 +64,7 @@ namespace VKDiplom
                double.Parse(HermiteVMinTextBox.Text),
                 double.Parse(HermiteVMaxTextBox.Text),
                 int.Parse(HermiteVCountTextBox.Text));
-                mathFunction = InterpolativeMathFunction.CompileFromString(MathExpressionTextBox.Text,"x","y");
+                mathFunction = InterpolativeMathFunction.FromMathExpression(MathExpressionTextBox.Text,"x","y");
             }
             catch (Exception)
             {
@@ -134,7 +134,9 @@ namespace VKDiplom
             _secondDerScene.Add(sdshape,false);
             var endTime = DateTime.Now;
             SetCalcLabelContent((endTime - startTime).Milliseconds);
-            
+            if (ShapesComboBox.SelectedIndex < 0)
+                ShapesComboBox.SelectedIndex = 0;
+
         }
 
         private void SetCalcLabelContent(double time)

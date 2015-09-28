@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Numerics;
+
 using HermiteInterpolation.Primitives;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using Microsoft.Xna.Framework;

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Graphics;
 using HermiteInterpolation;
 using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Shapes.SplineInterpolation.Bicubic;
@@ -51,8 +52,8 @@ namespace VKDiplom
 
             //var aproximationFunction = new InterpolativeMathFunction(f, xd, yd, xyd);
             //var aproximationFunction = new InterpolativeMathFunction(f);
-            var mathExpression = new MathExpression("sin(sqrt(x^2+y^2))", "x", "y");
-            //var aproximationFunction = InterpolativeMathFunction.CompileFromString("x^4+y^4", "x", "y");
+            var mathExpression = MathExpression.CreateDefault("sin(sqrt(x^2+y^2))", "x", "y");
+            //var aproximationFunction = InterpolativeMathFunction.Create("x^4+y^4", "x", "y");
 //            var shape = new SegmentSurface(new double[] {-3, -2, -1, 0, 1, 2, 3},
 //                new double[] {-3, -2, -1, 0, 1, 2, 3},
             //  aproximationFunction, derivation);
@@ -149,7 +150,7 @@ namespace VKDiplom
                 {
                     "Direct function",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new MathFunctionSurface(uDimension, vDimension,new MathExpression(MathExpressionTextBox.Text,"x","y"))
+                        new MathFunctionSurface(uDimension, vDimension,MathExpression.CreateDefault(MathExpressionTextBox.Text,"x","y"))
                 },
                 {
                     "Bicubic",
@@ -202,6 +203,7 @@ namespace VKDiplom
             
             var splineSelector = sender as ComboBox;
             if (splineSelector?.ItemsSource == null) return;
+            if(splineSelector.SelectedIndex>-1&&splineSelector.SelectedIndex<_functionScene.Count)
             ScenesAction(scene=> scene.HighlightedShapeIndex=splineSelector.SelectedIndex);
         }
     }

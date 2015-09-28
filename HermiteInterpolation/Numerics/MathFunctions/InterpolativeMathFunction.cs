@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Threading;
+using HermiteInterpolation.Numerics;
+
 using MathNet.Numerics;
 //using SymbolicDifferentiation;
 
@@ -105,29 +108,44 @@ namespace HermiteInterpolation.MathFunctions
         ///     Instance of class if mathExpression is correct expression Z, othervise
         ///     returns null;
         /// </returns>
-        public static InterpolativeMathFunction CompileFromString(string mathExpression, string variableX,
+        public static InterpolativeMathFunction FromMathExpression(string mathExpression, string variableX,
             string variableY)
+        {
+            //// TODO: osetrit vynimky pre neplatne vstupy
+            
+            //var function = MathFunctions.Create(mathExpression, variableX, variableY);
+            ////var mathExpressionDx = Differentiator.Differentiate(mathExpression, variableX,
+            ////    true);
+            ////var functionDx = MathFunctions.Create(mathExpressionDx);
+            ////var functionDy = MathFunctions.Create(Differentiator.Differentiate(mathExpression, variableY,
+            ////    true));
+            ////var functionDxy = MathFunctions.Create(Differentiator.Differentiate(mathExpressionDx, variableY,
+            ////    true));
+            //return function == null ? null : new InterpolativeMathFunction(function);
+            return Create(MathExpression.CreateDefault(mathExpression, variableX, variableY));
+        }
+
+      
+
+        public static InterpolativeMathFunction Create(MathExpression expression)
         {
             // TODO: osetrit vynimky pre neplatne vstupy
 
-            var function = MathFunctions.CompileFromString(mathExpression, variableX, variableY);
-            //var mathExpressionDx = Differentiator.Differentiate(mathExpression, variableX,
-            //    true);
-            //var functionDx = MathFunctions.CompileFromString(mathExpressionDx);
-            //var functionDy = MathFunctions.CompileFromString(Differentiator.Differentiate(mathExpression, variableY,
-            //    true));
-            //var functionDxy = MathFunctions.CompileFromString(Differentiator.Differentiate(mathExpressionDx, variableY,
-            //    true));
-            return function == null ? null : new InterpolativeMathFunction(function);
+            var f = expression.Compile();
+            var dx = expression.Differentiate("x");
+            var dy = expression.Differentiate("y");
+            var dxy = expression.Differentiate("x", "y");
+            
+            return new InterpolativeMathFunction(f,dx,dy,dxy);
         }
     }
 
-    public static class MathExpressionExtensions
-    {
-        public static InterpolativeMathFunction CompileToMathFunction(this MathExpression expression)
-        {
-            return InterpolativeMathFunction.CompileFromString(expression.Expression, expression.Variables[0],
-                expression.Variables[1]);
-        }
-    }
+    //public static class MathExpressionExtensions
+    //{
+    //    public static InterpolativeMathFunction CompileToMathFunction(this MathExpression expression)
+    //    {
+    //        return InterpolativeMathFunction.Create(expression.Expression, expression.Variables[0],
+    //            expression.Variables[1]);
+    //    }
+    //}
 }

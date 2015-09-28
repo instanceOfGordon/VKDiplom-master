@@ -2,6 +2,8 @@
 using System;
 using System.Threading.Tasks;
 using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Numerics;
+
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
 
