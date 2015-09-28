@@ -64,7 +64,7 @@ namespace VKDiplom
                double.Parse(HermiteVMinTextBox.Text),
                 double.Parse(HermiteVMaxTextBox.Text),
                 int.Parse(HermiteVCountTextBox.Text));
-                mathFunction = InterpolativeMathFunction.CompileFromString(MathExpressionTextBox.Text,XVariableTextBox.Text,YVariableTextBox.Text);
+                mathFunction = InterpolativeMathFunction.CompileFromString(MathExpressionTextBox.Text,"x","y");
             }
             catch (Exception)
             {
@@ -117,12 +117,12 @@ namespace VKDiplom
 
             _functionScene.Add(shape,false);
 
-            //if (SplinesComboBox.SelectedIndex == _functionScene.Count - 2)
+            //if (ShapesComboBox.SelectedIndex == _functionScene.Count - 2)
             //{
-            SplinesComboBox.ItemsSource = null;
-            SplinesComboBox.ItemsSource = _functionScene;
-           // SplinesComboBox.SelectedIndex = _functionScene.HighlightedShapeIndex;
-            //    ++SplinesComboBox.SelectedIndex;
+            ShapesComboBox.ItemsSource = null;
+            ShapesComboBox.ItemsSource = _functionScene;
+           // ShapesComboBox.SelectedIndex = _functionScene.HighlightedShapeIndex;
+            //    ++ShapesComboBox.SelectedIndex;
 
             //}       
 

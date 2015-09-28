@@ -8,7 +8,7 @@ namespace VKDiplom
         {
            
             _camera.Distance -= 0.02f*mouseWheelEventArgs.Delta;
-            DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
+            //DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
             //DrawingSurface_OnMouseWheel();
         }
     }

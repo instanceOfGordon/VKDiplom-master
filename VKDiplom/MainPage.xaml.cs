@@ -115,9 +115,9 @@ namespace VKDiplom
         // FDxDy
         private void FocusFunctionDrawingSurface()
         {
-            FdxdyBackground.Background = PurpleBrush;
-            DxfdyBackground.Background = TransparentBrush;
-            DydxfBackground.Background = TransparentBrush;
+            FxBackground.Background = PurpleBrush;
+            DFxBackground.Background = TransparentBrush;
+            DDFxBackground.Background = TransparentBrush;
 
             switch (_focusedDrawingSurface)
             {
@@ -143,9 +143,9 @@ namespace VKDiplom
         // DxFDy
         private void FocusFirstDerivationDrawingSurface()
         {
-            FdxdyBackground.Background = TransparentBrush;
-            DxfdyBackground.Background = PurpleBrush;
-            DydxfBackground.Background = TransparentBrush;
+            FxBackground.Background = TransparentBrush;
+            DFxBackground.Background = PurpleBrush;
+            DDFxBackground.Background = TransparentBrush;
 
             switch (_focusedDrawingSurface)
             {
@@ -173,9 +173,9 @@ namespace VKDiplom
         // DyDxF
         private void FocusSecondDerivation()
         {
-            FdxdyBackground.Background = TransparentBrush;
-            DxfdyBackground.Background = TransparentBrush;
-            DydxfBackground.Background = PurpleBrush;
+            FxBackground.Background = TransparentBrush;
+            DFxBackground.Background = TransparentBrush;
+            DDFxBackground.Background = PurpleBrush;
 
             switch (_focusedDrawingSurface)
             {
@@ -219,5 +219,6 @@ namespace VKDiplom
         //{
 
         //}
+        
     }
 }

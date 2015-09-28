@@ -149,7 +149,7 @@ namespace VKDiplom
                 {
                     "Direct function",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new MathFunctionSurface(uDimension, vDimension,new MathExpression(MathExpressionTextBox.Text,XVariableTextBox.Text,YVariableTextBox.Text))
+                        new MathFunctionSurface(uDimension, vDimension,new MathExpression(MathExpressionTextBox.Text,"x","y"))
                 },
                 {
                     "Bicubic",
@@ -188,12 +188,12 @@ namespace VKDiplom
             KnotsGeneratorComboBox.SelectedValuePath = "Value";
             KnotsGeneratorComboBox.SelectedIndex = 0;
 
-            SplinesComboBox.ItemsSource = _functionScene;
-            SplinesComboBox.DisplayMemberPath = "Name";
+            ShapesComboBox.ItemsSource = _functionScene;
+            ShapesComboBox.DisplayMemberPath = "Name";
             //var item = new ComboBoxItem();
             //item.Content = "Name";
             //item.Foreground = 
-            //SplinesComboBox.ItemTemplate.DataType = new ComboBoxItem();
+            //ShapesComboBox.ItemTemplate.DataType = new ComboBoxItem();
 
         }
 
@@ -201,8 +201,7 @@ namespace VKDiplom
         {
             
             var splineSelector = sender as ComboBox;
-            if (splineSelector == null) return;
-            if (splineSelector.ItemsSource==null) return;
+            if (splineSelector?.ItemsSource == null) return;
             ScenesAction(scene=> scene.HighlightedShapeIndex=splineSelector.SelectedIndex);
         }
     }

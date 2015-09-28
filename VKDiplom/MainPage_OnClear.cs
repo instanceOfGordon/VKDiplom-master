@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace VKDiplom
 {
@@ -8,7 +9,15 @@ namespace VKDiplom
         {
             _colorWheel.Reset();
             ScenesAction(scene=> scene.Clear());
-            SplinesComboBox.ItemsSource = _functionScene;
+            ShapesComboBox.ItemsSource = _functionScene;
+        }
+
+        private void DeleteShapeButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var selIdx = ShapesComboBox.SelectedIndex;
+            ScenesAction(scene=>scene.RemoveAt(selIdx));
+            ShapesComboBox.SelectedIndex = Math.Max(0,selIdx-1);
+            ShapesComboBox.ItemsSource = _functionScene;
         }
     }
 }
