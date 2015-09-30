@@ -18,12 +18,18 @@ namespace HermiteInterpolation.Numerics
         }
 
         public abstract MathFunction Compile();
-        public abstract MathFunction Differentiate(params string[] respectTovariables);
+
+        //protected abstract MathFunction Compile(string expression);
+
+        public abstract MathFunction CompileDerivative(params string[] respectToVariables);
+        
+
+       
 
         public static MathExpression CreateDefault(string expression, params string[] variables)
         {
-            return new NumericMathExpression(expression, variables);
-            //return new SymbolicMathExpression(expression, variables);
+            //return new NumericMathExpression(expression, variables);
+            return new SymbolicMathExpression(expression, variables);
         }
 
 

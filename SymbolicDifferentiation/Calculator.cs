@@ -7,8 +7,8 @@ namespace SymbolicDifferentiation
     {
         public static int Calculate(string input, double xVal, double yVal, ref double output)
         {
-            input = input.Replace("x", xVal.ToString());
-            input = input.Replace("y", yVal.ToString());
+            input = xVal<0? input.Replace("x", "(" + xVal + ")") : input.Replace("x", xVal.ToString());
+            input = yVal<0? input.Replace("y", "("+yVal+")") : input.Replace("y", yVal.ToString());
             return Calculate(input, ref output);
         }
 

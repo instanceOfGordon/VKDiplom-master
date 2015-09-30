@@ -192,17 +192,17 @@ namespace SymbolicDifferentiation
         // supported functions Dalculation
         public static readonly Func<string, string, string> D = (u, diffVar) => Differentiator.Differentiate(u, diffVar);
         public static readonly Func<string, string, string> DSin = (u, diffVar) => D(u, diffVar) + "*cos(" + u + ")";
-        public static readonly Func<string, string, string> DCos = (u, diffVar) => D(u, diffVar) + "*-sin(" + u + ")";
+        public static readonly Func<string, string, string> DCos = (u, diffVar) => D(u, diffVar) + "*(-sin(" + u + "))";
         public static readonly Func<string, string, string> DTan = (u, diffVar) => D(u, diffVar) + "*sec(" + u + ")^2";
         public static readonly Func<string, string, string> DSec = (u, diffVar) => D(u, diffVar) + "*sec(" + u + ")*tan(" + u + ")";
         public static readonly Func<string, string, string> DCosec = (u, diffVar) => "(-" + D(u, diffVar) + ")*cosec(" + u + ")*cot(" + u + ")";
-        public static readonly Func<string, string, string> DCot = (u, diffVar) => D(u, diffVar) + "*-cosec(" + u + ")^2";
+        public static readonly Func<string, string, string> DCot = (u, diffVar) => D(u, diffVar) + "*(-cosec(" + u + ")^2)";
         public static readonly Func<string, string, string> DSinh = (u, diffVar) => D(u, diffVar) + "*cosh(" + u + ")";
         public static readonly Func<string, string, string> DCosh = (u, diffVar) => D(u, diffVar) + "*sinh(" + u + ")";
         public static readonly Func<string, string, string> DTanh = (u, diffVar) => D(u, diffVar) + "*sech(" + u + ")^2";
         public static readonly Func<string, string, string> DSech = (u, diffVar) => D(u, diffVar) + "*sech(" + u + ")*tanh(" + u + ")";
         public static readonly Func<string, string, string> DCosech = (u, diffVar) => "(-" + D(u, diffVar) + ")*cosech(" + u + ")*coth(" + u + ")";
-        public static readonly Func<string, string, string> DCoth = (u, diffVar) => D(u, diffVar) + "*-cosech(" + u + ")^2";
+        public static readonly Func<string, string, string> DCoth = (u, diffVar) => D(u, diffVar) + "*(-cosech(" + u + ")^2)";
         public static readonly Func<string, string, string> DAsin = (u, diffVar) => D(u, diffVar) + "/sqrt(1-(" + u + ")^2)";
 
         public static readonly Func<string, string, string> DAcos =

@@ -27,10 +27,10 @@ namespace HermiteInterpolation.MathFunctions
             Z = z;
             // Partial derivations 
             //const double h2 = 2*H;
-            //Differentiate.FirstPa
+            //CompileDerivative.FirstPa
 
             Dx = new MathFunction(Differentiate.FirstPartialDerivativeFunc(new Func<double[], double>(z), 0));
-            //(a,b)=>Differentiate.FirstPartialDerivative2Func((x,y)=>z(x,y), 0)(a,b);
+            //(a,b)=>CompileDerivative.FirstPartialDerivative2Func((x,y)=>z(x,y), 0)(a,b);
             //(x, y) => (z(x + x*h, y) - z(x - x*h, y)) / (h2*x*x);
 
             Dy = new MathFunction(Differentiate.FirstPartialDerivativeFunc(new Func<double[], double>(z), 1));
@@ -41,7 +41,7 @@ namespace HermiteInterpolation.MathFunctions
             //Dx = new MathExpression("2*x","x","y").Compile();
             //Dx = new MathExpression("2*y", "x", "y").Compile();
             //Dx = new MathExpression("0", "x", "y").Compile();
-            //Differentiate.FirstPartialDerivative2Func(Dx, 1);
+            //CompileDerivative.FirstPartialDerivative2Func(Dx, 1);
             //(x, y) => (Dx(x, y + y*h) - Dx(x, y - y*h)) / (y*y*h2);//
 
             // better derivation [f(x-2h) - 8f(x-h) + 8f(x+h) - f(x+2h)] / 12h
@@ -108,33 +108,33 @@ namespace HermiteInterpolation.MathFunctions
         ///     Instance of class if mathExpression is correct expression Z, othervise
         ///     returns null;
         /// </returns>
-        public static InterpolativeMathFunction FromMathExpression(string mathExpression, string variableX,
+        public static InterpolativeMathFunction FromExpression(string mathExpression, string variableX,
             string variableY)
         {
             //// TODO: osetrit vynimky pre neplatne vstupy
             
-            //var function = MathFunctions.Create(mathExpression, variableX, variableY);
-            ////var mathExpressionDx = Differentiator.Differentiate(mathExpression, variableX,
+            //var function = MathFunctions.FromExpression(mathExpression, variableX, variableY);
+            ////var mathExpressionDx = Differentiator.CompileDerivative(mathExpression, variableX,
             ////    true);
-            ////var functionDx = MathFunctions.Create(mathExpressionDx);
-            ////var functionDy = MathFunctions.Create(Differentiator.Differentiate(mathExpression, variableY,
+            ////var functionDx = MathFunctions.FromExpression(mathExpressionDx);
+            ////var functionDy = MathFunctions.FromExpression(Differentiator.CompileDerivative(mathExpression, variableY,
             ////    true));
-            ////var functionDxy = MathFunctions.Create(Differentiator.Differentiate(mathExpressionDx, variableY,
+            ////var functionDxy = MathFunctions.FromExpression(Differentiator.CompileDerivative(mathExpressionDx, variableY,
             ////    true));
             //return function == null ? null : new InterpolativeMathFunction(function);
-            return Create(MathExpression.CreateDefault(mathExpression, variableX, variableY));
+            return FromExpression(MathExpression.CreateDefault(mathExpression, variableX, variableY));
         }
 
       
 
-        public static InterpolativeMathFunction Create(MathExpression expression)
+        public static InterpolativeMathFunction FromExpression(MathExpression expression)
         {
             // TODO: osetrit vynimky pre neplatne vstupy
 
             var f = expression.Compile();
-            var dx = expression.Differentiate("x");
-            var dy = expression.Differentiate("y");
-            var dxy = expression.Differentiate("x", "y");
+            var dx = expression.CompileDerivative("x");
+            var dy = expression.CompileDerivative("y");
+            var dxy = expression.CompileDerivative("x", "y");
             
             return new InterpolativeMathFunction(f,dx,dy,dxy);
         }
@@ -144,7 +144,7 @@ namespace HermiteInterpolation.MathFunctions
     //{
     //    public static InterpolativeMathFunction CompileToMathFunction(this MathExpression expression)
     //    {
-    //        return InterpolativeMathFunction.Create(expression.Expression, expression.Variables[0],
+    //        return InterpolativeMathFunction.FromExpression(expression.Expression, expression.Variables[0],
     //            expression.Variables[1]);
     //    }
     //}

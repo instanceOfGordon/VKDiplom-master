@@ -41,11 +41,11 @@ namespace HermiteInterpolation.Numerics
             return mathFunction;
         }
 
-        public override MathFunction Differentiate(params string[] respectTovariables)
+        public override MathFunction CompileDerivative(params string[] respectToVariables)
         {
             var diff = Compile();
 
-            foreach (var respectTo in respectTovariables)
+            foreach (var respectTo in respectToVariables)
             {
                 var idx = Array.IndexOf(Variables, respectTo);
                 if(idx<0) continue;

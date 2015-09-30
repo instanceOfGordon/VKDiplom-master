@@ -30,23 +30,24 @@ namespace SymbolicDifferentiation
             var nIndex = 0;
             // var operators = new[] {'(', '+', '-', '/', '*', '^'};
             // replace "--" with "" or "+"
-            while ((nIndex = str.IndexOf("--", nIndex, StringComparison.Ordinal)) != -1)
-                if (nIndex == 0 || "(+-/*^".Contains(str[nIndex - 1].ToString()))
-                    str = str.Remove(nIndex, 2);
-                else
-                {
-                    str = str.Remove(nIndex, 1);
-                    var strChars = str.ToCharArray();
-                    strChars[nIndex] = '+';
-                    str = new string(strChars);
-                }
+            str = str.Replace("--", "=");
+            //while ((nIndex = str.IndexOf("--", nIndex, StringComparison.Ordinal)) != -1)
+            //    if (nIndex == 0 || "(+-/*^".Contains(str[nIndex - 1].ToString()))
+            //        str = str.Remove(nIndex, 2);
+            //    else
+            //    {
+            //        str = str.Remove(nIndex, 1);
+            //        var strChars = str.ToCharArray();
+            //        strChars[nIndex] = '+';
+            //        str = new string(strChars);
+            //    }
 
             nIndex = 0;
             // replace "+-" with "-"
 
-            while ((nIndex = str.IndexOf("+-", nIndex, StringComparison.Ordinal)) != -1)
-                str = str.Remove(nIndex);
-
+            //while ((nIndex = str.IndexOf("+-", nIndex, StringComparison.Ordinal)) != -1)
+            //    str = str.Remove(nIndex);
+            str = str.Replace("+-", "-");
             return str;
         }
 

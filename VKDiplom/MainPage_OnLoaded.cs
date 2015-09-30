@@ -53,7 +53,7 @@ namespace VKDiplom
             //var aproximationFunction = new InterpolativeMathFunction(f, xd, yd, xyd);
             //var aproximationFunction = new InterpolativeMathFunction(f);
             var mathExpression = MathExpression.CreateDefault("sin(sqrt(x^2+y^2))", "x", "y");
-            //var aproximationFunction = InterpolativeMathFunction.Create("x^4+y^4", "x", "y");
+            //var aproximationFunction = InterpolativeMathFunction.FromExpression("x^4+y^4", "x", "y");
 //            var shape = new SegmentSurface(new double[] {-3, -2, -1, 0, 1, 2, 3},
 //                new double[] {-3, -2, -1, 0, 1, 2, 3},
             //  aproximationFunction, derivation);

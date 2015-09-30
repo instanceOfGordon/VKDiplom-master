@@ -22,7 +22,7 @@ namespace HermiteInterpolation.SplineKnots
         //}
 
         protected KnotsGenerator(MathExpression expression)
-            :this(InterpolativeMathFunction.Create(expression))
+            :this(InterpolativeMathFunction.FromExpression(expression))
         {
            
         }

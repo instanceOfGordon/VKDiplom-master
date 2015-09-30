@@ -64,7 +64,7 @@ namespace VKDiplom
                double.Parse(HermiteVMinTextBox.Text),
                 double.Parse(HermiteVMaxTextBox.Text),
                 int.Parse(HermiteVCountTextBox.Text));
-                mathFunction = InterpolativeMathFunction.FromMathExpression(MathExpressionTextBox.Text,"x","y");
+                mathFunction = InterpolativeMathFunction.FromExpression(MathExpressionTextBox.Text,"x","y");
             }
             catch (Exception)
             {
