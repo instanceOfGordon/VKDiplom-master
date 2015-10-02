@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
-
+using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Primitives;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using Microsoft.Xna.Framework;
@@ -81,7 +81,7 @@ namespace HermiteInterpolation.Shapes
                 for (var j = 0; j < yCount; j++, y += meshDensity)
                 {
                     y = y < v1 ? y : (float) v1;
-                    var z = (float) function(x, y);
+                    var z = (float) function.SafeCall(x, y);
                     segmentMeshVertices[k++] = new VertexPositionNormalColor(new Vector3(x, y, z), DefaultNormal,
                         DefaultColor);
                 }

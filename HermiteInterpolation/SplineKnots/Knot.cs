@@ -1,4 +1,6 @@
-﻿namespace HermiteInterpolation.SplineKnots
+﻿using System;
+
+namespace HermiteInterpolation.SplineKnots
 {
     public class Knot
     {
@@ -38,12 +40,37 @@
 
         public Knot()
         {
-            
+
         }
 
         public override string ToString()
         {
             return $"X: {X:0.00}, Y: {Y:0.00}, Z: {Z:0.00}, Dx: {Dx:0.00}, Dy: {Dy:0.00}, Dxy: {Dxy:0.00}";
+        }
+
+        public static Knot operator +(Knot leftOp, Knot rightOp)
+        {
+            var z = leftOp.Z + rightOp.Z;
+            var dx = leftOp.Dx + rightOp.Dx;
+            var dy = leftOp.Dy + rightOp.Dy;
+            var dxy = leftOp.Dxy + rightOp.Dxy;
+
+            return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
+        }
+
+        public static Knot operator -(Knot leftOp, Knot rightOp)
+        {
+            var z = leftOp.Z - rightOp.Z;
+            var dx = leftOp.Dx - rightOp.Dx;
+            var dy = leftOp.Dy - rightOp.Dy;
+            var dxy = leftOp.Dxy - rightOp.Dxy;
+
+            return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
+        }
+
+        public bool EqualsPosition(Knot knot)
+        {
+            return Math.Abs(X - knot.X) < Constants.MeshDensity && Math.Abs(Y - knot.Y) < Constants.MeshDensity;
         }
     }
 }

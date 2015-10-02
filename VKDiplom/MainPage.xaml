@@ -271,7 +271,7 @@
                 <Slider IsEnabled="False" Minimum="0" Maximum="360" x:Name="ColorSlider"
                         ValueChanged="ColorSlider_OnValueChanged" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" />
                 <CheckBox x:Name="ColorCheckBox" Grid.Row="0" Grid.Column="1" Margin="10"
-                          HorizontalAlignment="Left" Content="Auto color" IsChecked="True"
+                          HorizontalAlignment="Left" VerticalAlignment="Center" Content="Auto color" IsChecked="True"
                           IsEnabledChanged="ColorCheckBox_OnIsEnabledChanged" Style="{StaticResource CheckBox}"
                           Width="77" Grid.ColumnSpan="2" />
             </Grid>

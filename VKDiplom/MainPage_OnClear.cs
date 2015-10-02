@@ -19,16 +19,17 @@ namespace VKDiplom
             var count = _functionScene.Count;
             var selIdx = ShapesComboBox.SelectedIndex;
             if (selIdx >= count || selIdx < 0) return;
-            //if(selIdx==0&&count>1)
-            //    ShapesComboBox.SelectedIndex =  selIdx;
-            //else
-            //    ShapesComboBox.SelectedIndex = selIdx - 1;
-            ShapesComboBox.SelectedIndex = -1;
+            if (selIdx == 0 && count > 1)
+                ShapesComboBox.SelectedIndex = 0;
+            else if (selIdx == 0 && count == 1)
+                ShapesComboBox.SelectedIndex = -1;
+            else
+                ShapesComboBox.SelectedIndex = selIdx-1;
             ScenesAction(scene=>scene.RemoveAt(selIdx));
-            ShapesComboBox.ItemsSource = null;
+            ShapesComboBox.ItemsSource = null;        
             ShapesComboBox.ItemsSource = _functionScene;
-         
-            
+            //MessageBox.Show("STOP");
+
         }
     }
 }

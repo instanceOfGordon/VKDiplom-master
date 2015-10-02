@@ -103,6 +103,16 @@ namespace SymbolicDifferentiation
 
         public static int GetOperator(string lpcs, string[] lpcsOperators)
         {
+            if (lpcs.IsNumeric()) return -1;
+            //if (lpcs[0] == '(' && lpcs[lpcs.Length - 1] == ')')
+            //{
+            //    var strInput = lpcs.Substring(1, lpcs.Length - 2);
+            //    if (strInput.IsNumeric())
+            //    {
+                    
+            //        return -1;
+            //    }
+            //}
             for (int nIndex = 0; nIndex < lpcsOperators.Length; nIndex++)
             {
                 int nOpen = 0;

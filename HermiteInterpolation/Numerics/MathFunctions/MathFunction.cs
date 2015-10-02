@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CalculationEngine;
-
-namespace HermiteInterpolation.MathFunctions
+﻿namespace HermiteInterpolation.Numerics.MathFunctions
 {
 
     public delegate double MathFunction(params double[] variablesValues);
     /// <summary>
     /// Factory for creating anonymous delegates represents RxR->R math functions.
     /// </summary>
-    internal static class MathFunctions
+    internal static class MathFunctionExtensions
     {
 
       
 
         //Za toto sa hanbim. 
 
-        public static double SafeCall(MathFunction mathFunction, double x, double y)
+        public static double SafeCall(this MathFunction mathFunction, double x, double y)
         {
             //float offset = _meshDensity/10;
             //var value = mathFunction(x, y);

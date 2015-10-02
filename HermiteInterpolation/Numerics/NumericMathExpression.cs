@@ -2,6 +2,7 @@
 using System.Linq;
 using CalculationEngine;
 using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Numerics.MathFunctions;
 
 namespace HermiteInterpolation.Numerics
 {

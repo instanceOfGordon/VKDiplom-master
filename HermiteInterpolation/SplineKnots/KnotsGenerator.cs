@@ -38,13 +38,20 @@ namespace HermiteInterpolation.SplineKnots
         //{
         //    return 
         //}
+
+        //public static Knot[][] operator -(KnotsGenerator leftOp, KnotsGenerator rightOp)
+        //{
+            
+        //}
     }
 
-    internal enum UnknownVariableType
-    {
-        Dx,
-        Dxy,
-        Dy,
-        Dyx
-    }
+   
+
+    //internal enum UnknownVariableType
+    //{
+    //    Dx,
+    //    Dxy,
+    //    Dy,
+    //    Dyx
+    //}
 }

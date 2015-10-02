@@ -30,7 +30,7 @@ namespace HermiteInterpolation.SplineKnots
             int equationsCount, bool even = false)
         {
             var rs = new double[equationsCount];
-            h = 3;///h;
+            h = 3/h;
             rs[0] = h*(rightSide(2) - rightSide(0)) - dfirst;
             rs[equationsCount - 1] = h*(rightSide(equationsCount + 1) - rightSide(equationsCount - 1)) - dlast;
             for (var i = 1; i < equationsCount - 1; i++)
@@ -59,7 +59,7 @@ namespace HermiteInterpolation.SplineKnots
                 var v = vDimension.Min;
                 for (var j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
-                    var z = MathFunctions.MathFunctions.SafeCall(Function.Z, u, v);//Function.Z(u,v); //Z(u, v);
+                    var z = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Z, u, v);//Function.Z(u,v); //Z(u, v);
 
                     values[i][j] = new Knot(u, v, z);
                 }
@@ -68,8 +68,8 @@ namespace HermiteInterpolation.SplineKnots
             var uKnotCountMin1 = uDimension.KnotCount - 1;
             for (var j = 0; j < vDimension.KnotCount; j++)
             {
-                values[0][j].Dx = MathFunctions.MathFunctions.SafeCall(Function.Dx, values[0][j].X, values[0][j].Y); //Function.Dx(values[0][j].X, values[0][j].Y);
-                values[uKnotCountMin1][j].Dx = MathFunctions.MathFunctions.SafeCall(Function.Dx, values[uKnotCountMin1][j].X,
+                values[0][j].Dx = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dx, values[0][j].X, values[0][j].Y); //Function.Dx(values[0][j].X, values[0][j].Y);
+                values[uKnotCountMin1][j].Dx = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dx, values[uKnotCountMin1][j].X,
                     values[uKnotCountMin1][j].Y);
                 //Function.Dx(values[uKnotCountMin1][j].X, values[uKnotCountMin1][j].Y);
             }
@@ -77,17 +77,17 @@ namespace HermiteInterpolation.SplineKnots
             var vKnotCountMin1 = vDimension.KnotCount - 1;
             for (var i = 0; i < uDimension.KnotCount; i++)
             {
-                values[i][0].Dy = MathFunctions.MathFunctions.SafeCall(Function.Dy, values[i][0].X, values[i][0].Y);
-                values[i][vKnotCountMin1].Dy = MathFunctions.MathFunctions.SafeCall(Function.Dy, values[i][vKnotCountMin1].X,
+                values[i][0].Dy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dy, values[i][0].X, values[i][0].Y);
+                values[i][vKnotCountMin1].Dy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dy, values[i][vKnotCountMin1].X,
                     values[i][vKnotCountMin1].Y);
             }
             // Init Dxy
-            values[0][0].Dxy = MathFunctions.MathFunctions.SafeCall(Function.Dxy, values[0][0].X, values[0][0].Y);
-            values[uKnotCountMin1][0].Dxy = MathFunctions.MathFunctions.SafeCall(Function.Dxy, values[uKnotCountMin1][0].X,
+            values[0][0].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[0][0].X, values[0][0].Y);
+            values[uKnotCountMin1][0].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[uKnotCountMin1][0].X,
                 values[uKnotCountMin1][0].Y);
-            values[0][vKnotCountMin1].Dxy = MathFunctions.MathFunctions.SafeCall(Function.Dxy, values[0][vKnotCountMin1].X,
+            values[0][vKnotCountMin1].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[0][vKnotCountMin1].X,
                 values[0][vKnotCountMin1].Y);
-            values[uKnotCountMin1][vKnotCountMin1].Dxy = MathFunctions.MathFunctions.SafeCall(Function.Dxy,
+            values[uKnotCountMin1][vKnotCountMin1].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy,
                 values[uKnotCountMin1][vKnotCountMin1].X, values[uKnotCountMin1][vKnotCountMin1].Y);
 
             FillXDerivations(values);

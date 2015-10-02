@@ -474,11 +474,23 @@ namespace SymbolicDifferentiation
 
         public int GetCalculation(bool bValue = false)
         {
+           
             if (MStrInput.IsNumeric())
             {
-                MNOutput = Double.Parse(MStrInput);
+                MNOutput = double.Parse(MStrInput);
                 return 0;
             };
+            //if (MStrInput[0] == '(' && MStrInput[MStrInput.Length - 1] == ')')
+            //{
+            //    var strInput = MStrInput.Substring(1, MStrInput.Length - 2);
+            //    if (strInput.IsNumeric())
+            //    {
+            //        MNOutput = double.Parse(strInput);
+            //        return 0;
+            //    }
+            //}
+                
+
             var nIndex = MStrInput.First('(');
             string str = null;
             if (nIndex == -1)

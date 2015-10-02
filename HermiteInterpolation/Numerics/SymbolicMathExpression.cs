@@ -1,4 +1,5 @@
 using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Numerics.MathFunctions;
 using SymbolicDifferentiation;
 
 namespace HermiteInterpolation.Numerics
@@ -9,15 +10,12 @@ namespace HermiteInterpolation.Numerics
         {
         }
 
-        protected MathFunction Compile(string expression)
+        protected MathFunction Compile(string expression) => vals =>
         {
-            return vals =>
-            {
-                double result = 0;
-                Calculator.Calculate(expression, vals[0], vals[1], ref result);
-                return result;
-            };
-        }
+            double result = 0;
+            Calculator.Calculate(expression, vals[0], vals[1], ref result);
+            return result;
+        };
 
         public string Differentiate(params string[] respectToVariables)
         {
@@ -29,13 +27,13 @@ namespace HermiteInterpolation.Numerics
             return diff;
         }
 
-        protected MathFunction CompileDerivative(string deriveFunction) =>
-            vals =>
-            {
-                double result = 0;
-                Calculator.Calculate(deriveFunction, vals[0], vals[1], ref result);
-                return result;
-            };
+        //protected MathFunction CompileDerivative(string deriveFunction) =>
+        //    vals =>
+        //    {
+        //        double result = 0;
+        //        Calculator.Calculate(deriveFunction, vals[0], vals[1], ref result);
+        //        return result;
+        //    };
 
         public override MathFunction Compile()
         {
@@ -46,7 +44,7 @@ namespace HermiteInterpolation.Numerics
         {
             var diff = Differentiate(respectToVariables);
 
-            return CompileDerivative(diff);
+            return Compile(diff);
         }
     }
 }

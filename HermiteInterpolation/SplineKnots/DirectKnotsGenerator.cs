@@ -3,9 +3,10 @@ using System;
 using System.Threading.Tasks;
 using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
-
+using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
+using static HermiteInterpolation.Numerics.MathFunctions.MathFunctionExtensions;
 
 namespace HermiteInterpolation.SplineKnots
 {
@@ -34,15 +35,16 @@ namespace HermiteInterpolation.SplineKnots
                 var v = vDimension.Min;
                 for (int j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
-                    var z = MathFunctions.MathFunctions.SafeCall(Function.Z, u, v); //Z(u, v);
-                    var dx = MathFunctions.MathFunctions.SafeCall(Function.Dx, u, v); //Dx(u, v);
-                    var dy = MathFunctions.MathFunctions.SafeCall(Function.Dy, u, v); //Dy(u, v);
-                    var dxy = MathFunctions.MathFunctions.SafeCall(Function.Dxy, u, v); //Dxy(u, v);
+                    
+                    var z = Function.Z.SafeCall(u, v); //Z(u, v);
+                    var dx = Function.Dx.SafeCall(u, v); //Dx(u, v);
+                    var dy = Function.Dy.SafeCall(u, v); //Dy(u, v);
+                    var dxy = Function.Dxy.SafeCall(u, v); //Dxy(u, v);
                     values[i][j] = new Knot(u, v, z, dx, dy, dxy);
 
                 }
-                u += uSize;
-            }
+                //u += uSize;
+            }//);
             return values;
         }
 

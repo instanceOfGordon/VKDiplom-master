@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace SymbolicDifferentiation
 {
     public class Calculator
     {
+        //private readonly static NumberFormatInfo NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
+
         public static int Calculate(string input, double xVal, double yVal, ref double output)
         {
-            input = xVal<0? input.Replace("x", "(" + xVal + ")") : input.Replace("x", xVal.ToString());
-            input = yVal<0? input.Replace("y", "("+yVal+")") : input.Replace("y", yVal.ToString());
+
+            var xValStr = xVal.ToString();//.Replace("e","");//CultureInfo.InvariantCulture);//.Replace(",",".");
+            var yValStr = yVal.ToString();//.Replace("e", "");//CultureInfo.InvariantCulture);//.Replace(",", ".");
+            input = xVal<0? input.Replace("x", "(" + xValStr + ")") : input.Replace("x", xValStr);
+            input = yVal<0? input.Replace("y", "("+ yValStr + ")") : input.Replace("y", yValStr);
             return Calculate(input, ref output);
         }
 
@@ -19,7 +25,8 @@ namespace SymbolicDifferentiation
             //string input = lpcsInput;
             // remove spaces
             input = input.Replace(" ","");
-           
+            //input = input.Replace(",", "");
+
             // make all characters lower case
             input = input.ToLower();
             // Optimize "--"
