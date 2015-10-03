@@ -76,7 +76,7 @@ namespace HermiteInterpolation.SplineKnots
             var dxy = leftOp.Dxy * rightOp.Dxy;
 
             return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
-        }
+        }//
 
         public static Knot operator /(Knot leftOp, Knot rightOp)
         {

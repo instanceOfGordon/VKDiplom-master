@@ -104,7 +104,7 @@ namespace HermiteInterpolation.SplineKnots
         //    rightOpIntersectIdx0 = -1;
         //    leftOpIntersectIdx1 = -1;
         //    rightOpIntersectIdx1 = -1;
-        //    return false;
+        //    return false;//
         //}
 
     }

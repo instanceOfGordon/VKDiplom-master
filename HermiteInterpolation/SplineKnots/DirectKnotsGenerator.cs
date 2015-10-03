@@ -35,7 +35,7 @@ namespace HermiteInterpolation.SplineKnots
                 var v = vDimension.Min;
                 for (int j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
-                    
+                    //
                     var z = Function.Z.SafeCall(u, v); //Z(u, v);
                     var dx = Function.Dx.SafeCall(u, v); //Dx(u, v);
                     var dy = Function.Dy.SafeCall(u, v); //Dy(u, v);

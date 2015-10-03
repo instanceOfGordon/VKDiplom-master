@@ -9,5 +9,5 @@ namespace HermiteInterpolation.SplineKnots
     //    public static readonly K
 
     //    public int Value { get; protected set; }
-    //}
+    //}//
 }

@@ -59,7 +59,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             //MeshDensity = 0.1f;
             //InterpolativeFunction = knotsGenerator.Function;
             //            _uKnotsDistance = Math.Abs(uMax - uMin) / uCount;
-            //            
+            //            //
             //  _vKnotsDistance = Math.Abs(vMax - vMin) / vCount;
             //_interpolatedFunction = InterpolativeMathFunction;
             //Knots = knotsGenerator.GenerateKnots(uDimension, vDimension);

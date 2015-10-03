@@ -43,7 +43,7 @@ namespace HermiteInterpolation.SplineKnots
         {
             _generatorChain.Add(generator);
             _operatorChain.Add(operation);
-        }
+        }//
 
         //public bool RemoveAt(int index)
         //{

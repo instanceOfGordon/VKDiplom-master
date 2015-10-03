@@ -22,7 +22,7 @@ namespace HermiteInterpolation.SplineKnots
         }
 
         //protected KnotsGenerator()
-        //{
+        //{//
             
         //}
 

@@ -236,7 +236,7 @@ namespace VKDiplom
 
                     InterpolationTypeComboBox.SelectedIndex = 1;
 
-                //SetSelectedIndexByGeneratorType(selectedSpline.KnotsGenerator.GetType());
+                // SetSelectedIndexByGeneratorType(selectedSpline.KnotsGenerator.GetType());
                 if (selectedSpline.KnotsGenerator is DirectKnotsGenerator)
                     KnotsGeneratorComboBox.SelectedIndex = 0;
                 else if (selectedSpline.KnotsGenerator is ReducedDeBoorKnotsGenerator)
