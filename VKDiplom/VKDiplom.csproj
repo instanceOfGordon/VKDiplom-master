@@ -107,7 +107,6 @@
     <Compile Include="SettingsWindow.cs" />
     <Compile Include="Engine\Utils\GraphicsInitializationUtils.cs" />
     <Compile Include="Utilities\ColorWheel.cs" />
-    <Compile Include="Utilities\ComboBoxExtensions.cs" />
     <Compile Include="Utilities\Keyboard.cs" />
     <Compile Include="Utilities\ParseUtils.cs" />
   </ItemGroup>
