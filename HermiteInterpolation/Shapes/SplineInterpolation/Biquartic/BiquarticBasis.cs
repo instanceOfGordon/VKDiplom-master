@@ -6,7 +6,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation.Biquartic
 {
     internal class BiquarticBasis : Basis
     {
-        public BiquarticBasis(Knot[][] knots, Derivation derivation)
+        public BiquarticBasis(KnotMatrix knots, Derivation derivation)
             : base(knots, derivation)
         {
         }
@@ -99,15 +99,15 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation.Biquartic
         {
             var m = Matrix<double>.Build.Random(5, 5, 0);
 
-            var k00 = Knots[uIdx][vIdx];
-            var k01 = Knots[uIdx][vIdx + 1];
-            var k02 = Knots[uIdx][vIdx + 2];
-            var k10 = Knots[uIdx + 1][vIdx];
-            var k11 = Knots[uIdx + 1][vIdx + 1];
-            var k12 = Knots[uIdx + 1][vIdx + 2];
-            var k20 = Knots[uIdx + 2][vIdx];
-            var k21 = Knots[uIdx + 2][vIdx + 1];
-            var k22 = Knots[uIdx + 2][vIdx + 2];
+            var k00 = Knots[uIdx,vIdx];
+            var k01 = Knots[uIdx,vIdx + 1];
+            var k02 = Knots[uIdx,vIdx + 2];
+            var k10 = Knots[uIdx + 1,vIdx];
+            var k11 = Knots[uIdx + 1,vIdx + 1];
+            var k12 = Knots[uIdx + 1,vIdx + 2];
+            var k20 = Knots[uIdx + 2,vIdx];
+            var k21 = Knots[uIdx + 2,vIdx + 1];
+            var k22 = Knots[uIdx + 2,vIdx + 2];
 
             m[0, 0] = k00.Z; //SafeCall(f, u0, v0);
             m[0, 1] = k01.Z; //SafeCall(f, u0, v1);

@@ -11,19 +11,25 @@ namespace HermiteInterpolation.Shapes
 {
     public sealed class MathFunctionSurface : CompositeSurface
     {
+        public SurfaceDimension UDimension { get; }
+        public SurfaceDimension VDimension { get;  }
+
         public MathFunctionSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
             MathExpression mathExpression)
             : this(
                 uDimension, vDimension, mathExpression.Compile()
                 )
         {
-                 Name = mathExpression.Expression;
+           
+            Name = mathExpression.Expression;
         }
 
         public MathFunctionSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
             MathFunction function)
 
         {
+            UDimension = uDimension;
+            VDimension = vDimension;
             var uCount_min_1 = uDimension.KnotCount - 1; //surface.UKnotsCount-1;
             var vCount_min_1 = vDimension.KnotCount - 1; //surface.VKnotsCount-1;
 
@@ -33,7 +39,7 @@ namespace HermiteInterpolation.Shapes
             {
                 for (var j = 0; j < vCount_min_1; j++)
                 {
-                    var segment = CreateSegment(i, j, uDimension, vDimension, function);
+                    var segment = CreateSegment(i, j, function);
                     segments.Add(segment);
                 }
             }
@@ -50,19 +56,19 @@ namespace HermiteInterpolation.Shapes
 
         //public float MeshDensity { get; } = Constants.;
 
-        private ISurface CreateSegment(int uIdx, int vIdx, SurfaceDimension uDimension, SurfaceDimension vDimension,
+        private ISurface CreateSegment(int uIdx, int vIdx, 
             MathFunction function)
         {
             //var afv = Knots;
 
             var meshDensity = Constants.MeshDensity;
-            var uSize = Math.Abs(uDimension.Max - uDimension.Min)/(uDimension.KnotCount - 1);
-            var vSize = Math.Abs(vDimension.Max - vDimension.Min)/(vDimension.KnotCount - 1);
+            var uSize = Math.Abs(UDimension.Max - UDimension.Min)/(UDimension.KnotCount - 1);
+            var vSize = Math.Abs(VDimension.Max - VDimension.Min)/(VDimension.KnotCount - 1);
 
-            var u0 = uDimension.Min + uSize*uIdx; //afv[uIdx][vIdx].X;
-            var u1 = uDimension.Min + uSize*(uIdx + 1);
-            var v0 = vDimension.Min + vSize*vIdx;
-            var v1 = vDimension.Min + vSize*(vIdx + 1);
+            var u0 = UDimension.Min + uSize*uIdx; //afv[uIdx][vIdx].X;
+            var u1 = UDimension.Min + uSize*(uIdx + 1);
+            var v0 = VDimension.Min + vSize*vIdx;
+            var v1 = VDimension.Min + vSize*(vIdx + 1);
 
             var uKnotsDistance = Math.Abs(u1 - u0);
             var xCount = Math.Ceiling(uKnotsDistance/meshDensity);

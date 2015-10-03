@@ -6,7 +6,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation.Bicubic
     internal class BicubicBasis : Basis
     {
 
-        public BicubicBasis(Knot[][] knots, Derivation derivation) : base(knots,derivation)
+        public BicubicBasis(KnotMatrix knots, Derivation derivation) : base(knots,derivation)
         {
           
         }
@@ -61,10 +61,10 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation.Bicubic
 
             var m = Matrix<double>.Build.Random(4, 4, 0);
 
-            var k00 = Knots[uIdx][vIdx];
-            var k01 = Knots[uIdx][vIdx + 1];
-            var k10 = Knots[uIdx + 1][vIdx];
-            var k11 = Knots[uIdx + 1][vIdx + 1];
+            var k00 = Knots[uIdx,vIdx];
+            var k01 = Knots[uIdx,vIdx + 1];
+            var k10 = Knots[uIdx + 1,vIdx];
+            var k11 = Knots[uIdx + 1,vIdx + 1];
             m[0, 0] = k00.Z; //SafeCall(f, u0, v0);
             m[0, 1] = k01.Z; //SafeCall(f, u0, v1);
             m[0, 2] = k00.Dy; //SafeCall(dy, u0, v0);

@@ -55,7 +55,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
         {
             
             //MathExpression = expression;
-            //KnotsGenerator = knotsGenerator.;
+            KnotsGenerator = knotsGenerator;
             //MeshDensity = 0.1f;
             //InterpolativeFunction = knotsGenerator.Function;
             //            _uKnotsDistance = Math.Abs(uMax - uMin) / uCount;
@@ -67,28 +67,14 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             UDimension = uDimension;
             VDimension = vDimension;
             Derivation = derivation;
-            Knots = knotsGenerator.GenerateKnots(uDimension, vDimension);
-            Segments = CreateMesh();
-        }
-
-        public Knot[][] Knots { get;}
-
-        protected Spline(SurfaceDimension uDimension, SurfaceDimension vDimension, Knot[][] knots, Derivation derivation = Derivation.Zero)
-        {
-            //KnotsGenerator = knotsGenerator;
-            //MeshDensity = 0.1f;
-            //InterpolativeFunction = knotsGenerator.Function;
-            //            _uKnotsDistance = Math.Abs(uMax - uMin) / uCount;
-            //            
-            //  _vKnotsDistance = Math.Abs(vMax - vMin) / vCount;
-            //_interpolatedFunction = InterpolativeMathFunction;
             //Knots = knotsGenerator.GenerateKnots(uDimension, vDimension);
-            Knots = knots;
-            UDimension = uDimension;
-            VDimension = vDimension;
-            Derivation = derivation;
-            Segments = CreateMesh();
+            Segments = CreateMesh(knotsGenerator.GenerateKnots(uDimension, vDimension));
         }
+
+        public KnotsGenerator KnotsGenerator { get; }
+
+        //public KnotMatrix Knots { get;}
+
 
 
 
@@ -98,12 +84,12 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
 
 
         //protected Knot[][] Knots { get; set; }
-        internal IEnumerable<ISurface> CreateMesh()
+        internal IEnumerable<ISurface> CreateMesh(KnotMatrix knots)
         {
             //MyArrays.WriteArray(knots);
             //var surface = Surface;
-            var uCount_min_1 = Knots.Length - 1;//surface.UKnotsCount-1;
-            var vCount_min_1 = Knots[0].Length - 1;//surface.VKnotsCount-1;
+            var uCount_min_1 = knots.Rows - 1;//surface.UKnotsCount-1;
+            var vCount_min_1 = knots.Columns - 1;//surface.VKnotsCount-1;
 
             var segments = new List<ISurface>(uCount_min_1 * vCount_min_1);
 
@@ -111,7 +97,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             {
                 for (int j = 0; j < vCount_min_1; j++)
                 {
-                    var segment = CreateSegment(i, j);
+                    var segment = CreateSegment(i, j, knots);
                     segments.Add(segment);
                 }
             }
@@ -149,54 +135,54 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
         //    //return new CompositeSurface(segments);
         //}
 
-        protected abstract ISurface CreateSegment(int uIdx, int vIdx);
+        protected abstract ISurface CreateSegment(int uIdx, int vIdx, KnotMatrix knots);
 
         //public static abstract Spline operator -(Spline s1, Spline s2)
         //public abstract Spline Subtract(Spline s1, Spline s2);
-        public static Spline operator -(Spline s1, Spline s2)
-        {
-            //var subtractedFunction = s1.KnotsGenerator.Function - s2.KnotsGenerator.Function;
-            //var generator = (KnotsGenerator)Activator.CreateInstance(s1.KnotsGenerator.GetType(), subtractedFunction);
-            //return (Spline)Activator.CreateInstance(s1.GetType(), s1.UDimension, s1.VDimension, generator, s1.Derivation);
+        //public static Spline operator -(Spline s1, Spline s2)
+        //{
+        //    //var subtractedFunction = s1.KnotsGenerator.Function - s2.KnotsGenerator.Function;
+        //    //var generator = (KnotsGenerator)Activator.CreateInstance(s1.KnotsGenerator.GetType(), subtractedFunction);
+        //    //return (Spline)Activator.CreateInstance(s1.GetType(), s1.UDimension, s1.VDimension, generator, s1.Derivation);
 
-            var knots1 = s1.Knots;
-            var knots2 = s2.Knots;
-            var knots = SuptractKnots(knots1, knots2);
-            var resultSpline = (Spline)Activator.CreateInstance(s1.GetType(), s1.UDimension, s1.VDimension, knots, s1.Derivation);
-            return resultSpline;
-        }
+        //    var knots1 = s1.Knots;
+        //    var knots2 = s2.Knots;
+        //    var knots = SuptractKnots(knots1, knots2);
+        //    var resultSpline = (Spline)Activator.CreateInstance(s1.GetType(), s1.UDimension, s1.VDimension, knots, s1.Derivation);
+        //    return resultSpline;
+        //}
 
-        public static Spline operator -(InterpolativeMathFunction f, Spline s)
-        {
-            //var subtractedFunction = f - s.KnotsGenerator.Function;
-            //var generator = (KnotsGenerator)Activator.CreateInstance(s.KnotsGenerator.GetType(), subtractedFunction);
-            //return (Spline)Activator.CreateInstance(s.GetType(), s.UDimension, s.VDimension, generator, s.Derivation);
-            var knots1 = new DirectKnotsGenerator(f).GenerateKnots(s.UDimension,s.VDimension);
-            var knots2 = s.Knots;
-            var knots = SuptractKnots(knots1, knots2);
-            var resultSpline = (Spline)Activator.CreateInstance(s.GetType(), s.UDimension, s.VDimension, knots, s.Derivation);
-            return resultSpline;
-        }
+        //public static Spline operator -(InterpolativeMathFunction f, Spline s)
+        //{
+        //    //var subtractedFunction = f - s.KnotsGenerator.Function;
+        //    //var generator = (KnotsGenerator)Activator.CreateInstance(s.KnotsGenerator.GetType(), subtractedFunction);
+        //    //return (Spline)Activator.CreateInstance(s.GetType(), s.UDimension, s.VDimension, generator, s.Derivation);
+        //    var knots1 = new DirectKnotsGenerator(f).GenerateKnots(s.UDimension,s.VDimension);
+        //    var knots2 = s.Knots;
+        //    var knots = SuptractKnots(knots1, knots2);
+        //    var resultSpline = (Spline)Activator.CreateInstance(s.GetType(), s.UDimension, s.VDimension, knots, s.Derivation);
+        //    return resultSpline;
+        //}
 
-        private static Knot[][] SuptractKnots(Knot[][] knots1, Knot[][] knots2)
-        {
-            int i1, j1, i2, j2;
-            KnotsArrays.KnotsArraysIntersectionIndexes(knots1, knots2, out i1, out j1, out i2, out j2);
-            return MyArrays.ArraysOperation(knots1, knots2, (k1, k2) => k1 - k2, i1, j1);
+        //private static Knot[][] SuptractKnots(Knot[][] knots1, Knot[][] knots2)
+        //{
+        //    int i1, j1, i2, j2;
+        //    KnotsArrays.KnotsArraysIntersectionIndexes(knots1, knots2, out i1, out j1, out i2, out j2);
+        //    return MyArrays.ArraysOperation(knots1, knots2, (k1, k2) => k1 - k2, i1, j1);
            
-        }
+        //}
 
-        public static Spline operator -(Spline s, InterpolativeMathFunction f)
-        {
-            //var subtractedFunction = s.KnotsGenerator.Function - f;
-            //var generator = (KnotsGenerator)Activator.CreateInstance(s.KnotsGenerator.GetType(), subtractedFunction);
-            //return (Spline)Activator.CreateInstance(s.GetType(), s.UDimension, s.VDimension, generator, s.Derivation);
-            var knots2 = new DirectKnotsGenerator(f).GenerateKnots(s.UDimension, s.VDimension);
-            var knots1 = s.Knots;
-            var knots = SuptractKnots(knots1, knots2);
-            var resultSpline = (Spline)Activator.CreateInstance(s.GetType(), s.UDimension, s.VDimension, knots, s.Derivation);
-            return resultSpline;
-        }
+        //public static Spline operator -(Spline s, InterpolativeMathFunction f)
+        //{
+        //    //var subtractedFunction = s.KnotsGenerator.Function - f;
+        //    //var generator = (KnotsGenerator)Activator.CreateInstance(s.KnotsGenerator.GetType(), subtractedFunction);
+        //    //return (Spline)Activator.CreateInstance(s.GetType(), s.UDimension, s.VDimension, generator, s.Derivation);
+        //    var knots2 = new DirectKnotsGenerator(f).GenerateKnots(s.UDimension, s.VDimension);
+        //    var knots1 = s.Knots;
+        //    var knots = SuptractKnots(knots1, knots2);
+        //    var resultSpline = (Spline)Activator.CreateInstance(s.GetType(), s.UDimension, s.VDimension, knots, s.Derivation);
+        //    return resultSpline;
+        //}
 
         //public CompositeSurface InterpolationDifference()
         //{

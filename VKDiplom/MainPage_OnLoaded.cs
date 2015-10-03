@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Browser;
 using System.Windows.Controls;
@@ -16,6 +18,7 @@ using HermiteInterpolation.Shapes.SplineInterpolation.Biquartic;
 using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
+using VKDiplom.Utilities;
 
 #endregion
 
@@ -33,7 +36,7 @@ namespace VKDiplom
             }
             LoadScene(sender as DrawingSurface, out _functionScene);
 
-             //MexicanHatDemo(_functionScene, Derivation.Zero);
+            //MexicanHatDemo(_functionScene, Derivation.Zero);
         }
 
         private void MexicanHatDemo(Scene scene, Derivation derivation)
@@ -93,13 +96,13 @@ namespace VKDiplom
             //MexicanHatDemo(_secondDerScene, Derivation.Second);
         }
 
-       
+
 
         private void LoadScene(DrawingSurface drawingSurface, out Scene scene)
         {
             //if (VkDiplomGraphicsInitializationUtils.IsHardwareAccelerated()
             //{
-             
+
             //    scene = null;
             //    return;
             //}
@@ -150,18 +153,19 @@ namespace VKDiplom
                 {
                     "Direct function",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new MathFunctionSurface(uDimension, vDimension,MathExpression.CreateDefault(MathExpressionTextBox.Text,"x","y"))
+                        new MathFunctionSurface(uDimension, vDimension,
+                            MathExpression.CreateDefault(MathExpressionTextBox.Text, "x", "y"))
                 },
                 {
                     "Bicubic",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new BicubicHermiteSurface(uDimension, vDimension,knotsGenerator, derivation)                    
+                        new BicubicHermiteSurface(uDimension, vDimension, knotsGenerator, derivation)
                 },
                 {
                     "Biquartic",
-                   (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new BiquarticHermiteSurface(uDimension, vDimension,knotsGenerator, derivation)       
-                }             
+                    (uDimension, vDimension, knotsGenerator, derivation) =>
+                        new BiquarticHermiteSurface(uDimension, vDimension, knotsGenerator, derivation)
+                }
             };
             _knotsChoices = new Dictionary<string, KnotsGeneratorFactory>
             {
@@ -198,13 +202,99 @@ namespace VKDiplom
 
         }
 
+        //private void Select
+
         private void SplineComboBox_OnSelectedItem(object sender, SelectionChangedEventArgs e)
         {
-            
+
             var splineSelector = sender as ComboBox;
             if (splineSelector?.ItemsSource == null) return;
-            if(splineSelector.SelectedIndex>-1&&splineSelector.SelectedIndex<_functionScene.Count)
-            ScenesAction(scene=> scene.HighlightedShapeIndex=splineSelector.SelectedIndex);
+            if (splineSelector.SelectedIndex <= -1 || splineSelector.SelectedIndex >= _functionScene.Count) return;
+
+            ScenesAction(scene => scene.HighlightedShapeIndex = splineSelector.SelectedIndex);
+
+            var selectedSpline = _functionScene[splineSelector.SelectedIndex] as Spline;
+            if (selectedSpline != null)
+            {
+                var culture = CultureInfo.CurrentCulture;
+                HermiteUMinTextBox.Text = selectedSpline.UDimension.Min.ToString(culture);
+                HermiteVMinTextBox.Text = selectedSpline.VDimension.Min.ToString(culture);
+                HermiteUMaxTextBox.Text = selectedSpline.UDimension.Max.ToString(culture);
+                HermiteVMaxTextBox.Text = selectedSpline.VDimension.Max.ToString(culture);
+                HermiteUCountTextBox.Text = selectedSpline.UDimension.KnotCount.ToString(culture);
+                HermiteVCountTextBox.Text = selectedSpline.VDimension.KnotCount.ToString(culture);
+                MathExpressionTextBox.Text = selectedSpline.Name;
+                //var type = selectedSpline.GetType();
+                //var knotGeneratorType = selectedSpline.KnotsGenerator;
+                //InterpolationTypeComboBox.SelectItemByType(type);
+
+                // Hardcoded. Need to find better solution
+                if (selectedSpline is BiquarticHermiteSurface)
+
+                    InterpolationTypeComboBox.SelectedIndex = 2;
+                else if (selectedSpline is BicubicHermiteSurface)
+
+                    InterpolationTypeComboBox.SelectedIndex = 1;
+
+                //SetSelectedIndexByGeneratorType(selectedSpline.KnotsGenerator.GetType());
+                if (selectedSpline.KnotsGenerator is DirectKnotsGenerator)
+                    KnotsGeneratorComboBox.SelectedIndex = 0;
+                else if (selectedSpline.KnotsGenerator is ReducedDeBoorKnotsGenerator)
+                    KnotsGeneratorComboBox.SelectedIndex = 2;
+                else if (selectedSpline.KnotsGenerator is DeBoorKnotsGenerator)
+                    KnotsGeneratorComboBox.SelectedIndex = 1;
+            }
+            var selectedSurface = _functionScene[splineSelector.SelectedIndex] as MathFunctionSurface;
+            if (selectedSurface != null)
+            {
+                var culture = CultureInfo.CurrentCulture;
+                HermiteUMinTextBox.Text = selectedSurface.UDimension.Min.ToString(culture);
+                HermiteVMinTextBox.Text = selectedSurface.VDimension.Min.ToString(culture);
+                HermiteUMaxTextBox.Text = selectedSurface.UDimension.Max.ToString(culture);
+                HermiteVMaxTextBox.Text = selectedSurface.VDimension.Max.ToString(culture);
+                HermiteUCountTextBox.Text = selectedSurface.UDimension.KnotCount.ToString(culture);
+                HermiteVCountTextBox.Text = selectedSurface.VDimension.KnotCount.ToString(culture);
+                InterpolationTypeComboBox.SelectedIndex = 0;
+                InterpolationTypeComboBox_OnSelectionChanged(InterpolationTypeComboBox, null);
+            }
+        }
+
+        //private int SetSelectedIndexByGeneratorType(Type generatorType)
+        //{
+        //    var itemSource = KnotsGeneratorComboBox.ItemsSource as IDictionary<string, KnotsGeneratorFactory>;
+
+        //    if (itemSource == null) return -1;
+        //    var idx = -1;
+        //    foreach (var pair in itemSource)
+        //    {
+        //        var returnType = pair.Value.Method.ReturnType;
+        //        if (returnType == generatorType)
+        //        {
+        //            KnotsGeneratorComboBox.SelectedIndex = idx;
+        //            return idx;
+        //        }
+
+        //    }
+        //    return idx;
+        //}
+
+        private int SetSelectedIndexBySplineType(Type splineType)
+        {
+            var itemSource = KnotsGeneratorComboBox.ItemsSource as IDictionary<string, SplineFactory>;
+
+            if (itemSource == null) return -1;
+            var idx = -1;
+            foreach (var pair in itemSource)
+            {
+                var searchedSplineType = pair.Value.Method.ReturnType;
+                if (searchedSplineType == splineType)
+                {
+                    KnotsGeneratorComboBox.SelectedIndex = idx;
+                    return idx;
+                }
+
+            }
+            return idx;
         }
     }
 }

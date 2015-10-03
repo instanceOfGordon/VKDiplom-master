@@ -87,7 +87,8 @@
     <Compile Include="Shapes\SplineInterpolation\VertexIndexer.cs" />
     <Compile Include="Shapes\SplineInterpolation\SurfaceDimension.cs" />
     <Compile Include="Shapes\SplineInterpolation\Spline.cs" />
-    <Compile Include="SplineKnots\KnotsArrays.cs" />
+    <Compile Include="SplineKnots\ChainedKnotsGenerator.cs" />
+    <Compile Include="SplineKnots\KnotMatrix.cs" />
     <Compile Include="SplineKnots\KnotsGenerator.cs" />
     <Compile Include="SplineKnots\Knot.cs" />
     <Compile Include="SplineKnots\DeBoorKnotsGenerator.cs" />

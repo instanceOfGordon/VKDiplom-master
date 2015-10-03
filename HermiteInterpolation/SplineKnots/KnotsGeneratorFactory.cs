@@ -4,7 +4,7 @@ namespace HermiteInterpolation.SplineKnots
 {
     public delegate KnotsGenerator KnotsGeneratorFactory(InterpolativeMathFunction function);
 
-    //public class KnotsGeneratorType
+    //public class KnotsGenerator
     //{
     //    public static readonly K
 

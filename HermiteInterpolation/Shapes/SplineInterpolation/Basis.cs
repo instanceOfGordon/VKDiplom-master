@@ -5,13 +5,13 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
     internal abstract class Basis
     {
-        protected Basis(Knot[][] knots, Derivation derivation)
+        protected Basis(KnotMatrix knots, Derivation derivation)
         {
             Knots = knots;
             Derivation = derivation;
         }
 
-        internal Knot[][] Knots { get; private set; }
+        internal KnotMatrix Knots { get; private set; }
         internal Derivation Derivation { get; }
         //internal delegate Vector<double> BasisVector(double t, double t0, double t1);
 

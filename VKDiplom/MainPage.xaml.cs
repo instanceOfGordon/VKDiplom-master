@@ -215,10 +215,12 @@ namespace VKDiplom
             }
         }
 
+        
+
         //private void ScaleSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<T> e)
         //{
 
         //}
-        
+
     }
 }

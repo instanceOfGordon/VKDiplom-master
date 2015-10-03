@@ -59,27 +59,27 @@ namespace HermiteInterpolation.SplineKnots
             return rs;
         }
 
-        protected override void FillDyxDerivations(int rowOrColumnIdx, Knot[][] values)
+        protected override void FillDyxDerivations(int rowOrColumnIdx, KnotMatrix values)
         {
             throw new NotImplementedException();
         }
 
-        protected override void FillYDerivations(int rowOrColumnIdx, Knot[][] values)
+        protected override void FillYDerivations(int rowOrColumnIdx, KnotMatrix values)
         {
             throw new NotImplementedException();
         }
 
-        protected override void FillDxyDerivations(int rowOrColumnIdx, Knot[][] values)
+        protected override void FillDxyDerivations(int rowOrColumnIdx, KnotMatrix values)
         {
             throw new NotImplementedException();
         }
 
-        protected override void FillXDerivations(int rowOrColumnIdx, Knot[][] values)
+        protected override void FillXDerivations(int rowOrColumnIdx, KnotMatrix values)
         {
             throw new NotImplementedException();
         }
 
-        public override Knot[][] GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
+        public override KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
             return null;
         }

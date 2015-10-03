@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
@@ -16,6 +16,11 @@ namespace HermiteInterpolation.SplineKnots
             Function = function;
         }
 
+        protected KnotsGenerator()
+        {
+            
+        }
+
         //protected KnotsGenerator()
         //{
             
@@ -26,7 +31,7 @@ namespace HermiteInterpolation.SplineKnots
         {
            
         }
-        public abstract Knot[][] GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension);
+        public abstract KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension);
 
         //public KnotsGenerator CreateCop(KnotsGenerator instanceToCopy, InterpolativeMathFunction function)
         //{
@@ -34,18 +39,22 @@ namespace HermiteInterpolation.SplineKnots
         //    return (KnotsGenerator) Activator.CreateInstance(instanceToCopy.GetType(), function);
         //}
 
-        //public static KnotsGenerator operator +(KnotsGenerator g1, KnotsGenerator g2)
-        //{
-        //    return 
-        //}
+        public static KnotsGenerator operator +(KnotsGenerator leftOp, KnotsGenerator rightOp)
+        {
+            var result = new ChainedKnotsGenerator(leftOp) {{rightOp, (l, r) => l + r}};
+            return result;
+        }
 
-        //public static Knot[][] operator -(KnotsGenerator leftOp, KnotsGenerator rightOp)
-        //{
-            
-        //}
+        public static KnotsGenerator operator -(KnotsGenerator leftOp, KnotsGenerator rightOp)
+        {
+            var result = new ChainedKnotsGenerator(leftOp) {{rightOp, (l, r) => l - r}};
+            return result;
+        }
+
+
+
     }
 
-   
 
     //internal enum UnknownVariableType
     //{

@@ -40,14 +40,14 @@ namespace HermiteInterpolation.SplineKnots
             return rs;
         }
 
-        public override Knot[][] GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
+        public override KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
             if (uDimension.KnotCount < 4 || vDimension.KnotCount < 4)
             {
                 return new DirectKnotsGenerator(Function).GenerateKnots(uDimension, vDimension);
             }
 
-            var values = MyArrays.JaggedArray<Knot>(uDimension.KnotCount, vDimension.KnotCount);
+            var values =new KnotMatrix(uDimension.KnotCount, vDimension.KnotCount);
             var uSize = Math.Abs(uDimension.Max - uDimension.Min)/(uDimension.KnotCount - 1);
             var vSize = Math.Abs(vDimension.Max - vDimension.Min)/(vDimension.KnotCount - 1);
             var u = uDimension.Min;
@@ -61,34 +61,34 @@ namespace HermiteInterpolation.SplineKnots
                 {
                     var z = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Z, u, v);//Function.Z(u,v); //Z(u, v);
 
-                    values[i][j] = new Knot(u, v, z);
+                    values[i,j] = new Knot(u, v, z);
                 }
             }
             // Init Dx
             var uKnotCountMin1 = uDimension.KnotCount - 1;
             for (var j = 0; j < vDimension.KnotCount; j++)
             {
-                values[0][j].Dx = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dx, values[0][j].X, values[0][j].Y); //Function.Dx(values[0][j].X, values[0][j].Y);
-                values[uKnotCountMin1][j].Dx = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dx, values[uKnotCountMin1][j].X,
-                    values[uKnotCountMin1][j].Y);
-                //Function.Dx(values[uKnotCountMin1][j].X, values[uKnotCountMin1][j].Y);
+                values[0,j].Dx = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dx, values[0,j].X, values[0,j].Y); //Function.Dx(values[0,j].X, values[0,j].Y);
+                values[uKnotCountMin1,j].Dx = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dx, values[uKnotCountMin1,j].X,
+                    values[uKnotCountMin1,j].Y);
+                //Function.Dx(values[uKnotCountMin1,j].X, values[uKnotCountMin1,j].Y);
             }
             // Init Dy
             var vKnotCountMin1 = vDimension.KnotCount - 1;
             for (var i = 0; i < uDimension.KnotCount; i++)
             {
-                values[i][0].Dy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dy, values[i][0].X, values[i][0].Y);
-                values[i][vKnotCountMin1].Dy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dy, values[i][vKnotCountMin1].X,
-                    values[i][vKnotCountMin1].Y);
+                values[i,0].Dy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dy, values[i,0].X, values[i,0].Y);
+                values[i,vKnotCountMin1].Dy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dy, values[i,vKnotCountMin1].X,
+                    values[i,vKnotCountMin1].Y);
             }
             // Init Dxy
-            values[0][0].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[0][0].X, values[0][0].Y);
-            values[uKnotCountMin1][0].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[uKnotCountMin1][0].X,
-                values[uKnotCountMin1][0].Y);
-            values[0][vKnotCountMin1].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[0][vKnotCountMin1].X,
-                values[0][vKnotCountMin1].Y);
-            values[uKnotCountMin1][vKnotCountMin1].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy,
-                values[uKnotCountMin1][vKnotCountMin1].X, values[uKnotCountMin1][vKnotCountMin1].Y);
+            values[0,0].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[0,0].X, values[0,0].Y);
+            values[uKnotCountMin1,0].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[uKnotCountMin1,0].X,
+                values[uKnotCountMin1,0].Y);
+            values[0,vKnotCountMin1].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy, values[0,vKnotCountMin1].X,
+                values[0,vKnotCountMin1].Y);
+            values[uKnotCountMin1,vKnotCountMin1].Dxy = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dxy,
+                values[uKnotCountMin1,vKnotCountMin1].X, values[uKnotCountMin1,vKnotCountMin1].Y);
 
             FillXDerivations(values);
             FillDxyDerivations(values);
@@ -98,110 +98,110 @@ namespace HermiteInterpolation.SplineKnots
             return values;
         }
 
-        protected void FillXDerivations(Knot[][] values)
+        protected void FillXDerivations(KnotMatrix values)
         {
-            for (var j = 0; j < values[0].Length; j++)
+            for (var j = 0; j < values.Columns; j++)
             {
                 FillXDerivations(j, values);
             }
         }
 
-        protected void FillDxyDerivations(Knot[][] values)
+        protected void FillDxyDerivations(KnotMatrix values)
         {
             FillDxyDerivations(0, values);
-            FillDxyDerivations(values[0].Length - 1, values);
+            FillDxyDerivations(values.Columns - 1, values);
         }
 
-        protected void FillYDerivations(Knot[][] values)
+        protected void FillYDerivations(KnotMatrix values)
         {
-            for (var i = 0; i < values.Length; i++)
+            for (var i = 0; i < values.Rows; i++)
             {
                 FillYDerivations(i, values);
             }
         }
 
-        protected void FillDyxDerivations(Knot[][] values)
+        protected void FillDyxDerivations(KnotMatrix values)
         {
-            for (var i = 0; i < values.Length; i++)
+            for (var i = 0; i < values.Rows; i++)
             {
                 FillDyxDerivations(i, values);
             }
         }
 
-        protected virtual void FillXDerivations(int rowOrColumnIdx, Knot[][] values)
+        protected virtual void FillXDerivations(int rowOrColumnIdx, KnotMatrix values)
         {
-            var equationsCount = values.Length - 2;
+            var equationsCount = values.Rows - 2;
             if (equationsCount == 0) return;
-            Action<int, double> dset = (idx, value) => values[idx][rowOrColumnIdx].Dx = value;
-            Func<int, double> rget = idx => values[idx][rowOrColumnIdx].Z;
-            var h = values[1][0].X - values[0][0].X;
-            var dlast = values[values.Length - 1][rowOrColumnIdx].Dx;
-            var dfirst = values[0][rowOrColumnIdx].Dx;
+            Action<int, double> dset = (idx, value) => values[idx,rowOrColumnIdx].Dx = value;
+            Func<int, double> rget = idx => values[idx,rowOrColumnIdx].Z;
+            var h = values[1,0].X - values[0,0].X;
+            var dlast = values[values.Rows - 1,rowOrColumnIdx].Dx;
+            var dfirst = values[0,rowOrColumnIdx].Dx;
 
-            //var equationsCount = values.Length - 2;
+            //var equationsCount = values.Rows - 2;
             //if (equationsCount == 0) return;
-            //Action<int, double> unknownsToSet = (idx, value) => values[rowOrColumnIdx][idx].Dx = value;
-            //Func<int, double> rightSideValuesToGet = idx => values[rowOrColumnIdx][idx].Z;
-            //var h = values[1][0].X - values[0][0].X;
-            //var dlast = values[rowOrColumnIdx][values[0].Length-1].Dx;
-            //var dfirst = values[rowOrColumnIdx][0].Dx;
+            //Action<int, double> unknownsToSet = (idx, value) => values[rowOrColumnIdx,idx].Dx = value;
+            //Func<int, double> rightSideValuesToGet = idx => values[rowOrColumnIdx,idx].Z;
+            //var h = values[1,0].X - values[0,0].X;
+            //var dlast = values[rowOrColumnIdx,values.Columns-1].Dx;
+            //var dfirst = values[rowOrColumnIdx,0].Dx;
 
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
 
        
 
-        protected virtual void FillYDerivations(int rowOrColumnIdx, Knot[][] values)
+        protected virtual void FillYDerivations(int rowOrColumnIdx, KnotMatrix values)
         {
-            var equationsCount = values[0].Length - 2;
+            var equationsCount = values.Columns - 2;
             if (equationsCount == 0) return;
-            Action<int, double> dset = (idx, value) => values[rowOrColumnIdx][idx].Dy = value;
-            Func<int, double> rget = idx => values[rowOrColumnIdx][idx].Z;
-            var h = values[0][1].Y - values[0][0].Y;
-            var dfirst = values[rowOrColumnIdx][0].Dy;
-            var dlast = values[rowOrColumnIdx][values[0].Length - 1].Dy;
+            Action<int, double> dset = (idx, value) => values[rowOrColumnIdx,idx].Dy = value;
+            Func<int, double> rget = idx => values[rowOrColumnIdx,idx].Z;
+            var h = values[0,1].Y - values[0,0].Y;
+            var dfirst = values[rowOrColumnIdx,0].Dy;
+            var dlast = values[rowOrColumnIdx,values.Columns - 1].Dy;
 
-            //var equationsCount = values[0].Length - 2;
+            //var equationsCount = values.Columns - 2;
             //if (equationsCount == 0) return;
-            //Action<int, double> unknownsToSet = (idx, value) => values[idx][rowOrColumnIdx].Dy = value;
-            //Func<int, double> rightSideValuesToGet = idx => values[idx][rowOrColumnIdx].Z;
-            //var h = values[0][1].Y - values[0][0].Y;
-            //var dfirst = values[0][rowOrColumnIdx].Dy;
-            //var dlast = values[values.Length-1][rowOrColumnIdx].Dy;
+            //Action<int, double> unknownsToSet = (idx, value) => values[idx,rowOrColumnIdx].Dy = value;
+            //Func<int, double> rightSideValuesToGet = idx => values[idx,rowOrColumnIdx].Z;
+            //var h = values[0,1].Y - values[0,0].Y;
+            //var dfirst = values[0,rowOrColumnIdx].Dy;
+            //var dlast = values[values.Rows-1,rowOrColumnIdx].Dy;
 
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
 
-        protected virtual void FillDxyDerivations(int rowOrColumnIdx, Knot[][] values)
+        protected virtual void FillDxyDerivations(int rowOrColumnIdx, KnotMatrix values)
         {
-            var equationsCount = values.Length - 2;
+            var equationsCount = values.Rows - 2;
             if (equationsCount == 0) return;
-            Action<int, double> dset = (idx, value) => values[idx][rowOrColumnIdx].Dxy = value;
-            Func<int, double> rget = idx => values[idx][rowOrColumnIdx].Dy;
-            var h = values[1][0].X - values[0][0].X;
-            var dlast = values[values.Length - 1][rowOrColumnIdx].Dxy;
-            var dfirst = values[0][rowOrColumnIdx].Dxy;
+            Action<int, double> dset = (idx, value) => values[idx,rowOrColumnIdx].Dxy = value;
+            Func<int, double> rget = idx => values[idx,rowOrColumnIdx].Dy;
+            var h = values[1,0].X - values[0,0].X;
+            var dlast = values[values.Rows - 1,rowOrColumnIdx].Dxy;
+            var dfirst = values[0,rowOrColumnIdx].Dxy;
 
-            //var equationsCount = values.Length - 2;
+            //var equationsCount = values.Rows - 2;
             //if (equationsCount == 0) return;
-            //Action<int, double> unknownsToSet = (idx, value) => values[rowOrColumnIdx][idx].Dxy = value;
-            //Func<int, double> rightSideValuesToGet = idx => values[rowOrColumnIdx][idx].Dx;
-            //var h = values[1][0].X - values[0][0].X;
-            //var dlast = values[rowOrColumnIdx][values[0].Length - 1].Dxy;
-            //var dfirst = values[rowOrColumnIdx][0].Dxy;
+            //Action<int, double> unknownsToSet = (idx, value) => values[rowOrColumnIdx,idx].Dxy = value;
+            //Func<int, double> rightSideValuesToGet = idx => values[rowOrColumnIdx,idx].Dx;
+            //var h = values[1,0].X - values[0,0].X;
+            //var dlast = values[rowOrColumnIdx,values.Columns - 1].Dxy;
+            //var dfirst = values[rowOrColumnIdx,0].Dxy;
 
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
 
-        protected virtual void FillDyxDerivations(int rowOrColumnIdx, Knot[][] values)
+        protected virtual void FillDyxDerivations(int rowOrColumnIdx, KnotMatrix values)
         {
-            var equationsCount = values[0].Length - 2;
+            var equationsCount = values.Columns - 2;
             if (equationsCount == 0) return;
-            Action<int, double> dset = (idx, value) => values[rowOrColumnIdx][idx].Dxy = value;
-            Func<int, double> rget = idx => values[rowOrColumnIdx][idx].Dx;
-            var h = values[0][1].Y - values[0][0].Y;
-            var dfirst = values[rowOrColumnIdx][0].Dxy;
-            var dlast = values[rowOrColumnIdx][values[0].Length - 1].Dxy;
+            Action<int, double> dset = (idx, value) => values[rowOrColumnIdx,idx].Dxy = value;
+            Func<int, double> rget = idx => values[rowOrColumnIdx,idx].Dx;
+            var h = values[0,1].Y - values[0,0].Y;
+            var dfirst = values[rowOrColumnIdx,0].Dxy;
+            var dlast = values[rowOrColumnIdx,values.Columns - 1].Dxy;
 
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }

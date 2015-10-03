@@ -71,41 +71,27 @@ namespace VKDiplom
                 MessageBox.Show("Invalid input.");
                 return;
             }
-            //SplineSurface shape, fdshape, sdshape;
-            //var selectedItem = (HermiteType) InterpolationTypeComboBox.SelectedIndex;
-            //switch (selectedItem)
-            //{
-            //    case HermiteType.Bicubic:
-            //        shape = new BicubicHermiteSurface(uDim, vDim,
-            //            function);
-            //        fdshape = new BicubicHermiteSurface(uDim, vDim,
-            //            function, Derivation.First);
-            //        sdshape = new BicubicHermiteSurface(uDim, vDim,
-            //            function, Derivation.Second);
-            //        break;
 
-            //    case HermiteType.Biquartic:
-            //        shape = new BiquarticHermiteSurface(uDim, vDim,
-            //            function);
-            //        fdshape = new BiquarticHermiteSurface(uDim, vDim,
-            //            function, Derivation.First);
-            //        sdshape = new BiquarticHermiteSurface(uDim, vDim,
-            //            function, Derivation.Second);
-            //        break;
-            //    default:
-            //        shape = new BicubicHermiteSurface(uDim, vDim,
-            //            function);
-            //        fdshape = new BicubicHermiteSurface(uDim, vDim,
-            //            function, Derivation.First);
-            //        sdshape = new BicubicHermiteSurface(uDim, vDim,
-            //            function, Derivation.Second);
-            //        break;
-            //}
-
+            SplineFactory createSpline;
+            KnotsGeneratorFactory createKnotsGenerator;
             var startTime = DateTime.Now;
-            
-            var createSpline = (SplineFactory) InterpolationTypeComboBox.SelectedValue;
-            var createKnotsGenerator = (KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue;
+
+            if (_splineSubtractionClicked)
+            {
+                createSpline = _minuendShapeFactory;
+                var minuendGenerator = _minuendKnotsFactory(mathFunction);
+                var subtrahendGenerator = ((KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue)(mathFunction);
+                createKnotsGenerator = (mf)=>minuendGenerator-subtrahendGenerator;
+            }
+            else
+            {
+                createSpline = (SplineFactory)InterpolationTypeComboBox.SelectedValue;
+                createKnotsGenerator = (KnotsGeneratorFactory)KnotsGeneratorComboBox.SelectedValue;
+            }
+
+
+           
+          
             var shape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction));
             var fdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.First);
             var sdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.Second);
@@ -122,7 +108,7 @@ namespace VKDiplom
             ShapesComboBox.ItemsSource = null;
             ShapesComboBox.ItemsSource = _functionScene;
            // ShapesComboBox.SelectedIndex = _functionScene.HighlightedShapeIndex;
-            //    ++ShapesComboBox.SelectedIndex;
+            //++ShapesComboBox.SelectedIndex;
 
             //}       
 

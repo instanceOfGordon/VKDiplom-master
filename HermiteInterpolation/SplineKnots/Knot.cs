@@ -68,6 +68,26 @@ namespace HermiteInterpolation.SplineKnots
             return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
         }
 
+        public static Knot operator *(Knot leftOp, Knot rightOp)
+        {
+            var z = leftOp.Z * rightOp.Z;
+            var dx = leftOp.Dx * rightOp.Dx;
+            var dy = leftOp.Dy * rightOp.Dy;
+            var dxy = leftOp.Dxy * rightOp.Dxy;
+
+            return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
+        }
+
+        public static Knot operator /(Knot leftOp, Knot rightOp)
+        {
+            var z = leftOp.Z / rightOp.Z;
+            var dx = leftOp.Dx / rightOp.Dx;
+            var dy = leftOp.Dy / rightOp.Dy;
+            var dxy = leftOp.Dxy / rightOp.Dxy;
+
+            return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
+        }
+
         public bool EqualsPosition(Knot knot)
         {
             return Math.Abs(X - knot.X) < Constants.MeshDensity && Math.Abs(Y - knot.Y) < Constants.MeshDensity;
