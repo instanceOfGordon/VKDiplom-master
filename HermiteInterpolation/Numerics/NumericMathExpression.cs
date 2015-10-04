@@ -12,9 +12,6 @@ namespace HermiteInterpolation.Numerics
         {
         }
 
-       
-
-
         public override MathFunction Compile()
         {
             var variablesValues = Variables.ToDictionary<string, string, object>(t => t, t => 0.0d);
@@ -33,9 +30,6 @@ namespace HermiteInterpolation.Numerics
                 for (int i = 0; i < variableValues.Length; i++)
                     engine.Variables[Variables[i]] = variableValues[i];
 
-
-                //engine.Variables[Variables[0]] = variableValues[0];
-                //engine.Variables[Variables[1]] = variableValues[1];
                 var result = (double)engine.Evaluate(Expression);
                 return result;
             };
@@ -52,9 +46,7 @@ namespace HermiteInterpolation.Numerics
                 if(idx<0) continue;
                 diff = new MathFunction(MathNet.Numerics.Differentiate.FirstPartialDerivativeFunc(new Func<double[], double>(diff), idx));
             }
-
             return diff;
-
         }
     }
 }

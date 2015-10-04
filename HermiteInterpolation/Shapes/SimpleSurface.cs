@@ -81,11 +81,7 @@ namespace HermiteInterpolation.Shapes
                 InitializeIndices();
                 CalculateLightingNormals();
             }
-        }
-
-        // internal TextureStyle TextureStyle { get; private set; }
-
-
+        }        
         public float MinHeight
         {
             get

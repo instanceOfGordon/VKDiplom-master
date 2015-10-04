@@ -130,26 +130,15 @@ namespace SymbolicDifferentiation
         public static bool IsNumeric(this string lpcs)
         {
             var p = 0;
-            //if (lpcs.Length == 2 && lpcs[p] == '(' && lpcs[1] == ')')
-            //    return false;
-            //if (lpcs[p] == '(' && lpcs[lpcs.Length-1] == ')')
-            //    p++;
             if (lpcs[p] == '-' || lpcs[p] == '+')
                 p++;
-            //if (lpcs[p] == 'e' && (p+1==lpcs.Length-1||(lpcs[p+1]==')'&&p+2==lpcs.Length-1)))
             if (lpcs[p] == 'e' && p+1 == lpcs.Length)
                 return true;
-            //if (lpcs[p] == 'p' && lpcs[p + 1] == 'i' && (p + 2 == lpcs.Length - 1||(lpcs[p+2]==')'&&p+3==lpcs.Length-1)))
+
             if (lpcs[p] == 'p' && lpcs[p + 1] == 'i' && p + 2 == lpcs.Length)
                 return true;
             for(;p < lpcs.Length;p++)
             {
-                //if(lpcs[p]==')'&&(p==lpcs.Length-1&&lpcs[0]=='('))
-                //    continue;
-                //if (lpcs[p] == 'e' && p + 1 == lpcs.Length)
-                //    return true;
-                //if (lpcs[p] == 'e' && lpcs[p+1]== '-')
-                //    p=p+2;
                 if (lpcs[p] == CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator[0]&&p!=lpcs.Length-1)
                    continue;
                 if(lpcs[p] == 'e')
@@ -264,10 +253,5 @@ namespace SymbolicDifferentiation
             str = str.TrimEnd('\t');
             return str;
         }
-
-        //public static double ToDouble(this string str)
-        //{
-        //    if()
-        //}
     }
 }

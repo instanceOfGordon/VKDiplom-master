@@ -27,14 +27,6 @@ namespace HermiteInterpolation.Numerics
             return diff;
         }
 
-        //protected MathFunction CompileDerivative(string deriveFunction) =>
-        //    vals =>
-        //    {
-        //        double result = 0;
-        //        Calculator.Calculate(deriveFunction, vals[0], vals[1], ref result);
-        //        return result;
-        //    };
-
         public override MathFunction Compile()
         {
             return Compile(Expression);

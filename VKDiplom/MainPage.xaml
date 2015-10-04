@@ -227,7 +227,7 @@
                                   HorizontalAlignment="Left" Width="100"
                                   SelectedIndex="0" Style="{StaticResource ComboBox}" />
                         <!--<CheckBox Grid.Column="8" Grid.Row="1" Content="Difference" Style="{StaticResource CheckBox}" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center"></CheckBox>-->
-                        <Button Name="SplineSubtractionButton" Grid.Column="8" Grid.Row="1" Style="{StaticResource CommonButton}" Content="Subtract" Margin="5,0,5,0" Height="21" Click="SplineSubtractionButton_OnClick"></Button>
+                        <Button Name="SplineSubtractionButton" Grid.Column="8" Grid.Row="1" Style="{StaticResource CommonButton}" Content="Subtract" Margin="5,0,5,0" HorizontalAlignment="Left" Width="60" Height="21" Click="SplineSubtractionButton_OnClick"></Button>
                         <!-- COLOR PICKER -->
 
 

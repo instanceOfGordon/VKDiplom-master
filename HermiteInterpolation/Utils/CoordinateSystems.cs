@@ -14,11 +14,8 @@ namespace HermiteInterpolation.Utils
         public static Vector3 FromCartesianToSpherical(float x, float y, float z)
         {
             var radius = (float)Math.Sqrt(x*x + y*y + z*z);
-//            var inclination = (float)Math.Acos(z/radius);
-//            var azimuth = (float)Math.Atan(y / x);
             var inclination = (float)Math.Acos(y / radius);
             var azimuth = (float)Math.Atan(z / x);
-            //return new Vector3(radius, azimuth, inclination);
             return new Vector3(radius,inclination,azimuth);
         }
 

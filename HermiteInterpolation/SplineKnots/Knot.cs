@@ -40,7 +40,6 @@ namespace HermiteInterpolation.SplineKnots
 
         public Knot()
         {
-
         }
 
         public override string ToString()

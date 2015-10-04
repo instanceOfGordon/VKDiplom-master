@@ -10,7 +10,6 @@ namespace HermiteInterpolation.SplineKnots
     public class DeBoorKnotsGenerator : KnotsGenerator
     {
        
-
         protected virtual double[] MainDiagonal(int equationsCount, bool even = false)
         {
             return MyArrays.InitalizedArray<double>(equationsCount, 4);
@@ -71,7 +70,6 @@ namespace HermiteInterpolation.SplineKnots
                 values[0,j].Dx = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dx, values[0,j].X, values[0,j].Y); //Function.Dx(values[0,j].X, values[0,j].Y);
                 values[uKnotCountMin1,j].Dx = Numerics.MathFunctions.MathFunctionExtensions.SafeCall(Function.Dx, values[uKnotCountMin1,j].X,
                     values[uKnotCountMin1,j].Y);
-                //Function.Dx(values[uKnotCountMin1,j].X, values[uKnotCountMin1,j].Y);
             }
             // Init Dy
             var vKnotCountMin1 = vDimension.KnotCount - 1;
@@ -138,14 +136,6 @@ namespace HermiteInterpolation.SplineKnots
             var dlast = values[values.Rows - 1,rowOrColumnIdx].Dx;
             var dfirst = values[0,rowOrColumnIdx].Dx;
 
-            //var equationsCount = values.Rows - 2;
-            //if (equationsCount == 0) return;
-            //Action<int, double> unknownsToSet = (idx, value) => values[rowOrColumnIdx,idx].Dx = value;
-            //Func<int, double> rightSideValuesToGet = idx => values[rowOrColumnIdx,idx].Z;
-            //var h = values[1,0].X - values[0,0].X;
-            //var dlast = values[rowOrColumnIdx,values.Columns-1].Dx;
-            //var dfirst = values[rowOrColumnIdx,0].Dx;
-
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
 
@@ -161,14 +151,6 @@ namespace HermiteInterpolation.SplineKnots
             var dfirst = values[rowOrColumnIdx,0].Dy;
             var dlast = values[rowOrColumnIdx,values.Columns - 1].Dy;
 
-            //var equationsCount = values.Columns - 2;
-            //if (equationsCount == 0) return;
-            //Action<int, double> unknownsToSet = (idx, value) => values[idx,rowOrColumnIdx].Dy = value;
-            //Func<int, double> rightSideValuesToGet = idx => values[idx,rowOrColumnIdx].Z;
-            //var h = values[0,1].Y - values[0,0].Y;
-            //var dfirst = values[0,rowOrColumnIdx].Dy;
-            //var dlast = values[values.Rows-1,rowOrColumnIdx].Dy;
-
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }
 
@@ -181,14 +163,6 @@ namespace HermiteInterpolation.SplineKnots
             var h = values[1,0].X - values[0,0].X;
             var dlast = values[values.Rows - 1,rowOrColumnIdx].Dxy;
             var dfirst = values[0,rowOrColumnIdx].Dxy;
-
-            //var equationsCount = values.Rows - 2;
-            //if (equationsCount == 0) return;
-            //Action<int, double> unknownsToSet = (idx, value) => values[rowOrColumnIdx,idx].Dxy = value;
-            //Func<int, double> rightSideValuesToGet = idx => values[rowOrColumnIdx,idx].Dx;
-            //var h = values[1,0].X - values[0,0].X;
-            //var dlast = values[rowOrColumnIdx,values.Columns - 1].Dxy;
-            //var dfirst = values[rowOrColumnIdx,0].Dxy;
 
             SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
         }

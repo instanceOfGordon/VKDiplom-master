@@ -11,31 +11,7 @@ namespace VKDiplom
         private void MainPage_OnKeyDown(object sender, KeyEventArgs e)
         {
             Keyboard.SetKeyDown(e.Key, true);
-            //if(e.Key==Key)
-            //switch (e.Key)
-            //{
-            //    case Key.Add:
-            //    case Key.P:
-            //        _camera.Distance -= ZoomFactor;
-            //        break;
-            //    case Key.Subtract:
-            //    case Key.O:
-            //        _camera.Distance -= ZoomFactor;
-            //        break;
-            //    case Key.Up:
-            //        _camera.VerticalAngle += RotationFactor;
-            //        break;
-            //    case Key.Down:
-            //        _camera.VerticalAngle -= RotationFactor;
-            //        break;
-            //    case Key.Right:
-            //        _camera.HorizontalAngle += RotationFactor;
-            //        break;
-            //    case Key.Left:
-            //        _camera.HorizontalAngle -= RotationFactor;
-            //        break;
-            //}
-            //DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
+
         }
 
         private void MainPage_OnKeyUp(object sender, KeyEventArgs e)
@@ -71,8 +47,6 @@ namespace VKDiplom
 
             #endregion Rotation
 
-            //if (DebugBox != null)
-            //    DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
         }
 
 

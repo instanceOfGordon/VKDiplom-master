@@ -46,9 +46,6 @@ namespace HermiteInterpolation.SplineKnots
                 //u += uSize;
             }//);
             return values;
-        }
-
-
-       
+        }  
     }
 }

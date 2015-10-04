@@ -9,7 +9,6 @@ namespace VKDiplom.Engine
         private float _distance;
         private float _verticalAngle;
         private float _horizontalAngle;
-
         public float MaxDistance { get; set; }
 
         public RotateCamera()
@@ -71,9 +70,7 @@ namespace VKDiplom.Engine
                 //Position = CoordinateSystems.FromSphericalToCartesian(_distance, _horizontalAngle, _verticalAngle);
             }
         }
-
-        
-
+      
         public float HorizontalAngle
         {
             get { return _horizontalAngle; }

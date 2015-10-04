@@ -7,6 +7,7 @@ using HermiteInterpolation;
 using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.SplineInterpolation;
+using HermiteInterpolation.Shapes.SplineInterpolation.Bicubic;
 using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
@@ -33,14 +34,10 @@ namespace VKDiplom
 
         private void DrawScene(Scene scene, DrawEventArgs e)
         {
-            //ProcessKeyboardInput();                              
-            // _functionScene.SetupView(_graphicsDevice);
             if (_isSoftwareRendered) return;
 
             ProcessKeyboardInput(scene);
-            //_functionScene.Camera.SetViewToZero(new Vector3(State.SliderYawVal, State.SliderPitchVal, State.SliderRollVal));
             scene.Draw();
-
             // invalidate to get a callback next frame
             e.InvalidateSurface();
         }
@@ -78,23 +75,28 @@ namespace VKDiplom
 
             if (_splineSubtractionClicked)
             {
-                createSpline = _minuendShapeFactory;
+                //createSpline = (x);
                 var minuendGenerator = _minuendKnotsFactory(mathFunction);
                 var subtrahendGenerator = ((KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue)(mathFunction);
                 createKnotsGenerator = (mf)=>minuendGenerator-subtrahendGenerator;
+                createSpline = (u,v,k,d)=>new BicubicHermiteSurface(u,v,k,d);
+                //_splineSubtractionClicked = false;
             }
             else
             {
                 createSpline = (SplineFactory)InterpolationTypeComboBox.SelectedValue;
                 createKnotsGenerator = (KnotsGeneratorFactory)KnotsGeneratorComboBox.SelectedValue;
             }
-
-
-           
-          
+     
             var shape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction));
             var fdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.First);
             var sdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.Second);
+
+            if (_splineSubtractionClicked)
+            {
+                shape.Name += "DIFF";
+                DisableSplineChaining();
+            }
 
             var color = _colorWheel.Next;
             shape.ColoredByShades(color);
@@ -103,14 +105,8 @@ namespace VKDiplom
 
             _functionScene.Add(shape,false);
 
-            //if (ShapesComboBox.SelectedIndex == _functionScene.Count - 2)
-            //{
             ShapesComboBox.ItemsSource = null;
             ShapesComboBox.ItemsSource = _functionScene;
-           // ShapesComboBox.SelectedIndex = _functionScene.HighlightedShapeIndex;
-            //++ShapesComboBox.SelectedIndex;
-
-            //}       
 
             fdshape.ColoredByShades(color);
             fdshape.DrawStyle = DrawStyle.Surface;
@@ -130,22 +126,5 @@ namespace VKDiplom
             CalcTimeLabel.Content = "Function rendered in: " + $"{time:0.00}" + " ms";
         }
 
-        //private void DrawHermiteSurface(Scene scene, CompositeSurface surface)
-        //{
-        //    new Thread(() => { });
-
-        //    surface.ColoredHeight();
-        //    surface.DrawStyle = _drawStyle;
-        //    switch (_textureStyle)
-        //    {
-        //        case TextureStyle.SingleColor:
-        //            surface.ColoredSimple(_color);
-        //            break;
-        //        case TextureStyle.HeightColored:
-        //            surface.ColoredHeight();
-        //            break;
-        //    }
-        //    scene.Add(surface);
-        //}
     }
 }

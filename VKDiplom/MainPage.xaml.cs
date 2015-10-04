@@ -60,8 +60,7 @@ namespace VKDiplom
 
             InitializeComponent();
             InittializeComboBoxes();
-            //_scaleTresholdToDefault = 0.025 * (ZScaleSlider.Maximum - ZScaleSlider.Minimum);
-            // var 
+            
         }
 
         private void ScenesAction(Action<Scene> action)
@@ -81,15 +80,6 @@ namespace VKDiplom
             var checkBox = sender as CheckBox;
             if (checkBox == null) return;
             ColorSlider.IsEnabled = checkBox.IsEnabled;
-            //if (checkBox.IsEnabled)
-            //{
-            //    ColorStackPanel.Background = _disabledColorBrush;
-            //}
-            //else
-            //{
-            //    ColorUtils.
-            //    ColorStackPanel.Background = new SolidColorBrush(new UIColor());
-            //}
         }
 
         private void FocusDrawingSurface_OnClick(object sender, MouseEventArgs e)
@@ -214,13 +204,5 @@ namespace VKDiplom
                 KnotsGeneratorComboBox.IsEnabled = true;
             }
         }
-
-        
-
-        //private void ScaleSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<T> e)
-        //{
-
-        //}
-
     }
 }

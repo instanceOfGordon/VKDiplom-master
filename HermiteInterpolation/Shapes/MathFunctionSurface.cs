@@ -43,24 +43,12 @@ namespace HermiteInterpolation.Shapes
                     segments.Add(segment);
                 }
             }
-            Segments = segments;
-            //return segments;
+            Segments = segments;         
         }
-
-        //private IEnumerable<ISurface> CreateMesh(MathFunction mathFunction)
-        //{
-
-        //}  
-
-        //protected InterpolativeMathFunction InterpolativeFunction { get; }
-
-        //public float MeshDensity { get; } = Constants.;
 
         private ISurface CreateSegment(int uIdx, int vIdx, 
             MathFunction function)
         {
-            //var afv = Knots;
-
             var meshDensity = Constants.MeshDensity;
             var uSize = Math.Abs(UDimension.Max - UDimension.Min)/(UDimension.KnotCount - 1);
             var vSize = Math.Abs(VDimension.Max - VDimension.Min)/(VDimension.KnotCount - 1);
@@ -72,10 +60,8 @@ namespace HermiteInterpolation.Shapes
 
             var uKnotsDistance = Math.Abs(u1 - u0);
             var xCount = Math.Ceiling(uKnotsDistance/meshDensity);
-            //var xMeshDensity = (float)(uKnotsDistance / xCount);
             var yKnotDistance = Math.Abs(v1 - v0);
             var yCount = Math.Ceiling(yKnotDistance/meshDensity);
-            //var yMeshDensity = (float)(yKnotDistance / yCount);
             var verticesCount = (int) ((++xCount)*(++yCount));
             var segmentMeshVertices = new VertexPositionNormalColor[verticesCount];
             var k = 0;

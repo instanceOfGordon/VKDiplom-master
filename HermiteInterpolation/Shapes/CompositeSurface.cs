@@ -32,9 +32,6 @@ namespace HermiteInterpolation.Shapes
 
         public void Draw()
         {
-            //if (_segments == null)
-            //    _segments = CreateMesh();
-            //_segments.Draw();
             foreach (var segment in Segments)
             {
                 segment.Draw();
@@ -47,11 +44,9 @@ namespace HermiteInterpolation.Shapes
             get
             {
                 if (!_minHeight.HasValue)
-                    _minHeight = Segments.Min(segment => segment.MinHeight);
-                //_vertices.Min(vertex => vertex.Position.Z);
+                    _minHeight = Segments.Min(segment => segment.MinHeight);           
                 return _minHeight.Value;
             }
-            //protected set { _minHeight = value; }
         }
 
         public float MaxHeight
@@ -61,7 +56,6 @@ namespace HermiteInterpolation.Shapes
                 if (!_maxHeight.HasValue) _maxHeight = Segments.Max(segment => segment.MaxHeight);
                 return _maxHeight.Value;
             }
-            //  protected set { _maxHeight = value; }
         }
         public void ColoredSimple(Color color)
         {
@@ -70,7 +64,6 @@ namespace HermiteInterpolation.Shapes
             {
                 segment.ColoredSimple(color);
             }
-
         }
 
         public void ColoredHeight()
@@ -111,34 +104,11 @@ namespace HermiteInterpolation.Shapes
             {
                 segment.ColoredSimple(seedFunction(parameters));
             }
-            //Segments.ForEach(segment => segment.ColoredSimple(seedFunction(parameters)));
         }
 
         public void ColoredBySegment()
         {
-            //            var colors = new[] { new Color(237, 28, 36), new Color(255, 127, 39), new Color(255,242,0), new Color(34, 177, 76), 
-            //                new Color(63, 72, 204), new Color(163, 73, 164)};
-
-            //new Color(255, 201, 14)};
-            //var colors = new[] { new Color(237, 28, 36), new Color(6, 128, 64), new Color(63, 72, 204), new Color(255, 201, 14) };
-            // new Color(63, 72, 204), new Color(163, 73, 164)};
-            ColoredBySegment(x => ColorUtils.Random());
-            //Segments.ForEach(segment => segment.ColoredSimple(ColorUtils.Random()));
-
-            //            var colors = new[] { new Color(255, 6, 6), new Color(6, 255, 6), new Color(6, 6, 255), new Color(255, 6, 255) };
-            //            var ccount = colors.Length;
-            //            var cidx = 0;
-            //            for (var i = 0; i < ukcmo; i++)
-            //            {
-            //                for (var j = 0; j < vkcmo; j++)
-            //                {
-            //                    var idx = i*vkcmo + j;
-            //                    var idxcolor = cidx%ccount;
-            //                    Segments[idx].ColoredSimple(colors[idxcolor]);
-            //                    ++cidx;
-            //                }
-            //                cidx = vkcmo != ccount ? cidx:cidx+1;
-            //           
+            ColoredBySegment(x => ColorUtils.Random());         
         }
 
         public void ColoredByShades(Color baseColor)

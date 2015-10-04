@@ -54,16 +54,6 @@ namespace HermiteInterpolation.Utils
 
         public static T[] ArraysOperation<T>(T[] leftOp, T[] rightOp, Func<T, T, T> operation, int fromIdx = 0)
         {
-            //var length = Math.Min(leftOp.Length, rightOp.Length);
-
-            //var result = new T[length - fromIdx];
-            ////var resIdx = 0;
-            //for (int i = fromIdx; i < length; i++)
-            //{
-            //    result[i - fromIdx] = operation(leftOp[i], rightOp[i]);
-            //}
-            //return result;
-
             var result = new T[leftOp.Length];
 
             for (int k = 0; k < fromIdx; k++)
@@ -85,17 +75,6 @@ namespace HermiteInterpolation.Utils
 
         public static T[][] ArraysOperation<T>(T[][] leftOp, T[][] rightOp, Func<T, T, T> operation, int fromIdx = 0, int fromJdx=0)
         {
-            //var length = Math.Min(leftOp.Length, rightOp.Length);
-
-            //var result = new T[length - fromIdx][];
-            ////var resIdx = 0;
-            //for (int i = fromIdx; i < length; i++)
-            //{
-            //    result[i - fromIdx] = ArraysOperation(leftOp[i],rightOp[i],operation,fromJdx);
-            //}
-            //return result;
-
-
             var result = new T[leftOp.Length][];
 
             for (int k = 0; k < fromIdx; k++)

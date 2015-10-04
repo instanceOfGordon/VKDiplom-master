@@ -10,10 +10,7 @@ namespace VKDiplom
     {
         private void FunctionDrawingSurface_OnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
         {
-            //            var drawingSurface = sender as DrawingSurface;
-            //            if (drawingSurface != null && _functionScene != null)
-            //                _functionScene.Camera.AspectRatio = (float) drawingSurface.ActualWidth/(float) drawingSurface.ActualHeight;
-            //            _mouseDeltaScale = 300.0 / Math.Min(drawingSurface.ActualWidth, drawingSurface.ActualHeight);
+
             SizeChanged(sender as DrawingSurface, _functionScene);
         }
 
@@ -33,20 +30,14 @@ namespace VKDiplom
 
             scene.Camera.AspectRatio = (float) drawingSurface.ActualWidth/
                                        (float) drawingSurface.ActualHeight;
-
-            //_mouseDeltaScale = 300.0/Math.Min(drawingSurface.ActualWidth, drawingSurface.ActualHeight);
         }
 
-        //private readonly double TressholdToDefault = 0.025 * (ZScaleSlider.Maximum - scaler.Minimum);
         private void ScaleSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var scaler = sender as Slider;
             if (scaler == null) return;
             if (_functionScene == null) return;
-            //if (scaler.Value < 2 && scaler.Value > -2)
-            //{
-            //    scaler.Value = 0;
-            //}
+
             var tresholdToDefault = 0.025 * (ZScaleSlider.Maximum - scaler.Minimum);
             //if ((e.OldValue < 1-tresholdToDefault && e.NewValue > 1-tresholdToDefault) || (e.OldValue > 1+tresholdToDefault && e.NewValue < 1+tresholdToDefault))
             if (e.NewValue > 1 - tresholdToDefault && e.NewValue < 1 + tresholdToDefault)

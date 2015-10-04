@@ -20,12 +20,8 @@ namespace HermiteInterpolation.Numerics
 
         public abstract MathFunction Compile();
 
-        //protected abstract MathFunction Compile(string expression);
-
         public abstract MathFunction CompileDerivative(params string[] respectToVariables);
-        
-
-       
+          
 
         public static MathExpression CreateDefault(string expression, params string[] variables)
         {

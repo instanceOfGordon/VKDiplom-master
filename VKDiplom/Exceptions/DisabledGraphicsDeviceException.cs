@@ -4,6 +4,5 @@ namespace VKDiplom.Exceptions
 {
     public class DisabledGraphicsDeviceException : Exception
     {
-
     }
 }

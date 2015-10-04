@@ -8,19 +8,9 @@
     internal static class MathFunctionExtensions
     {
 
-      
-
-        //Za toto sa hanbim. 
-
+        //Za toto sa hanbim.
         public static double SafeCall(this MathFunction mathFunction, double x, double y)
         {
-            //float offset = _meshDensity/10;
-            //var value = mathFunction(x, y);
-            //if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
-            //value = mathFunction(x, y - 0.05);
-            //if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
-            //value = mathFunction(x - 0.05, y - 0.05);
-
             var value = mathFunction(x, y);
             if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
             value = mathFunction(x, y +  double.Epsilon);

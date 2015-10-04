@@ -8,21 +8,6 @@ namespace VKDiplom.Utilities
     {
         private static readonly Color[] Colors =
         {
-            ////Red
-            //Color.FromNonPremultiplied(237,28,36,255),
-            ////Cyan
-            //Color.FromNonPremultiplied(153,217,234,255),
-
-            ////Green
-            //Color.FromNonPremultiplied(34,177,76,255),
-            ////Purple
-            //Color.FromNonPremultiplied(119,73,165,255),
-
-            ////Yellow
-            //Color.FromNonPremultiplied(255,201,14,255),
-            ////Blue
-            //Color.FromNonPremultiplied(63,72,204,255)
-
             //Red
             Color.FromNonPremultiplied(165,73,78,255),
             //Cyan
@@ -61,25 +46,5 @@ namespace VKDiplom.Utilities
         {
             _idx = 0;
         }
-
-        //public IEnumerable<Color> Next
-        //{
-        //    get
-        //    {
-        //        yield return Color.FromNonPremultiplied(165, 73, 78, 255);
-        //        //Cyan
-        //        yield return Color.FromNonPremultiplied(73, 147, 165, 255);
-
-        //        //Green
-        //        yield return Color.FromNonPremultiplied(73, 165, 101, 255);
-        //        //Purple
-        //        yield return Color.FromNonPremultiplied(119, 73, 165, 255);
-
-        //        //Yellow
-        //        yield return Color.FromNonPremultiplied(165, 145, 73, 255);
-        //        //Blue
-        //        yield return Color.FromNonPremultiplied(73, 80, 165, 255);
-        //    }
-        //}
     }
 }

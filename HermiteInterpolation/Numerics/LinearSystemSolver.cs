@@ -22,13 +22,7 @@
                 upperDiagonal[i] *= m;
                 rightSide[i] = (rightSide[i] - lowerDiagonal[i]*rightSide[i - 1])*m;
             }
-            //var n = lowerDiagonal.Length-1;
-            //rightSide[n] = (rightSide[n] - lowerDiagonal[n] * rightSide[n - 1]) / (mainDiagonal[n] - lowerDiagonal[n] * upperDiagonal[n - 1]);
 
-            //for (var i = n; i-- > 0; )
-            //{
-            //    rightSide[i] -= upperDiagonal[i] * rightSide[i + 1];
-            //}
             for (var i = rightSide.Length - 1; i-- > 0;)
             {
                 rightSide[i] = rightSide[i] - upperDiagonal[i]*rightSide[i + 1];

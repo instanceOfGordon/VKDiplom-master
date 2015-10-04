@@ -7,7 +7,6 @@ namespace VKDiplom.Utilities
 {
     public static class ParseUtils
     {
-
         public static string DecimalsToString(double[] numbers, string delimiter)
         {
             var sb = new StringBuilder();
@@ -41,10 +40,6 @@ namespace VKDiplom.Utilities
 
         public static double[] StringOfDecimalsToArray(string numbers)
         {
-            //var a = numbers.Split(new[] {'\t', '\n', ' ', '\r', ';'}, StringSplitOptions.RemoveEmptyEntries);
-            //var b = a.Select(double.Parse);
-            //var c = b.ToArray();
-            //return c;
             return
                 numbers.Split(new[] {'\t', '\n', ' ', '\r', ';'}, StringSplitOptions.RemoveEmptyEntries)
                     .Select(double.Parse)
@@ -81,9 +76,6 @@ namespace VKDiplom.Utilities
 
         public static void IntAccepted(object sender, KeyEventArgs e)
         {
-            //const int KEYCODE_Hyphen_OnKeyboard = 189;
-
-            
             e.Handled = !(
                 (!( //No modifier key must be pressed
                     (System.Windows.Input.Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
@@ -94,12 +86,7 @@ namespace VKDiplom.Utilities
                      (e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
                      || e.Key == Key.Subtract || e.Key == Key.Add || e.Key == Key.Unknown
                      || e.Key == Key.Home || e.Key == Key.End || e.Key == Key.Delete
-                     || e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Escape || e.Key == Key.Back
-                     //|| (e.Key == Key.Unknown && (
-                     //           e.PlatformKeyCode == KEYCODE_Hyphen_OnKeyboard
-                     //        || e.PlatformKeyCode == KEYCODE_Dot_OnKeyboard || e.PlatformKeyCode == KEYCODE_Dot_OnNumericKeyPad
-                     //     )
-                     // )
+                     || e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Escape || e.Key == Key.Back                     
                      )
                     )
                 );

@@ -12,9 +12,6 @@ namespace HermiteInterpolation.MathFunctions
     /// </summary>
     public class InterpolativeMathFunction
     {
-        // Constant for calculating derivations.
-        //private const double H = 0.00001;
-
         /// <summary>
         ///     Parameter z specifies expression to be approximated Hermite spline.
         ///     All required derivations are calculated automatically.
@@ -22,29 +19,10 @@ namespace HermiteInterpolation.MathFunctions
         /// <param name="z"></param>
         public InterpolativeMathFunction(MathFunction z)
         {
-            //const double h = Epsilon;
-            //const double h2 = h*2;
             Z = z;
-            // Partial derivations 
-            //const double h2 = 2*H;
-            //CompileDerivative.FirstPa
-
             Dx = new MathFunction(Differentiate.FirstPartialDerivativeFunc(new Func<double[], double>(z), 0));
-            //(a,b)=>CompileDerivative.FirstPartialDerivative2Func((x,y)=>z(x,y), 0)(a,b);
-            //(x, y) => (z(x + x*h, y) - z(x - x*h, y)) / (h2*x*x);
-
             Dy = new MathFunction(Differentiate.FirstPartialDerivativeFunc(new Func<double[], double>(z), 1));
-            //(x, y) => (z(x, y + y*h) - z(x, y - y*h)) / (y*y*h2);//
-
             Dxy = new MathFunction(Differentiate.FirstPartialDerivativeFunc(new Func<double[], double>(Dx), 1));
-
-            //Dx = new MathExpression("2*x","x","y").Compile();
-            //Dx = new MathExpression("2*y", "x", "y").Compile();
-            //Dx = new MathExpression("0", "x", "y").Compile();
-            //CompileDerivative.FirstPartialDerivative2Func(Dx, 1);
-            //(x, y) => (Dx(x, y + y*h) - Dx(x, y - y*h)) / (y*y*h2);//
-
-            // better derivation [f(x-2h) - 8f(x-h) + 8f(x+h) - f(x+2h)] / 12h
         }
 
         /// <summary>
@@ -89,14 +67,7 @@ namespace HermiteInterpolation.MathFunctions
             return new InterpolativeMathFunction(vars => f1.Z(vars)/f2.Z(vars));
         }
 
-        //public MathFunction Get(Derivation derivation)
-        //{
-        //    switch (derivation)
-        //    {
-
-        //    }
-        //}
-
+           
         /// <summary>
         ///     Parse aproximation Z from string.
         ///     All required derivations are calculated automatically.
@@ -111,17 +82,7 @@ namespace HermiteInterpolation.MathFunctions
         public static InterpolativeMathFunction FromExpression(string mathExpression, string variableX,
             string variableY)
         {
-            //// TODO: osetrit vynimky pre neplatne vstupy
-            
-            //var function = MathFunctionExtensions.FromExpression(mathExpression, variableX, variableY);
-            ////var mathExpressionDx = Differentiator.CompileDerivative(mathExpression, variableX,
-            ////    true);
-            ////var functionDx = MathFunctionExtensions.FromExpression(mathExpressionDx);
-            ////var functionDy = MathFunctionExtensions.FromExpression(Differentiator.CompileDerivative(mathExpression, variableY,
-            ////    true));
-            ////var functionDxy = MathFunctionExtensions.FromExpression(Differentiator.CompileDerivative(mathExpressionDx, variableY,
-            ////    true));
-            //return function == null ? null : new InterpolativeMathFunction(function);
+            //// TODO: osetrit vynimky pre neplatne vstupy           
             return FromExpression(MathExpression.CreateDefault(mathExpression, variableX, variableY));
         }
 
@@ -130,7 +91,6 @@ namespace HermiteInterpolation.MathFunctions
         public static InterpolativeMathFunction FromExpression(MathExpression expression)
         {
             // TODO: osetrit vynimky pre neplatne vstupy
-
             var f = expression.Compile();
             var dx = expression.CompileDerivative("x");
             var dy = expression.CompileDerivative("y");
@@ -140,12 +100,4 @@ namespace HermiteInterpolation.MathFunctions
         }
     }
 
-    //public static class MathExpressionExtensions
-    //{
-    //    public static InterpolativeMathFunction CompileToMathFunction(this MathExpression expression)
-    //    {
-    //        return InterpolativeMathFunction.FromExpression(expression.Expression, expression.Variables[0],
-    //            expression.Variables[1]);
-    //    }
-    //}
 }

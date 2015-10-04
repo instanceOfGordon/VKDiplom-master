@@ -21,23 +21,12 @@ namespace HermiteInterpolation.SplineKnots
             
         }
 
-        //protected KnotsGenerator()
-        //{//
-            
-        //}
-
         protected KnotsGenerator(MathExpression expression)
             :this(InterpolativeMathFunction.FromExpression(expression))
         {
            
         }
         public abstract KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension);
-
-        //public KnotsGenerator CreateCop(KnotsGenerator instanceToCopy, InterpolativeMathFunction function)
-        //{
-        //    //var type = GetType();
-        //    return (KnotsGenerator) Activator.CreateInstance(instanceToCopy.GetType(), function);
-        //}
 
         public static KnotsGenerator operator +(KnotsGenerator leftOp, KnotsGenerator rightOp)
         {
@@ -50,17 +39,5 @@ namespace HermiteInterpolation.SplineKnots
             var result = new ChainedKnotsGenerator(leftOp) {{rightOp, (l, r) => l - r}};
             return result;
         }
-
-
-
     }
-
-
-    //internal enum UnknownVariableType
-    //{
-    //    Dx,
-    //    Dxy,
-    //    Dy,
-    //    Dyx
-    //}
 }

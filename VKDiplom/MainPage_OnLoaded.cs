@@ -42,17 +42,6 @@ namespace VKDiplom
         private void MexicanHatDemo(Scene scene, Derivation derivation)
         {
             if (scene == null) return;
-//            Func<double, double, double> f = (x, y) => Math.Sin(Math.Sqrt(x*x + y*y));
-//            Func<double, double, double> xd = (x, y) => (x*Math.Cos(Math.Sqrt(x*x + y*y)))
-//                                                        /(Math.Sqrt(x*x + y*y));
-//            Func<double, double, double> yd = (x, y) => (y*Math.Cos(Math.Sqrt(x*x + y*y)))
-//                                                        /Math.Sqrt(x*x + y*y);
-//            Func<double, double, double> xyd = (x, y) => -(y*x*Math.Sin(Math.Sqrt(x*x + y*y)))
-//                                                         /(x*x + y*y)
-//                                                         - (y*x*Math.Cos(Math.Sqrt(x*x + y*y)))
-//                                                         /(Math.Pow(x*x + y*y, 1.5));
-
-
             //var aproximationFunction = new InterpolativeMathFunction(f, xd, yd, xyd);
             //var aproximationFunction = new InterpolativeMathFunction(f);
             var mathExpression = MathExpression.CreateDefault("sin(sqrt(x^2+y^2))", "x", "y");
@@ -224,11 +213,7 @@ namespace VKDiplom
                 HermiteUCountTextBox.Text = selectedSpline.UDimension.KnotCount.ToString(culture);
                 HermiteVCountTextBox.Text = selectedSpline.VDimension.KnotCount.ToString(culture);
                 MathExpressionTextBox.Text = selectedSpline.Name;
-                //var type = selectedSpline.GetType();
-                //var knotGeneratorType = selectedSpline.KnotsGenerator;
-                //InterpolationTypeComboBox.SelectItemByType(type);
 
-                // Hardcoded. Need to find better solution
                 if (selectedSpline is BiquarticHermiteSurface)
 
                     InterpolationTypeComboBox.SelectedIndex = 2;
@@ -236,7 +221,6 @@ namespace VKDiplom
 
                     InterpolationTypeComboBox.SelectedIndex = 1;
 
-                // SetSelectedIndexByGeneratorType(selectedSpline.KnotsGenerator.GetType());
                 if (selectedSpline.KnotsGenerator is DirectKnotsGenerator)
                     KnotsGeneratorComboBox.SelectedIndex = 0;
                 else if (selectedSpline.KnotsGenerator is ReducedDeBoorKnotsGenerator)
@@ -258,25 +242,6 @@ namespace VKDiplom
                 InterpolationTypeComboBox_OnSelectionChanged(InterpolationTypeComboBox, null);
             }
         }
-
-        //private int SetSelectedIndexByGeneratorType(Type generatorType)
-        //{
-        //    var itemSource = KnotsGeneratorComboBox.ItemsSource as IDictionary<string, KnotsGeneratorFactory>;
-
-        //    if (itemSource == null) return -1;
-        //    var idx = -1;
-        //    foreach (var pair in itemSource)
-        //    {
-        //        var returnType = pair.Value.Method.ReturnType;
-        //        if (returnType == generatorType)
-        //        {
-        //            KnotsGeneratorComboBox.SelectedIndex = idx;
-        //            return idx;
-        //        }
-
-        //    }
-        //    return idx;
-        //}
 
         private int SetSelectedIndexBySplineType(Type splineType)
         {

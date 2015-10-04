@@ -5,8 +5,6 @@ namespace VKDiplom.Engine.Utils
 {
     public static class VkDiplomGraphicsInitializationUtils
     {
-        //public static readonly bool IsHardwareAccelerated = GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware;
-
         public static bool IsHardwareAccelerated()
         {
             return GraphicsDeviceManager.Current.RenderMode == RenderMode.Hardware;

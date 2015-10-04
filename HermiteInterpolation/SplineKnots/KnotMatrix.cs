@@ -22,14 +22,6 @@ namespace HermiteInterpolation.SplineKnots
             get { return _matrix[i][j]; }
             set
             {
-                //Knot ll, lr, tl, tr;
-                //if(i== Rows - 1)
-
-
-                //var ll = _matrix[i - 1][j-1];
-                //var lr = _matrix[i - 1][j + 1];
-                //var tl = _matrix[i+1]
-
                 _matrix[i][j] = value;
             }
         }

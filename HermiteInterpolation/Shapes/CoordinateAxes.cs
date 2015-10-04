@@ -14,32 +14,12 @@ namespace HermiteInterpolation.Shapes
         private VertexBuffer _axesVertexBuffer;
         private bool _disposed;
 
-
         public CoordinateAxes()
         {
             
             CreateShape();
         }
 
-//        protected override void SetupView(ref GraphicsDevice graphicsDevice,  BasisMatrix viewProjection)
-//        {
-//
-//            //var projection = CreateFinalProjection(viewProjection);
-//            graphicsDevice.SetVertexBuffer(VertexBuffer);
-//            graphicsDevice.DrawPrimitives(PrimitiveType.LineList,0,NumberOfVerts/2);
-//            graphicsDevice.SetVertexBuffer(_arrowsVertexBuffer);
-//            graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,0,NumberOfVertsArrows/3);
-//        }
-
-        //  protected override void SetupView(ref GraphicsDevice graphicsDevice,  BasisMatrix viewProjection)
-        // {
-
-//            //var projection = CreateFinalProjection(viewProjection);
-//            graphicsDevice.SetVertexBuffer(VertexBuffer);
-//            graphicsDevice.DrawPrimitives(PrimitiveType.LineList,0,NumberOfVerts/2);
-//            graphicsDevice.SetVertexBuffer(_arrowsVertexBuffer);
-//            graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,0,NumberOfVertsArrows/3);
-//        }
         private void Dispose(bool disposing)
         {
             if (_disposed) return;
@@ -62,9 +42,7 @@ namespace HermiteInterpolation.Shapes
         {
              Dispose(false);
         }
-
-        //public BlendState BlendState { get; set; } => BlendState.O
-
+        
         public void Draw()
         {
             var graphicsDevice = GraphicsDeviceManager.Current.GraphicsDevice;
@@ -124,18 +102,11 @@ namespace HermiteInterpolation.Shapes
             //Y
             axes[2] = new VertexPositionColor(new Vector3(0, 0, 0), color1);
             axes[3] = new VertexPositionColor(new Vector3(0, axisLength, 0), color1);
-//            axes[3] = new VertexPositionColor(new Vector3(0, 0, axisLength), color1);
-
             var yy = new Vector3(0, axisLength, 0);
-//            var yy = new Vector3(0, 0, axisLength);
             var ya = new Vector3(-shift, axisLength - shift, -shift);
             var yb = new Vector3(shift, axisLength - shift, -shift);
             var yc = new Vector3(shift, axisLength - shift, shift);
             var yd = new Vector3(-shift, axisLength - shift, shift);
-//            var ya = new Vector3(-shift, -shift, axisLength - shift);
-//            var yb = new Vector3(shift, -shift, axisLength - shift);
-//            var yc = new Vector3(shift, shift, axisLength - shift);
-//            var yd = new Vector3(-shift, shift, axisLength - shift);
             arrows[18] = new VertexPositionColor(yy, color1);
             arrows[19] = new VertexPositionColor(yb, color1);
             arrows[20] = new VertexPositionColor(ya, color1);
@@ -162,21 +133,14 @@ namespace HermiteInterpolation.Shapes
 
             //Z
             axes[4] = new VertexPositionColor(new Vector3(0, 0, 0), color2);
-//            axes[5] = new VertexPositionColor(new Vector3(0, axisLength, 0), color2);
             axes[5] = new VertexPositionColor(new Vector3(0, 0, axisLength), color2);
 
 
             var zz = new Vector3(0, 0, axisLength);
-//            var zz = new Vector3(0, axisLength, 0);
             var za = new Vector3(-shift, -shift, axisLength - shift);
             var zb = new Vector3(shift, -shift, axisLength - shift);
             var zc = new Vector3(shift, shift, axisLength - shift);
             var zd = new Vector3(-shift, shift, axisLength - shift);
-//            var za = new Vector3(-shift, axisLength - shift, -shift);
-//            var zb = new Vector3(shift, axisLength - shift, -shift);
-//            var zc = new Vector3(shift, axisLength - shift, shift);
-//            var zd = new Vector3(-shift, axisLength - shift, shift);
-
             arrows[36] = new VertexPositionColor(zz, color2);
             arrows[37] = new VertexPositionColor(zb, color2);
             arrows[38] = new VertexPositionColor(za, color2);
@@ -214,22 +178,6 @@ namespace HermiteInterpolation.Shapes
             axes[13] = new VertexPositionColor(new Vector3(0.4f, axisLength + 0.35f, 0), color1d);
             axes[14] = new VertexPositionColor(new Vector3(0.3f, axisLength + 0.2f, 0), color1d);
             axes[15] = new VertexPositionColor(new Vector3(0.3f, axisLength + 0.05f, 0), color1d);
-
-//            axes[10] = new VertexPositionColor(new Vector3(0.2f,0.35f,  axisLength + 0), color1d);
-//            axes[11] = new VertexPositionColor(new Vector3(0.3f, 0.2f, axisLength + 0), color1d);
-//            axes[12] = new VertexPositionColor(new Vector3(0.3f,  0.2f, axisLength + 0), color1d);
-//            axes[13] = new VertexPositionColor(new Vector3(0.4f, 0.35f, axisLength + 0), color1d);
-//            axes[14] = new VertexPositionColor(new Vector3(0.3f,  0.2f, axisLength + 0), color1d);
-//            axes[15] = new VertexPositionColor(new Vector3(0.3f,  0.05f, axisLength + 0), color1d);
-
-            //Z oznacenie
-//            axes[16] = new VertexPositionColor(new Vector3(0, axisLength + 0.1f, 0.4f), color2d);
-//            axes[17] = new VertexPositionColor(new Vector3(0, axisLength + 0.4f,  0.4f), color2d);
-//            axes[18] = new VertexPositionColor(new Vector3(0, axisLength + 0.4f, + 0.4f), color2d);
-//            axes[19] = new VertexPositionColor(new Vector3(0, axisLength + 0.1f, 0.2f), color2d);
-//            axes[20] = new VertexPositionColor(new Vector3(0, axisLength + 0.1f,0.2f), color2d);
-//            axes[21] = new VertexPositionColor(new Vector3(0, axisLength + 0.4f,  0.2f), color2d);
-
             axes[16] = new VertexPositionColor(new Vector3(0, 0.1f, axisLength + 0.4f), color2d);
             axes[17] = new VertexPositionColor(new Vector3(0, 0.4f, axisLength + 0.4f), color2d);
             axes[18] = new VertexPositionColor(new Vector3(0, 0.4f, axisLength + 0.4f), color2d);

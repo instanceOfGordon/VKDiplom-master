@@ -6,8 +6,7 @@ namespace HermiteInterpolation.Primitives
     {
         public static void CalculateTriangleNormals(VertexPositionNormalColor[] vertices, short[] indices)
         {
-            //if (_drawStyle != DrawStyle.Triangles) return;
-
+          
             ZeroNormals(vertices);
             for (var i = 0; i < indices.Length/3; i++)
             {

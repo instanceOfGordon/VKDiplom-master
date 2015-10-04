@@ -5,30 +5,11 @@ namespace SymbolicDifferentiation
 {
     public class Differentiator
     {
-        //public string DiffVar { get; }
-
-        //public Differentiator(string diffVar)
-        //{
-        //    DiffVar = diffVar;
-        //}
-
-        //public Differentiator()
-        //{
-        //    DiffVar = "x";
-        //}
         public static string Differentiate(string input, string diffVar, bool bOptimize = false)
         {
             if (!input.Contains(diffVar)) return "0";
             var strInput = input.RemoveConstants(diffVar);
-
-            // dirty hack 
-            // MUST REPAIR incorrect differentiation when diffVar!="x"
-            //if (diffVar != "x")
-            //{
-            //    strInput = strInput.Replace("x", "DUMMY");
-            //    strInput = strInput.Replace(diffVar, "x");
-            //    strInput = strInput.Replace("DUMMY", diffVar);
-            //}
+          
             // remove spaces
             strInput = strInput.Replace(" ","");
             // make all characters lower case
@@ -64,25 +45,14 @@ namespace SymbolicDifferentiation
             if (bOptimize)
                 // optimize the equation from unneeded elements
                 strOutput = strOutput.Optimize();
-            // return output differentiation
-            //if (diffVar != "x")
-            //{
-            //    strOutput = strOutput.Replace(diffVar, "DUMMY");
-            //    strOutput = strOutput.Replace("x", diffVar);
-            //    strOutput = strOutput.Replace("DUMMY", "x");
-            //}
+
             return strOutput;
         }
 
         private static string DifferentiateStack(List<ExpressionItem> vStack, string diffVar,ref int nExpression)
         {
             var pQI = vStack[nExpression++];
-            //var pQI = vStack[nExpression];
-            //if (!pQI.MStrInput.Contains(diffVar))
-            //{
-            //    pQI.MStrOutput = "0";
-            //    return "0";
-            //}
+
             if (pQI.MCOperator != null)
             {
                 // get left operand
@@ -110,8 +80,7 @@ namespace SymbolicDifferentiation
                             pQI.MStrOutput = "(-" + u + '*' + dv + ")/(" + v + ")^2";
                             break;
                         case '^':   // d(u^v) = dv*u^v*ln(u)
-                            //double un;
-                            //var success = double.TryParse(u,out un);
+
                             //if(success)
                                 pQI.MStrOutput = dv + "*" + u + "^" + v + (u == "e" ? "" : "*ln(" + u + ")");
                             break;

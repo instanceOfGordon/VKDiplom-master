@@ -6,7 +6,7 @@ namespace SymbolicDifferentiation
 {
     public class Calculator
     {
-        //private readonly static NumberFormatInfo NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
+        
 
         public static int Calculate(string input, double xVal, double yVal, ref double output)
         {
@@ -20,13 +20,9 @@ namespace SymbolicDifferentiation
 
         public static int Calculate(string input, ref double output)
         {
-           // if (variables.Length != values.Length) return -1;
-            //output = -1;
-            //string input = lpcsInput;
+         
             // remove spaces
             input = input.Replace(" ","");
-            //input = input.Replace(",", "");
-
             // make all characters lower case
             input = input.ToLower();
             // Optimize "--"
