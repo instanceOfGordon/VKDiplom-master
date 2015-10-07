@@ -17,8 +17,7 @@ namespace HermiteInterpolation.SplineKnots
         private readonly IList<KnotsGenerator> _generatorChain;
         private readonly IList<KnotsOperation> _operatorChain;
 
-       
-
+      
         public ChainedKnotsGenerator(KnotsGenerator first)
         {
             _generatorChain = new List<KnotsGenerator> {first};

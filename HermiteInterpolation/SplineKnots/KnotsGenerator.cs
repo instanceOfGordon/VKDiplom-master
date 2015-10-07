@@ -9,7 +9,7 @@ namespace HermiteInterpolation.SplineKnots
 {
     public abstract class KnotsGenerator
     {
-        public InterpolativeMathFunction Function { get;}
+        public InterpolativeMathFunction Function { get; }
 
         protected KnotsGenerator(InterpolativeMathFunction function)
         {
@@ -18,7 +18,7 @@ namespace HermiteInterpolation.SplineKnots
 
         protected KnotsGenerator()
         {
-            
+
         }
 
         protected KnotsGenerator(MathExpression expression)
@@ -30,14 +30,12 @@ namespace HermiteInterpolation.SplineKnots
 
         public static KnotsGenerator operator +(KnotsGenerator leftOp, KnotsGenerator rightOp)
         {
-            var result = new ChainedKnotsGenerator(leftOp) {{rightOp, (l, r) => l + r}};
-            return result;
+            return new ChainedKnotsGenerator(leftOp) { { rightOp, (l, r) => l + r } };
         }
 
         public static KnotsGenerator operator -(KnotsGenerator leftOp, KnotsGenerator rightOp)
         {
-            var result = new ChainedKnotsGenerator(leftOp) {{rightOp, (l, r) => l - r}};
-            return result;
+            return new ChainedKnotsGenerator(leftOp) { { rightOp, (l, r) => l - r } };
         }
     }
 }

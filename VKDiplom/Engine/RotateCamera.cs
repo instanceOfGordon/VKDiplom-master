@@ -38,23 +38,23 @@ namespace VKDiplom.Engine
             }
         }
 
-        private bool IsMirrored { get; set; } = false;
+        //private bool IsMirrored { get; set; } = false;
 
-        private bool MirrorView {
-            set
-            {
-                if (!IsMirrored&&value)
-                {
-                    HorizontalAngle += MathHelper.Pi;
-                    IsMirrored = true;
-                }
-                else if(IsMirrored&&!value)
-                {
-                    HorizontalAngle -= MathHelper.Pi;
-                    IsMirrored = false;
-                }        
-            }
-        }
+        //private bool MirrorView {
+        //    set
+        //    {
+        //        if (!IsMirrored&&value)
+        //        {
+        //            HorizontalAngle += MathHelper.Pi;
+        //            IsMirrored = true;
+        //        }
+        //        else if(IsMirrored&&!value)
+        //        {
+        //            HorizontalAngle -= MathHelper.Pi;
+        //            IsMirrored = false;
+        //        }        
+        //    }
+        //}
 
         public float VerticalAngle
         {
@@ -66,6 +66,7 @@ namespace VKDiplom.Engine
                 //MirrorView = value < 0;
                 //Position = CoordinateSystems.FromSphericalToCartesian(_distance, _verticalAngle, _horizontalAngle + 1);
                 //HorizontalAngle += MathHelper.Pi;
+                UpVector = _verticalAngle < 0 ? Vector3.Down : Vector3.Up;
                 Position = CoordinateSystems.FromSphericalToCartesian(_distance, _verticalAngle, HorizontalAngle);
                 //Position = CoordinateSystems.FromSphericalToCartesian(_distance, _horizontalAngle, _verticalAngle);
             }
@@ -89,6 +90,7 @@ namespace VKDiplom.Engine
                 _distance = value.X;
                 _verticalAngle = value.Y;
                 _horizontalAngle = value.Z;
+                //UpVector = _horizontalAngle < MathHelper.PiOver2 ? Vector3.Up : Vector3.Down;
                 Position = CoordinateSystems.FromSphericalToCartesian(value);
             }
         }

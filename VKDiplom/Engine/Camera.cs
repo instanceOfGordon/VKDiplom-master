@@ -4,7 +4,7 @@ namespace VKDiplom.Engine
 {
     public class Camera
     {
-        private readonly Vector3 _upVector = Vector3.Up;
+        protected Vector3 UpVector { get; set; } = Vector3.Up;
         private Vector3 _position;
         private Vector3 _target;
         private Matrix _view; // The _view or camera transform
@@ -15,7 +15,8 @@ namespace VKDiplom.Engine
         {
             _target = Vector3.Zero;
             _position = new Vector3(0, 10, 19f);
-            _view = Matrix.CreateLookAt(_position, _target, _upVector);
+            _view = Matrix.CreateLookAt(_position, _target, UpVector);
+           
         }
 
         public Matrix ViewTransform
@@ -67,7 +68,7 @@ namespace VKDiplom.Engine
 
         private void UpdateView()
         {
-            _view = Matrix.CreateLookAt(_position, _target, _upVector);
+            _view = Matrix.CreateLookAt(_position, _target, UpVector);
         }
     }
 }

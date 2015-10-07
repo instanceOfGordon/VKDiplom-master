@@ -227,7 +227,7 @@
                                   HorizontalAlignment="Left" Width="100"
                                   SelectedIndex="0" Style="{StaticResource ComboBox}" />
                         <!--<CheckBox Grid.Column="8" Grid.Row="1" Content="Difference" Style="{StaticResource CheckBox}" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center"></CheckBox>-->
-                        <Button Name="SplineSubtractionButton" Grid.Column="8" Grid.Row="1" Style="{StaticResource CommonButton}" Content="Subtract" Margin="5,0,5,0" HorizontalAlignment="Left" Width="60" Height="21" Click="SplineSubtractionButton_OnClick"></Button>
+                        <Button Name="SplineSubtractionButton" Grid.Column="8" Grid.Row="1" Style="{StaticResource CommonButton}" Content="Subtract" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="60" Height="23" Click="SplineSubtractionButton_OnClick"></Button>
                         <!-- COLOR PICKER -->
 
 
@@ -264,16 +264,17 @@
                         Margin="10"
                         Style="{StaticResource CommonButton}" />
 
-                <StackPanel x:Name="ColorStackPanel" Background="DarkGray"
+                <!--<StackPanel x:Name="ColorStackPanel" Background="DarkGray"
                             Margin="10" Orientation="Horizontal" HorizontalAlignment="Right" Width="100"
                             Grid.ColumnSpan="2"
-                            Grid.Column="0" />
+                            Grid.Column="0" />-->
                 <Slider IsEnabled="False" Minimum="0" Maximum="360" x:Name="ColorSlider"
                         ValueChanged="ColorSlider_OnValueChanged" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" />
                 <CheckBox x:Name="ColorCheckBox" Grid.Row="0" Grid.Column="1" Margin="10"
                           HorizontalAlignment="Left" VerticalAlignment="Center" Content="Auto color" IsChecked="True"
                           IsEnabledChanged="ColorCheckBox_OnIsEnabledChanged" Style="{StaticResource CheckBox}"
                           Width="77" Grid.ColumnSpan="2" />
+                <!--<TextBox Grid.Row="0" Grid.Column="2" Margin="10" HorizontalAlignment="Center" Width="150" Name="DebugBox"></TextBox>-->
             </Grid>
 
         </Grid>
