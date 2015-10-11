@@ -61,6 +61,8 @@ namespace HermiteInterpolation.SplineKnots
             return Operation(left, right, (l, r) => l + r);
         }
 
+
+
         //private bool KnotsArraysIntersectionIndexes(Knot[] leftOp, Knot[] rightOp, out int leftOpIntersectIdx, out int rightOpIntersectIdx)
         //{
         //    for (int i = 0; i < leftOp.Length; i++)

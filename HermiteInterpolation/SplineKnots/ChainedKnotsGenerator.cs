@@ -22,10 +22,10 @@ namespace HermiteInterpolation.SplineKnots
         {
             _generatorChain = new List<KnotsGenerator> {first};
             _operatorChain = new List<KnotsOperation> {null};
+            //var s = new Stack();
+
         }
-
         
-
         public override KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
             var result= _generatorChain[0].GenerateKnots(uDimension,vDimension);

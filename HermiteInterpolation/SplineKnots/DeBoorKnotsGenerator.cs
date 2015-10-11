@@ -7,32 +7,33 @@ using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
 {
-    public class DeBoorKnotsGenerator : KnotsGenerator
+    public class DeBoorKnotsGenerator : KnotsGenerator//,IDeBoor
     {
-       
-        protected virtual double[] MainDiagonal(int equationsCount)
+        protected virtual double[] MainDiagonal(int unknownsCount)
         {
-            return MyArrays.InitalizedArray<double>(equationsCount, 4);
+            return MyArrays.InitalizedArray<double>(unknownsCount-2, 4);
         }
 
-        protected virtual double[] UpperDiagonal(int equationsCount)
+        protected virtual double[] UpperDiagonal(int unknownsCount)
         {
-            return MyArrays.InitalizedArray<double>(equationsCount, 1);
+            return MyArrays.InitalizedArray<double>(unknownsCount-2, 1);
         }
 
-        protected virtual double[] LowerDiagonal(int equationsCount)
+        protected virtual double[] LowerDiagonal(int unknownsCount)
         {
-            return MyArrays.InitalizedArray<double>(equationsCount, 1);
+            return MyArrays.InitalizedArray<double>(unknownsCount-2, 1);
         }
 
         protected virtual double[] RightSide(Func<int, double> rightSide, double h, double dfirst, double dlast,
-            int equationsCount, bool even = false)
+            int unknownsCount)
         {
+            var equationsCount = unknownsCount - 2;
             var rs = new double[equationsCount];
+            //var equation
             h = 3/h;
             rs[0] = h*(rightSide(2) - rightSide(0)) - dfirst;
             rs[equationsCount - 1] = h*(rightSide(equationsCount + 1) - rightSide(equationsCount - 1)) - dlast;
-            for (var i = 1; i < equationsCount - 1; i++)
+            for (var i = 1; i < equationsCount-1; i++)
             {
                 rs[i] = h*(rightSide(i + 2) - rightSide(i));
             }
@@ -50,9 +51,9 @@ namespace HermiteInterpolation.SplineKnots
             InitializeKnots(uDimension, vDimension, values);
 
             FillXDerivations(values);
-            FillDxyDerivations(values);
+            FillXYDerivations(values);
             FillYDerivations(values);
-            FillDyxDerivations(values);
+            FillYXDerivations(values);
 
             return values;
         }
@@ -117,10 +118,10 @@ namespace HermiteInterpolation.SplineKnots
             }
         }
 
-        protected virtual void FillDxyDerivations(KnotMatrix values)
+        protected virtual void FillXYDerivations(KnotMatrix values)
         {
-            FillDxyDerivations(0, values);
-            FillDxyDerivations(values.Columns - 1, values);
+            FillXYDerivations(0, values);
+            FillXYDerivations(values.Columns - 1, values);
         }
 
         protected virtual void FillYDerivations(KnotMatrix values)
@@ -131,74 +132,74 @@ namespace HermiteInterpolation.SplineKnots
             }
         }
 
-        protected virtual void FillDyxDerivations(KnotMatrix values)
+        protected virtual void FillYXDerivations(KnotMatrix values)
         {
             for (var i = 0; i < values.Rows; i++)
             {
-                FillDyxDerivations(i, values);
+                FillYXDerivations(i, values);
             }
         }
 
         protected virtual void FillXDerivations(int columnIndex, KnotMatrix values)
         {
-            var equationsCount = values.Rows - 2;
-            if (equationsCount == 0) return;
+            var unknownsCount = values.Rows;// - 2;
+            if (unknownsCount == 2) return;
             Action<int, double> dset = (idx, value) => values[idx,columnIndex].Dx = value;
             Func<int, double> rget = idx => values[idx,columnIndex].Z;
             var h = values[1,0].X - values[0,0].X;
             var dlast = values[values.Rows - 1,columnIndex].Dx;
             var dfirst = values[0,columnIndex].Dx;
 
-            SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
+            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
         }
 
-       
+
 
         protected virtual void FillYDerivations(int rowIndex, KnotMatrix values)
         {
-            var equationsCount = values.Columns - 2;
-            if (equationsCount == 0) return;
+            var unknownsCount = values.Columns;// - 2;
+            if (unknownsCount == 2) return;
             Action<int, double> dset = (idx, value) => values[rowIndex,idx].Dy = value;
             Func<int, double> rget = idx => values[rowIndex,idx].Z;
             var h = values[0,1].Y - values[0,0].Y;
             var dfirst = values[rowIndex,0].Dy;
             var dlast = values[rowIndex,values.Columns - 1].Dy;
 
-            SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
+            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
         }
 
-        protected virtual void FillDxyDerivations(int columnIndex, KnotMatrix values)
+        protected virtual void FillXYDerivations(int columnIndex, KnotMatrix values)
         {
-            var equationsCount = values.Rows - 2;
-            if (equationsCount == 0) return;
+            var unknownsCount = values.Rows;// - 2;
+            if (unknownsCount == 2) return;
             Action<int, double> dset = (idx, value) => values[idx,columnIndex].Dxy = value;
             Func<int, double> rget = idx => values[idx,columnIndex].Dy;
             var h = values[1,0].X - values[0,0].X;
             var dlast = values[values.Rows - 1,columnIndex].Dxy;
             var dfirst = values[0,columnIndex].Dxy;
 
-            SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
+            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
         }
 
-        protected virtual void FillDyxDerivations(int rowIndex, KnotMatrix values)
+        protected virtual void FillYXDerivations(int rowIndex, KnotMatrix values)
         {
-            var equationsCount = values.Columns - 2;
-            if (equationsCount == 0) return;
+            var unknownsCount = values.Columns;// - 2;
+            if (unknownsCount == 2) return;
             Action<int, double> dset = (idx, value) => values[rowIndex,idx].Dxy = value;
             Func<int, double> rget = idx => values[rowIndex,idx].Dx;
             var h = values[0,1].Y - values[0,0].Y;
             var dfirst = values[rowIndex,0].Dxy;
             var dlast = values[rowIndex,values.Columns - 1].Dxy;
 
-            SolveTridiagonal(rget, h, dfirst, dlast, equationsCount, dset);
+            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
         }
 
-        protected void SolveTridiagonal(Func<int, double> rightSideValuesToGet, double h, double dfirst, double dlast,
-            int equationsCount, Action<int, double> unknownsToSet)
+        protected virtual void SolveTridiagonal(Func<int, double> rightSideValuesToGet, double h, double dfirst, double dlast,
+            int unknownsCount, Action<int, double> unknownsToSet)
         {
-            var result = RightSide(rightSideValuesToGet, h, dfirst, dlast, equationsCount);
-            LinearSystemSolver.TridiagonalSystem(UpperDiagonal(equationsCount), MainDiagonal(equationsCount),
-                LowerDiagonal(equationsCount), result);
+            var result = RightSide(rightSideValuesToGet, h, dfirst, dlast, unknownsCount);
+            LinearSystemSolver.TridiagonalSystem(UpperDiagonal(unknownsCount), MainDiagonal(unknownsCount),
+                LowerDiagonal(unknownsCount), result);
 
             for (var i = 0; i < result.Length; i++)
             {
