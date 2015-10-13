@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
+using VKDiplom.Utilities;
 using Keyboard = VKDiplom.Utilities.Keyboard;
 
 namespace VKDiplom
@@ -11,7 +13,7 @@ namespace VKDiplom
         private void FunctionDrawingSurface_OnMouseLeftButtonDown(object sender,
             MouseButtonEventArgs mouseButtonEventArgs)
         {
-            _mouseDownPosition = mouseButtonEventArgs.GetPosition(null);
+            _previousMousePosition = mouseButtonEventArgs.GetPosition(null);
 
             _canDrag = true;
             (sender as UIElement).CaptureMouse();
@@ -85,22 +87,45 @@ namespace VKDiplom
             if (!_canDrag) return;
 
             var currentPosition = e.GetPosition(null);
-            //DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
+            //            var diffX = (float) (currentPosition.X - _previousMousePosition.X);
+            //            var diffY = (float)(currentPosition.Y - _previousMousePosition.Y);
+            //            //var moveVertical = diffY > diffX;
+            //            //DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
+            //            var vector = new Vector2((float)(currentPosition.X-0.5*FunctionDrawingSurface.ActualWidth), (float)(currentPosition.Y-0.5*FunctionDrawingSurface.ActualHeight));
+            //            //vector.Normalize();
+            //            var angle = VectorUtils.Angle(Vector2.UnitY,vector); //Math.Atan(Math.Abs(diffY / diffX));
+            //            //ShapeInfoTextBox.Text = angle.ToString();
+            //            //if (angle<MathHelper.PiOver4||angle>(MathHelper.TwoPi-MathHelper.PiOver4)||(angle>MathHelper.PiOver2+MathHelper.PiOver4&&angle< MathHelper.Pi+MathHelper.PiOver4))//Keyboard.IsKeyDown(Key.V))
+            //            if(angle<MathHelper.PiOver4||angle>MathHelper.Pi-MathHelper.PiOver4)
+            //            //if(Math.Abs(diffY)>Math.Abs(diffX))
+            //            {
+            //                var rotation = -0.02f*diffY;
+            //                ShapeInfoTextBox.Text = "VER";
+            //                _camera.VerticalAngle += rotation;
+
+            //            }
+            //            else
+            //            {
+            //                ShapeInfoTextBox.Text = "HOR";
+            //                var rotation=0.02f*(diffX);
+            //                _camera.HorizontalAngle += rotation;
+            ////            
+            //            }
             if (Keyboard.IsKeyDown(Key.V))
             {
-                var rotation = 0.02f*(float) (_mouseDownPosition.Y - currentPosition.Y);
+                var rotation = 0.02f * (float)(_previousMousePosition.Y - currentPosition.Y);
 
                 _camera.VerticalAngle += rotation;
-               
+
             }
             else
             {
-                var rotation=0.02f*(float) (currentPosition.X - _mouseDownPosition.X);
+                var rotation = 0.02f * (float)(currentPosition.X - _previousMousePosition.X);
                 _camera.HorizontalAngle += rotation;
-//            
+                //            
             }
 
-            _mouseDownPosition = currentPosition;
+            _previousMousePosition = currentPosition;
         }
 
       }

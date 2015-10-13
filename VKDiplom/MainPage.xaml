@@ -82,7 +82,7 @@
                             MouseRightButtonDown="FunctionDrawingSurface_OnMouseRightButtonDown"
                             MouseRightButtonUp="FunctionDrawingSurface_OnMouseRightButtonUp"
                             MouseMove="DrawingSurface_OnMouseMove"
-
+                            
                             Loaded="FunctionDrawingSurface_OnLoaded"
                             MinWidth="500" MinHeight="300" />
             <Line Grid.Column="0" VerticalAlignment="Center" Fill="LightGray" Stroke="LightGray"

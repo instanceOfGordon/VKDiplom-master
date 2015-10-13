@@ -109,6 +109,7 @@
     <Compile Include="Utilities\ColorWheel.cs" />
     <Compile Include="Utilities\Keyboard.cs" />
     <Compile Include="Utilities\ParseUtils.cs" />
+    <Compile Include="Utilities\VectorUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

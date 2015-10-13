@@ -46,7 +46,7 @@ namespace VKDiplom
         private Scene _functionScene; //= new Scene();
         private Dictionary<string, SplineFactory> _hermiteChoices;
         private Dictionary<string, KnotsGeneratorFactory> _knotsChoices;
-        private Point _mouseDownPosition;
+        private Point _previousMousePosition;
         private Scene _secondDerScene;
         private readonly bool _isSoftwareRendered = false;
         //private readonly double _scaleTresholdToDefault;
