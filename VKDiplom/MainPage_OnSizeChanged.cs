@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using HermiteInterpolation.Shapes;
 using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
 
@@ -38,11 +39,15 @@ namespace VKDiplom
             if (scaler == null) return;
             if (_functionScene == null) return;
 
-            var tresholdToDefault = 0.025 * (ZScaleSlider.Maximum - scaler.Minimum);
+            var tresholdToDefault = 0.025 * (scaler.Maximum - scaler.Minimum);
             //if ((e.OldValue < 1-tresholdToDefault && e.NewValue > 1-tresholdToDefault) || (e.OldValue > 1+tresholdToDefault && e.NewValue < 1+tresholdToDefault))
             if (e.NewValue > 1 - tresholdToDefault && e.NewValue < 1 + tresholdToDefault)
                 scaler.Value = 1;
             ScenesAction(scene=>scene.Scale = new Vector3(1,1,(float)Math.Pow(scaler.Value,2)));
         }
+
+       
+
+        
     }
 }

@@ -87,6 +87,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Constants.cs" />
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\RotateCamera.cs" />
     <Compile Include="Engine\Scene.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage_OnClear.cs" />
+    <Compile Include="MainPage_OnRemove.cs" />
     <Compile Include="MainPage_OnDraw.cs" />
     <Compile Include="MainPage_OnKeyboard.cs" />
     <Compile Include="MainPage_OnLoaded.cs" />

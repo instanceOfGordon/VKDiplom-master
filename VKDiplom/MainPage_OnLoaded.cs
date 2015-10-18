@@ -13,8 +13,6 @@ using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.SplineInterpolation;
-using HermiteInterpolation.Shapes.SplineInterpolation.Bicubic;
-using HermiteInterpolation.Shapes.SplineInterpolation.Biquartic;
 using HermiteInterpolation.SplineKnots;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;

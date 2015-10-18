@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
-
-using HermiteInterpolation.Shapes.SplineInterpolation.Bicubic;
 using HermiteInterpolation.SplineKnots;
 using HermiteInterpolation.Utils;
 

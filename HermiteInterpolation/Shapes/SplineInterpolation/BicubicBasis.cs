@@ -1,7 +1,7 @@
 ﻿using HermiteInterpolation.SplineKnots;
 using MathNet.Numerics.LinearAlgebra;
 
-namespace HermiteInterpolation.Shapes.SplineInterpolation.Bicubic
+namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
     internal class BicubicBasis : Basis
     {

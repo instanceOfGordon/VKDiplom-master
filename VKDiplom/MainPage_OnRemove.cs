@@ -28,7 +28,7 @@ namespace VKDiplom
             ScenesAction(scene=>scene.RemoveAt(selIdx));
             ShapesComboBox.ItemsSource = null;        
             ShapesComboBox.ItemsSource = _functionScene;
-       
+            AutoScale();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace HermiteInterpolation.Shapes.SplineInterpolation
+﻿namespace HermiteInterpolation.Shapes
 {
     public class VertexIndexer
     {

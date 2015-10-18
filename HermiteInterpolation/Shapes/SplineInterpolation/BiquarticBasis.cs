@@ -2,7 +2,7 @@
 using HermiteInterpolation.SplineKnots;
 using MathNet.Numerics.LinearAlgebra;
 
-namespace HermiteInterpolation.Shapes.SplineInterpolation.Biquartic
+namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
     internal class BiquarticBasis : Basis
     {

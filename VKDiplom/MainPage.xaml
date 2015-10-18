@@ -90,7 +90,10 @@
             <Slider MaxHeight="300" Grid.Column="0" Name="ZScaleSlider" Minimum="0" Maximum="2" Value="1"
                     ValueChanged="ScaleSlider_OnValueChanged" Orientation="Vertical" HorizontalAlignment="Left"
                     Margin="10,30,0,30" />
-            <sdk:Label Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5"
+            <CheckBox Grid.Column="0" Name="AutoScaleCheckBox"
+                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="Auto Scale" Foreground="Gray"
+                    Margin="10,30,0,5" Checked="AutoScaleCheckBox_OnChecked" Unchecked="AutoScaleCheckBox_OnUnchecked"/>
+            <sdk:Label Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"
                        Foreground="Gray" Content="Hold 'V' for vertical rotation" />
             <Grid Grid.Column="1" MinWidth="300">
                 <Grid.RowDefinitions>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
@@ -7,10 +8,11 @@ using HermiteInterpolation;
 using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.SplineInterpolation;
-using HermiteInterpolation.Shapes.SplineInterpolation.Bicubic;
 using HermiteInterpolation.SplineKnots;
+using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
+using static VKDiplom.Constants;
 
 namespace VKDiplom
 {
@@ -119,6 +121,8 @@ namespace VKDiplom
             if (ShapesComboBox.SelectedIndex < 0)
                 ShapesComboBox.SelectedIndex = 0;
 
+            AutoScale();
+
         }
 
         private void SetCalcLabelContent(double time)
@@ -126,5 +130,54 @@ namespace VKDiplom
             CalcTimeLabel.Content = "Function rendered in: " + $"{time:0.00}" + " ms";
         }
 
+        private void AutoScale()
+        {
+            var b = !AutoScaleCheckBox.IsChecked;
+            if(b != null && (bool) b)
+                return;
+            
+            var min = float.MaxValue;
+            foreach (var shape in _functionScene)
+            {
+                var surface = shape as ISurface;
+                if (surface == null) continue;
+                var contestant = surface.MinHeight;
+                min = contestant < min ? contestant : min;
+            }
+
+            var max = float.MinValue;
+            foreach (var shape in _functionScene)
+            {
+                var surface = shape as ISurface;
+                if (surface == null) continue;
+                var contestant = surface.MaxHeight;
+                max = contestant > max ? contestant : max;
+            }
+            float zScale = 1f;
+            //var hdiff = Math.Abs(max - min);
+            if (max > MaxDrawableHeight)// || min< MinDrawableHeight)
+            {
+                //var extremum = Math.Max(Math.Abs(min), Math.Abs(max));
+                zScale = 1 / (max / MaxDrawableHeight);
+            }
+            if (Math.Abs(min) > Math.Abs(max) && min < MinDrawableHeight)
+            {
+                //var extremum = Math.Max(Math.Abs(min), Math.Abs(max));
+                zScale = 1 / (max / MaxDrawableHeight);
+            }
+            ScenesAction(scene => scene.Scale = new Vector3(1, 1, zScale));
+
+        }
+
+        private void AutoScaleCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            ZScaleSlider.IsEnabled = true;
+            ScaleSlider_OnValueChanged(ZScaleSlider, new RoutedPropertyChangedEventArgs<double>(ZScaleSlider.Value, ZScaleSlider.Value));
+        }
+
+        private void AutoScaleCheckBox_OnChecked(object sender, RoutedEventArgs e)
+        {
+            ZScaleSlider.IsEnabled = false;
+        }
     }
 }

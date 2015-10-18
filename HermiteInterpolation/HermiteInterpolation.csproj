@@ -84,7 +84,7 @@
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
     <Compile Include="Shapes\CompositeSurface.cs" />
     <Compile Include="Shapes\MathFunctionSurface.cs" />
-    <Compile Include="Shapes\SplineInterpolation\VertexIndexer.cs" />
+    <Compile Include="Shapes\VertexIndexer.cs" />
     <Compile Include="Shapes\SplineInterpolation\SurfaceDimension.cs" />
     <Compile Include="Shapes\SplineInterpolation\Spline.cs" />
     <Compile Include="SplineKnots\ChainedKnotsGenerator.cs" />
@@ -104,10 +104,10 @@
     <Compile Include="Shapes\CoordinateAxes.cs" />
     <Compile Include="Shapes\DrawStyle.cs" />
     <Compile Include="Shapes\SplineInterpolation\Basis.cs" />
-    <Compile Include="Shapes\SplineInterpolation\Bicubic\BicubicBasis.cs" />
-    <Compile Include="Shapes\SplineInterpolation\Bicubic\BicubicHermiteSurface.cs" />
-    <Compile Include="Shapes\SplineInterpolation\Biquartic\BiquarticBasis.cs" />
-    <Compile Include="Shapes\SplineInterpolation\Biquartic\BiquarticHermiteSurface.cs" />
+    <Compile Include="Shapes\SplineInterpolation\BicubicBasis.cs" />
+    <Compile Include="Shapes\SplineInterpolation\BicubicHermiteSurface.cs" />
+    <Compile Include="Shapes\SplineInterpolation\BiquarticBasis.cs" />
+    <Compile Include="Shapes\SplineInterpolation\BiquarticHermiteSurface.cs" />
     <Compile Include="Shapes\SplineInterpolation\Derivation.cs" />
     <Compile Include="Shapes\SplineInterpolation\SplineFactory.cs" />
     <Compile Include="Shapes\IDrawable.cs" />
