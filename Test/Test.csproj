@@ -55,7 +55,6 @@
     <Compile Include="SymbolicDifferentiationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SymbolicCalculationTest.cs" />
-    <Compile Include="ReducedDeboorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SymbolicDifferentiation\SymbolicDifferentiation.csproj">

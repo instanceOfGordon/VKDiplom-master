@@ -96,7 +96,7 @@
     <Compile Include="Numerics\MathFunctions\InterpolativeMathFunction.cs" />
     <Compile Include="SplineKnots\KnotsGeneratorFactory.cs" />
     <Compile Include="SplineKnots\ReducedDeBoorKnotsGenerator.cs" />
-    <Compile Include="Numerics\LinearSystemSolver.cs" />
+    <Compile Include="Numerics\LinearSystems.cs" />
     <Compile Include="Numerics\RandomNumber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\CoordinateAxes.cs" />

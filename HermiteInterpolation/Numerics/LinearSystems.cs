@@ -1,6 +1,6 @@
 ﻿namespace HermiteInterpolation.Numerics
 {
-    internal static class LinearSystemSolver
+    internal static class LinearSystems
     {
         /// <summary>
         ///     Solve tridiagonal system of equations.
@@ -11,7 +11,7 @@
         /// <param name="upperDiagonal">Upper diagonal.</param>
         /// <param name="rightSide">Right side. Will contains result when completed.</param>
         /// <returns>Result (== rightSide when completed)</returns>
-        internal static double[] TridiagonalSystem(double[] lowerDiagonal, double[] mainDiagonal, double[] upperDiagonal,
+        internal static double[] SolveTridiagonalSystem(double[] lowerDiagonal, double[] mainDiagonal, double[] upperDiagonal,
             double[] rightSide)
         {
             upperDiagonal[0] /= mainDiagonal[0];

@@ -34,9 +34,9 @@ namespace HermiteInterpolation.SplineKnots
 
         public override KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
-            if (uDimension.KnotCount < 4 || vDimension.KnotCount < 4)
+            if (uDimension.KnotCount < 6 || vDimension.KnotCount < 6)
             {
-                return new DirectKnotsGenerator(Function).GenerateKnots(uDimension, vDimension);
+                return new DeBoorKnotsGenerator(Function).GenerateKnots(uDimension, vDimension);
             }
 
             var values = new KnotMatrix(uDimension.KnotCount, vDimension.KnotCount);
@@ -73,6 +73,126 @@ namespace HermiteInterpolation.SplineKnots
         {
             return base.UpperDiagonal((unknownsCount + 2) / 2 - 1);
         }
+
+        protected override void FillXDerivations(KnotMatrix values)
+        {
+            for (var j = 0; j < values.Columns; j++)
+            {
+                FillXDerivations(j, values);
+            }
+            var h = values[1, 0].X - values[0, 0].X;
+            var threeOver4H = 0.75 * h;
+            for (var i = 1; i < values.Rows - 1; i += 2)
+            {
+                for (var j = 0; j < values.Columns; j++)
+                {
+                    values[i, j].Dx = threeOver4H * (values[i + 1, j].Z - values[i - 1, j].Z)
+                                      - 0.25 * (values[i + 1, j].Dx + values[i - 1, j].Dx);
+                }
+            }
+        }
+
+        protected override void FillYDerivations(KnotMatrix values)
+        {
+            for (var i = 0; i < values.Rows; i++)
+            {
+                FillYDerivations(i, values);
+            }
+            var h = values[0, 1].X - values[0, 0].X;
+            var threeOver4H = 0.75 * h;
+            for (var i = 0; i < values.Rows; i++)
+            {
+                for (var j = 1; j < values.Columns - 1; j += 2)
+                {
+                    values[i, j].Dx = threeOver4H * (values[i, j + 1].Z - values[i, j - 1].Z)
+                                      - 0.25 * (values[i, j + 1].Dy + values[i, j + 1].Dy);
+                }
+            }
+        }
+
+        protected override void FillYXDerivations(KnotMatrix values)
+        {
+            for (var i = 2; i < values.Rows - 1; i += 2)
+            {
+                FillYXDerivations(i, values);
+            }
+
+            var oneDiv16 = 1d / 16d;
+            var threeDiv16 = oneDiv16 * 3;
+            var hx = values[1, 0].X - values[0, 0].X;
+            var hy = values[0, 1].Y - values[0, 0].Y;
+            var oneDivHx = 1d / hx;
+            var oneDivHy = 1d / hy;
+
+            for (var i = 1; i < values.Rows - 1; i += 2)
+            {
+                for (var j = 1; j < values.Columns - 1; j += 2)
+                {
+                    values[i, j].Dxy = oneDiv16 *
+                                       (values[i + 1, j + 1].Dxy + values[i + 1, j - 1].Dxy + values[i - 1, j + 1].Dxy +
+                                        values[i - 1, j - 1].Dxy)
+                                       -
+                                       threeDiv16 * oneDivHy *
+                                       (values[i + 1, j + 1].Dx + values[i + 1, j - 1].Dx + values[i - 1, j + 1].Dx +
+                                        values[i - 1, j - 1].Dx)
+                                       -
+                                       threeDiv16 * oneDivHx *
+                                       (values[i + 1, j + 1].Dy + values[i + 1, j - 1].Dy + values[i - 1, j + 1].Dy +
+                                        values[i - 1, j - 1].Dy)
+                                       +
+                                       3 * threeDiv16 * oneDivHx * oneDivHy *
+                                       (values[i + 1, j + 1].Dy - values[i + 1, j - 1].Dy - values[i - 1, j + 1].Dy *
+                                        values[i - 1, j - 1].Dy);
+                }
+            }
+
+            for (var i = 1; i < values.Rows - 1; i += 2)
+            {
+                for (var j = 2; j < values.Columns - 2; j += 2)
+                {
+                    values[i, j].Dxy = 0.75 * oneDivHy * (values[i, j + 1].Dx - values[i, j - 1].Dx)
+                                       - 0.25 * (values[i, j + 1].Dxy - values[i, j - 1].Dxy);
+                }
+            }
+
+            for (var i = 2; i < values.Rows - 2; i += 2)
+            {
+                for (var j = 1; j < values.Columns - 2; j += 2)
+                {
+                    values[i, j].Dxy = 0.75 * oneDivHy * (values[i, j + 1].Dx - values[i, j - 1].Dx)
+                                       - 0.25 * (values[i, j + 1].Dxy - values[i, j - 1].Dxy);
+                }
+            }
+        }
+
+        private void FillXYDerivations(KnotMatrix values)
+        {
+            base.FillXYDerivations(0, values);
+            base.FillXYDerivations(values.Columns - 1, values);
+            base.FillYXDerivations(0, values);
+            base.FillYXDerivations(values.Rows - 1, values);
+        }
+
+        protected override void FillYXDerivations(int rowIndex, KnotMatrix values)
+        {
+            var unknownsCount = values.Columns - 2;
+            if (unknownsCount == 2) return;
+            //Action<int, double> dset = (idx, value) => values[rowIndex, idx].Dxy = value;
+            //Func<int, double> rget = idx => values[rowIndex, idx].Dx;
+            var h = values[0, 1].Y - values[0, 0].Y;
+            var dfirst = values[rowIndex, 0].Dxy;
+            var dlast = values[rowIndex, values.Columns - 1].Dxy;
+
+            var result = RightSideCross(values, rowIndex, dfirst, dlast, unknownsCount);
+            LinearSystems.SolveTridiagonalSystem(UpperDiagonal(unknownsCount), MainDiagonal(unknownsCount),
+                LowerDiagonal(unknownsCount), result);
+
+            for (var i = 0; i < result.Length; i++)
+            {
+                values[rowIndex, 2 * i + 1].Dxy = result[i];
+            }
+        }
+
 
         protected override double[] RightSide(Func<int, double> rightSide, double h, double dfirst, double dlast,
             int unknownsCount)
@@ -220,123 +340,6 @@ namespace HermiteInterpolation.SplineKnots
             return rs;
         }
 
-        protected override void FillXDerivations(KnotMatrix values)
-        {
-            for (var j = 0; j < values.Columns; j++)
-            {
-                FillXDerivations(j, values);
-            }
-            var h = values[1, 0].X - values[0, 0].X;
-            for (var i = 1; i < values.Rows - 1; i += 2)
-            {
-                for (var j = 1; j < values.Columns - 1; j += 2)
-                {
-                    values[i, j].Dx = 0.75*h*(values[i + 1, j].Z - values[i - 1, j].Z)
-                                      - 0.25*(values[i + 1, j].Dx + values[i - 1, j].Dx);
-                }
-            }
-        }
-
-        protected override void FillYDerivations(KnotMatrix values)
-        {
-            for (var i = 0; i < values.Rows; i++)
-            {
-                FillYDerivations(i, values);
-            }
-            var h = values[0, 1].X - values[0, 0].X;
-            for (var j = 1; j < values.Columns - 1; j += 2)
-            {
-                for (var i = 1; i < values.Rows - 1; i += 2)
-                {
-                    values[i, j].Dx = 0.75*h*(values[i, j + 1].Z - values[i, j - 1].Z)
-                                      - 0.25*(values[i, j + 1].Dy + values[i, j + 1].Dy);
-                }
-            }
-        }
-
-        protected override void FillYXDerivations(KnotMatrix values)
-        {
-            for (var i = 2; i < values.Rows - 1; i += 2)
-            {
-                FillYXDerivations(i, values);
-            }
-
-            var oneDiv16 = 1d/16d;
-            var threeDiv16 = oneDiv16*3;
-            var hx = values[1, 0].X - values[0, 0].X;
-            var hy = values[0, 1].Y - values[0, 0].Y;
-            var oneDivHx = 1d/hx;
-            var oneDivHy = 1d/hy;
-
-            for (var i = 1; i < values.Rows - 1; i += 2)
-            {
-                for (var j = 1; j < values.Columns - 1; j += 2)
-                {
-                    values[i, j].Dxy = oneDiv16*
-                                       (values[i + 1, j + 1].Dxy + values[i + 1, j - 1].Dxy + values[i - 1, j + 1].Dxy +
-                                        values[i - 1, j - 1].Dxy)
-                                       -
-                                       threeDiv16*oneDivHy*
-                                       (values[i + 1, j + 1].Dx + values[i + 1, j - 1].Dx + values[i - 1, j + 1].Dx +
-                                        values[i - 1, j - 1].Dx)
-                                       -
-                                       threeDiv16*oneDivHx*
-                                       (values[i + 1, j + 1].Dy + values[i + 1, j - 1].Dy + values[i - 1, j + 1].Dy +
-                                        values[i - 1, j - 1].Dy)
-                                       +
-                                       3*threeDiv16*oneDivHx*oneDivHy*
-                                       (values[i + 1, j + 1].Dy - values[i + 1, j - 1].Dy - values[i - 1, j + 1].Dy*
-                                        values[i - 1, j - 1].Dy);
-                }
-            }
-
-            for (var i = 1; i < values.Rows - 1; i += 2)
-            {
-                for (var j = 2; j < values.Columns - 2; j += 2)
-                {
-                    values[i, j].Dxy = 0.75*oneDivHy*(values[i, j + 1].Dx - values[i, j - 1].Dx)
-                                       - 0.25*(values[i, j + 1].Dxy - values[i, j - 1].Dxy);
-                }
-            }
-
-            for (var i = 2; i < values.Rows - 2; i += 2)
-            {
-                for (var j = 1; j < values.Columns - 2; j += 2)
-                {
-                    values[i, j].Dxy = 0.75*oneDivHy*(values[i, j + 1].Dx - values[i, j - 1].Dx)
-                                       - 0.25*(values[i, j + 1].Dxy - values[i, j - 1].Dxy);
-                }
-            }
-        }
-
-        private void FillXYDerivations(KnotMatrix values)
-        {
-            base.FillXYDerivations(0, values);
-            base.FillXYDerivations(values.Columns - 1, values);
-            base.FillYXDerivations(0, values);
-            base.FillYXDerivations(values.Rows - 1, values);
-        }
-
-        protected override void FillYXDerivations(int rowIndex, KnotMatrix values)
-        {
-            var unknownsCount = values.Columns - 2;
-            if (unknownsCount == 2) return;
-            //Action<int, double> dset = (idx, value) => values[rowIndex, idx].Dxy = value;
-            //Func<int, double> rget = idx => values[rowIndex, idx].Dx;
-            var h = values[0, 1].Y - values[0, 0].Y;
-            var dfirst = values[rowIndex, 0].Dxy;
-            var dlast = values[rowIndex, values.Columns - 1].Dxy;
-
-            var result = RightSideCross(values, rowIndex, dfirst, dlast, unknownsCount);
-            LinearSystemSolver.TridiagonalSystem(UpperDiagonal(unknownsCount), MainDiagonal(unknownsCount),
-                LowerDiagonal(unknownsCount), result);
-
-            for (var i = 0; i < result.Length; i++)
-            {
-                values[rowIndex, 2*i+1].Dxy=result[i];
-            }
-        }
-
         //private void FillYDerivations(int rowIndex, KnotMatrix values)
         //{
         //    var unknownsCount = values.Columns/2 - 1;
@@ -353,12 +356,13 @@ namespace HermiteInterpolation.SplineKnots
         protected override void SolveTridiagonal(Func<int, double> rightSideValuesToGet, double h, double dfirst, double dlast, int unknownsCount, Action<int, double> unknownsToSet)
         {
             var result = RightSide(rightSideValuesToGet, h, dfirst, dlast, unknownsCount);
-            LinearSystemSolver.TridiagonalSystem(UpperDiagonal(unknownsCount), MainDiagonal(unknownsCount),
-                LowerDiagonal(unknownsCount), result);
+            var equationsCount = result.Length;
+            LinearSystems.SolveTridiagonalSystem(UpperDiagonal(equationsCount), MainDiagonal(equationsCount),
+                LowerDiagonal(equationsCount), result);
 
-            for (var i = 0; i < result.Length; i++)
+            for (int i = 0; i < result.Length; i++)
             {
-                unknownsToSet(i*2 + 1, result[i]);
+                unknownsToSet(2*(i+1), result[i]);
             }
         }
 
