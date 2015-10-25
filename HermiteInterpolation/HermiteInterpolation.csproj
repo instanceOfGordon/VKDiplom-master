@@ -88,7 +88,6 @@
     <Compile Include="Shapes\SplineInterpolation\SurfaceDimension.cs" />
     <Compile Include="Shapes\SplineInterpolation\Spline.cs" />
     <Compile Include="SplineKnots\ChainedKnotsGenerator.cs" />
-    <Compile Include="SplineKnots\IDeBoor.cs" />
     <Compile Include="SplineKnots\KnotMatrix.cs" />
     <Compile Include="SplineKnots\KnotsGenerator.cs" />
     <Compile Include="SplineKnots\Knot.cs" />
@@ -96,7 +95,6 @@
     <Compile Include="Numerics\MathFunctions\MathFunction.cs" />
     <Compile Include="Numerics\MathFunctions\InterpolativeMathFunction.cs" />
     <Compile Include="SplineKnots\KnotsGeneratorFactory.cs" />
-    <Compile Include="SplineKnots\ReducedDeBoorKnotsGenerator2.cs" />
     <Compile Include="SplineKnots\ReducedDeBoorKnotsGenerator.cs" />
     <Compile Include="Numerics\LinearSystemSolver.cs" />
     <Compile Include="Numerics\RandomNumber.cs" />

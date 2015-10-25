@@ -58,10 +58,6 @@
     <Compile Include="ReducedDeboorTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HermiteInterpolation\HermiteInterpolation.csproj">
-      <Project>{4da8571c-ca17-4dc7-90b6-544f4ecdf424}</Project>
-      <Name>HermiteInterpolation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SymbolicDifferentiation\SymbolicDifferentiation.csproj">
       <Project>{3F4739EC-1220-4BA8-A01A-DBCBC1B32DDC}</Project>
       <Name>SymbolicDifferentiation</Name>

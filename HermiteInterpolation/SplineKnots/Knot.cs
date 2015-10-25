@@ -2,8 +2,8 @@
 
 namespace HermiteInterpolation.SplineKnots
 {
-    public class Knot
-    {
+    public sealed class Knot : IEquatable<Knot>
+    { 
 
         public double X { get; internal set; }
         public double Y { get; internal set; }
@@ -11,6 +11,8 @@ namespace HermiteInterpolation.SplineKnots
         public double Dx { get; internal set; }
         public double Dy { get; internal set; }
         public double Dxy { get; internal set; }
+
+        //private readonly object _lock = new object();
 
         /// <summary>
         /// Defines known function value with it's derivation.
@@ -40,7 +42,7 @@ namespace HermiteInterpolation.SplineKnots
 
         public Knot()
         {
-        }
+        }       
 
         public override string ToString()
         {
@@ -87,9 +89,54 @@ namespace HermiteInterpolation.SplineKnots
             return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
         }
 
-        public bool EqualsPosition(Knot knot)
+        //public bool EqualsPosition(Knot knot)
+        //{
+        //    return Math.Abs(X - knot.X) < Constants.MeshDensity && Math.Abs(Y - knot.Y) < Constants.MeshDensity;
+        //}
+
+        public bool Equals(Knot knot)
         {
-            return Math.Abs(X - knot.X) < Constants.MeshDensity && Math.Abs(Y - knot.Y) < Constants.MeshDensity;
+            if (ReferenceEquals(null, knot)) return false;
+            if (ReferenceEquals(this, knot)) return true;
+            return X.Equals(knot.X) && Y.Equals(knot.Y) && Z.Equals(knot.Z) && Dx.Equals(knot.Dx) && Dy.Equals(knot.Dy) && Dxy.Equals(knot.Dxy);
+        }
+
+        //public override int GetHashCode()
+        //{
+        //    return base.GetHashCode();
+        //}
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = X.GetHashCode();
+                hashCode = (hashCode * 397) ^ Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ Z.GetHashCode();
+                hashCode = (hashCode * 397) ^ Dx.GetHashCode();
+                hashCode = (hashCode * 397) ^ Dy.GetHashCode();
+                hashCode = (hashCode * 397) ^ Dxy.GetHashCode();
+                return hashCode;
+            }
+        }
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj is Knot && Equals((Knot) obj);
+        }
+
+        public static bool operator ==(Knot leftOp, Knot rightOp)
+        {
+            if (ReferenceEquals(leftOp, rightOp)) return true;
+            if (ReferenceEquals(leftOp, null)) return false;
+            if (ReferenceEquals(rightOp, null)) return false;
+
+            return leftOp.Equals(rightOp);
+        }
+
+        public static bool operator !=(Knot leftOp, Knot rightOp)
+        {
+            return !(leftOp == rightOp);
         }
     }
 }
