@@ -11,26 +11,11 @@ namespace HermiteInterpolation.SplineKnots
         //private readonly DeBoorKnotsGenerator _initializator;
         public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function) : base(function)
         {
-            //_initializator = new DeBoorKnotsGenerator(function);
         }
 
         public ReducedDeBoorKnotsGenerator(MathExpression expression) : base(expression)
-        {
-           // _initializator = new DeBoorKnotsGenerator(expression);
-        }
-
-        //        private readonly int _uCount;
-        //        private readonly int _vCount;
-        //
-        //        public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function, int uCount, int vCount) : base(function)
-        //        {
-        //            _uCount = uCount;
-        //            _vCount = vCount;
-        //        }
-
-        //private bool _rowsEven;
-        //private bool _columnsEven;
-
+        {         
+        }        
 
         public override KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
         {
