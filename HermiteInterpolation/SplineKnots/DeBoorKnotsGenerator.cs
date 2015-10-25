@@ -7,24 +7,24 @@ using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
 {
-    public sealed class DeBoorKnotsGenerator : KnotsGenerator//,IDeBoor
+    public class DeBoorKnotsGenerator : KnotsGenerator//,IDeBoor
     {
-        public double[] MainDiagonal(int unknownsCount)
+        protected virtual double[] MainDiagonal(int unknownsCount)
         {
             return MyArrays.InitalizedArray<double>(unknownsCount, 4);
         }
 
-        public double[] UpperDiagonal(int unknownsCount)
+        protected virtual double[] UpperDiagonal(int unknownsCount)
         {
             return MyArrays.InitalizedArray<double>(unknownsCount, 1);
         }
 
-        public double[] LowerDiagonal(int unknownsCount)
+        protected virtual double[] LowerDiagonal(int unknownsCount)
         {
             return MyArrays.InitalizedArray<double>(unknownsCount, 1);
         }
 
-        private double[] RightSide(Func<int, double> rightSide, double h, double dfirst, double dlast,
+        protected virtual double[] RightSide(Func<int, double> rightSide, double h, double dfirst, double dlast,
             int unknownsCount)
         {
             //var unknownsCount = unknownsCount - 2;
@@ -58,7 +58,7 @@ namespace HermiteInterpolation.SplineKnots
             return values;
         }
 
-        public void InitializeKnots(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotMatrix values)
+        protected virtual void InitializeKnots(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotMatrix values)
         {
             var uSize = Math.Abs(uDimension.Max - uDimension.Min)/(uDimension.KnotCount - 1);
             var vSize = Math.Abs(vDimension.Max - vDimension.Min)/(vDimension.KnotCount - 1);
@@ -110,7 +110,7 @@ namespace HermiteInterpolation.SplineKnots
                 values[uKnotCountMin1, vKnotCountMin1].X, values[uKnotCountMin1, vKnotCountMin1].Y);
         }
 
-        public void FillXDerivations(KnotMatrix values)
+        protected virtual void FillXDerivations(KnotMatrix values)
         {
             for (var j = 0; j < values.Columns; j++)
             {
@@ -118,13 +118,13 @@ namespace HermiteInterpolation.SplineKnots
             }
         }
 
-        public void FillXYDerivations(KnotMatrix values)
+        protected virtual void FillXYDerivations(KnotMatrix values)
         {
             FillXYDerivations(0, values);
             FillXYDerivations(values.Columns - 1, values);
         }
 
-        public void FillYDerivations(KnotMatrix values)
+        protected virtual void FillYDerivations(KnotMatrix values)
         {
             for (var i = 0; i < values.Rows; i++)
             {
@@ -132,7 +132,7 @@ namespace HermiteInterpolation.SplineKnots
             }
         }
 
-        public void FillYXDerivations(KnotMatrix values)
+        protected virtual void FillYXDerivations(KnotMatrix values)
         {
             for (var i = 0; i < values.Rows; i++)
             {
@@ -140,7 +140,7 @@ namespace HermiteInterpolation.SplineKnots
             }
         }
 
-        public void FillXDerivations(int columnIndex, KnotMatrix values)
+        protected virtual void FillXDerivations(int columnIndex, KnotMatrix values)
         {
             var unknownsCount = values.Rows - 2;
             if (unknownsCount == 0) return;
@@ -155,7 +155,7 @@ namespace HermiteInterpolation.SplineKnots
 
 
 
-        public void FillYDerivations(int rowIndex, KnotMatrix values)
+        protected virtual void FillYDerivations(int rowIndex, KnotMatrix values)
         {
             var unknownsCount = values.Columns - 2;
             if (unknownsCount == 2) return;
@@ -168,7 +168,7 @@ namespace HermiteInterpolation.SplineKnots
             SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
         }
 
-        public void FillXYDerivations(int columnIndex, KnotMatrix values)
+        protected virtual void FillXYDerivations(int columnIndex, KnotMatrix values)
         {
             var unknownsCount = values.Rows - 2;
             if (unknownsCount == 2) return;
@@ -181,7 +181,7 @@ namespace HermiteInterpolation.SplineKnots
             SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
         }
 
-        public void FillYXDerivations(int rowIndex, KnotMatrix values)
+        protected virtual void FillYXDerivations(int rowIndex, KnotMatrix values)
         {
             var unknownsCount = values.Columns - 2;
             if (unknownsCount == 2) return;
@@ -194,7 +194,7 @@ namespace HermiteInterpolation.SplineKnots
             SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
         }
 
-        public void SolveTridiagonal(Func<int, double> rightSideValuesToGet, double h, double dfirst, double dlast,
+        protected virtual void SolveTridiagonal(Func<int, double> rightSideValuesToGet, double h, double dfirst, double dlast,
             int unknownsCount, Action<int, double> unknownsToSet)
         {
             var result = RightSide(rightSideValuesToGet, h, dfirst, dlast, unknownsCount);

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("HermiteInterpolation")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("PF UPJŠ")]
 [assembly: AssemblyProduct("HermiteInterpolation")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("2015 Viliam Kačala")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

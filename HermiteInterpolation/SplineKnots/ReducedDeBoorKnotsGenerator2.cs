@@ -7,7 +7,38 @@ using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
 {
-    //public class ReducedDeBoorKnotsGenerator : KnotsGenerator, IDeBoor
+    public class ReducedDeBoorKnotsGenerator2 : DeBoorKnotsGenerator
+    {
+        public ReducedDeBoorKnotsGenerator2(InterpolativeMathFunction function) : base(function)
+        {
+        }
+
+        public ReducedDeBoorKnotsGenerator2(MathExpression expression) : base(expression)
+        {
+        }
+
+        public override KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
+        {
+            if (uDimension.KnotCount < 4 || vDimension.KnotCount < 4)
+            {
+                return new DirectKnotsGenerator(Function).GenerateKnots(uDimension, vDimension);
+            }
+
+            var values = new KnotMatrix(uDimension.KnotCount, vDimension.KnotCount);
+            //_rowsEven = uDimension.KnotCount % 2 == 0;
+            //_columnsEven = vDimension.KnotCount % 2 == 0;
+
+            InitializeKnots(uDimension, vDimension, values);
+
+            FillXDerivations(values);
+            FillYDerivations(values);
+            FillXYDerivations(values);
+            FillYXDerivations(values);
+
+            return values;
+        }
+    }
+
     //{
     //    private readonly DeBoorKnotsGenerator _deBoor;
     //    public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function) : base(function)
