@@ -83,7 +83,7 @@ namespace HermiteInterpolation.SplineKnots
             {
                 FillYDerivations(i, values);
             }
-            var h = values[0, 1].X - values[0, 0].X;
+            var h = values[0, 1].Y - values[0, 0].Y;
             var threeOver4H = 0.75 * h;
             for (var i = 0; i < values.Rows; i++)
             {
