@@ -30,7 +30,7 @@ namespace HermiteInterpolation.SplineKnots
 
             InitializeKnots(uDimension, vDimension, values);
 
-            FillXDerivations(values);
+            FillXDerivations(values);         
             FillYDerivations(values);
             FillXYDerivations(values);
             FillYXDerivations(values);
@@ -66,12 +66,13 @@ namespace HermiteInterpolation.SplineKnots
                 FillXDerivations(j, values);
             }
             var h = values[1, 0].X - values[0, 0].X;
-            var threeOver4H = 0.75 * h;
+            var oneDivH = 1 / h;
+            var threeDiv4H = 0.75 * oneDivH;
             for (var i = 1; i < values.Rows - 1; i += 2)
             {
                 for (var j = 0; j < values.Columns; j++)
                 {
-                    values[i, j].Dx = threeOver4H * (values[i + 1, j].Z - values[i - 1, j].Z)
+                    values[i, j].Dx = threeDiv4H * (values[i + 1, j].Z - values[i - 1, j].Z)
                                       - 0.25 * (values[i + 1, j].Dx + values[i - 1, j].Dx);
                 }
             }
@@ -84,13 +85,14 @@ namespace HermiteInterpolation.SplineKnots
                 FillYDerivations(i, values);
             }
             var h = values[0, 1].Y - values[0, 0].Y;
-            var threeOver4H = 0.75 * h;
+            var oneDivH = 1 / h;
+            var threeDiv4H = 0.75 * oneDivH;
             for (var i = 0; i < values.Rows; i++)
             {
                 for (var j = 1; j < values.Columns - 1; j += 2)
                 {
-                    values[i, j].Dx = threeOver4H * (values[i, j + 1].Z - values[i, j - 1].Z)
-                                      - 0.25 * (values[i, j + 1].Dy + values[i, j + 1].Dy);
+                    values[i, j].Dy = threeDiv4H * (values[i, j + 1].Z - values[i, j - 1].Z)
+                                      - 0.25 * (values[i, j + 1].Dy + values[i, j - 1].Dy);
                 }
             }
         }
@@ -150,7 +152,7 @@ namespace HermiteInterpolation.SplineKnots
             }
         }
 
-        private void FillXYDerivations(KnotMatrix values)
+        protected override void FillXYDerivations(KnotMatrix values)
         {
             base.FillXYDerivations(0, values);
             base.FillXYDerivations(values.Columns - 1, values);
@@ -179,7 +181,7 @@ namespace HermiteInterpolation.SplineKnots
         }
 
 
-        protected override double[] RightSide(Func<int, double> rightSide, double h, double dfirst, double dlast,
+        protected override double[] RightSide(Func<int, double> rightSideVariables, double h, double dfirst, double dlast,
             int unknownsCount)
         {
             //var length = even ? 2 * unknownsCount : 2 * unknownsCount + 1;
@@ -188,18 +190,18 @@ namespace HermiteInterpolation.SplineKnots
             //var rs = new double[unknownsCount];
             //var div3h = 3 / h;
             //var div12h = div3h * 4;
-            //rs[0] = div3h * (rightSide(4) - rightSide(0)) - div12h * (rightSide(3) - rightSide(1)) - dfirst;
+            //rs[0] = div3h * (rightSideVariables(4) - rightSideVariables(0)) - div12h * (rightSideVariables(3) - rightSideVariables(1)) - dfirst;
             //rs[unknownsCount - 1] = div3h *
-            //                         (rightSide(equationParams.Upsilon + equationParams.Tau) -
-            //                          rightSide(equationParams.Upsilon - 2))
+            //                         (rightSideVariables(equationParams.Upsilon + equationParams.Tau) -
+            //                          rightSideVariables(equationParams.Upsilon - 2))
             //                         -
             //                         div12h *
-            //                         (rightSide(equationParams.Upsilon + 1) - rightSide(equationParams.Upsilon - 1)) -
+            //                         (rightSideVariables(equationParams.Upsilon + 1) - rightSideVariables(equationParams.Upsilon - 1)) -
             //                         dlast;
             //for (var i = 1; i < unknownsCount; i++)
             //{
             //    var i2 = i * 2;
-            //    rs[i] = div3h * (rightSide(i2 + 4) - rightSide(i2)) - div12h * (rightSide(i2 + 3) - rightSide(i2 + 1));
+            //    rs[i] = div3h * (rightSideVariables(i2 + 4) - rightSideVariables(i2)) - div12h * (rightSideVariables(i2 + 3) - rightSideVariables(i2 + 1));
             //}
             //return rs;
             //var length = even ? 2 * unknownsCount : 2 * unknownsCount + 1;
@@ -213,23 +215,39 @@ namespace HermiteInterpolation.SplineKnots
             //dlast = eta*dlast;
             var equationsCount = unknownsCount / 2 - 1;
             var rs = new double[equationsCount];
-            var div3h = 3/h;
-            var div12h = div3h*4;
-            rs[0] = div3h*(rightSide(4) - rightSide(0)) - div12h*(rightSide(3) - rightSide(1)) - dfirst;
-           
-            rs[equationsCount - 1] = div3h*
-                                     (rightSide(upsilon + tau) -
-                                      rightSide(upsilon - 2))
+                                 
+            //var threeDivH = 1.5 / h;
+            var threeDivH = 3/h;
+            var twelveDivH = threeDivH * 4;
+            rs[0] = threeDivH*(rightSideVariables(4) - rightSideVariables(0)) - twelveDivH*(rightSideVariables(3) - rightSideVariables(1)) - dfirst;
+
+            rs[equationsCount - 1] = threeDivH *
+                                     (rightSideVariables(upsilon + tau) -
+                                      rightSideVariables(upsilon - 2))
                                      -
-                                     div12h*
-                                     (rightSide(upsilon + 1) - rightSide(upsilon - 1)) -
-                                     eta*dlast;
-            
-            for (var i = 1; i < equationsCount; i++)
+                                     twelveDivH *
+                                     (rightSideVariables(upsilon + 1) - rightSideVariables(upsilon - 1)) -
+                                     eta * dlast;
+
+            //for (var i = 1; i < equationsCount; i++)
+            //{
+            //    var i2 = i*2;
+            //    rs[i] = threeDivH*(rightSideVariables(2*(i + 1)) - rightSideVariables(2 * (i - 1)) - twelveDivH*(rightSideVariables(i2 + 1) - rightSideVariables(i2 + 1)));
+            //}
+
+            for (var k = 2; k < equationsCount; k++)
             {
-                var i2 = i*2;
-                rs[i] = div3h*(rightSide(i2 + 2) - rightSide(i2 - 2)) - div12h*(rightSide(i2 + 1) - rightSide(i2 + 1));
+                var k2 = k * 2;
+                rs[k-1] = threeDivH * (rightSideVariables(2 * (k + 1)) - rightSideVariables(2 * (k - 1)) - twelveDivH * (rightSideVariables(k2 + 1) - rightSideVariables(k2 - 1)));
             }
+
+            //I do not know (yet) why but these must be half of values designed by L. Mino
+            //This cycle shouldn't be here
+            for (int i = 0; i < rs.Length; i++)
+            {
+                rs[i] *= 0.5;
+            }
+
             return rs;
         }
 
@@ -342,78 +360,13 @@ namespace HermiteInterpolation.SplineKnots
         {
             var result = RightSide(rightSideValuesToGet, h, dfirst, dlast, unknownsCount);
             var equationsCount = result.Length;
-            LinearSystems.SolveTridiagonalSystem(UpperDiagonal(equationsCount), MainDiagonal(equationsCount),
-                LowerDiagonal(equationsCount), result);
+            LinearSystems.SolveTridiagonalSystem(UpperDiagonal(unknownsCount), MainDiagonal(unknownsCount),
+                LowerDiagonal(unknownsCount), result);
 
-            for (int i = 0; i < result.Length; i++)
+            for (int k = 0; k < result.Length; k++)
             {
-                unknownsToSet(2*(i+1), result[i]);
+                unknownsToSet(2*(k+1), result[k]);
             }
-        }
-
-        //private void FillXYDerivations(int rowIndex, KnotMatrix values)
-        //{
-        //    var unknownsCount = values.Rows - 2;
-        //    if (unknownsCount == 0) return;
-        //    Action<int, double> dset = (i, value) => values[i, rowIndex].Dxy = value;
-        //    Func<int, double> rget = i => values[i, rowIndex].Dy;
-        //    var h = values[1, 0].X - values[0, 0].X;
-        //    var dlast = values[values.Rows - 1, rowIndex].Dxy;
-        //    var dfirst = values[0, rowIndex].Dxy;
-
-        //    SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
-        //}
-
-        //private void FillXDerivations(int columnIndex, KnotMatrix values)
-        //{
-        //    //var unknownsCount = values.Rows%2 == 0 ? values.Rows/2 - 0 : values.Rows/2 - 1;
-        //    var unknownsCount = values.Rows / 2 - 1;
-        //    if (unknownsCount == 0) return;
-        //    Action<int, double> dset = (idx, value) => values[idx, columnIndex].Dx = value;
-        //    Func<int, double> rget = idx => values[idx, columnIndex].Z;
-        //    var h = values[1, 0].X - values[0, 0].X;
-        //    var dlast = values[values.Rows - 1, columnIndex].Dx;
-        //    var dfirst = values[0, columnIndex].Dx;
-
-        //    SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, values.Rows % 2==0, dset);
-        //}
-
-        protected struct EquationParams
-        {
-            /// <summary>
-            /// </summary>
-            /// <param name="mu">Matrix parameter</param>
-            /// <param name="tau">Right side index parameter</param>
-            /// <param name="eta">Right side parameter</param>
-            /// <param name="upsilon">Number of equations</param>
-            //public EquationParams(int mu, int tau, int eta, int upsilon) : this()
-            //{
-            //    Mu = mu;
-            //    Tau = tau;
-            //    Eta = eta;
-            //    Upsilon = upsilon;
-            //}
-            public EquationParams(bool even) : this()
-            {
-                if (even)
-                {
-                    Mu = 15;
-                    Tau = 0;
-                    Eta = -4;
-                    //Upsilon = length;
-                }
-                else
-                {
-                    Mu = -14;
-                    Tau = 2;
-                    Eta = 1;
-                    //Upsilon = length - 1;
-                }
-            }
-
-            public int Mu { get; private set; }
-            public int Tau { get; private set; }
-            public int Eta { get; private set; }
         }
     }
 }
