@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\SplineKnots">
+      <UniqueIdentifier>{52f31464-1119-4ac4-b535-45d2915f688a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SplineKnots">
+      <UniqueIdentifier>{66401f5f-015a-4f87-955d-af52efddb573}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,13 +30,55 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="KnotsGenerator.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="Knot.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="SurfaceDimension.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="DeBoorKnotsGenerator.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KnotMatrix.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="MathFunction.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KnotsGenerator.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="Knot.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
     <ClCompile Include="SplineKnotsBenchmark.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="DeBoorKnotsGenerator.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SurfaceDimension.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="KnotMatrix.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="MathFunction.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

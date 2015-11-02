@@ -1,6 +1,6 @@
 ﻿using System;
-using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
+using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
 
@@ -343,7 +343,7 @@ namespace HermiteInterpolation.SplineKnots
             return rs;
         }
 
-        //private void FillYDerivations(int rowIndex, KnotMatrix values)
+        //private void FillYDerivations(int rowIndex, StaticKnotMatrix values)
         //{
         //    var unknownsCount = values.Columns/2 - 1;
         //    if (unknownsCount == 0) return;
@@ -356,16 +356,16 @@ namespace HermiteInterpolation.SplineKnots
         //   SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, values.Columns % 2 == 0, dset);
         //}
 
-        protected override void SolveTridiagonal(Func<int, double> rightSideValuesToGet, double h, double dfirst, double dlast, int unknownsCount, Action<int, double> unknownsToSet)
+        protected override void SolveTridiagonal(Func<int, double> rightSideValuesSelector, double h, double dfirst, double dlast, int unknownsCount, Action<int, double> unknownsSetter)
         {
-            var result = RightSide(rightSideValuesToGet, h, dfirst, dlast, unknownsCount);
+            var result = RightSide(rightSideValuesSelector, h, dfirst, dlast, unknownsCount);
             var equationsCount = result.Length;
             LinearSystems.SolveTridiagonalSystem(UpperDiagonal(unknownsCount), MainDiagonal(unknownsCount),
                 LowerDiagonal(unknownsCount), result);
 
             for (int k = 0; k < result.Length; k++)
             {
-                unknownsToSet(2*(k+1), result[k]);
+                unknownsSetter(2*(k+1), result[k]);
             }
         }
     }

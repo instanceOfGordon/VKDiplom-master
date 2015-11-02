@@ -1,4 +1,3 @@
-using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics.MathFunctions;
 using SymbolicDifferentiation;
 

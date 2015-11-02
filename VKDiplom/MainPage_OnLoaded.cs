@@ -9,7 +9,6 @@ using System.Windows.Browser;
 using System.Windows.Controls;
 using System.Windows.Graphics;
 using HermiteInterpolation;
-using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.SplineInterpolation;

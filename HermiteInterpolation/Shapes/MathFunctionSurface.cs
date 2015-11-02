@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Primitives;

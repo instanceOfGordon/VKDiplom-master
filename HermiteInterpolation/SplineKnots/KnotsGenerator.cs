@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
-
+using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 
 namespace HermiteInterpolation.SplineKnots

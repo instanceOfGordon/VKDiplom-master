@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Threading;
-using HermiteInterpolation.Numerics;
-using HermiteInterpolation.Numerics.MathFunctions;
 using MathNet.Numerics;
+
 //using SymbolicDifferentiation;
 
-namespace HermiteInterpolation.MathFunctions
+namespace HermiteInterpolation.Numerics.MathFunctions
 {
     /// <summary>
     ///     Defines expression and it's derivations in form of delegates.

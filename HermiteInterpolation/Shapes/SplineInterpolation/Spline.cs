@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
+using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.SplineKnots;
 using HermiteInterpolation.Utils;
 

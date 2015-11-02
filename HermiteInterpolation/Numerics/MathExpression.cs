@@ -1,5 +1,4 @@
-﻿using HermiteInterpolation.MathFunctions;
-using HermiteInterpolation.Numerics.MathFunctions;
+﻿using HermiteInterpolation.Numerics.MathFunctions;
 
 
 namespace HermiteInterpolation.Numerics

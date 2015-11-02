@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Threading.Tasks;
-using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes.SplineInterpolation;

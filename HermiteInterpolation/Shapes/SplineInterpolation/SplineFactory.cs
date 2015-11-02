@@ -1,5 +1,4 @@
-﻿using HermiteInterpolation.MathFunctions;
-using HermiteInterpolation.SplineKnots;
+﻿using HermiteInterpolation.SplineKnots;
 
 namespace HermiteInterpolation.Shapes.SplineInterpolation
 {

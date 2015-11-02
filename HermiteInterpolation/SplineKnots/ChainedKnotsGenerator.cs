@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using HermiteInterpolation.MathFunctions;
 using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 

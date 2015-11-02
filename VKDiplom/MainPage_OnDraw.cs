@@ -5,7 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using HermiteInterpolation;
-using HermiteInterpolation.MathFunctions;
+using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.SplineKnots;
