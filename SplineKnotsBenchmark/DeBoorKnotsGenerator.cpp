@@ -32,6 +32,21 @@ namespace splineknots
 		return std::unique_ptr<KnotMatrix>(values);
 	}
 
+	std::vector<double> DeBoorKnotsGenerator::MainDiagonal(size_t n)
+	{
+		return std::vector<double>(n, 4);
+	}
+
+	std::vector<double> DeBoorKnotsGenerator::LowerDiagonal(size_t n)
+	{
+		return std::vector<double>(n, 1);
+	}
+
+	std::vector<double> DeBoorKnotsGenerator::UpperDiagonal(size_t n)
+	{
+		return std::vector<double>(n, 1);
+	}
+
 	std::vector<double> DeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast, int unknowns_count)
 	{
 		std::vector<double> rs(unknowns_count);
@@ -202,5 +217,14 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast, int unknownsCount, UnknownsSetter& unknowns_setter)
 	{
+		auto result = RightSide(selector, h, dfirst, dlast, unknownsCount);
+		auto ldiag = LowerDiagonal(unknownsCount);
+		auto mdiag = MainDiagonal(unknownsCount);
+		auto udiag = UpperDiagonal(unknownsCount);
+		utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());
+		for (size_t i = 0; i < result.size(); i++)
+		{
+			unknowns_setter(i + 1, result[i]);
+		}
 	}
 }

@@ -192,8 +192,8 @@ namespace HermiteInterpolation.SplineKnots
             int unknownsCount, Action<int, double> unknownsSetter)
         {
             var result = RightSide(rightSideValuesSelector, h, dfirst, dlast, unknownsCount);
-            LinearSystems.SolveTridiagonalSystem(UpperDiagonal(unknownsCount), MainDiagonal(unknownsCount),
-                LowerDiagonal(unknownsCount), result);
+            LinearSystems.SolveTridiagonalSystem(LowerDiagonal(unknownsCount), MainDiagonal(unknownsCount),
+                UpperDiagonal(unknownsCount), result);
 
             for (var i = 0; i < result.Length; i++)
             {

@@ -16,7 +16,10 @@ namespace splineknots
 
 		virtual std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
 	protected:
-		
+		virtual std::vector<double> MainDiagonal(size_t n);
+		virtual std::vector<double> LowerDiagonal(size_t n);
+		virtual std::vector<double> UpperDiagonal(size_t n);
+
 		virtual std::vector<double> RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast,
 		                                      int unknowns_count);
 		virtual void InitializeKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension, KnotMatrix& values);
