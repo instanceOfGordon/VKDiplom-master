@@ -13,6 +13,7 @@ namespace splineknots
 		
 	public:
 		DeBoorKnotsGenerator(MathFunction math_function);
+		DeBoorKnotsGenerator(InterpolativeMathFunction math_function);
 		~DeBoorKnotsGenerator();
 
 		virtual std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);

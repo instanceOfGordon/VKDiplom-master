@@ -25,4 +25,9 @@ namespace splineknots {
 		: function_(function)
 	{
 	}
+
+	KnotsGenerator::KnotsGenerator(InterpolativeMathFunction function)
+		: function_(function)
+	{
+	}
 }

@@ -163,7 +163,7 @@ namespace HermiteInterpolation.SplineKnots
         protected override void FillYXDerivations(int rowIndex, KnotMatrix values)
         {
             var unknownsCount = values.Columns - 2;
-            if (unknownsCount == 2) return;
+            if (unknownsCount == 0) return;
             //Action<int, double> dset = (idx, value) => values[rowIndex, idx].Dxy = value;
             //Func<int, double> rget = idx => values[rowIndex, idx].Dx;
             var h = values[0, 1].Y - values[0, 0].Y;

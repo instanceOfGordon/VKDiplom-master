@@ -12,6 +12,11 @@ namespace splineknots
 	{
 	}
 
+	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function)
+		: KnotsGenerator(math_function)
+	{
+	}
+
 	DeBoorKnotsGenerator::~DeBoorKnotsGenerator()
 	{
 	}
@@ -222,9 +227,9 @@ namespace splineknots
 		auto mdiag = MainDiagonal(unknowns_count);
 		auto udiag = UpperDiagonal(unknowns_count);
 		utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());
-		for (size_t i = 0; i < result.size(); i++)
+		for (size_t k = 0; k < result.size(); k++)
 		{
-			unknowns_setter(i + 1, result[i]);
+			unknowns_setter(k + 1, result[k]);
 		}
 	}
 }
