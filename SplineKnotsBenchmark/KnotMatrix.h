@@ -20,7 +20,9 @@ namespace splineknots {
 		size_t RowsCount() const;
 
 		size_t ColumnsCount() const;
-		Knot& GetAt(int i, int j);
+		//Knot& GetAt(int i, int j);
+		Knot& operator()(int i, int j);
+		const Knot& operator()(int i, int j) const;
 		//friend void swap(KnotMatrix& left, KnotMatrix& right);
 		Knot*& operator[](size_t k) const;
 	

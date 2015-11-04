@@ -32,30 +32,30 @@ namespace splineknots
 		return std::unique_ptr<KnotMatrix>(values);
 	}
 
-	std::vector<double> DeBoorKnotsGenerator::MainDiagonal(size_t n)
+	std::vector<double> DeBoorKnotsGenerator::MainDiagonal(size_t unknowns_count)
 	{
-		return std::vector<double>(n, 4);
+		return std::vector<double>(unknowns_count, 4);
 	}
 
-	std::vector<double> DeBoorKnotsGenerator::LowerDiagonal(size_t n)
+	std::vector<double> DeBoorKnotsGenerator::LowerDiagonal(size_t unknowns_count)
 	{
-		return std::vector<double>(n, 1);
+		return std::vector<double>(unknowns_count, 1);
 	}
 
-	std::vector<double> DeBoorKnotsGenerator::UpperDiagonal(size_t n)
+	std::vector<double> DeBoorKnotsGenerator::UpperDiagonal(size_t unknowns_count)
 	{
-		return std::vector<double>(n, 1);
+		return std::vector<double>(unknowns_count, 1);
 	}
 
-	std::vector<double> DeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast, int unknowns_count)
+	std::vector<double> DeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast, int unknowns_count)
 	{
 		std::vector<double> rs(unknowns_count);
 		h = 3 / h;
-		rs[0] = h * (right_side_variables(2) - right_side_variables(0)) - dfirst;
-		rs[unknowns_count - 1] = h * (right_side_variables(unknowns_count + 1) - right_side_variables(unknowns_count - 1)) - dlast;
+		rs[0] = h * (right_side_autoiables(2) - right_side_autoiables(0)) - dfirst;
+		rs[unknowns_count - 1] = h * (right_side_autoiables(unknowns_count + 1) - right_side_autoiables(unknowns_count - 1)) - dlast;
 		for (auto i = 1; i < unknowns_count - 1; i++)
 		{
-			rs[i] = h * (right_side_variables(i + 2) - right_side_variables(i));
+			rs[i] = h * (right_side_autoiables(i + 2) - right_side_autoiables(i));
 		}
 		// Optimizing compiler shouldn't return copy of vector instance
 		return rs;
@@ -133,8 +133,8 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::FillXDerivations(int column_index, KnotMatrix& values)
 	{
-		auto unknownsCount = values.RowsCount() - 2;
-		if (unknownsCount == 0) return;
+		auto unknowns_count = values.RowsCount() - 2;
+		if (unknowns_count == 0) return;
 
 		UnknownsSetter dset = [values,column_index](int index, double value)
 		{
@@ -149,13 +149,13 @@ namespace splineknots
 		auto dlast = values[values.RowsCount() - 1][column_index].Dx();
 		auto dfirst = values[0][column_index].Dx();
 
-		SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
+		SolveTridiagonal(rget, h, dfirst, dlast, unknowns_count, dset);
 	}
 
 	void DeBoorKnotsGenerator::FillXYDerivations(int column_index, KnotMatrix& values)
 	{
-		auto unknownsCount = values.RowsCount() - 2;
-		if (unknownsCount == 0) return;
+		auto unknowns_count = values.RowsCount() - 2;
+		if (unknowns_count == 0) return;
 
 		UnknownsSetter dset = [values, column_index](int index, double value)
 		{
@@ -170,13 +170,13 @@ namespace splineknots
 		auto dlast = values[values.RowsCount() - 1][column_index].Dxy();
 		auto dfirst = values[0][column_index].Dxy();
 
-		SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
+		SolveTridiagonal(rget, h, dfirst, dlast, unknowns_count, dset);
 	}
 
 	void DeBoorKnotsGenerator::FillYDerivations(int row_index, KnotMatrix& values)
 	{
-		auto unknownsCount = values.ColumnsCount() - 2;
-		if (unknownsCount == 0) return;
+		auto unknowns_count = values.ColumnsCount() - 2;
+		if (unknowns_count == 0) return;
 
 		UnknownsSetter dset = [values, row_index](int index, double value)
 		{
@@ -191,13 +191,13 @@ namespace splineknots
 		auto dlast = values[row_index][values.ColumnsCount()- 1].Dy();
 		auto dfirst = values[row_index][0].Dy();
 
-		SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
+		SolveTridiagonal(rget, h, dfirst, dlast, unknowns_count, dset);
 	}
 
 	void DeBoorKnotsGenerator::FillYXDerivations(int row_index, KnotMatrix& values)
 	{
-		auto unknownsCount = values.ColumnsCount() - 2;
-		if (unknownsCount == 0) return;
+		auto unknowns_count = values.ColumnsCount() - 2;
+		if (unknowns_count == 0) return;
 
 		UnknownsSetter dset = [values, row_index](int index, double value)
 		{
@@ -212,15 +212,15 @@ namespace splineknots
 		auto dlast = values[row_index][values.ColumnsCount() - 1].Dxy();
 		auto dfirst = values[row_index][0].Dxy();
 
-		SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
+		SolveTridiagonal(rget, h, dfirst, dlast, unknowns_count, dset);
 	}
 
-	void DeBoorKnotsGenerator::SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast, int unknownsCount, UnknownsSetter& unknowns_setter)
+	void DeBoorKnotsGenerator::SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
 	{
-		auto result = RightSide(selector, h, dfirst, dlast, unknownsCount);
-		auto ldiag = LowerDiagonal(unknownsCount);
-		auto mdiag = MainDiagonal(unknownsCount);
-		auto udiag = UpperDiagonal(unknownsCount);
+		auto result = RightSide(selector, h, dfirst, dlast, unknowns_count);
+		auto ldiag = LowerDiagonal(unknowns_count);
+		auto mdiag = MainDiagonal(unknowns_count);
+		auto udiag = UpperDiagonal(unknowns_count);
 		utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());
 		for (size_t i = 0; i < result.size(); i++)
 		{

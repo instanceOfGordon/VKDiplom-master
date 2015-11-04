@@ -4,7 +4,7 @@
 namespace splineknots {
 	/*double safeCall(MathFunction function, double x, double y)
 	{
-		var value = function(x, y);
+		auto value = function(x, y);
 		if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;
 		value = function(x, y + double.Epsilon);
 		if (!double.IsNaN(value) && !double.IsInfinity(value)) return value;

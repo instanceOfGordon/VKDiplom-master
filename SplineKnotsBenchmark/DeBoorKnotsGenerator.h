@@ -6,21 +6,22 @@
 
 namespace splineknots
 {
+	typedef std::function<double(int)> RightSideSelector;
+	typedef std::function<void(int, double)> UnknownsSetter;
 	class DeBoorKnotsGenerator : public KnotsGenerator
 	{
-		typedef std::function<double(int)> RightSideSelector;
-		typedef std::function<void(int, double)> UnknownsSetter;
+		
 	public:
 		DeBoorKnotsGenerator(MathFunction math_function);
 		~DeBoorKnotsGenerator();
 
 		virtual std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
 	protected:
-		virtual std::vector<double> MainDiagonal(size_t n);
-		virtual std::vector<double> LowerDiagonal(size_t n);
-		virtual std::vector<double> UpperDiagonal(size_t n);
+		virtual std::vector<double> MainDiagonal(size_t unknowns_count);
+		virtual std::vector<double> LowerDiagonal(size_t unknowns_count);
+		virtual std::vector<double> UpperDiagonal(size_t unknowns_count);
 
-		virtual std::vector<double> RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast,
+		virtual std::vector<double> RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast,
 		                                      int unknowns_count);
 		virtual void InitializeKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension, KnotMatrix& values);
 		virtual void FillXDerivations(KnotMatrix& values);
