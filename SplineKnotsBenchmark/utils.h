@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 
 namespace utils
 {
@@ -17,3 +16,4 @@ namespace utils
 		double* upper_diagonal, double* right_side, size_t n);
 };
 
+#include "utils_template.cpp"

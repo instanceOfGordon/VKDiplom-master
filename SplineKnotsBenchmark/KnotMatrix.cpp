@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "KnotMatrix.h"
+#include "utils.h"
+//#include "utils_template.cpp"
 
 
 splineknots::KnotMatrix::~KnotMatrix() noexcept

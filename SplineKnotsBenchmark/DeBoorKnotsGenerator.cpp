@@ -8,17 +8,26 @@ namespace splineknots
 {
 	
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function)
-		: KnotsGenerator(math_function)
+		//: KnotsGenerator(math_function)
+		: function_(math_function),
+		tridiagonal_(new Tridiagonal(1,4,1))
 	{
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function)
-		: KnotsGenerator(math_function)
+		//: KnotsGenerator(math_function)
+		: function_(math_function),
+		tridiagonal_(new Tridiagonal(1, 4, 1))
 	{
 	}
 
 	DeBoorKnotsGenerator::~DeBoorKnotsGenerator()
 	{
+	}
+
+	const InterpolativeMathFunction& DeBoorKnotsGenerator::Function() const
+	{
+		return function_;
 	}
 
 	std::unique_ptr<KnotMatrix> DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
@@ -37,7 +46,7 @@ namespace splineknots
 		return std::unique_ptr<KnotMatrix>(values);
 	}
 
-	std::vector<double> DeBoorKnotsGenerator::MainDiagonal(size_t unknowns_count)
+	/*std::vector<double> DeBoorKnotsGenerator::MainDiagonal(size_t unknowns_count)
 	{
 		return std::vector<double>(unknowns_count, 4);
 	}
@@ -50,7 +59,7 @@ namespace splineknots
 	std::vector<double> DeBoorKnotsGenerator::UpperDiagonal(size_t unknowns_count)
 	{
 		return std::vector<double>(unknowns_count, 1);
-	}
+	}*/
 
 	std::vector<double> DeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast, int unknowns_count)
 	{
@@ -78,7 +87,7 @@ namespace splineknots
 			auto v = vdimension.min;
 			for (auto j = 0; j < vdimension.knot_count; j++,v += vSize)
 			{
-				auto z = Function().Z()(u, v);
+				auto z = f.Z()(u, v);
 				//Function.Z(u,v); //Z(u, v);
 				values[i][j] = Knot(u, v, z);
 			}
@@ -87,16 +96,17 @@ namespace splineknots
 		auto uKnotCountMin1 = udimension.knot_count - 1;
 		for (auto j = 0; j < vdimension.knot_count; j++)
 		{
-			values[0][j].SetDx(f.Dx()(values[0][j].X(), values[0][j].Y())); //Function.Dx(values[0,j].X, values[0,j].Y);
+			auto dx = f.Dx()(values[0][j].X(), values[0][j].Y());
+			values[0][j].SetDx(dx); //Function.Dx(values[0,j].X, values[0,j].Y);
 			values[uKnotCountMin1][j].SetDx(f.Dx()(values[uKnotCountMin1][j].X(), values[uKnotCountMin1][j].Y()));
 		}
 		// Init Dy
 		auto vKnotCountMin1 = vdimension.knot_count - 1;
 		for (auto i = 0; i < udimension.knot_count; i++)
 		{
-			values[i][0].SetDx(f.Dx()(values[i][0].X(), values[i][0].Y()));
-			values[i][vKnotCountMin1].SetDx(
-				f.Dx()(values[i][vKnotCountMin1].X(), values[i][vKnotCountMin1].Y())
+			values[i][0].SetDy(f.Dy()(values[i][0].X(), values[i][0].Y()));
+			values[i][vKnotCountMin1].SetDy(
+				f.Dy()(values[i][vKnotCountMin1].X(), values[i][vKnotCountMin1].Y())
 			);
 		}
 		// Init Dxy
@@ -223,10 +233,11 @@ namespace splineknots
 	void DeBoorKnotsGenerator::SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
 	{
 		auto result = RightSide(selector, h, dfirst, dlast, unknowns_count);
-		auto ldiag = LowerDiagonal(unknowns_count);
+		/*auto ldiag = LowerDiagonal(unknowns_count);
 		auto mdiag = MainDiagonal(unknowns_count);
 		auto udiag = UpperDiagonal(unknowns_count);
-		utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());
+		utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());*/
+		tridiagonal_->Solve(unknowns_count, &result.front());
 		for (size_t k = 0; k < result.size(); k++)
 		{
 			unknowns_setter(k + 1, result[k]);

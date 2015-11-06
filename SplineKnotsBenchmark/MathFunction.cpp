@@ -5,7 +5,7 @@
 splineknots::InterpolativeMathFunction::InterpolativeMathFunction(const MathFunction function)
 	:z_(function)
 {
-	double h = DBL_MIN;
+	double h = 0.001;
 	auto& z = z_;
 	
 	dx_=[=](double x, double y)

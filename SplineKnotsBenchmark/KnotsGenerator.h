@@ -15,7 +15,7 @@ namespace splineknots {
 		virtual ~KnotsGenerator();// = default;
 		const InterpolativeMathFunction& Function() const;
 
-		//virtual std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)=0;
+		virtual std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) = 0;
 	protected:
 		KnotsGenerator(MathFunction function);
 		KnotsGenerator(InterpolativeMathFunction function);

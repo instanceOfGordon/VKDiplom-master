@@ -1,5 +1,6 @@
 #pragma once
 #include "Knot.h"
+
 namespace splineknots {
 	
 	class KnotMatrix

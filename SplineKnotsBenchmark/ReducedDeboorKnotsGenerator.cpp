@@ -3,12 +3,18 @@
 
 
 splineknots::ReducedDeboorKnotsGenerator::ReducedDeboorKnotsGenerator(MathFunction math_function)
-	: DeBoorKnotsGenerator(math_function)
+	//: DeBoorKnotsGenerator(math_function)
+	: function_(math_function), 
+	full_deboor_(new DeBoorKnotsGenerator(math_function)),
+	tridiagonal_(new ReducedDeBoorTridiagonal)
 {
 }
 
 splineknots::ReducedDeboorKnotsGenerator::ReducedDeboorKnotsGenerator(InterpolativeMathFunction math_function)
-	: DeBoorKnotsGenerator(math_function)
+	//: DeBoorKnotsGenerator(math_function)
+	: function_(math_function),
+	full_deboor_(new DeBoorKnotsGenerator(math_function)),
+	tridiagonal_(new ReducedDeBoorTridiagonal)
 {
 }
 
@@ -16,23 +22,23 @@ splineknots::ReducedDeboorKnotsGenerator::~ReducedDeboorKnotsGenerator()
 {
 }
 
-std::vector<double> splineknots::ReducedDeboorKnotsGenerator::MainDiagonal(size_t unknowns_count)
-{
-	auto equations_count = (unknowns_count + 2) / 2 - 1;
-	std::vector<double> diag(equations_count, -14);
-	diag[equations_count - 1] = unknowns_count % 2 == 0 ? -15 : -14;
-	return diag;
-}
-
-std::vector<double> splineknots::ReducedDeboorKnotsGenerator::LowerDiagonal(size_t unknowns_count)
-{
-	return DeBoorKnotsGenerator::LowerDiagonal((unknowns_count + 2) / 2 - 1);
-}
-
-std::vector<double> splineknots::ReducedDeboorKnotsGenerator::UpperDiagonal(size_t unknowns_count)
-{
-	return DeBoorKnotsGenerator::UpperDiagonal((unknowns_count + 2) / 2 - 1);
-}
+//std::vector<double> splineknots::ReducedDeboorKnotsGenerator::MainDiagonal(size_t unknowns_count)
+//{
+//	auto equations_count = (unknowns_count + 2) / 2 - 1;
+//	std::vector<double> diag(equations_count, -14);
+//	diag[equations_count - 1] = unknowns_count % 2 == 0 ? -15 : -14;
+//	return diag;
+//}
+//
+//std::vector<double> splineknots::ReducedDeboorKnotsGenerator::LowerDiagonal(size_t unknowns_count)
+//{
+//	return DeBoorKnotsGenerator::LowerDiagonal((unknowns_count + 2) / 2 - 1);
+//}
+//
+//std::vector<double> splineknots::ReducedDeboorKnotsGenerator::UpperDiagonal(size_t unknowns_count)
+//{
+//	return DeBoorKnotsGenerator::UpperDiagonal((unknowns_count + 2) / 2 - 1);
+//}
 
 std::vector<double> splineknots::ReducedDeboorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast, int unknowns_count)
 {
@@ -160,7 +166,7 @@ void splineknots::ReducedDeboorKnotsGenerator::FillXDerivations(KnotMatrix& valu
 	auto ncols = values.ColumnsCount();
 	for (size_t j = 0; j < ncols; j++)
 	{
-		DeBoorKnotsGenerator::FillXDerivations(j, values);
+		full_deboor_->FillXDerivations(j, values);
 	}
 	auto h = values(1, 0).X() - values(0, 0).X();
 	auto one_div_h = 1.0 / h;
@@ -180,10 +186,10 @@ void splineknots::ReducedDeboorKnotsGenerator::FillXDerivations(KnotMatrix& valu
 
 void splineknots::ReducedDeboorKnotsGenerator::FillXYDerivations(KnotMatrix& values)
 {
-	DeBoorKnotsGenerator::FillXYDerivations(0, values);
-	DeBoorKnotsGenerator::FillXYDerivations(values.ColumnsCount()-1, values);
-	DeBoorKnotsGenerator::FillYXDerivations(0, values);
-	DeBoorKnotsGenerator::FillYXDerivations(values.RowsCount() - 1, values);
+	full_deboor_->FillXYDerivations(0, values);
+	full_deboor_->FillXYDerivations(values.ColumnsCount()-1, values);
+	full_deboor_->FillYXDerivations(0, values);
+	full_deboor_->FillYXDerivations(values.RowsCount() - 1, values);
 }
 
 void splineknots::ReducedDeboorKnotsGenerator::FillYDerivations(KnotMatrix& values)
@@ -191,7 +197,7 @@ void splineknots::ReducedDeboorKnotsGenerator::FillYDerivations(KnotMatrix& valu
 	auto nrows = values.RowsCount();
 	for (size_t i = 0; i < nrows; i++)
 	{
-		DeBoorKnotsGenerator::FillYDerivations(i, values);
+		full_deboor_->FillYDerivations(i, values);
 	}
 	auto h = values(0, 1).Y() - values(0, 0).Y();
 	auto one_div_h = 1.0 / h;
@@ -275,10 +281,11 @@ void splineknots::ReducedDeboorKnotsGenerator::FillYXDerivations(int row_index, 
 	auto dlast = values(row_index, values.ColumnsCount() - 1).Dxy();
 
 	auto result = RightSideCross(values, row_index, dfirst, dlast, unknowns_count);
-	auto ldiag = LowerDiagonal(unknowns_count);
+	/*auto ldiag = LowerDiagonal(unknowns_count);
 	auto mdiag = MainDiagonal(unknowns_count);
 	auto udiag = UpperDiagonal(unknowns_count);
-	utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());
+	utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());*/
+	tridiagonal_->Solve(unknowns_count, &result.front());
 	for (size_t i = 0; i < result.size(); i++)
 	{
 		values(row_index, 2 * i + 1).SetDxy(result[i]);
@@ -288,22 +295,28 @@ void splineknots::ReducedDeboorKnotsGenerator::FillYXDerivations(int row_index, 
 void splineknots::ReducedDeboorKnotsGenerator::SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
 {
 	auto result = RightSide(selector, h, dfirst, dlast, unknowns_count);
-	auto ldiag = LowerDiagonal(unknowns_count);
+	/*auto ldiag = LowerDiagonal(unknowns_count);
 	auto mdiag = MainDiagonal(unknowns_count);
 	auto udiag = UpperDiagonal(unknowns_count);
-	utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());
+	utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());*/
+	tridiagonal_->Solve(unknowns_count, &result.front());
 	for (size_t k = 0; k < result.size(); k++)
 	{
 		unknowns_setter(2*(k + 1), result[k]);
 	}
 }
 
+const splineknots::InterpolativeMathFunction& splineknots::ReducedDeboorKnotsGenerator::Function() const
+{
+	return function_;
+}
+
 std::unique_ptr<splineknots::KnotMatrix> splineknots::ReducedDeboorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
 {
 	if(udimension.knot_count<6|| vdimension.knot_count<6)
 	{
-		DeBoorKnotsGenerator deboor(Function());
-			return deboor.GenerateKnots(udimension, vdimension);
+		//DeBoorKnotsGenerator deboor(Function());
+			return full_deboor_->GenerateKnots(udimension, vdimension);
 	}
 	
 	auto values = new KnotMatrix(udimension.knot_count, vdimension.knot_count);

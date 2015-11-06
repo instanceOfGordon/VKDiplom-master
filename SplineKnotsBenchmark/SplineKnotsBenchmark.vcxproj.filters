@@ -54,6 +54,15 @@
     <ClInclude Include="ReducedDeboorKnotsGenerator.h">
       <Filter>Header Files\SplineKnots</Filter>
     </ClInclude>
+    <ClInclude Include="Tridiagonal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StopWatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SplineKnots.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -65,14 +74,8 @@
     <ClCompile Include="Knot.cpp">
       <Filter>Source Files\SplineKnots</Filter>
     </ClCompile>
-    <ClCompile Include="SplineKnotsBenchmark.cpp">
-      <Filter>Source Files\SplineKnots</Filter>
-    </ClCompile>
     <ClCompile Include="DeBoorKnotsGenerator.cpp">
       <Filter>Source Files\SplineKnots</Filter>
-    </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SurfaceDimension.cpp">
       <Filter>Source Files\SplineKnots</Filter>
@@ -84,6 +87,21 @@
       <Filter>Source Files\SplineKnots</Filter>
     </ClCompile>
     <ClCompile Include="ReducedDeboorKnotsGenerator.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="Tridiagonal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils_template.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SplineKnotsBenchmark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SplineKnots.cpp">
       <Filter>Source Files\SplineKnots</Filter>
     </ClCompile>
   </ItemGroup>
