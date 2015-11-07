@@ -10,14 +10,14 @@ namespace splineknots
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function)
 		//: KnotsGenerator(math_function)
 		: function_(math_function),
-		tridiagonal_(new Tridiagonal(1,4,1))
+		tridiagonal_(new utils::Tridiagonal(1,4,1))
 	{
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function)
 		//: KnotsGenerator(math_function)
 		: function_(math_function),
-		tridiagonal_(new Tridiagonal(1, 4, 1))
+		tridiagonal_(new utils::Tridiagonal(1, 4, 1))
 	{
 	}
 
@@ -30,7 +30,8 @@ namespace splineknots
 		return function_;
 	}
 
-	std::unique_ptr<KnotMatrix> DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
+	//std::unique_ptr<KnotMatrix> DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
+	KnotMatrix*  DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
 	{
 		if (udimension.knot_count < 4 || vdimension.knot_count < 4)
 		{
@@ -43,7 +44,7 @@ namespace splineknots
 		FillXYDerivations(valuesRef);
 		FillYDerivations(valuesRef);
 		FillYXDerivations(valuesRef);
-		return std::unique_ptr<KnotMatrix>(values);
+		return values;//std::unique_ptr<KnotMatrix>(values);
 	}
 
 	/*std::vector<double> DeBoorKnotsGenerator::MainDiagonal(size_t unknowns_count)
@@ -61,15 +62,15 @@ namespace splineknots
 		return std::vector<double>(unknowns_count, 1);
 	}*/
 
-	std::vector<double> DeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast, int unknowns_count)
+	std::vector<double> DeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast, int unknowns_count)
 	{
 		std::vector<double> rs(unknowns_count);
 		h = 3 / h;
-		rs[0] = h * (right_side_autoiables(2) - right_side_autoiables(0)) - dfirst;
-		rs[unknowns_count - 1] = h * (right_side_autoiables(unknowns_count + 1) - right_side_autoiables(unknowns_count - 1)) - dlast;
+		rs[0] = h * (right_side_variables(2) - right_side_variables(0)) - dfirst;
+		rs[unknowns_count - 1] = h * (right_side_variables(unknowns_count + 1) - right_side_variables(unknowns_count - 1)) - dlast;
 		for (auto i = 1; i < unknowns_count - 1; i++)
 		{
-			rs[i] = h * (right_side_autoiables(i + 2) - right_side_autoiables(i));
+			rs[i] = h * (right_side_variables(i + 2) - right_side_variables(i));
 		}
 		// Optimizing compiler shouldn't return copy of vector instance
 		return rs;
@@ -242,5 +243,22 @@ namespace splineknots
 		{
 			unknowns_setter(k + 1, result[k]);
 		}
+	}
+
+	utils::Tridiagonal& DeBoorKnotsGenerator::Tridiagonal()
+	{
+		return *tridiagonal_;
+	}
+
+	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal)
+		: function_(math_function),
+		tridiagonal_(std::move(tridiagonal))
+	{
+	}
+
+	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal)
+		: function_(math_function),
+		tridiagonal_(std::move(tridiagonal))
+	{
 	}
 }

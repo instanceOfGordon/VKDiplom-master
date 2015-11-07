@@ -6,13 +6,13 @@
 
 splineknots::KnotMatrix::~KnotMatrix() noexcept
 {
-	/*for (size_t i = 0; i < rowsCount_; i++)
+	for (size_t i = 0; i < rows_count_; i++)
 		{
 			delete[] matrix_[i];
 		}
 		delete[] matrix_;
-		matrix_ = nullptr;*/
-	utils::DeleteJaggedArray(matrix_, rows_count_, columns_count_);
+		matrix_ = nullptr;
+	//utils::DeleteJaggedArray(matrix_, rows_count_, columns_count_);
 }
 
 size_t splineknots::KnotMatrix::RowsCount() const

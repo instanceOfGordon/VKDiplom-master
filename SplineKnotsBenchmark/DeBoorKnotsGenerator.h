@@ -12,14 +12,15 @@ namespace splineknots
 	class DeBoorKnotsGenerator //: public KnotsGenerator
 	{
 		InterpolativeMathFunction function_;
-		std::unique_ptr<Tridiagonal> tridiagonal_;
+		std::unique_ptr<utils::Tridiagonal> tridiagonal_;
 
 	public:
 		DeBoorKnotsGenerator(MathFunction math_function);
 		DeBoorKnotsGenerator(InterpolativeMathFunction math_function);
-		~DeBoorKnotsGenerator();
+		virtual ~DeBoorKnotsGenerator();
 		const InterpolativeMathFunction& Function() const;
-		std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
+		//std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
+		virtual KnotMatrix* GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
 	//protected:
 		/*std::vector<double> MainDiagonal(size_t unknowns_count);
 		std::vector<double> LowerDiagonal(size_t unknowns_count);
@@ -38,18 +39,22 @@ namespace splineknots
 		void FillYXDerivations(int row_index, KnotMatrix& values);
 		void SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast,
 		                              int unknowns_count, UnknownsSetter& unknowns_setter);*/
-		std::vector<double> RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast,
+		virtual std::vector<double> RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast,
 			int unknowns_count);
 		void InitializeKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension, KnotMatrix& values);
-		void FillXDerivations(KnotMatrix& values);
-		void FillXYDerivations(KnotMatrix& values);
-		void FillYDerivations(KnotMatrix& values);
-		void FillYXDerivations(KnotMatrix& values);
-		void FillXDerivations(int column_index, KnotMatrix& values);
-		void FillXYDerivations(int column_index, KnotMatrix& values);
-		void FillYDerivations(int row_index, KnotMatrix& values);
-		void FillYXDerivations(int row_index, KnotMatrix& values);
-		void SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast,
+		virtual void FillXDerivations(KnotMatrix& values);
+		virtual void FillXYDerivations(KnotMatrix& values);
+		virtual void FillYDerivations(KnotMatrix& values);
+		virtual void FillYXDerivations(KnotMatrix& values);
+		virtual void FillXDerivations(int column_index, KnotMatrix& values);
+		virtual void FillXYDerivations(int column_index, KnotMatrix& values);
+		virtual void FillYDerivations(int row_index, KnotMatrix& values);
+		virtual void FillYXDerivations(int row_index, KnotMatrix& values);
+		virtual void SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast,
 			int unknowns_count, UnknownsSetter& unknowns_setter);
+	protected:
+		DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal);
+		DeBoorKnotsGenerator(InterpolativeMathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal);
+		utils::Tridiagonal& Tridiagonal();
 	};
 }

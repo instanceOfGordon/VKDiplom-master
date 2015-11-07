@@ -31,6 +31,7 @@ namespace utils
 		for (size_t i = 0; i < rows; i++)
 		{
 			delete[] jaggedArray[i];
+			jaggedArray[i] = nullptr;
 		}
 		delete[] jaggedArray;
 		jaggedArray = nullptr;
