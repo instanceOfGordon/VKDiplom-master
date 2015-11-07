@@ -47,21 +47,6 @@ namespace splineknots
 		return values;//std::unique_ptr<KnotMatrix>(values);
 	}
 
-	/*std::vector<double> DeBoorKnotsGenerator::MainDiagonal(size_t unknowns_count)
-	{
-		return std::vector<double>(unknowns_count, 4);
-	}
-
-	std::vector<double> DeBoorKnotsGenerator::LowerDiagonal(size_t unknowns_count)
-	{
-		return std::vector<double>(unknowns_count, 1);
-	}
-
-	std::vector<double> DeBoorKnotsGenerator::UpperDiagonal(size_t unknowns_count)
-	{
-		return std::vector<double>(unknowns_count, 1);
-	}*/
-
 	std::vector<double> DeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast, int unknowns_count)
 	{
 		std::vector<double> rs(unknowns_count);
