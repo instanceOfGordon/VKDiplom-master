@@ -8,8 +8,8 @@ namespace splineknots {
 	{
 
 	public:
-		//std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
-		KnotMatrix* GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
+		std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
+		//KnotMatrix* GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
 		ReducedDeboorKnotsGenerator(MathFunction function);
 		ReducedDeboorKnotsGenerator(InterpolativeMathFunction function);
 		~ReducedDeboorKnotsGenerator();

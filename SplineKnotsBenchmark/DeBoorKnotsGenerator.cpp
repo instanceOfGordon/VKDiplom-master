@@ -30,8 +30,8 @@ namespace splineknots
 		return function_;
 	}
 
-	//std::unique_ptr<KnotMatrix> DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
-	KnotMatrix*  DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
+	std::unique_ptr<KnotMatrix> DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
+	//KnotMatrix*  DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
 	{
 		if (udimension.knot_count < 4 || vdimension.knot_count < 4)
 		{
@@ -44,7 +44,8 @@ namespace splineknots
 		FillXYDerivations(valuesRef);
 		FillYDerivations(valuesRef);
 		FillYXDerivations(valuesRef);
-		return values;//std::unique_ptr<KnotMatrix>(values);
+		//return values;
+		return std::unique_ptr<KnotMatrix>(values);
 	}
 
 	std::vector<double> DeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast, int unknowns_count)

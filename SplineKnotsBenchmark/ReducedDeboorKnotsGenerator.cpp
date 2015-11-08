@@ -276,8 +276,8 @@ void splineknots::ReducedDeboorKnotsGenerator::SolveTridiagonal(RightSideSelecto
 	}
 }
 
-//std::unique_ptr<splineknots::KnotMatrix> splineknots::ReducedDeboorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
-splineknots::KnotMatrix*  splineknots::ReducedDeboorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
+std::unique_ptr<splineknots::KnotMatrix> splineknots::ReducedDeboorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
+//splineknots::KnotMatrix*  splineknots::ReducedDeboorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
 {
 	if(udimension.knot_count<6|| vdimension.knot_count<6)
 	{
@@ -293,5 +293,6 @@ splineknots::KnotMatrix*  splineknots::ReducedDeboorKnotsGenerator::GenerateKnot
 	FillXYDerivations(valuesRef);
 	FillYXDerivations(valuesRef);
 
-	return values; // std::unique_ptr<KnotMatrix>(values);
+	//return values;
+	return std::unique_ptr<KnotMatrix>(values);
 }

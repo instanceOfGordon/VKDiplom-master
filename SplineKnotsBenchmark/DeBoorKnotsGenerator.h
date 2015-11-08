@@ -19,8 +19,8 @@ namespace splineknots
 		DeBoorKnotsGenerator(InterpolativeMathFunction math_function);
 		virtual ~DeBoorKnotsGenerator();
 		const InterpolativeMathFunction& Function() const;
-		//std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
-		virtual KnotMatrix* GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
+		virtual std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
+		//virtual KnotMatrix* GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
 	
 		virtual std::vector<double> RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast,
 			int unknowns_count);

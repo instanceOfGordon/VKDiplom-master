@@ -28,14 +28,14 @@ bool Benchmark()
 
 	//double fulldumb = 0;
 	//StopWatch<std::chrono::high_resolution_clock> sw;
-	std::vector<splineknots::KnotMatrix*> calculated_results;
+	std::vector<std::unique_ptr<splineknots::KnotMatrix>> calculated_results;
 	calculated_results.reserve(num_iterations * 2);
 	
 	start = clock();
 	for (size_t i = 0; i < num_iterations; i++)
 	{
 		auto result = full.GenerateKnots(udimension, vdimension);
-		calculated_results.push_back(result);
+		calculated_results.push_back(move(result));
 		//fulldumb += result->operator()(1, 1).Z();
 	}
 	auto full_time = clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
@@ -46,7 +46,7 @@ bool Benchmark()
 	for (size_t i = 0; i < num_iterations; i++)
 	{
 		auto result = reduced.GenerateKnots(udimension, vdimension);
-		calculated_results.push_back(result);
+		calculated_results.push_back(move(result));
 		//fulldumb += result->operator()(1, 1).Z();
 	}
 	auto reduced_time = clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
@@ -59,11 +59,11 @@ bool Benchmark()
 	std::cout << std::endl << "Press any key to repeat benchmark." << std::endl;
 	std::cout << std::endl << "Or press 'Q' to quit." << std::endl;
 	//calculated_results.clear();
-	for (splineknots::KnotMatrix*& m : calculated_results)
+	/*for (auto& m : calculated_results)
 	{
 		delete m;
 		m = nullptr;
-	}
+	}*/
 	char input;
 	std::cin >> input;
 	if (input == 'Q' || input == 'q')
