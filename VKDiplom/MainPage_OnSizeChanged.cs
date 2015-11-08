@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using HermiteInterpolation.Shapes;
 using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
+using Point = System.Windows.Point;
 
 namespace VKDiplom
 {
@@ -11,8 +12,14 @@ namespace VKDiplom
     {
         private void FunctionDrawingSurface_OnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
         {
+            var drawingSurface = sender as DrawingSurface;
+            if(drawingSurface==null) return;
+            SizeChanged(drawingSurface, _functionScene);
+            //var transform = drawingSurface.TransformToVisual(Application.Current.RootVisual);
+            //var surfacePosittion = transform.Transform(new Point(0, 0));
 
-            SizeChanged(sender as DrawingSurface, _functionScene);
+            //_center = new Point(surfacePosittion.X + 0.5*FunctionDrawingSurface.ActualWidth,
+            //    surfacePosittion.Y + 0.5*FunctionDrawingSurface.ActualHeight);
         }
 
         private void FirstDerivationDrawingSurface_OnSizeChanged(object sender, SizeChangedEventArgs e)

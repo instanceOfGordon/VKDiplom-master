@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
 using VKDiplom.Utilities;
 using Keyboard = VKDiplom.Utilities.Keyboard;
+using Point = System.Windows.Point;
 
 namespace VKDiplom
 {
@@ -29,8 +30,11 @@ namespace VKDiplom
 
         /////////////
 
+        //private Point _downPosition;
         private void FirstDerivationDrawingSurface_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            //_downPosition = e.GetPosition(null);
+            //_previousMousePosition = _downPosition;
         }
 
         private void FirstDerivationDrawingSurface_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -81,12 +85,41 @@ namespace VKDiplom
         }
 
         ////////////
-
+        //private Point _center;
         private void DrawingSurface_OnMouseMove(object sender, MouseEventArgs e)
         {
             if (!_canDrag) return;
 
             var currentPosition = e.GetPosition(null);
+
+            //var diffX = (float)(currentPosition.X - _previousMousePosition.X);
+            //var diffY = (float)(currentPosition.Y - _previousMousePosition.Y);
+            ////var moveVertical = diffY > diffX;
+            ////DebugBox.Text = _camera.Distance + ": " + _camera.VerticalAngle + ": " + _camera.HorizontalAngle;
+            //var vector = new Vector2((float)Math.Abs(currentPosition.X - _downPosition.X), (float)Math.Abs(currentPosition.Y - _downPosition.Y));
+            //vector.Normalize();
+            //var angle = VectorUtils.Angle(new Vector2((float)_downPosition.X,(float)_d), vector); //Math.Atan(Math.Abs(diffY / diffX));
+            //                                                      //ShapeInfoTextBox.Text = angle.ToString();
+            //                                                      //if (angle<MathHelper.PiOver4||angle>(MathHelper.TwoPi-MathHelper.PiOver4)||(angle>MathHelper.PiOver2+MathHelper.PiOver4&&angle< MathHelper.Pi+MathHelper.PiOver4))//Keyboard.IsKeyDown(Key.V))
+            //if (angle < MathHelper.PiOver4 || angle > MathHelper.Pi - MathHelper.PiOver4)
+            ////if(Math.Abs(diffY)>Math.Abs(diffX))
+            //{
+            //    ShapeInfoTextBox.Text = "HOR"+"  "+angle;
+            //    var rotation = 0.001f * (diffX);
+            //    _camera.HorizontalAngle += rotation;
+
+            //}
+            //else
+            //{
+            //    var rotation = -0.001f * diffY;
+            //    ShapeInfoTextBox.Text = "VER"+"  " + angle;
+            //    _camera.VerticalAngle += rotation;
+
+            //    //            
+            //}
+
+
+
             //            var diffX = (float) (currentPosition.X - _previousMousePosition.X);
             //            var diffY = (float)(currentPosition.Y - _previousMousePosition.Y);
             //            //var moveVertical = diffY > diffX;
@@ -111,6 +144,7 @@ namespace VKDiplom
             //                _camera.HorizontalAngle += rotation;
             ////            
             //            }
+
             if (Keyboard.IsKeyDown(Key.V))
             {
                 var rotation = 0.02f * (float)(_previousMousePosition.Y - currentPosition.Y);
@@ -128,5 +162,5 @@ namespace VKDiplom
             _previousMousePosition = currentPosition;
         }
 
-      }
+    }
 }

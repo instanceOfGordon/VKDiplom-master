@@ -1,17 +1,18 @@
 #include "stdafx.h"
 #include "KnotMatrix.h"
 #include "utils.h"
+
 //#include "utils_template.cpp"
 
 
 splineknots::KnotMatrix::~KnotMatrix() noexcept
 {
 	for (size_t i = 0; i < rows_count_; i++)
-		{
-			delete[] matrix_[i];
-		}
-		delete[] matrix_;
-		matrix_ = nullptr;
+	{
+		delete[] matrix_[i];
+	}
+	delete[] matrix_;
+	matrix_ = nullptr;
 	//utils::DeleteJaggedArray(matrix_, rows_count_, columns_count_);
 }
 
