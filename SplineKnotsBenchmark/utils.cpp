@@ -21,5 +21,6 @@ namespace utils
 		{
 			right_side[i] -= upper_diagonal_copy[i] * right_side[i + 1];
 		}
+		delete[] upper_diagonal_copy;
 	}
 }
