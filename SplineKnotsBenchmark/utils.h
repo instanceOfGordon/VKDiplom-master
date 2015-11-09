@@ -14,6 +14,9 @@ namespace utils
 
 	void SolveTridiagonalSystem(double* lower_diagonal, double* main_diagonal,
 		double* upper_diagonal, double* right_side, size_t n);
+
+	template<typename T>
+	double Average(T* arr, size_t arr_size);
 };
 
 #include "utils_template.cpp"

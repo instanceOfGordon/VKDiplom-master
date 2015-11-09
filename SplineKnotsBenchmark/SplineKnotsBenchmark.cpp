@@ -15,7 +15,7 @@ bool Benchmark()
 	unsigned int num_knots = 0;
 	std::cin >> num_knots;
 	std::cin.get();
-	unsigned int start;
+	//unsigned int start;
 	splineknots::MathFunction function = [](double x, double y)
 		{
 			return sin(sqrt(x*x + y*y));
@@ -29,27 +29,38 @@ bool Benchmark()
 	//double fulldumb = 0;
 	//StopWatch<std::chrono::high_resolution_clock> sw;
 	std::vector<std::unique_ptr<splineknots::KnotMatrix>> calculated_results;
+	std::vector<unsigned int> full_times;
+	full_times.reserve(num_iterations);
+	std::vector<unsigned int> reduced_times;
+	reduced_times.reserve(num_iterations);
 	calculated_results.reserve(num_iterations * 2);
 	
-	start = clock();
+	unsigned int start;// = clock();
+	unsigned int finish;
 	for (size_t i = 0; i < num_iterations; i++)
 	{
+		start = clock();
 		auto result = full.GenerateKnots(udimension, vdimension);
+		finish = clock();
 		calculated_results.push_back(move(result));
+		full_times.push_back(finish - start);
 		//fulldumb += result->operator()(1, 1).Z();
 	}
-	auto full_time = clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
+	auto full_time = utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
 	std::cout << "Full : " << full_time << std::endl;
 	//double reduceddumb = 0;
 	start = clock();
 	//sw.Reset();
 	for (size_t i = 0; i < num_iterations; i++)
 	{
+		start = clock();
 		auto result = reduced.GenerateKnots(udimension, vdimension);
+		finish = clock();
 		calculated_results.push_back(move(result));
+		reduced_times.push_back(finish - start);
 		//fulldumb += result->operator()(1, 1).Z();
 	}
-	auto reduced_time = clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
+	auto reduced_time = utils::Average(&reduced_times.front(), reduced_times.size());//clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
 
 
 	

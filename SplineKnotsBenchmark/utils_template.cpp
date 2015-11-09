@@ -49,5 +49,14 @@ namespace utils
 		return res;
 	}
 
-	
+	template<typename T>
+	double Average(T* arr, size_t arr_size)
+	{
+		T sum =0;
+		for (size_t i = 0; i < arr_size; i++)
+		{
+			sum += arr[i];
+		}
+		return static_cast<double>(sum) / arr_size;
+	}
 }
