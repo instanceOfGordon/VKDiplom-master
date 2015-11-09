@@ -5,6 +5,7 @@
 #include "SplineKnots.h"
 #include "StopWatch.h"
 #include <iostream>
+#include <algorithm>
 
 bool Benchmark()
 {
@@ -46,7 +47,8 @@ bool Benchmark()
 		full_times.push_back(finish - start);
 		//fulldumb += result->operator()(1, 1).Z();
 	}
-	auto full_time = utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
+	std::sort(full_times.begin(), full_times.end());
+	auto full_time = full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
 	std::cout << "Full : " << full_time << std::endl;
 	//double reduceddumb = 0;
 	start = clock();
@@ -60,7 +62,8 @@ bool Benchmark()
 		reduced_times.push_back(finish - start);
 		//fulldumb += result->operator()(1, 1).Z();
 	}
-	auto reduced_time = utils::Average(&reduced_times.front(), reduced_times.size());//clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
+	std::sort(reduced_times.begin(), reduced_times.end());
+	auto reduced_time = reduced_times[reduced_times.size() / 2]; //utils::Average(&reduced_times.front(), reduced_times.size());//clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
 
 
 	
