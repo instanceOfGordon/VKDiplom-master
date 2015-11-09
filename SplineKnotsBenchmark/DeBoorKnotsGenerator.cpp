@@ -2,6 +2,7 @@
 #include "DeBoorKnotsGenerator.h"
 #include <complex>
 #include <locale>
+#include "Tridiagonal.h"
 
 
 namespace splineknots

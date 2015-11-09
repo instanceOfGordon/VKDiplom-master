@@ -7,8 +7,8 @@ namespace utils
 
 	void SolveTridiagonalSystem(double* lower_diagonal, double* main_diagonal, double* upper_diagonal, double* right_side, size_t n)
 	{
-		auto upper_diagonal_copy = new double[n - 1];
-		memcpy(upper_diagonal_copy, upper_diagonal, n - 1);
+		auto upper_diagonal_copy = new double[n];
+		memcpy(upper_diagonal_copy, upper_diagonal, n);
 		upper_diagonal_copy[0] /= main_diagonal[0];
 		right_side[0] /= main_diagonal[0];
 		for (size_t i = 0; i < n; i++)

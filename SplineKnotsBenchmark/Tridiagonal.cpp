@@ -26,16 +26,16 @@ utils::Tridiagonal::~Tridiagonal()
 
 void utils::Tridiagonal::Resize(size_t newsize)
 {
-	for (size_t i = lower_diagonal_->size(); i < newsize-1; i++)
+	for (size_t i = lower_diagonal_->size(); i < newsize; i++)
 	{
 		lower_diagonal_->push_back(lower_diagonal_value);
 		main_diagonal_->push_back(main_diagonal_value);
 		lower_diagonal_->push_back(upper_diagonal_value);
 	}
-	if(newsize>main_diagonal_->size())
+	/*if(newsize>main_diagonal_->size())
 	{
 		main_diagonal_->push_back(main_diagonal_value);
-	}
+	}*/
 
 }
 
