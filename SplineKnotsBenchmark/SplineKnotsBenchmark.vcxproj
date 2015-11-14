@@ -223,6 +223,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ComparisonBenchmarkResult.h" />
     <ClInclude Include="CurveDeBoorKnotsGenerator.h" />
     <ClInclude Include="KnotMatrix.h" />
     <ClInclude Include="DeBoorKnotsGenerator.h" />
@@ -240,6 +241,7 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ComparisonBenchmarkResult.cpp" />
     <ClCompile Include="CurveDeBoorKnotsGenerator.cpp" />
     <ClCompile Include="KnotMatrix.cpp" />
     <ClCompile Include="DeBoorKnotsGenerator.cpp" />

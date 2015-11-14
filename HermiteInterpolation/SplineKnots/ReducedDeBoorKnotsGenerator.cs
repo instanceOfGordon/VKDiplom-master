@@ -184,29 +184,7 @@ namespace HermiteInterpolation.SplineKnots
         protected override double[] RightSide(Func<int, double> rightSideVariables, double h, double dfirst, double dlast,
             int unknownsCount)
         {
-            //var length = even ? 2 * unknownsCount : 2 * unknownsCount + 1;
-            //var equationParams = new EquationParams(length);
-
-            //var rs = new double[unknownsCount];
-            //var div3h = 3 / h;
-            //var div12h = div3h * 4;
-            //rs[0] = div3h * (rightSideVariables(4) - rightSideVariables(0)) - div12h * (rightSideVariables(3) - rightSideVariables(1)) - dfirst;
-            //rs[unknownsCount - 1] = div3h *
-            //                         (rightSideVariables(equationParams.Upsilon + equationParams.Tau) -
-            //                          rightSideVariables(equationParams.Upsilon - 2))
-            //                         -
-            //                         div12h *
-            //                         (rightSideVariables(equationParams.Upsilon + 1) - rightSideVariables(equationParams.Upsilon - 1)) -
-            //                         dlast;
-            //for (var i = 1; i < unknownsCount; i++)
-            //{
-            //    var i2 = i * 2;
-            //    rs[i] = div3h * (rightSideVariables(i2 + 4) - rightSideVariables(i2)) - div12h * (rightSideVariables(i2 + 3) - rightSideVariables(i2 + 1));
-            //}
-            //return rs;
-            //var length = even ? 2 * unknownsCount : 2 * unknownsCount + 1;
-            //var equationParams = new EquationParams(length);
-            //var even = unknownsCount%2 == 0;
+       
             unknownsCount += 2;//; even ? unknownsCount/2 - 2 : unknownsCount/2 - 3;
             var even = unknownsCount%2 == 0;
             var tau = even ? 0 : 2;
@@ -228,13 +206,6 @@ namespace HermiteInterpolation.SplineKnots
                                      twelveDivH *
                                      (rightSideVariables(upsilon + 1) - rightSideVariables(upsilon - 1)) -
                                      eta * dlast;
-
-            //for (var i = 1; i < equationsCount; i++)
-            //{
-            //    var i2 = i*2;
-            //    rs[i] = threeDivH*(rightSideVariables(2*(i + 1)) - rightSideVariables(2 * (i - 1)) - twelveDivH*(rightSideVariables(i2 + 1) - rightSideVariables(i2 + 1)));
-            //}
-
             for (var k = 2; k < equationsCount; k++)
             {
                 var k2 = k * 2;

@@ -13,7 +13,7 @@ namespace splineknots
 	{
 		//InterpolativeMathFunction function_;
 		std::unique_ptr<utils::Tridiagonal> tridiagonal_;
-
+		
 	public:
 		DeBoorKnotsGenerator(MathFunction math_function);
 		DeBoorKnotsGenerator(InterpolativeMathFunction math_function);

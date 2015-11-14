@@ -71,31 +71,31 @@ namespace splineknots
 			{
 				auto z = f.Z()(u, v);
 				//Function.Z(u,v); //Z(u, v);
-				values[i][j] = Knot(u, v, z);
+				values(i,j) = Knot(u, v, z);
 			}
 		}
 		// Init Dx
 		auto uKnotCountMin1 = udimension.knot_count - 1;
 		for (auto j = 0; j < vdimension.knot_count; j++)
 		{
-			auto dx = f.Dx()(values[0][j].X(), values[0][j].Y());
-			values[0][j].SetDx(dx); //Function.Dx(values[0,j].X, values[0,j].Y);
-			values[uKnotCountMin1][j].SetDx(f.Dx()(values[uKnotCountMin1][j].X(), values[uKnotCountMin1][j].Y()));
+			auto dx = f.Dx()(values(0,j).X(), values(0,j).Y());
+			values(0,j).SetDx(dx); //Function.Dx(values(0,j).X, values(0,j).Y);
+			values(uKnotCountMin1, j).SetDx(f.Dx()(values(uKnotCountMin1, j).X(), values(uKnotCountMin1, j).Y()));
 		}
 		// Init Dy
 		auto vKnotCountMin1 = vdimension.knot_count - 1;
 		for (auto i = 0; i < udimension.knot_count; i++)
 		{
-			values[i][0].SetDy(f.Dy()(values[i][0].X(), values[i][0].Y()));
-			values[i][vKnotCountMin1].SetDy(
-				f.Dy()(values[i][vKnotCountMin1].X(), values[i][vKnotCountMin1].Y())
+			values(i,0).SetDy(f.Dy()(values(i,0).X(), values(i,0).Y()));
+			values(i, vKnotCountMin1).SetDy(
+				f.Dy()(values(i, vKnotCountMin1).X(), values(i, vKnotCountMin1).Y())
 			);
 		}
 		// Init Dxy
-		values[0][0].SetDxy(f.Dxy()(values[0][0].X(), values[0][0].Y()));
-		values[uKnotCountMin1][0].SetDxy(f.Dxy()(values[uKnotCountMin1][0].X(), values[uKnotCountMin1][0].Y()));
-		values[0][vKnotCountMin1].SetDxy(f.Dxy()(values[0][vKnotCountMin1].X(), values[0][vKnotCountMin1].Y()));
-		values[uKnotCountMin1][vKnotCountMin1].SetDxy(f.Dxy()(values[uKnotCountMin1][vKnotCountMin1].X(), values[uKnotCountMin1][vKnotCountMin1].Y()));
+		values(0, 0).SetDxy(f.Dxy()(values(0, 0).X(), values(0, 0).Y()));
+		values(uKnotCountMin1, 0).SetDxy(f.Dxy()(values(uKnotCountMin1, 0).X(), values(uKnotCountMin1, 0).Y()));
+		values(0, vKnotCountMin1).SetDxy(f.Dxy()(values(0, vKnotCountMin1).X(), values(0, vKnotCountMin1).Y()));
+		values(uKnotCountMin1, vKnotCountMin1).SetDxy(f.Dxy()(values(uKnotCountMin1, vKnotCountMin1).X(), values(uKnotCountMin1, vKnotCountMin1).Y()));
 	}
 
 	void DeBoorKnotsGenerator::FillXDerivations(KnotMatrix& values)
@@ -142,9 +142,9 @@ namespace splineknots
 			return values[index][column_index].Z();
 		};
 		
-		auto h = values[1][0].X() - values[0][0].X();
-		auto dlast = values[values.RowsCount() - 1][column_index].Dx();
-		auto dfirst = values[0][column_index].Dx();
+		auto h = values(1, 0).X() - values(0, 0).X();
+		auto dlast = values(values.RowsCount() - 1, column_index).Dx();
+		auto dfirst = values(0, column_index).Dx();
 
 		SolveTridiagonal(rget, h, dfirst, dlast, unknowns_count, dset);
 	}
@@ -160,12 +160,12 @@ namespace splineknots
 		};
 		RightSideSelector rget = [values, column_index](int index)
 		{
-			return values[index][column_index].Dy();
+			return values(index, column_index).Dy();
 		};
 
-		auto h = values[1][0].X() - values[0][0].X();
-		auto dlast = values[values.RowsCount() - 1][column_index].Dxy();
-		auto dfirst = values[0][column_index].Dxy();
+		auto h = values(1, 0).X() - values(0, 0).X();
+		auto dlast = values(values.RowsCount() - 1, column_index).Dxy();
+		auto dfirst = values(0, column_index).Dxy();
 
 		SolveTridiagonal(rget, h, dfirst, dlast, unknowns_count, dset);
 	}
@@ -181,12 +181,12 @@ namespace splineknots
 		};
 		RightSideSelector rget = [values, row_index](int index)
 		{
-			return values[row_index][index].Z();
+			return values(row_index, index).Z();
 		};
 
-		auto h = values[0][1].Y() - values[0][0].Y();
-		auto dlast = values[row_index][values.ColumnsCount()- 1].Dy();
-		auto dfirst = values[row_index][0].Dy();
+		auto h = values(0, 1).Y() - values(0, 0).Y();
+		auto dlast = values(row_index, values.ColumnsCount()- 1).Dy();
+		auto dfirst = values(row_index, 0).Dy();
 
 		SolveTridiagonal(rget, h, dfirst, dlast, unknowns_count, dset);
 	}
@@ -202,12 +202,12 @@ namespace splineknots
 		};
 		RightSideSelector rget = [values, row_index](int index)
 		{
-			return values[row_index][index].Dx();
+			return values(row_index, index).Dx();
 		};
 
-		auto h = values[0][1].Y() - values[0][0].Y();
-		auto dlast = values[row_index][values.ColumnsCount() - 1].Dxy();
-		auto dfirst = values[row_index][0].Dxy();
+		auto h = values(0, 1).Y() - values(0, 0).Y();
+		auto dlast = values(row_index, values.ColumnsCount() - 1).Dxy();
+		auto dfirst = values(row_index, 0).Dxy();
 
 		SolveTridiagonal(rget, h, dfirst, dlast, unknowns_count, dset);
 	}
