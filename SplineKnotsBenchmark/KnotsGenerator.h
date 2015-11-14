@@ -1,7 +1,7 @@
 #pragma once
 #include "KnotMatrix.h"
 #include "MathFunction.h"
-struct SurfaceDimension;
+#include "SurfaceDimension.h"
 
 namespace splineknots {
 	

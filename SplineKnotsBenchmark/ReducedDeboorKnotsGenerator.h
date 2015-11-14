@@ -3,7 +3,7 @@
 #include "DeBoorKnotsGenerator.h"
 
 namespace splineknots {
-	class ReducedDeboorKnotsGenerator final:
+	class ReducedDeboorKnotsGenerator :
 		public DeBoorKnotsGenerator
 	{
 

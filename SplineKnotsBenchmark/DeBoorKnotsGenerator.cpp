@@ -9,15 +9,13 @@ namespace splineknots
 {
 	
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function)
-		//: KnotsGenerator(math_function)
-		: function_(math_function),
+		: KnotsGenerator(math_function),
 		tridiagonal_(new utils::Tridiagonal(1,4,1))
 	{
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function)
-		//: KnotsGenerator(math_function)
-		: function_(math_function),
+		: KnotsGenerator(math_function),
 		tridiagonal_(new utils::Tridiagonal(1, 4, 1))
 	{
 	}
@@ -26,10 +24,6 @@ namespace splineknots
 	{
 	}
 
-	const InterpolativeMathFunction& DeBoorKnotsGenerator::Function() const
-	{
-		return function_;
-	}
 
 	std::unique_ptr<KnotMatrix> DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
 	//KnotMatrix*  DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
@@ -221,10 +215,6 @@ namespace splineknots
 	void DeBoorKnotsGenerator::SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
 	{
 		auto result = RightSide(selector, h, dfirst, dlast, unknowns_count);
-		/*auto ldiag = LowerDiagonal(unknowns_count);
-		auto mdiag = MainDiagonal(unknowns_count);
-		auto udiag = UpperDiagonal(unknowns_count);
-		utils::SolveTridiagonalSystem(&ldiag.front(), &mdiag.front(), &udiag.front(), &result.front(), result.size());*/
 		tridiagonal_->Solve(unknowns_count, &result.front());
 		for (size_t k = 0; k < result.size(); k++)
 		{
@@ -238,13 +228,13 @@ namespace splineknots
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal)
-		: function_(math_function),
+		: KnotsGenerator(math_function),
 		tridiagonal_(std::move(tridiagonal))
 	{
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal)
-		: function_(math_function),
+		: KnotsGenerator(math_function),
 		tridiagonal_(std::move(tridiagonal))
 	{
 	}

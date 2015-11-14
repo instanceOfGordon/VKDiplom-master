@@ -177,8 +177,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <StringPooling>true</StringPooling>
-      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -225,11 +223,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CurveDeBoorKnotsGenerator.h" />
     <ClInclude Include="KnotMatrix.h" />
     <ClInclude Include="DeBoorKnotsGenerator.h" />
     <ClInclude Include="Knot.h" />
     <ClInclude Include="KnotsGenerator.h" />
     <ClInclude Include="MathFunction.h" />
+    <ClInclude Include="MulVsDiv.h" />
     <ClInclude Include="ReducedDeboorKnotsGenerator.h" />
     <ClInclude Include="SplineKnots.h" />
     <ClInclude Include="stdafx.h" />
@@ -240,13 +240,14 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CurveDeBoorKnotsGenerator.cpp" />
     <ClCompile Include="KnotMatrix.cpp" />
     <ClCompile Include="DeBoorKnotsGenerator.cpp" />
     <ClCompile Include="Knot.cpp" />
     <ClCompile Include="KnotsGenerator.cpp" />
     <ClCompile Include="MathFunction.cpp" />
+    <ClCompile Include="MulVsDiv.cpp" />
     <ClCompile Include="ReducedDeboorKnotsGenerator.cpp" />
-    <ClCompile Include="SplineKnots.cpp" />
     <ClCompile Include="SplineKnotsBenchmark.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

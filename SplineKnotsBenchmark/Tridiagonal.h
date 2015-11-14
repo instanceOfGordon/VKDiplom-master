@@ -15,7 +15,7 @@ namespace utils {
 		std::unique_ptr<std::vector<double>> lower_diagonal_;
 		std::unique_ptr<std::vector<double>> main_diagonal_;
 		std::unique_ptr<std::vector<double>> upper_diagonal_;
-		static const size_t kInitCount = 401;
+		static const size_t kInitCount = 801;
 
 
 		const double lower_diagonal_value;

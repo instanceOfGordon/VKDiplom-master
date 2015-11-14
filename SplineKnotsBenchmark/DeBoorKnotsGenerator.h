@@ -9,17 +9,17 @@ namespace splineknots
 {
 	typedef std::function<double(int)> RightSideSelector;
 	typedef std::function<void(int, double)> UnknownsSetter;
-	class DeBoorKnotsGenerator //: public KnotsGenerator
+	class DeBoorKnotsGenerator : public KnotsGenerator
 	{
-		InterpolativeMathFunction function_;
+		//InterpolativeMathFunction function_;
 		std::unique_ptr<utils::Tridiagonal> tridiagonal_;
 
 	public:
 		DeBoorKnotsGenerator(MathFunction math_function);
 		DeBoorKnotsGenerator(InterpolativeMathFunction math_function);
 		virtual ~DeBoorKnotsGenerator();
-		const InterpolativeMathFunction& Function() const;
-		virtual std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
+		//const InterpolativeMathFunction& Function() const;
+	 std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
 		//virtual KnotMatrix* GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
 	
 		virtual std::vector<double> RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast,
