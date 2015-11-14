@@ -1,6 +1,6 @@
 ========================================================================
     CONSOLE APPLICATION : SplineKnotsBenchmark Project Overview
-	Version 1.0.0
+	Version 1.1.0
 ========================================================================
 
 AppWizard has created this SplineKnotsBenchmark application for you.
