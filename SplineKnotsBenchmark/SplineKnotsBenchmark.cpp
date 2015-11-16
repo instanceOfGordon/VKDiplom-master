@@ -33,7 +33,7 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	splineknots::CurveDeBoorKnotsGenerator reduced(std::make_unique<splineknots::ReducedDeBoorKnotsGenerator>(function));
 	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 
-	std::vector<std::unique_ptr<splineknots::KnotMatrix>> calculated_results;
+	std::vector<splineknots::KnotMatrix> calculated_results;
 	std::vector<unsigned int> full_times;
 	full_times.reserve(num_iterations);
 	std::vector<unsigned int> reduced_times;
@@ -49,7 +49,7 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 		for (size_t i = 0; i < num_repetitions; i++)
 		{
 			auto result = reduced.GenerateKnots(udimension);
-			calculated_results.push_back(move(result));
+			calculated_results.push_back(std::move(result));
 		}
 		finish = clock();
 		reduced_times.push_back(finish - start);
@@ -58,10 +58,10 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	for (size_t i = 0; i < num_iterations; i++)
 	{
 		start = clock();
-		for (size_t i = 0; i < num_repetitions; i++)
+		for (size_t j = 0; j < num_repetitions; j++)
 		{
 			auto result = full.GenerateKnots(udimension);
-			calculated_results.push_back(move(result));
+			calculated_results.push_back(std::move(result));
 		}
 		finish = clock();
 
@@ -87,7 +87,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 	splineknots::SurfaceDimension vdimension(udimension);
 
-	std::vector<std::unique_ptr<splineknots::KnotMatrix>> calculated_results;
+	std::vector<splineknots::KnotMatrix> calculated_results;
 	std::vector<unsigned int> full_times;
 	full_times.reserve(num_iterations);
 	std::vector<unsigned int> reduced_times;
@@ -108,7 +108,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 		start = clock();
 		auto result = reduced.GenerateKnots(udimension, vdimension);
 		finish = clock();
-		calculated_results.push_back(move(result));
+		calculated_results.push_back(std::move(result));
 		reduced_times.push_back(finish - start);
 	}
 
@@ -117,7 +117,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 		start = clock();
 		auto result = full.GenerateKnots(udimension, vdimension);
 		finish = clock();
-		calculated_results.push_back(move(result));
+		calculated_results.push_back(std::move(result));
 		full_times.push_back(finish - start);
 	}
 

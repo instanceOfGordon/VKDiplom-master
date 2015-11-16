@@ -9,9 +9,10 @@ namespace splineknots {
 		size_t columns_count_;
 
 		Knot** matrix_;
+		KnotMatrix();
 
 	public:
-		
+		static KnotMatrix NullMatrix();
 		KnotMatrix(size_t rows_, size_t columns_);
 		KnotMatrix(const KnotMatrix& other);
 		KnotMatrix(KnotMatrix&& other);

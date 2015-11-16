@@ -45,15 +45,16 @@ void splineknots::CurveDeBoorKnotsGenerator::InitializeKnots(SurfaceDimension& d
 	values[0][knotCountMin1].SetDy(f.Dy()(values[0][knotCountMin1].X(), values[0][knotCountMin1].Y()));
 }
 
-std::unique_ptr<splineknots::KnotMatrix> splineknots::CurveDeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& dimension)
+splineknots::KnotMatrix splineknots::CurveDeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& dimension)
 {
 	if (dimension.knot_count < 6) {
-		return{};
+		CurveDeBoorKnotsGenerator cdeboor(std::make_unique<DeBoorKnotsGenerator>(knot_generator_->Function()));
+		return cdeboor.GenerateKnots(dimension);
 	}
 	//SurfaceDimension vdim(1, 1, 1);
-	auto values = new KnotMatrix(1, dimension.knot_count);
-	auto& valuesRef = *values;
-	InitializeKnots(dimension, valuesRef);
-	knot_generator_->FillYDerivations(valuesRef);
-	return std::unique_ptr<KnotMatrix>(values);
+	KnotMatrix values(1, dimension.knot_count);
+	
+	InitializeKnots(dimension, values);
+	knot_generator_->FillYDerivations(values);
+	return values;
 }

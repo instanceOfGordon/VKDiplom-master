@@ -42,6 +42,19 @@ splineknots::Knot*& splineknots::KnotMatrix::operator[](size_t k) const
 	return matrix_[k];
 }
 
+splineknots::KnotMatrix::KnotMatrix()
+:rows_count_(0),
+ columns_count_(0),
+matrix_(nullptr)
+{
+}
+
+splineknots::KnotMatrix splineknots::KnotMatrix::NullMatrix()
+{
+	KnotMatrix nullval;
+	return nullval;
+}
+
 splineknots::KnotMatrix::KnotMatrix(size_t rows, size_t columns)
 	: rows_count_(rows),
 	  columns_count_(columns)
@@ -64,20 +77,7 @@ splineknots::KnotMatrix::KnotMatrix(const KnotMatrix& other)
 		matrix_[i] = new Knot[columns_count_];
 		memcpy(matrix_[i], other.matrix_[i], columns_count_);
 	}
-	/*for (size_t i = 0; i < rowsCount_; i++)
-		{
-			delete[] matrix_[i];
-		}
-		delete[] matrix_;
-		matrix_ = nullptr;
-		rowsCount_ = other.getRowsCount();
-		columnsCount_ = other.getColumnsCount();
-		matrix_ = new Knot*[rowsCount_];
-		for (size_t i = 0; i < other.getRowsCount(); i++)
-		{
-			matrix_[i] = new Knot[columnsCount_];
-			memcpy(matrix_[i], other.matrix_[i], columnsCount_);
-		}*/
+	
 }
 
 splineknots::KnotMatrix::KnotMatrix(KnotMatrix&& other)
