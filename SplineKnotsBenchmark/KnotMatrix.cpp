@@ -57,7 +57,7 @@ splineknots::KnotMatrix splineknots::KnotMatrix::NullMatrix()
 
 bool splineknots::KnotMatrix::IsNull()
 {
-	if (matrix_ || rows_count_ == 0 || columns_count_ == 0)
+	if (matrix_ || rows_count_ < 1 || columns_count_ < 1)
 		return true;
 	return false;
 }
