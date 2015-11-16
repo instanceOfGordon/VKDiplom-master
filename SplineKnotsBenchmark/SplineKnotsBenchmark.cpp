@@ -15,23 +15,22 @@ typedef std::chrono::steady_clock::time_point TimePoint;
 typedef std::chrono::duration<long long, std::nano> Duration;
 
 void MulDivBenchmark()
-{	
+{
 	MulVsDiv bencher;
-    bencher.BenchAll();
+	bencher.BenchAll();
 }
-
 
 
 ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 {
-	
+	const int num_repetitions = 100;
 	splineknots::MathFunction function = [](double x, double y)
-	{
-		return sin(sqrt(x*x + y*y));
-	};
+		{
+			return sin(sqrt(x * x + y * y));
+		};
 
-	splineknots::CurveKnotsGenerator<splineknots::DeBoorKnotsGenerator> full(function);
-	splineknots::CurveKnotsGenerator<splineknots::ReducedDeboorKnotsGenerator> reduced(function);
+	splineknots::CurveDeBoorKnotsGenerator full(std::make_unique<splineknots::DeBoorKnotsGenerator>(function));
+	splineknots::CurveDeBoorKnotsGenerator reduced(std::make_unique<splineknots::ReducedDeBoorKnotsGenerator>(function));
 	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 
 	std::vector<std::unique_ptr<splineknots::KnotMatrix>> calculated_results;
@@ -39,50 +38,52 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	full_times.reserve(num_iterations);
 	std::vector<unsigned int> reduced_times;
 	reduced_times.reserve(num_iterations);
-	calculated_results.reserve(num_iterations * 2);
+	calculated_results.reserve(num_iterations * 2 * num_repetitions);
 
 	unsigned int start;// = clock();
 	unsigned int finish;
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
-		clock();
 		start = clock();
-		auto result = reduced.GenerateKnots(udimension);
+		for (size_t i = 0; i < num_repetitions; i++)
+		{
+			auto result = reduced.GenerateKnots(udimension);
+			calculated_results.push_back(move(result));
+		}
 		finish = clock();
-		calculated_results.push_back(move(result));
 		reduced_times.push_back(finish - start);
-
 	}
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
-
 		start = clock();
-		auto result = full.GenerateKnots(udimension);
+		for (size_t i = 0; i < num_repetitions; i++)
+		{
+			auto result = full.GenerateKnots(udimension);
+			calculated_results.push_back(move(result));
+		}
 		finish = clock();
-		calculated_results.push_back(move(result));
-		full_times.push_back(finish - start);
 
+		full_times.push_back(finish - start);
 	}
 
 	auto full_time = *std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
 
 	auto reduced_time = *std::min_element(reduced_times.begin(), reduced_times.end());//reduced_times[reduced_times.size() / 2]; //utils::Average(&reduced_times.front(), reduced_times.size());//clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
-																					  //std::cout << std::endl << std::endl << "Just ignore it : " << calculated_results[num_iterations]->operator()(0, 0).Dx() << std::endl;
+	//std::cout << std::endl << std::endl << "Just ignore it : " << calculated_results[num_iterations]->operator()(0, 0).Dx() << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
 
 ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 {
-	
 	splineknots::MathFunction function = [](double x, double y)
 		{
-			return sin(sqrt(x*x + y*y));
+			return sin(sqrt(x * x + y * y));
 		};
 
 	splineknots::DeBoorKnotsGenerator full(function);
-	splineknots::ReducedDeboorKnotsGenerator reduced(function);
+	splineknots::ReducedDeBoorKnotsGenerator reduced(function);
 	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 	splineknots::SurfaceDimension vdimension(udimension);
 
@@ -101,27 +102,23 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 	//std::vector<unsigned int> dumb_times;
 	//dumb_times.reserve(dumb_interations * 2);
 	//calculated_results.reserve(dumb_interations * 4);
-	
+
 	for (size_t i = 0; i < num_iterations; i++)
 	{
-		clock();
 		start = clock();
 		auto result = reduced.GenerateKnots(udimension, vdimension);
 		finish = clock();
 		calculated_results.push_back(move(result));
 		reduced_times.push_back(finish - start);
-
 	}
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
-		
 		start = clock();
 		auto result = full.GenerateKnots(udimension, vdimension);
 		finish = clock();
 		calculated_results.push_back(move(result));
 		full_times.push_back(finish - start);
-
 	}
 
 	auto full_time = *std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
@@ -129,8 +126,8 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 	auto reduced_time = *std::min_element(reduced_times.begin(), reduced_times.end());//reduced_times[reduced_times.size() / 2]; //utils::Average(&reduced_times.front(), reduced_times.size());//clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
 	//std::cout << std::endl << std::endl << "Just ignore it : " << calculated_results[num_iterations]->operator()(0, 0).Dx() << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
-	
-	
+
+
 	//std::cout << std::endl << std::endl << "Just ignore it : " << calculated_results[num_iterations]->operator()(0, 0).Dx() + dumb1->operator()(0, 0).Dx() + dumb2->operator()(0, 0).Dx() << dumbfinish << std::endl;
 }
 
@@ -144,8 +141,9 @@ void PrintDeboorResult(ComparisonBenchmarkResult& result)
 int main()
 {
 	bool repeat = true;
-	
-	while (repeat) {
+
+	while (repeat)
+	{
 		/*auto dumb = SurfaceBenchmark(1, 199);
 		std::cout << "Random number (ignore it)" << dumb.Ratio() << std::endl << std::endl;*/
 		std::cout << clock();
@@ -164,7 +162,7 @@ int main()
 		std::cout << std::endl << "---------------" << std::endl;
 		unsigned int num_iterations;
 		unsigned int num_knots;
-		ComparisonBenchmarkResult result(1,1);
+		ComparisonBenchmarkResult result(1, 1);
 		switch (input)
 		{
 		case '1':
@@ -175,24 +173,24 @@ int main()
 		case '2':
 			std::cout << std::endl << "---------------" << std::endl;
 			std::cout << "Spline curve benchmark" << std::endl << std::endl;
-			std::cout << "Enter number of iterations: " << std::endl;			
-			std::cin >> num_iterations;
-			std::cout << "Enter number of knots: " << std::endl;		
-			std::cin >> num_knots;
-			std::cin.get();
-			result = CurveBenchmark(num_iterations, num_knots);
-			PrintDeboorResult(result);		
-			break;
-		case '3':
-			
-			std::cout << "Spline surface benchmark" << std::endl << std::endl;
-			std::cout << "Enter number of iterations: " << std::endl;		
+			std::cout << "Enter number of iterations: " << std::endl;
 			std::cin >> num_iterations;
 			std::cout << "Enter number of knots: " << std::endl;
 			std::cin >> num_knots;
 			std::cin.get();
-			
-			result = SurfaceBenchmark(num_iterations,num_knots);
+			result = CurveBenchmark(num_iterations, num_knots);
+			PrintDeboorResult(result);
+			break;
+		case '3':
+
+			std::cout << "Spline surface benchmark" << std::endl << std::endl;
+			std::cout << "Enter number of iterations: " << std::endl;
+			std::cin >> num_iterations;
+			std::cout << "Enter number of knots: " << std::endl;
+			std::cin >> num_knots;
+			std::cin.get();
+
+			result = SurfaceBenchmark(num_iterations, num_knots);
 			PrintDeboorResult(result);
 			break;
 		case 'q':
@@ -209,4 +207,3 @@ int main()
 	}
 	return 0;
 }
-

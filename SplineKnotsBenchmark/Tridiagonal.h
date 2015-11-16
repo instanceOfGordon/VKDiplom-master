@@ -32,12 +32,12 @@ namespace utils {
 
 		const std::vector<double>& MainDiagonal() const
 		{
-			return *(main_diagonal_.get());
+			return *main_diagonal_;
 		}
 
 		const std::vector<double>& UpperDiagonal() const
 		{
-			return *(upper_diagonal_.get());
+			return *upper_diagonal_;
 		}
 
 		const double& LowerDiagonalValue() const

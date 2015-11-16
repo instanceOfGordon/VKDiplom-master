@@ -26,7 +26,6 @@ namespace splineknots
 
 
 	std::unique_ptr<KnotMatrix> DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
-	//KnotMatrix*  DeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
 	{
 		if (udimension.knot_count < 4 || vdimension.knot_count < 4)
 		{
@@ -39,7 +38,6 @@ namespace splineknots
 		FillXYDerivations(valuesRef);
 		FillYDerivations(valuesRef);
 		FillYXDerivations(valuesRef);
-		//return values;
 		return std::unique_ptr<KnotMatrix>(values);
 	}
 

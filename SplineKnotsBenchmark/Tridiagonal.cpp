@@ -61,18 +61,20 @@ utils::ReducedDeBoorTridiagonal::~ReducedDeBoorTridiagonal()
 void utils::ReducedDeBoorTridiagonal::Solve(size_t num_unknowns, double* right_side)
 {
 	auto num_equations = (num_unknowns + 2) / 2 - 1;
-	auto maindiag = MainDiagonal();
+	
 	//auto size = 
 	if (num_equations > MainDiagonal().size())
 		Resize(num_equations);
-	if(num_equations != MainDiagonal().size())
+	auto maindiag = MainDiagonal();
+	if(num_equations != maindiag.size())
 	{
 		for (size_t i = 0; i < num_equations-1; i++)
 		{
 			maindiag[i] = -14;
 		}
 	}
-	maindiag[num_equations -1] = num_unknowns % 2 == 0 ? -15 : -14;
+	auto lastidx = MainDiagonal().size()-1;
+	maindiag[lastidx] = num_unknowns % 2 == 0 ? -15 : -14;
 	auto ld = LowerDiagonal();
 	auto ud = UpperDiagonal();
 	utils::SolveTridiagonalSystem(&ld.front(), &maindiag.front(), &ud.front(), right_side, num_equations);

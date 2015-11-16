@@ -3,16 +3,16 @@
 #include "DeBoorKnotsGenerator.h"
 
 namespace splineknots {
-	class ReducedDeboorKnotsGenerator :
+	class ReducedDeBoorKnotsGenerator :
 		public DeBoorKnotsGenerator
 	{
 
 	public:
 		std::unique_ptr<KnotMatrix> GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
 		//KnotMatrix* GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
-		ReducedDeboorKnotsGenerator(MathFunction function);
-		ReducedDeboorKnotsGenerator(InterpolativeMathFunction function);
-		~ReducedDeboorKnotsGenerator();
+		ReducedDeBoorKnotsGenerator(MathFunction function);
+		ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function);
+		~ReducedDeBoorKnotsGenerator();
 
 		std::vector<double> RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast,
 			int unknowns_count) override;
