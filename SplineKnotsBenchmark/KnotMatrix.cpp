@@ -55,6 +55,13 @@ splineknots::KnotMatrix splineknots::KnotMatrix::NullMatrix()
 	return nullval;
 }
 
+bool splineknots::KnotMatrix::IsNull()
+{
+	if (matrix_ || rows_count_ == 0 || columns_count_ == 0)
+		return true;
+	return false;
+}
+
 splineknots::KnotMatrix::KnotMatrix(size_t rows, size_t columns)
 	: rows_count_(rows),
 	  columns_count_(columns)

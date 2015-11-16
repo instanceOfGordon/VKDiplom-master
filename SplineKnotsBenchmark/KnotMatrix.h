@@ -13,6 +13,7 @@ namespace splineknots {
 
 	public:
 		static KnotMatrix NullMatrix();
+		bool IsNull();
 		KnotMatrix(size_t rows_, size_t columns_);
 		KnotMatrix(const KnotMatrix& other);
 		KnotMatrix(KnotMatrix&& other);
