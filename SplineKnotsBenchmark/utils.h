@@ -18,6 +18,14 @@ namespace utils
 	void SolveTridiagonalSystemBuffered(double* lower_diagonal, double* main_diagonal,
 		double* upper_diagonal, double* right_side, size_t n, double* buffer);
 
+	void SolveDeboorTridiagonalSystem(double lower_diagonal_value, double main_diagonal_value,
+		double upper_diagonal_value, double* right_side, size_t right_side_count,
+		double last_main_diagonal_value = DBL_TRUE_MIN);
+
+	void SolveDeboorTridiagonalSystemBuffered(double lower_diagonal_value, double main_diagonal_value,
+		double upper_diagonal_value, double* right_side, size_t right_side_count, double* buffer, 
+		double last_main_diagonal_value = DBL_TRUE_MIN);
+
 
 	template<typename T>
 	double Average(T* arr, size_t arr_size);

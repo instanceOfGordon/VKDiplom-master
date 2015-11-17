@@ -10,9 +10,9 @@
 //}
 
 utils::Tridiagonal::Tridiagonal(double lower_value, double main_value, double upper_value)
-	:lower_diagonal_(std::make_unique<std::vector<double>>(kInitCount,lower_value)),
-	main_diagonal_(std::make_unique<std::vector<double>>(kInitCount, main_value)),
-	upper_diagonal_(std::make_unique<std::vector<double>>(kInitCount, upper_value)),
+	://lower_diagonal_(std::make_unique<std::vector<double>>(kInitCount,lower_value)),
+	//main_diagonal_(std::make_unique<std::vector<double>>(kInitCount, main_value)),
+	//upper_diagonal_(std::make_unique<std::vector<double>>(kInitCount, upper_value)),
 	lu_buffer_(std::make_unique<std::vector<double>>(kInitCount, upper_value)),
 	lower_diagonal_value(lower_value),
 	main_diagonal_value(main_value),
@@ -28,54 +28,48 @@ utils::Tridiagonal::~Tridiagonal()
 
 void utils::Tridiagonal::Resize(size_t newsize)
 {
-	if (newsize > main_diagonal_->size()) {
-		lower_diagonal_->reserve(newsize);
-		main_diagonal_->reserve(newsize);
-		upper_diagonal_->reserve(newsize);
+	if (newsize > lu_buffer_->size()) {
+		lu_buffer_->reserve(newsize);
+		
 	}
-	for (size_t i = lower_diagonal_->size(); i < newsize; i++)
+	for (size_t i = lu_buffer_->size(); i < newsize; i++)
 	{
-		lower_diagonal_->push_back(lower_diagonal_value);
-		main_diagonal_->push_back(main_diagonal_value);
-		upper_diagonal_->push_back(upper_diagonal_value);
+		lu_buffer_->push_back(upper_diagonal_value);
 	}
-	/*if(newsize>main_diagonal_->size())
-	{
-		main_diagonal_->push_back(main_diagonal_value);
-	}*/
+	
 
 }
 
+double* utils::Tridiagonal::ResetBufferAndGet()
+{
+	auto& buffer = *lu_buffer_;
+	std::fill(buffer.begin(), buffer.end(), upper_diagonal_value);
+	return &buffer.front();
+}
 
+double* utils::Tridiagonal::Buffer()
+{
+	return &lu_buffer_->front();
+}
+
+size_t utils::Tridiagonal::BufferElementCount() const
+{
+	return lu_buffer_->size();
+}
 
 void utils::Tridiagonal::Solve(size_t num_unknowns, double* right_side)
 {
-	if (num_unknowns > main_diagonal_->size())
+	//auto& buffer = *lu_buffer_;
+	if (num_unknowns > BufferElementCount())
 		Resize(num_unknowns);
-	utils::SolveTridiagonalSystem(&lower_diagonal_->front(), &main_diagonal_->front(), &upper_diagonal_->front(), right_side, num_unknowns);
-
+	auto buffer =Buffer();
+	//utils::SolveTridiagonalSystem(&lower_diagonal_->front(), &main_diagonal_->front(), &upper_diagonal_->front(), right_side, num_unknowns);
+	utils::SolveDeboorTridiagonalSystemBuffered(lower_diagonal_value, main_diagonal_value, upper_diagonal_value, right_side, num_unknowns,buffer);
 }
 
-const std::vector<double>& utils::Tridiagonal::LowerDiagonal() const
-{
-	return *lower_diagonal_;
-}
 
-const std::vector<double>& utils::Tridiagonal::Buffer()
-{
-	memcpy(&lu_buffer_->front(), &upper_diagonal_->front(), lu_buffer_->size());
-	return *lu_buffer_;
-}
 
-const std::vector<double>& utils::Tridiagonal::MainDiagonal() const
-{
-	return *main_diagonal_;
-}
 
-const std::vector<double>& utils::Tridiagonal::UpperDiagonal() const
-{
-	return *upper_diagonal_;
-}
 
 const double& utils::Tridiagonal::LowerDiagonalValue() const
 {
@@ -105,22 +99,10 @@ void utils::ReducedDeBoorTridiagonal::Solve(size_t num_unknowns, double* right_s
 {
 	auto num_equations = (num_unknowns + 2) / 2 - 1;
 	
-	//auto size = 
-	if (num_equations > MainDiagonal().size())
+	auto size = BufferElementCount();
+	if (num_equations > size)
 		Resize(num_equations);
-	auto maindiag = MainDiagonal();
-	if(num_equations != maindiag.size())
-	{
-		for (size_t i = 0; i < num_equations-1; i++)
-		{
-			maindiag[i] = -14;
-		}
-	}
-	auto lastidx = MainDiagonal().size()-1;
-	maindiag[lastidx] = num_unknowns % 2 == 0 ? -15 : -14;
-	auto ld = LowerDiagonal();
-	auto ud = UpperDiagonal();
+	double last_maindiag_value = num_unknowns % 2 == 0 ? -15 : -14;
 	auto buffer = Buffer();
-	//utils::SolveTridiagonalSystem(&ld.front(), &maindiag.front(), &ud.front(), right_side, num_equations);
-	utils::SolveTridiagonalSystemBuffered(&ld.front(), &maindiag.front(), &ud.front(), right_side, num_equations,&buffer.front());
+	utils::SolveDeboorTridiagonalSystemBuffered(LowerDiagonalValue(), MainDiagonalValue(), UpperDiagonalValue(), right_side, num_equations, buffer, last_maindiag_value);
 }
