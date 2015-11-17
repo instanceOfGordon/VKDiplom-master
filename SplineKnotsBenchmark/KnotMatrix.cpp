@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "KnotMatrix.h"
 #include "utils.h"
+#include <iostream>
 
 //#include "utils_template.cpp"
 
@@ -40,6 +41,28 @@ const splineknots::Knot& splineknots::KnotMatrix::operator()(int i, int j) const
 splineknots::Knot*& splineknots::KnotMatrix::operator[](size_t k) const
 {
 	return matrix_[k];
+}
+
+void splineknots::KnotMatrix::Print()
+{
+	using namespace std;
+	cout << "---------- Knot matrix ----------" << endl;
+	for (size_t i = 0; i < rows_count_; i++)
+	{
+		cout << "Row " << i << " :\t";
+		for (size_t j = 0; j < columns_count_; j++)
+		{
+			cout << j << ": " 
+				<< matrix_[i][j].X() << ' '
+				<< matrix_[i][j].Y() << ' '
+				<< matrix_[i][j].Z() << ' '
+				<< matrix_[i][j].Dx() << ' '
+				<< matrix_[i][j].Dy() << ' '
+				<< matrix_[i][j].Dxy() << '\t';
+		}
+		cout << endl;
+	}
+	cout << "-------------------------------" << endl;
 }
 
 splineknots::KnotMatrix::KnotMatrix()

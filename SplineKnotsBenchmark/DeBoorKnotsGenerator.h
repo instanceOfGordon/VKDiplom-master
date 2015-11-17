@@ -4,6 +4,7 @@
 #include <functional>
 #include <vector>
 #include "Tridiagonal.h"
+#include  <ppl.h>
 
 namespace splineknots
 {

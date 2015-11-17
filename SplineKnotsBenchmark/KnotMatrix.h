@@ -29,7 +29,7 @@ namespace splineknots {
 		//friend void swap(KnotMatrix& left, KnotMatrix& right);
 		Knot*& operator[](size_t k) const;
 	
-		
+		void Print();
 	};
 }
 
