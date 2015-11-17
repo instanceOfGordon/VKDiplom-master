@@ -15,6 +15,7 @@ namespace utils {
 		std::unique_ptr<std::vector<double>> lower_diagonal_;
 		std::unique_ptr<std::vector<double>> main_diagonal_;
 		std::unique_ptr<std::vector<double>> upper_diagonal_;
+		std::unique_ptr<std::vector<double>> lu_buffer_;
 		static const size_t kInitCount = 1501;
 
 
@@ -24,36 +25,19 @@ namespace utils {
 
 	protected:
 
-		const std::vector<double>& LowerDiagonal() const
-		{
-			return *lower_diagonal_;
-			//return *(lower_diagonal_.get());
-		}
+		const std::vector<double>& LowerDiagonal() const;
 
-		const std::vector<double>& MainDiagonal() const
-		{
-			return *main_diagonal_;
-		}
+		const std::vector<double>& Buffer();
 
-		const std::vector<double>& UpperDiagonal() const
-		{
-			return *upper_diagonal_;
-		}
+		const std::vector<double>& MainDiagonal() const;
 
-		const double& LowerDiagonalValue() const
-		{
-			return lower_diagonal_value;
-		}
+		const std::vector<double>& UpperDiagonal() const;
 
-		const double& MainDiagonalValue() const
-		{
-			return main_diagonal_value;
-		}
+		const double& LowerDiagonalValue() const;
 
-		const double& UpperDiagonalValue() const
-		{
-			return upper_diagonal_value;
-		}
+		const double& MainDiagonalValue() const;
+
+		const double& UpperDiagonalValue() const;
 	};
 
 	class ReducedDeBoorTridiagonal : public Tridiagonal

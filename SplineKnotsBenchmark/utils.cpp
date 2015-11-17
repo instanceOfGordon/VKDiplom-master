@@ -23,4 +23,20 @@ namespace utils
 		}
 		delete[] upper_diagonal_copy;
 	}
+
+	void SolveTridiagonalSystemBuffered(double* lower_diagonal, double* main_diagonal, double* upper_diagonal, double* right_side, size_t n, double* buffer)
+	{	
+		buffer[0] /= main_diagonal[0];
+		right_side[0] /= main_diagonal[0];
+		for (size_t i = 0; i < n; i++)
+		{
+			auto m = 1 / (main_diagonal[i] - lower_diagonal[i] * buffer[i - 1]);
+			buffer[i] *= m;
+			right_side[i] = (right_side[i] - lower_diagonal[i] * right_side[i - 1])*m;
+		}
+		for (size_t i = n - 1; i-- > 0;)
+		{
+			right_side[i] -= buffer[i] * right_side[i + 1];
+		}
+	}
 }
