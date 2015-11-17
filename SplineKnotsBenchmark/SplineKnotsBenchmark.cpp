@@ -107,6 +107,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 	{
 		start = clock();
 		auto result = reduced.GenerateKnots(udimension, vdimension);
+		//result.Print();
 		finish = clock();
 		calculated_results.push_back(std::move(result));
 		reduced_times.push_back(finish - start);
@@ -116,10 +117,13 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 	{
 		start = clock();
 		auto result = full.GenerateKnots(udimension, vdimension);
+		//result.Print();
 		finish = clock();
 		calculated_results.push_back(std::move(result));
 		full_times.push_back(finish - start);
 	}
+
+
 
 	auto full_time = *std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
 
