@@ -11,11 +11,4 @@ namespace splineknots {
 	{
 	}
 
-	SurfaceDimension::~SurfaceDimension()
-	{
-	}
-
-	/*SurfaceDimension::~SurfaceDimension()
-	{
-	}*/
 }

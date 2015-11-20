@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ReducedDeboorKnotsGenerator.h"
-
+#include <omp.h>
 
 splineknots::ReducedDeBoorKnotsGenerator::ReducedDeBoorKnotsGenerator(MathFunction math_function)
 	: DeBoorKnotsGenerator(math_function, std::make_unique<utils::ReducedDeBoorTridiagonal>())
@@ -73,9 +73,9 @@ std::vector<double> splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(Kno
 	auto one_div_hx = 1.0 / hx;
 	auto one_div_hy = 1.0 / hy;
 	auto three_div_hx = 3.0 / hx;
-	auto six_div_hx = 2 *three_div_hx;
-	
-	auto eighteen_div_hx = 6*one_div_hx;
+	auto six_div_hx = 2 * three_div_hx;
+
+	auto eighteen_div_hx = 6 * one_div_hx;
 	auto twentyfour_div_hx = 8 * three_div_hx;
 	//auto twelweDivHx = threeDivHx * 4;
 	auto three_div_hy = 3.0 / hy;
@@ -83,13 +83,13 @@ std::vector<double> splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(Kno
 	auto twelwe_div_hy = three_div_hy * 4;
 	auto three_div7_hx = one_div7 * three_div_hx;
 	auto nine_div7_hx = 3 * three_div7_hx;
-	auto twelve_div7_hx = 4*three_div7_hx;
+	auto twelve_div7_hx = 4 * three_div7_hx;
 	auto three_div7_hy = one_div7 * three_div_hy;
 	auto twelve_div7_hy = 4 * three_div7_hy;
 	auto three_div7_hxhy = three_div7_hy / hy;
 	auto nine_div7_hxhy = 3 * three_div7_hxhy;
 
-	auto thirtysix_div7_hxhy =  12 * three_div7_hxhy;
+	auto thirtysix_div7_hxhy = 12 * three_div7_hxhy;
 	auto onehundredeight_div7_hxhy = 3 * thirtysix_div7_hxhy;
 	auto onehundredfortyfour_div7_hxhy = 4 * thirtysix_div7_hxhy;
 	auto twentyseven_div7_hxhy = 9 * three_div7_hxhy;
@@ -156,15 +156,23 @@ std::vector<double> splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(Kno
 void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& values)
 {
 	auto ncols = values.ColumnsCount();
-	for (size_t j = 0; j < ncols; j++)
+	/*#pragma omp parallel for if(IsParallel())
+	for (int j = 0; j < ncols; j++)
 	{
 		DeBoorKnotsGenerator::FillXDerivations(j, values);
-	}
+	}*/
+	utils::For(0, values.ColumnsCount(),
+	           [&](int j)
+	           {
+		           DeBoorKnotsGenerator::FillXDerivations(j, values);
+	           },
+	           IsParallel());
 	auto h = values(1, 0).X() - values(0, 0).X();
 	auto one_div_h = 1.0 / h;
 	auto three_div_4h = 0.75 * one_div_h;
 	auto nrows = values.RowsCount();
-	for (size_t i = 1; i < nrows - 1; i += 2)
+	/*#pragma omp parallel for if(IsParallel())
+	for (auto i = 1; i < nrows - 1; i += 2)
 	{
 		for (size_t j = 0; j < ncols; j++)
 		{
@@ -173,13 +181,26 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& valu
 				- 0.25 * (values(i + 1, j).Dx() + values(i - 1, j).Dx())
 			);
 		}
-	}
+	}*/
+
+	utils::For(1, nrows - 1,
+	           [&](int i)
+	           {
+		           for (size_t j = 0; j < ncols; j++)
+		           {
+			           values(i, j).SetDx(
+				           three_div_4h * (values(i + 1, j).Z() - values(i - 1, j).Z())
+				           - 0.25 * (values(i + 1, j).Dx() + values(i - 1, j).Dx())
+			           );
+		           }
+	           },
+		false, 2);
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillXYDerivations(KnotMatrix& values)
 {
 	DeBoorKnotsGenerator::FillXYDerivations(0, values);
-	DeBoorKnotsGenerator::FillXYDerivations(values.ColumnsCount()-1, values);
+	DeBoorKnotsGenerator::FillXYDerivations(values.ColumnsCount() - 1, values);
 	DeBoorKnotsGenerator::FillYXDerivations(0, values);
 	DeBoorKnotsGenerator::FillYXDerivations(values.RowsCount() - 1, values);
 }
@@ -187,33 +208,61 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillXYDerivations(KnotMatrix& val
 void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& values)
 {
 	auto nrows = values.RowsCount();
-	for (size_t i = 0; i < nrows; i++)
-	{
-		DeBoorKnotsGenerator::FillYDerivations(i, values);
-	}
+	//#pragma omp parallel for if(IsParallel())
+	//	for (int i = 0; i < nrows; i++)
+	//	{
+	//		DeBoorKnotsGenerator::FillYDerivations(i, values);
+	//	}
+	utils::For(0, values.RowsCount(),
+	           [&](int i)
+	           {
+		           DeBoorKnotsGenerator::FillYDerivations(i, values);
+	           },
+	           IsParallel());
 	auto h = values(0, 1).Y() - values(0, 0).Y();
 	auto one_div_h = 1.0 / h;
 	auto three_div_4h = 0.75 * one_div_h;
 	auto ncols = values.ColumnsCount();
-	for (size_t i = 0; i < nrows ; i++)
-	{
-		for (size_t j = 1; j < ncols-1; j+=2)
-		{
-			values(i, j).SetDy(
-				three_div_4h * (values(i, j+1).Z() - values(i, j-1).Z())
-				- 0.25 * (values(i, j+1).Dy() + values(i, j-1).Dy())
-				);
-		}
-	}
+	//#pragma omp parallel for if(IsParallel())
+	//	for (int i = 0; i < nrows; i++)
+	//	{
+	//		for (size_t j = 1; j < ncols - 1; j += 2)
+	//		{
+	//			values(i, j).SetDy(
+	//				three_div_4h * (values(i, j + 1).Z() - values(i, j - 1).Z())
+	//				- 0.25 * (values(i, j + 1).Dy() + values(i, j - 1).Dy())
+	//			);
+	//		}
+	//	}
+	utils::For(0, nrows,
+	           [&](int i)
+	           {
+		           for (size_t j = 1; j < ncols - 1; j += 2)
+		           {
+			           values(i, j).SetDy(
+				           three_div_4h * (values(i, j + 1).Z() - values(i, j - 1).Z())
+				           - 0.25 * (values(i, j + 1).Dy() + values(i, j - 1).Dy())
+			           );
+		           }
+	           },
+		IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
 {
 	auto nrows = values.RowsCount();
-	for (size_t i = 2; i < nrows; i+=2)
-	{
-		FillYXDerivations(i, values);
-	}
+	//#pragma omp parallel for if(IsParallel())
+	//	for (int i = 2; i < nrows; i += 2)
+	//	{
+	//		FillYXDerivations(i, values);
+	//	}
+
+	utils::For(2, nrows,
+	           [&](int i)
+	           {
+		           FillYXDerivations(i, values);
+	           },
+	           IsParallel(), 2);
 
 	auto one_div_16 = 1.0 / 16.0;
 	auto three_div_16 = one_div_16 * 3;
@@ -221,50 +270,100 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 	auto hy = values(0, 1).Y() - values(0, 0).Y();
 	auto one_div_hx = 1.0 / hx;
 	auto one_div_hy = 1.0 / hy;
-	auto three_div_16hy = three_div_16*one_div_hy;
-	auto three_div_16hx = three_div_16*one_div_hx;
+	auto three_div_16hy = three_div_16 * one_div_hy;
+	auto three_div_16hx = three_div_16 * one_div_hx;
 
 	auto ncols = values.ColumnsCount();
-	for (size_t i = 1; i < nrows-1; i+=2)
-	{
-		for (size_t j = 1; j < ncols-1; j+=2)
-		{
-			values(i, j).SetDxy(
-				one_div_16*
-				(values(i+1,j+1).Dxy()+values(i+1,j-1).Dxy()+values(i-1,j+1).Dxy() +
-					values(i-1,j-1).Dxy())
-				- three_div_16hy*
-				(values(i + 1, j + 1).Dx() + values(i + 1, j - 1).Dx() + values(i - 1, j + 1).Dx() +
-					values(i - 1, j - 1).Dx())
-				- three_div_16hx*
-				(values(i + 1, j + 1).Dy() + values(i + 1, j - 1).Dy() + values(i - 1, j + 1).Dy() +
-					values(i - 1, j - 1).Dy())
-			);
-		}
-	}
+	//#pragma omp parallel for if(IsParallel())
+	//	for (auto i = 1; i < nrows - 1; i += 2)
+	//	{
+	//		for (size_t j = 1; j < ncols - 1; j += 2)
+	//		{
+	//			values(i, j).SetDxy(
+	//				one_div_16 *
+	//				(values(i + 1, j + 1).Dxy() + values(i + 1, j - 1).Dxy() + values(i - 1, j + 1).Dxy() +
+	//					values(i - 1, j - 1).Dxy())
+	//				- three_div_16hy *
+	//				(values(i + 1, j + 1).Dx() + values(i + 1, j - 1).Dx() + values(i - 1, j + 1).Dx() +
+	//					values(i - 1, j - 1).Dx())
+	//				- three_div_16hx *
+	//				(values(i + 1, j + 1).Dy() + values(i + 1, j - 1).Dy() + values(i - 1, j + 1).Dy() +
+	//					values(i - 1, j - 1).Dy())
+	//			);
+	//		}
+	//	}
 
-	auto three_div_4hy = 0.75*one_div_hy;
-	for (size_t i = 1; i < nrows-1; i+=2)
-	{
-		for (size_t j = 2; j < ncols-2; j+=2)
-		{
-			values(i, j).SetDxy(
-				three_div_4hy*(values(i,j+1).Dx()-values(i,j-1).Dx())
-				-0.25*(values(i,j+1).Dxy()-values(i,j-1).Dxy())
-			);
-		}
-	}
+	utils::For(1, nrows - 1,
+	           [&](int i)
+	           {
+		           for (size_t j = 1; j < ncols - 1; j += 2)
+		           {
+			           values(i, j).SetDxy(
+				           one_div_16 *
+				           (values(i + 1, j + 1).Dxy() + values(i + 1, j - 1).Dxy() + values(i - 1, j + 1).Dxy() +
+					           values(i - 1, j - 1).Dxy())
+				           - three_div_16hy *
+				           (values(i + 1, j + 1).Dx() + values(i + 1, j - 1).Dx() + values(i - 1, j + 1).Dx() +
+					           values(i - 1, j - 1).Dx())
+				           - three_div_16hx *
+				           (values(i + 1, j + 1).Dy() + values(i + 1, j - 1).Dy() + values(i - 1, j + 1).Dy() +
+					           values(i - 1, j - 1).Dy())
+			           );
+		           }
+	           },
+		IsParallel(), 2);
 
-	for (size_t i = 2; i < nrows - 2; i += 2)
-	{
-		for (size_t j = 1; j < ncols - 2; j += 2)
-		{
-			values(i, j).SetDxy(
-				three_div_4hy*(values(i, j + 1).Dx() - values(i, j - 1).Dx())
-				- 0.25*(values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
-			);
-		}
-	}
+	auto three_div_4hy = 0.75 * one_div_hy;
+	//#pragma omp parallel for if(IsParallel())
+	//	for (int i = 1; i < nrows - 1; i += 2)
+	//	{
+	//		for (size_t j = 2; j < ncols - 2; j += 2)
+	//		{
+	//			values(i, j).SetDxy(
+	//				three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
+	//				- 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
+	//			);
+	//		}
+	//	}
+
+	utils::For(1, nrows - 1,
+	           [&](int i)
+	           {
+		           for (size_t j = 2; j < ncols - 2; j += 2)
+		           {
+			           values(i, j).SetDxy(
+				           three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
+				           - 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
+			           );
+		           }
+	           },
+		IsParallel(), 2);
+
+
+	//#pragma omp parallel for if(IsParallel())
+	//	for (int i = 2; i < nrows - 2; i += 2)
+	//	{
+	//		for (size_t j = 1; j < ncols - 2; j += 2)
+	//		{
+	//			values(i, j).SetDxy(
+	//				three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
+	//				- 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
+	//			);
+	//		}
+	//	}
+
+	utils::For(2, nrows - 2,
+	           [&](int i)
+	           {
+		           for (size_t j = 1; j < ncols - 2; j += 2)
+		           {
+			           values(i, j).SetDxy(
+				           three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
+				           - 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
+			           );
+		           }
+	           },
+		IsParallel(), 2);
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, KnotMatrix& values)
@@ -287,24 +386,24 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, 
 void splineknots::ReducedDeBoorKnotsGenerator::SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
 {
 	auto result = RightSide(selector, h, dfirst, dlast, unknowns_count);
-	Tridiagonal().Solve(unknowns_count, &result.front());
+	Tridiagonal(omp_get_thread_num()).Solve(unknowns_count, &result.front());
 	for (size_t k = 0; k < result.size(); k++)
 	{
-		unknowns_setter(2*(k + 1), result[k]);
+		unknowns_setter(2 * (k + 1), result[k]);
 	}
 }
 
 splineknots::KnotMatrix splineknots::ReducedDeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
 {
-	if(udimension.knot_count<6|| vdimension.knot_count<6)
+	if (udimension.knot_count < 6 || vdimension.knot_count < 6)
 	{
 		DeBoorKnotsGenerator deboor(Function());
-			return deboor.GenerateKnots(udimension, vdimension);
+		return deboor.GenerateKnots(udimension, vdimension);
 	}
-	
+
 	KnotMatrix values(udimension.knot_count, vdimension.knot_count);
-	
-	DeBoorKnotsGenerator::InitializeKnots(udimension, vdimension, values);
+
+	InitializeKnots(udimension, vdimension, values);
 	FillXDerivations(values);
 	FillYDerivations(values);
 	FillXYDerivations(values);

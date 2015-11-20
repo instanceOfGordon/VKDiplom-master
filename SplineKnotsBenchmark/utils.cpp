@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "utils.h"
-
+#include <omp.h>
 
 namespace utils
 {
-
+	unsigned int num_threads = std::thread::hardware_concurrency();
 	void SolveTridiagonalSystem(double* lower_diagonal, double* main_diagonal, double* upper_diagonal, double* right_side, size_t n)
 	{
 		auto upper_diagonal_copy = new double[n];

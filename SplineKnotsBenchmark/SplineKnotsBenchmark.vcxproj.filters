@@ -72,6 +72,9 @@
     <ClInclude Include="ComparisonBenchmarkResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Cloneable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -117,6 +120,9 @@
       <Filter>Source Files\SplineKnots</Filter>
     </ClCompile>
     <ClCompile Include="ComparisonBenchmarkResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloneable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

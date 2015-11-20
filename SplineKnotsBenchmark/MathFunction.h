@@ -11,7 +11,6 @@ namespace splineknots {
 		MathFunction dxy_;
 	public:
 		InterpolativeMathFunction(const MathFunction function);
-		~InterpolativeMathFunction();
 
 
 		const MathFunction& Z() const;

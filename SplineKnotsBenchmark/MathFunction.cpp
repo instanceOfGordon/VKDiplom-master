@@ -24,9 +24,6 @@ splineknots::InterpolativeMathFunction::InterpolativeMathFunction(const MathFunc
 	};
 }
 
-splineknots::InterpolativeMathFunction::~InterpolativeMathFunction()
-{
-}
 
 //splineknots::InterpolativeMathFunction::~InterpolativeMathFunction()
 //	{

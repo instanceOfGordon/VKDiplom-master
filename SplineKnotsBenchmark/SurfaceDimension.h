@@ -7,6 +7,6 @@ namespace splineknots
 		const int knot_count;
 
 		SurfaceDimension(double min, double max, int knot_count);
-		~SurfaceDimension();
+
 	};
 }

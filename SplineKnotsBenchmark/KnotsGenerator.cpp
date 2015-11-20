@@ -12,9 +12,9 @@ namespace splineknots {
 		return value;
 	}*/
 
-	KnotsGenerator::~KnotsGenerator()
+	/*KnotsGenerator::~KnotsGenerator()
 	{
-	}
+	}*/
 
 	const InterpolativeMathFunction& KnotsGenerator::Function() const
 	{

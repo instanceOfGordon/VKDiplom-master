@@ -1,7 +1,29 @@
 #pragma once
+#include <omp.h>
+#include <thread>
 
 namespace utils
 {
+	extern unsigned int num_threads;
+
+	template <typename Function>
+	void For(int from, int to, Function function, bool in_parallel = false, int increment_by =1)
+	{
+		if (in_parallel)
+		{
+			#pragma omp parallel for
+			for (int i = from; i < to; i+= increment_by)
+			{
+				function(i);
+			}
+		}
+		else {
+			for (int i = from; i < to; i+= increment_by)
+			{
+				function(i);
+			}
+		}
+	}
 
 	template<typename T>
 	T* InitArray(size_t length, T* arrayToInit, T value);
@@ -30,5 +52,6 @@ namespace utils
 	template<typename T>
 	double Average(T* arr, size_t arr_size);
 };
+
 
 #include "utils_template.cpp"

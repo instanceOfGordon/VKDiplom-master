@@ -1,17 +1,24 @@
 #pragma once
 #include "stdafx.h"
 #include <vector>
+#include "Cloneable.h"
+
 namespace utils {
-	class Tridiagonal
+	/*template <typename Tridiagonal>
+	std::vector<Tridiagonal> CreateTridiagonals(int )*/
+
+	class Tridiagonal : public Cloneable
 	{
 	public:
+		Tridiagonal* Clone() const override;
 		Tridiagonal(double lower_value, double main_value, double upper_value);
 		virtual ~Tridiagonal();
 
 		void Resize(size_t newsize);
 		virtual void Solve(size_t num_unknowns, double* right_side);
+		
 	private:
-		std::unique_ptr<std::vector<double>> lu_buffer_;
+		std::vector<double> lu_buffer_;
 		static const size_t kInitCount = 1501;
 
 		const double lower_diagonal_value;
@@ -35,6 +42,7 @@ namespace utils {
 	class ReducedDeBoorTridiagonal : public Tridiagonal
 	{
 	public:
+		ReducedDeBoorTridiagonal* Clone() const override;
 		//static Tridiagonal& Instance();
 		ReducedDeBoorTridiagonal();
 		virtual ~ReducedDeBoorTridiagonal();

@@ -58,3 +58,8 @@ splineknots::KnotMatrix splineknots::CurveDeBoorKnotsGenerator::GenerateKnots(Su
 	knot_generator_->FillYDerivations(values);
 	return values;
 }
+
+splineknots::DeBoorKnotsGenerator& splineknots::CurveDeBoorKnotsGenerator::WrappedGenerator()
+{
+	return *knot_generator_;
+}

@@ -2,18 +2,16 @@
 #include "Tridiagonal.h"
 #include "utils.h"
 
-
-//Tridiagonal& Tridiagonal::Instance()
-//{
-//	static Tridiagonal instance;
-//	return instance;
-//}
+utils::Tridiagonal* utils::Tridiagonal::Clone() const
+{
+	return new Tridiagonal(*this);
+}
 
 utils::Tridiagonal::Tridiagonal(double lower_value, double main_value, double upper_value)
 	://lower_diagonal_(std::make_unique<std::vector<double>>(kInitCount,lower_value)),
 	//main_diagonal_(std::make_unique<std::vector<double>>(kInitCount, main_value)),
 	//upper_diagonal_(std::make_unique<std::vector<double>>(kInitCount, upper_value)),
-	lu_buffer_(std::make_unique<std::vector<double>>(kInitCount, upper_value)),
+	lu_buffer_(kInitCount, upper_value),
 	lower_diagonal_value(lower_value),
 	main_diagonal_value(main_value),
 	upper_diagonal_value(upper_value)
@@ -28,13 +26,13 @@ utils::Tridiagonal::~Tridiagonal()
 
 void utils::Tridiagonal::Resize(size_t newsize)
 {
-	if (newsize > lu_buffer_->size()) {
-		lu_buffer_->reserve(newsize);
+	if (newsize > lu_buffer_.size()) {
+		lu_buffer_.reserve(newsize);
 		
 	}
-	for (size_t i = lu_buffer_->size(); i < newsize; i++)
+	for (size_t i = lu_buffer_.size(); i < newsize; i++)
 	{
-		lu_buffer_->push_back(upper_diagonal_value);
+		lu_buffer_.push_back(upper_diagonal_value);
 	}
 	
 
@@ -42,19 +40,19 @@ void utils::Tridiagonal::Resize(size_t newsize)
 
 double* utils::Tridiagonal::ResetBufferAndGet()
 {
-	auto& buffer = *lu_buffer_;
+	auto& buffer = lu_buffer_;
 	std::fill(buffer.begin(), buffer.end(), upper_diagonal_value);
 	return &buffer.front();
 }
 
 double* utils::Tridiagonal::Buffer()
 {
-	return &lu_buffer_->front();
+	return &lu_buffer_.front();
 }
 
 size_t utils::Tridiagonal::BufferElementCount() const
 {
-	return lu_buffer_->size();
+	return lu_buffer_.size();
 }
 
 void utils::Tridiagonal::Solve(size_t num_unknowns, double* right_side)
@@ -84,6 +82,11 @@ const double& utils::Tridiagonal::MainDiagonalValue() const
 const double& utils::Tridiagonal::UpperDiagonalValue() const
 {
 	return upper_diagonal_value;
+}
+
+utils::ReducedDeBoorTridiagonal* utils::ReducedDeBoorTridiagonal::Clone() const
+{
+	return new ReducedDeBoorTridiagonal(*this);
 }
 
 utils::ReducedDeBoorTridiagonal::ReducedDeBoorTridiagonal()

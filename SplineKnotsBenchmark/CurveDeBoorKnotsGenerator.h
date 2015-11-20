@@ -10,7 +10,7 @@ namespace splineknots {
 		CurveDeBoorKnotsGenerator(std::unique_ptr<DeBoorKnotsGenerator> deBoorKnotsGenerator);
 		void InitializeKnots(SurfaceDimension& dimension, KnotMatrix& values);
 		KnotMatrix GenerateKnots(SurfaceDimension& dimension);
-
+		DeBoorKnotsGenerator& WrappedGenerator();
 	};
 	
 }

@@ -31,6 +31,8 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 
 	splineknots::CurveDeBoorKnotsGenerator full(std::make_unique<splineknots::DeBoorKnotsGenerator>(function));
 	splineknots::CurveDeBoorKnotsGenerator reduced(std::make_unique<splineknots::ReducedDeBoorKnotsGenerator>(function));
+	full.WrappedGenerator().Tridiagonal().Resize(num_knots); 
+	reduced.WrappedGenerator().Tridiagonal().Resize(num_knots);
 	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 
 	std::vector<splineknots::KnotMatrix> calculated_results;
@@ -75,7 +77,7 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
 
-ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
+ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bool in_parallel = false)
 {
 	splineknots::MathFunction function = [](double x, double y)
 		{
@@ -84,6 +86,8 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 
 	splineknots::DeBoorKnotsGenerator full(function);
 	splineknots::ReducedDeBoorKnotsGenerator reduced(function);
+	full.InParallel(in_parallel);
+	reduced.InParallel(in_parallel);
 	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 	splineknots::SurfaceDimension vdimension(udimension);
 
@@ -107,8 +111,9 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 	{
 		start = clock();
 		auto result = reduced.GenerateKnots(udimension, vdimension);
-		//result.Print();
 		finish = clock();
+		//result.Print();
+		
 		calculated_results.push_back(std::move(result));
 		reduced_times.push_back(finish - start);
 	}
@@ -117,8 +122,9 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots)
 	{
 		start = clock();
 		auto result = full.GenerateKnots(udimension, vdimension);
-		//result.Print();
 		finish = clock();
+		//result.Print();
+		
 		calculated_results.push_back(std::move(result));
 		full_times.push_back(finish - start);
 	}
@@ -160,6 +166,7 @@ int main()
 		std::cout << "1: Multiplication vs division benchmark." << std::endl;
 		std::cout << "2: Spline curve benchmark." << std::endl;
 		std::cout << "3: Spline surface benchmark." << std::endl;
+		std::cout << "4: Spline surface benchmark (in parallel)." << std::endl;
 		std::cout << "Q: End program" << std::endl;
 		char input;
 		std::cin >> input;
@@ -195,6 +202,16 @@ int main()
 			std::cin.get();
 
 			result = SurfaceBenchmark(num_iterations, num_knots);
+			PrintDeboorResult(result);
+			break;
+		case '4':
+			std::cout << "Parallel spline surface benchmark" << std::endl << std::endl;
+			std::cout << "Enter number of iterations: " << std::endl;
+			std::cin >> num_iterations;
+			std::cout << "Enter number of knots: " << std::endl;
+			std::cin >> num_knots;
+			std::cin.get();
+			result = SurfaceBenchmark(num_iterations, num_knots,true);
 			PrintDeboorResult(result);
 			break;
 		case 'q':
