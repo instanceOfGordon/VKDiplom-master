@@ -69,8 +69,9 @@ namespace utils
 	{
 		if (last_main_diagonal_value == DBL_TRUE_MIN)
 			last_main_diagonal_value = lower_diagonal_value;
-		buffer[0] = upper_diagonal_value/ main_diagonal_value;
-		right_side[0] /=  main_diagonal_value;
+		auto mdv_rcp = 1/ main_diagonal_value;
+		buffer[0] = upper_diagonal_value*mdv_rcp;
+		right_side[0] *=  mdv_rcp;
 		auto lastindex = right_side_count - 1;
 		for (size_t i = 0; i < lastindex; i++)
 		{

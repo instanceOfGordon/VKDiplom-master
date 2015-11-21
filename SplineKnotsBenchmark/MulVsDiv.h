@@ -4,7 +4,7 @@ class MulVsDiv
 	
 public:
 	void Loop();
-	void LoopInlined();
+	void LoopVectorized();
 	void BenchAll();
 	MulVsDiv();
 	~MulVsDiv();

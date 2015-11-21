@@ -12,7 +12,7 @@ namespace utils
 		if (in_parallel)
 		{
 			#pragma omp parallel for
-			for (int i = from; i < to; i+= increment_by)
+			for(int i = from; i < to; i+= increment_by)
 			{
 				function(i);
 			}

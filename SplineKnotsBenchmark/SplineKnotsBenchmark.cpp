@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "SplineKnots.h"
-#include "StopWatch.h"
 #include <iostream>
 #include <algorithm>
 #include "MulVsDiv.h"

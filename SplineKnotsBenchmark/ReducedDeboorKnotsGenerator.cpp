@@ -29,7 +29,7 @@ std::vector<double> splineknots::ReducedDeBoorKnotsGenerator::RightSide(RightSid
 	auto rs = std::vector<double>(equations_count);
 
 	//auto threeDivH = 1.5 / h;
-	auto three_div_h = 3 / h;
+	auto three_div_h = (1 / h)*3;
 	auto twelve_div_h = three_div_h * 4;
 	rs[0] = three_div_h * (right_side_variables(4) - right_side_variables(0)) - twelve_div_h * (right_side_variables(3) - right_side_variables(1)) - dfirst;
 
@@ -72,13 +72,13 @@ std::vector<double> splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(Kno
 	auto hy = knots(0, 1).Y() - knots(0, 0).Y();
 	auto one_div_hx = 1.0 / hx;
 	auto one_div_hy = 1.0 / hy;
-	auto three_div_hx = 3.0 / hx;
+	auto three_div_hx = one_div_hx*3;
 	auto six_div_hx = 2 * three_div_hx;
 
 	auto eighteen_div_hx = 6 * one_div_hx;
 	auto twentyfour_div_hx = 8 * three_div_hx;
 	//auto twelweDivHx = threeDivHx * 4;
-	auto three_div_hy = 3.0 / hy;
+	auto three_div_hy = 3.0 * one_div_hy;
 	//auto nine_div_hy = 3 * three_div_hy;
 	auto twelwe_div_hy = three_div_hy * 4;
 	auto three_div7_hx = one_div7 * three_div_hx;
@@ -86,7 +86,7 @@ std::vector<double> splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(Kno
 	auto twelve_div7_hx = 4 * three_div7_hx;
 	auto three_div7_hy = one_div7 * three_div_hy;
 	auto twelve_div7_hy = 4 * three_div7_hy;
-	auto three_div7_hxhy = three_div7_hy / hy;
+	auto three_div7_hxhy = three_div7_hy *one_div_hy;
 	auto nine_div7_hxhy = 3 * three_div7_hxhy;
 
 	auto thirtysix_div7_hxhy = 12 * three_div7_hxhy;
@@ -265,7 +265,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 	           IsParallel(), 2);
 
 	auto one_div_16 = 1.0 / 16.0;
-	auto three_div_16 = one_div_16 * 3;
+	auto three_div_16 = 3/ 16;
 	auto hx = values(1, 0).X() - values(0, 0).X();
 	auto hy = values(0, 1).Y() - values(0, 0).Y();
 	auto one_div_hx = 1.0 / hx;

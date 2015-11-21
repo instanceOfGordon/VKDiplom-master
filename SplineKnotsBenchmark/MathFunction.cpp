@@ -25,10 +25,6 @@ splineknots::InterpolativeMathFunction::InterpolativeMathFunction(const MathFunc
 }
 
 
-//splineknots::InterpolativeMathFunction::~InterpolativeMathFunction()
-//	{
-//	}
-
 const splineknots::MathFunction& splineknots::InterpolativeMathFunction::Z() const
 {
 	return z_;
