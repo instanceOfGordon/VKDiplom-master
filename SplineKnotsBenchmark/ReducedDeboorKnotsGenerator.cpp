@@ -156,11 +156,6 @@ std::vector<double> splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(Kno
 void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& values)
 {
 	auto ncols = values.ColumnsCount();
-	/*#pragma omp parallel for if(IsParallel())
-	for (int j = 0; j < ncols; j++)
-	{
-		DeBoorKnotsGenerator::FillXDerivations(j, values);
-	}*/
 	utils::For(0, values.ColumnsCount(),
 	           [&](int j)
 	           {
@@ -171,17 +166,6 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& valu
 	auto one_div_h = 1.0 / h;
 	auto three_div_4h = 0.75 * one_div_h;
 	auto nrows = values.RowsCount();
-	/*#pragma omp parallel for if(IsParallel())
-	for (auto i = 1; i < nrows - 1; i += 2)
-	{
-		for (size_t j = 0; j < ncols; j++)
-		{
-			values(i, j).SetDx(
-				three_div_4h * (values(i + 1, j).Z() - values(i - 1, j).Z())
-				- 0.25 * (values(i + 1, j).Dx() + values(i - 1, j).Dx())
-			);
-		}
-	}*/
 
 	utils::For(1, nrows - 1,
 	           [&](int i)
@@ -208,11 +192,6 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillXYDerivations(KnotMatrix& val
 void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& values)
 {
 	auto nrows = values.RowsCount();
-	//#pragma omp parallel for if(IsParallel())
-	//	for (int i = 0; i < nrows; i++)
-	//	{
-	//		DeBoorKnotsGenerator::FillYDerivations(i, values);
-	//	}
 	utils::For(0, values.RowsCount(),
 	           [&](int i)
 	           {
@@ -223,17 +202,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& valu
 	auto one_div_h = 1.0 / h;
 	auto three_div_4h = 0.75 * one_div_h;
 	auto ncols = values.ColumnsCount();
-	//#pragma omp parallel for if(IsParallel())
-	//	for (int i = 0; i < nrows; i++)
-	//	{
-	//		for (size_t j = 1; j < ncols - 1; j += 2)
-	//		{
-	//			values(i, j).SetDy(
-	//				three_div_4h * (values(i, j + 1).Z() - values(i, j - 1).Z())
-	//				- 0.25 * (values(i, j + 1).Dy() + values(i, j - 1).Dy())
-	//			);
-	//		}
-	//	}
+	
 	utils::For(0, nrows,
 	           [&](int i)
 	           {
@@ -251,11 +220,6 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& valu
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
 {
 	auto nrows = values.RowsCount();
-	//#pragma omp parallel for if(IsParallel())
-	//	for (int i = 2; i < nrows; i += 2)
-	//	{
-	//		FillYXDerivations(i, values);
-	//	}
 
 	utils::For(2, nrows,
 	           [&](int i)
@@ -274,24 +238,6 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 	auto three_div_16hx = three_div_16 * one_div_hx;
 
 	auto ncols = values.ColumnsCount();
-	//#pragma omp parallel for if(IsParallel())
-	//	for (auto i = 1; i < nrows - 1; i += 2)
-	//	{
-	//		for (size_t j = 1; j < ncols - 1; j += 2)
-	//		{
-	//			values(i, j).SetDxy(
-	//				one_div_16 *
-	//				(values(i + 1, j + 1).Dxy() + values(i + 1, j - 1).Dxy() + values(i - 1, j + 1).Dxy() +
-	//					values(i - 1, j - 1).Dxy())
-	//				- three_div_16hy *
-	//				(values(i + 1, j + 1).Dx() + values(i + 1, j - 1).Dx() + values(i - 1, j + 1).Dx() +
-	//					values(i - 1, j - 1).Dx())
-	//				- three_div_16hx *
-	//				(values(i + 1, j + 1).Dy() + values(i + 1, j - 1).Dy() + values(i - 1, j + 1).Dy() +
-	//					values(i - 1, j - 1).Dy())
-	//			);
-	//		}
-	//	}
 
 	utils::For(1, nrows - 1,
 	           [&](int i)
@@ -314,17 +260,6 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 		IsParallel(), 2);
 
 	auto three_div_4hy = 0.75 * one_div_hy;
-	//#pragma omp parallel for if(IsParallel())
-	//	for (int i = 1; i < nrows - 1; i += 2)
-	//	{
-	//		for (size_t j = 2; j < ncols - 2; j += 2)
-	//		{
-	//			values(i, j).SetDxy(
-	//				three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
-	//				- 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
-	//			);
-	//		}
-	//	}
 
 	utils::For(1, nrows - 1,
 	           [&](int i)
@@ -338,19 +273,6 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 		           }
 	           },
 		IsParallel(), 2);
-
-
-	//#pragma omp parallel for if(IsParallel())
-	//	for (int i = 2; i < nrows - 2; i += 2)
-	//	{
-	//		for (size_t j = 1; j < ncols - 2; j += 2)
-	//		{
-	//			values(i, j).SetDxy(
-	//				three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
-	//				- 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
-	//			);
-	//		}
-	//	}
 
 	utils::For(2, nrows - 2,
 	           [&](int i)

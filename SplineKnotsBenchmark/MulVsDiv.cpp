@@ -85,7 +85,7 @@ void MulVsDiv::LoopVectorized()
 	int l = 0;
 	auto start = clock();
 	add:
-	for (int i = 0; i < length; ++i)
+	for (int i = 0; i < length; i++)
 	{
 		c[i] = a[i] + b[i];
 	}

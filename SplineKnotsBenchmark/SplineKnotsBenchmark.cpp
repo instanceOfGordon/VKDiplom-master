@@ -100,18 +100,13 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 	unsigned int start;// = clock();
 	unsigned int finish;
 
-	//const int dumb_interations = 3;
-	//std::vector<std::unique_ptr<splineknots::KnotMatrix>> dumb_results;
-	//std::vector<unsigned int> dumb_times;
-	//dumb_times.reserve(dumb_interations * 2);
-	//calculated_results.reserve(dumb_interations * 4);
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
 		start = clock();
 		auto result = reduced.GenerateKnots(udimension, vdimension);
 		finish = clock();
-		//result.Print();
+		result.Print();
 		
 		calculated_results.push_back(std::move(result));
 		reduced_times.push_back(finish - start);
@@ -122,7 +117,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		start = clock();
 		auto result = full.GenerateKnots(udimension, vdimension);
 		finish = clock();
-		//result.Print();
+		result.Print();
 		
 		calculated_results.push_back(std::move(result));
 		full_times.push_back(finish - start);

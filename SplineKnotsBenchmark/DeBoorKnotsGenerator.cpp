@@ -103,9 +103,6 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::FillXDerivations(KnotMatrix& values)
 	{
-		/*#pragma omp parallel for if(is_parallel_)
-		for (auto j = 0; j < values.ColumnsCount(); j++)
-			FillXDerivations(j, values);*/
 
 		utils::For(0, values.ColumnsCount(),
 		           [&](int j)
@@ -123,11 +120,6 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::FillYDerivations(KnotMatrix& values)
 	{
-#/*pragma omp parallel for if(is_parallel_)
-		for (auto i = 0; i < values.RowsCount(); i++)
-		{
-			FillYDerivations(i, values);
-		}*/
 
 		utils::For(0, values.RowsCount(),
 		           [&](int i)
@@ -139,12 +131,6 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
 	{
-		//#pragma omp parallel for if(is_parallel_)
-		//		for (auto i = 0; i < values.RowsCount(); i++)
-		//		{
-		//			FillYXDerivations(i, values);
-		//		}
-
 		utils::For(0, values.RowsCount(),
 		           [&](int i)
 		           {
@@ -272,15 +258,9 @@ namespace splineknots
 		}
 	}
 
-	/*utils::Tridiagonal& DeBoorKnotsGenerator::Tridiagonal()
-	{
-		return *tridiagonal_;
-	}*/
-
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal)
 		: KnotsGenerator(math_function),
 		  tridagonals_()
-	//tridiagonal_(std::move(tridiagonal))
 	{
 		tridagonals_.reserve(utils::num_threads);
 		tridagonals_.push_back(std::move(tridiagonal));
