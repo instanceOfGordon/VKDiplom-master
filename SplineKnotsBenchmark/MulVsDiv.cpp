@@ -76,31 +76,30 @@ void MulVsDiv::LoopVectorized()
 	const int loops = 10e6;
 	std::cout << "Vectorized loop: " << std::endl;
 	double a[length], b[length],c[length];
-	//auto a = new double[length];
-	//auto b = new double[length];
 	for (size_t i = 0; i < length; i++)
 	{
 		a[i] = rand() % 2048;
 		b[i] = rand() % 2048;
 	}
+
 	int l = 0;
 	auto start = clock();
-
 	add:
 	for (int i = 0; i < length; ++i)
 	{
 		c[i] = a[i] + b[i];
 	}
-
+	// MSVC doesn't vectorize nested loops (message 1300 - too little computation to vectorize) as mentioned on line 23 in function 'Loop'.
+	// However if nested loop is replaced with this nasty workaround SIMD vectorization will happen.
+	// Same condition apply for mul/div/rcp loops
 	while (l<loops)
 	{
 		++l;
 		goto add;		
 	}
-
-
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
+
 	l = 0;
 	start = clock();
 	mul:
@@ -115,6 +114,7 @@ void MulVsDiv::LoopVectorized()
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
+
 	l = 0;
 	start = clock();
 	div:
@@ -129,6 +129,7 @@ void MulVsDiv::LoopVectorized()
 	}
 	auto div_time = clock() - start;
 	std::cout << "Division: " << div_time << std::endl;
+
 	l = 0;
 	start = clock();
 	rcp:
