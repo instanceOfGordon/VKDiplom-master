@@ -88,7 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Numerics\NumericMathExpression.cs" />
     <Compile Include="Numerics\MathExpression.cs" />
     <Compile Include="Numerics\SymbolicMathExpression.cs" />
     <Compile Include="Primitives\VertexNormals.cs" />
@@ -131,10 +130,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj">
-      <Project>{3ed6a5a6-b6bd-4c61-ba5f-7bf692f11c3d}</Project>
-      <Name>CalculationEngine</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SymbolicDifferentiation\SymbolicDifferentiation.csproj">
       <Project>{3f4739ec-1220-4ba8-a01a-dbcbc1b32ddc}</Project>
       <Name>SymbolicDifferentiation</Name>
