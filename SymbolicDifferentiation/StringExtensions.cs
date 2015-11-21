@@ -29,24 +29,12 @@ namespace SymbolicDifferentiation
         public static string OptimizeSign(this string str)
         {
             var nIndex = 0;
-            // var operators = new[] {'(', '+', '-', '/', '*', '^'};
+
             // replace "--" with "" or "+"
             str = str.Replace("--", "=");
-            //while ((nIndex = str.IndexOf("--", nIndex, StringComparison.Ordinal)) != -1)
-            //    if (nIndex == 0 || "(+-/*^".Contains(str[nIndex - 1].ToString()))
-            //        str = str.Remove(nIndex, 2);
-            //    else
-            //    {
-            //        str = str.Remove(nIndex, 1);
-            //        var strChars = str.ToCharArray();
-            //        strChars[nIndex] = '+';
-            //        str = new string(strChars);
-            //    }
 
             nIndex = 0;
-            // replace "+-" with "-"
-
-            //while ((nIndex = str.IndexOf("+-", nIndex, StringComparison.Ordinal)) != -1)
+ 
             //    str = str.Remove(nIndex);
             str = str.Replace("+-", "-");
             return str;
@@ -57,19 +45,8 @@ namespace SymbolicDifferentiation
             var res = str;
             if (vars.Length != values.Length) throw new ArgumentOutOfRangeException("Variables length must be equal to Values length.");
             for (int i = 0; i < vars.Length; i++)
-            {
-                //res = str.Replace("+" + vars[i], "+" + values[i]);
-                //res = str.Replace("-" + vars[i], "-" + values[i]);
-                //res = str.Replace("*" + vars[i], "*" + values[i]);
-                //res = str.Replace("/" + vars[i], "/" + values[i]);
-                //res = str.Replace(vars[i]+"+", values[i]+"+");
-                //res = str.Replace(vars[i] + "-", values[i] + "-");
-                //res = str.Replace(vars[i] + "*", values[i] + "*");
-                //res = str.Replace(vars[i] + "/", values[i] + "/");
-                //res = str.Replace("^" + vars[i], "^" + values[i]);             
-                //res = str.Replace(vars[i] + "^", values[i] + "^");
+            {           
                 res = str.Replace(vars[i], values[i].ToString());
-
             }
             return res;
         }
@@ -77,14 +54,6 @@ namespace SymbolicDifferentiation
         public static string RemoveConstants(this string str, string variable)
         {
 
-            //if (!str.Contains(variable)) return "0";
-            //var leftOp = LeftOperand(str);
-            //var rightOp = RightOperand(str);
-            //string result="";
-            //if (leftOp != null && leftOp.Contains(variable))
-            //{
-            //    result += leftOp;
-            //}
             if (!str.Contains(variable))
                 return "0";
             var operIdx = MathStack.GetOperator(str, ExpressionItem.AdditionSubtractionOperator);
@@ -148,7 +117,7 @@ namespace SymbolicDifferentiation
                 if (!char.IsDigit(lpcs[p]))                 
                         return false;
                 
-                //p++;
+          
             }
             return true;
         }
@@ -253,5 +222,11 @@ namespace SymbolicDifferentiation
             str = str.TrimEnd('\t');
             return str;
         }
+
+        public static string TrimFloat(this double f)
+        {
+            return $"{f:0}";
+        }
+
     }
 }

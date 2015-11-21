@@ -8,7 +8,7 @@ namespace SymbolicDifferentiation
     {
         
 
-        public static int Calculate(string input, double xVal, double yVal, ref double output)
+        public int Calculate(string input, double xVal, double yVal, ref double output)
         {
 
             var xValStr = xVal.ToString();//.Replace("e","");//CultureInfo.InvariantCulture);//.Replace(",",".");
@@ -18,7 +18,7 @@ namespace SymbolicDifferentiation
             return Calculate(input, ref output);
         }
 
-        public static int Calculate(string input, ref double output)
+        public int Calculate(string input, ref double output)
         {
          
             // remove spaces
@@ -35,17 +35,6 @@ namespace SymbolicDifferentiation
             if ((nError = MathStack.FillStack(input, vStack)) < 0)
                 return nError;
 
-            //foreach (var expressionItem in vStack)
-            //{
-            //    for (int i = 0; i < values.Length; i++)
-            //    {
-            //        if (expressionItem.MStrInput == variables[i])
-            //            expressionItem.MStrInput = values.ToString();
-            //        else if (expressionItem.MStrInput.Contains("("+variables[i]+")"))
-                    
-            //    }
-            //}
-
             int nExpression = 0;
             // apply operators to operands
             nError = CalculateStack(vStack, ref nExpression, ref output);
@@ -53,7 +42,7 @@ namespace SymbolicDifferentiation
             return nError;
         }
 
-        private static int CalculateStack(List<ExpressionItem> vStack, ref int nExpression, ref double output)
+        private int CalculateStack(List<ExpressionItem> vStack, ref int nExpression, ref double output)
         {
             // output = -1;
             var pQI = vStack[nExpression++];
@@ -103,7 +92,7 @@ namespace SymbolicDifferentiation
 
             return 0;
         }
-        private static int CalculateStack(List<ExpressionItem> vStack, ref int nExpression, ref string output)
+        private int CalculateStack(List<ExpressionItem> vStack, ref int nExpression, ref string output)
         {
             var pQI = vStack[nExpression++];
             int nError;
@@ -146,30 +135,30 @@ namespace SymbolicDifferentiation
                     {
                         case '-':   // c(u-v) = cu-cv
                             pQI.MStrOutput = string.Format(pQI.MStrOutput, "%s",
-                                MathStack.TrimFloat(SupportedCalculationFunctions.Atof(cu) - SupportedCalculationFunctions.Atof(cv)));
+                                StringExtensions.TrimFloat(SupportedCalculationFunctions.Atof(cu) - SupportedCalculationFunctions.Atof(cv)));
                             //pQI.MStrOutput.Format("%s", TrimFloat(ATOF(cu) - ATOF(cv)));
                             break;
                         case '+':   // c(u+v) = cu+cv
                             pQI.MStrOutput = string.Format(pQI.MStrOutput, "%s",
-                               MathStack.TrimFloat(SupportedCalculationFunctions.Atof(cu) + SupportedCalculationFunctions.Atof(cv)));
+                               StringExtensions.TrimFloat(SupportedCalculationFunctions.Atof(cu) + SupportedCalculationFunctions.Atof(cv)));
                             break;
                         case '*':   // c(u*v) = cu*cv
                             pQI.MStrOutput = string.Format(pQI.MStrOutput, "%s",
-                                      MathStack.TrimFloat(SupportedCalculationFunctions.Atof(cu) * SupportedCalculationFunctions.Atof(cv)));
+                                      StringExtensions.TrimFloat(SupportedCalculationFunctions.Atof(cu) * SupportedCalculationFunctions.Atof(cv)));
                             break;
                         case '/':   // c(u/v) = cu/cv
                             if (Math.Abs(SupportedCalculationFunctions.Atof(cv)) < 0.001)
                                 return (int)ErrorArgument.DivideByZero;
                             pQI.MStrOutput = string.Format(pQI.MStrOutput, "%s",
-                                         MathStack.TrimFloat(SupportedCalculationFunctions.Atof(cu) / SupportedCalculationFunctions.Atof(cv)));
+                                        StringExtensions.TrimFloat(SupportedCalculationFunctions.Atof(cu) / SupportedCalculationFunctions.Atof(cv)));
                             break;
                         case '^':   // c(u^v) = cu^cv
                             pQI.MStrOutput = string.Format(pQI.MStrOutput, "%s",
-                                      MathStack.TrimFloat(Math.Pow(SupportedCalculationFunctions.Atof(cu), SupportedCalculationFunctions.Atof(cv))));
+                                      StringExtensions.TrimFloat(Math.Pow(SupportedCalculationFunctions.Atof(cu), SupportedCalculationFunctions.Atof(cv))));
                             break;
                         case '%':   // c(u%v) = cu%cv
                             pQI.MStrOutput = string.Format(pQI.MStrOutput, "%s",
-                                    MathStack.TrimFloat((int)SupportedCalculationFunctions.Atof(cu) % (int)SupportedCalculationFunctions.Atof(cv)));
+                                    StringExtensions.TrimFloat((int)SupportedCalculationFunctions.Atof(cu) % (int)SupportedCalculationFunctions.Atof(cv)));
                             break;
                     }
             }
@@ -187,7 +176,7 @@ namespace SymbolicDifferentiation
         }
 
 
-        internal static string Calculate(string input, bool bOptimize = false)
+        internal string Calculate(string input, bool bOptimize = false)
         {
             // remove spaces
             input = input.Replace(" ", "");
@@ -219,7 +208,7 @@ namespace SymbolicDifferentiation
             }
             else
             {
-                output = MathStack.TrimFloat(nOutput);
+                output = nOutput.TrimFloat();
             }
 
             //foreach (var expressionItem in vStack)
@@ -269,7 +258,7 @@ namespace SymbolicDifferentiation
         public static readonly Func<string, string> Acosh = x => "log(" + x + "+sqrt(" + x + "*" + x + "-1))";
         public static readonly Func<string, string> Atanh = x => "log((1+" + x + ")/(1-" + x + "))/2";
         // supported functions calculation
-        public static readonly Func<string, string> C = (u) => Calculator.Calculate(u);
+        public static readonly Func<string, string> C = (u) => (new Calculator()).Calculate(u);
         public static readonly Func<string, string> CSin = (u)=> "sin(" + C(u)+ ")";
         public static readonly Func<string, string> CCos = (u)=> "cos(" + C(u)+ ")";
         public static readonly Func<string, string> CTan = (u)=> "tan(" + C(u)+ ")";

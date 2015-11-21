@@ -11,28 +11,30 @@ namespace Test
         [TestMethod]
         public void DifferentiateXYTest()
         {
-            var d = Differentiator.Differentiate("x^2+y^2", "x", true);
-            var res = Differentiator.Differentiate(d, "y", true);
+            var differentiator = new Differentiator();
+            var d = differentiator.Differentiate("x^2+y^2", "x", true);
+            var res = differentiator.Differentiate(d, "y", true);
 
-            d = Differentiator.Differentiate("x^2+y^2", "y", true);
-            res = Differentiator.Differentiate(d, "x", true);
+            d = differentiator.Differentiate("x^2+y^2", "y", true);
+            res = differentiator.Differentiate(d, "x", true);
 
-            d = Differentiator.Differentiate("x^y", "x", true);
+            d = differentiator.Differentiate("x^y", "x", true);
             // toto nezvladne t.j y*x^(y-1) podla y
-            res = Differentiator.Differentiate(d, "y", true);
+            res = differentiator.Differentiate(d, "y", true);
 
-            d = Differentiator.Differentiate("x^y", "y", true);
-            res = Differentiator.Differentiate(d, "x", true);
+            d = differentiator.Differentiate("x^y", "y", true);
+            res = differentiator.Differentiate(d, "x", true);
         }
 
         [TestMethod]
         public void DifferentiateMexicanHatTest()
         {
-            var dx = Differentiator.Differentiate("sin(sqrt(x^2+y^2))", "x", true);
-            var res = Differentiator.Differentiate(dx, "y", true);
+            var differentiator = new Differentiator();
+            var dx = differentiator.Differentiate("sin(sqrt(x^2+y^2))", "x", true);
+            var res = differentiator.Differentiate(dx, "y", true);
 
-            dx = Differentiator.Differentiate("sin(sqrt(x^2+y^2))", "y", true);
-            res = Differentiator.Differentiate(dx, "x", true);
+            dx = differentiator.Differentiate("sin(sqrt(x^2+y^2))", "y", true);
+            res = differentiator.Differentiate(dx, "x", true);
 
         }
 

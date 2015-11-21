@@ -31,37 +31,8 @@ namespace SymbolicDifferentiation
             return MStrInput;
         }
 
-        //public string LeftOperand
-        //{
-        //    get
-        //    {
-        //        if (MStrInput.IsNumeric())
-        //            return MStrInput;
-        //        var operIdx = MathStack.GetOperator(MStrInput, Operators);
-        //        if (operIdx == -1) return MStrInput;
-        //        return MStrInput.Substring(0, operIdx);
-        //    }
-        //}
-
-        //public string RightOperand
-        //{
-        //    get
-        //    {
-        //        if (MStrInput.IsNumeric())
-        //            return MStrInput;
-        //        var operIdx = MathStack.GetOperator(MStrInput, Operators);
-        //        if (operIdx == -1) return MStrInput;
-        //        return MStrInput.Substring(operIdx + 1);
-        //    }
-        //}
-
         public void GetDifferentiation(string diffVar)
         {
-            //if (!MStrInput.Contains(diffVar))
-            //{
-            //    MStrOutput = "0";
-            //    return;
-            //}
             int nIndex;
             if (MNFunction != -1)
             {
@@ -207,7 +178,7 @@ namespace SymbolicDifferentiation
 
             double u = 0;
             //var nError = -1;
-            var nError = Calculator.Calculate(str, ref u);
+            var nError = (new Calculator()).Calculate(str, ref u);
             if (nError != 0 && bValue)
                 return nError;
             if (nError == 0)
@@ -347,7 +318,7 @@ namespace SymbolicDifferentiation
                     case 23: // acosech
                     case 24: // acoth
                         double result = 0;
-                        var err = Calculator.Calculate(str, ref result);
+                        var err = (new Calculator()).Calculate(str, ref result);
                         MNOutput = result;
                         if ((nError = err) < 0)
                             return nError;

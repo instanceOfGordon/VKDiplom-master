@@ -5,7 +5,7 @@ namespace SymbolicDifferentiation
 {
     public class Differentiator
     {
-        public static string Differentiate(string input, string diffVar, bool bOptimize = false)
+        public string Differentiate(string input, string diffVar, bool bOptimize = false)
         {
             if (!input.Contains(diffVar)) return "0";
             var strInput = input.RemoveConstants(diffVar);
@@ -28,20 +28,6 @@ namespace SymbolicDifferentiation
             string strOutput = DifferentiateStack(vStack, diffVar,ref nExpression);
             //string strOutput = DifferentiateStack(vStack, "x", ref nExpression);
 
-            // loop to fill the stack string from the stack vector
-            //foreach (var expressionItem in vStack)
-            //{
-            //    if (expressionItem.MCOperator!=null)
-            //        strStack += expressionItem.MCOperator + "\r\n";
-            //    else
-            //        strStack += "d(" + expressionItem.MStrInput + ")/d"+diffVar+ "= " + expressionItem.MStrOutput + "\r\n";
-
-            //    // insert tabs in front of the item stack
-            //    expressionItem.MStrStack.InsertTabs();
-            //    strStack += expressionItem.MStrStack;
-
-            //}
-
             if (bOptimize)
                 // optimize the equation from unneeded elements
                 strOutput = strOutput.Optimize();
@@ -49,7 +35,7 @@ namespace SymbolicDifferentiation
             return strOutput;
         }
 
-        private static string DifferentiateStack(List<ExpressionItem> vStack, string diffVar,ref int nExpression)
+        private string DifferentiateStack(List<ExpressionItem> vStack, string diffVar,ref int nExpression)
         {
             var pQI = vStack[nExpression++];
 
@@ -104,7 +90,7 @@ namespace SymbolicDifferentiation
                             double vn;
                             var success = double.TryParse(v, out vn);
                             if (success)
-                                pQI.MStrOutput = v + "*" + u + "^" + MathStack.TrimFloat(vn - 1) + "*" + du;
+                                pQI.MStrOutput = v + "*" + u + "^" + (vn - 1).TrimFloat() + "*" + du;
                             else
                                 pQI.MStrOutput = v + "*" + u + "^" + "("+v+"-1)*" + du;
                             break;
@@ -137,29 +123,8 @@ namespace SymbolicDifferentiation
 
     static class SupportedDifferentiationFunctions
     {
-        //public static readonly Func<string, string> Acos = x => "log(" + x + "+sqrt(" + x + "*" + x + "-1))";
-
-        //public static readonly Func<string, string> Acosech =
-        //    x => "log((sign(" + x + ")*sqrt(" + x + "*" + x + "+1)+1)/" + x + ")";
-
-        //public static readonly Func<string, double> Atof = x =>
-        //{
-        //    switch (x)
-        //    {
-        //        case "E":
-        //            return Math.E;
-        //        case "PI":
-        //            return Math.PI;
-        //    }
-        //    return Atof(x);
-        //};
-        //public static readonly Func<string, string> Acoth = x => "log((" + x + "+1)/(" + x + "-1))/2";
-        //public static readonly Func<string, string> Asech = x => "log((sqrt(-" + x + "*" + x + "+1)+1)/" + x + ")";
-        //public static readonly Func<string, string> Asinh = x => "log(" + x + "+sqrt(" + x + "*" + x + "+1))";
-        //public static readonly Func<string, string> Acosh = x => "log(" + x + "+sqrt(" + x + "*" + x + "-1))";
-        //public static readonly Func<string, string> Atanh = x => "log((1+" + x + ")/(1-" + x + "))/2";
-        // supported functions Dalculation
-        public static readonly Func<string, string, string> D = (u, diffVar) => Differentiator.Differentiate(u, diffVar);
+      
+        public static readonly Func<string, string, string> D = (u, diffVar) => (new Differentiator()).Differentiate(u, diffVar);
         public static readonly Func<string, string, string> DSin = (u, diffVar) => D(u, diffVar) + "*cos(" + u + ")";
         public static readonly Func<string, string, string> DCos = (u, diffVar) => D(u, diffVar) + "*(-sin(" + u + "))";
         public static readonly Func<string, string, string> DTan = (u, diffVar) => D(u, diffVar) + "*sec(" + u + ")^2";
@@ -192,10 +157,6 @@ namespace SymbolicDifferentiation
         public static readonly Func<string, string, string> DLn = (u, diffVar) => DLog(u, diffVar);
         public static readonly Func<string, string, string> DSign = (u, diffVar) => "0";
         public static readonly Func<string, string, string> DAbs = (u, diffVar) => D(u, diffVar) + "*(" + u + ")/abs(" + u + ")";
-        //public delegate string MathFunction(string x);
 
-        //public MathFunction Atof = x => (((x) == "e") ? Math.E : ((x) == "pi" ? Math.PI : Atof(x)));
-
-        //public static readonly Func<string, string> Sign = x => double.Parse(x) >= 0 ? 1.ToString() : (-1).ToString();
     }
 }

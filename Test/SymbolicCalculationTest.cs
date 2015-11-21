@@ -14,17 +14,18 @@ namespace Test
         public void CalculateXYTest()
         {
             double output = 0;
-            var res = Calculator.Calculate("x^2+y^2", Values[0], Values[1], ref output);
+            var calculator = new Calculator();
+            var res = calculator.Calculate("x^2+y^2", Values[0], Values[1], ref output);
 
 
-            res = Calculator.Calculate("x^y", Values[0], Values[1], ref output);
+            res = calculator.Calculate("x^y", Values[0], Values[1], ref output);
         }
 
         [TestMethod]
         public void CalculateMexicanHatTest()
         {
             double output = 0;
-            var res = Calculator.Calculate("sin(sqrt(x^2+y^2))", Values[0], Values[1], ref output);
+            var res = (new Calculator()).Calculate("sin(sqrt(x^2+y^2))", Values[0], Values[1], ref output);
 
 
         }
