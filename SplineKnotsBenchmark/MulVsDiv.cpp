@@ -9,13 +9,13 @@ void MulVsDiv::Loop()
 	const int length = 512;
 	const int loops = 10e6;
 	std::cout << "Loop: " << std::endl;
-	double a[length], b[length], c[length];
+	double a[length], b[length],c[length];
 	for (size_t i = 0; i < length; i++)
 	{
 		a[i] = rand() % 2048;
 		b[i] = rand() % 2048;
+		c[i] = rand() % 2048;
 	}
-
 
 	auto start = clock();
 	for (size_t l = 0; l < loops; l++)
@@ -65,7 +65,7 @@ void MulVsDiv::Loop()
 #pragma novector
 		for (int i = 0; i < length; i++)
 		{
-			c[i] = 1 / b[i];
+			c[i] = 1 / a[i];
 		}
 	}
 	auto rcp_time = clock() - start;
@@ -74,7 +74,7 @@ void MulVsDiv::Loop()
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl ;
 	std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
-	std::cout << "Just ignore it: " << c[15] + a[8] + b[1] << std::endl << std::endl;
+	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
 }
 
 void MulVsDiv::LoopVectorized()
@@ -82,11 +82,12 @@ void MulVsDiv::LoopVectorized()
 	const int length = 512;
 	const int loops = 10e6;
 	std::cout << "Vectorized loop: " << std::endl;
-	double a[length], b[length], c[length];
+	double a[length], b[length],c[length];
 	for (size_t i = 0; i < length; i++)
 	{
 		a[i] = rand() % 2048;
 		b[i] = rand() % 2048;
+		c[i] = rand() % 2048;
 	}
 
 	int l = 0;
@@ -142,7 +143,7 @@ div:
 rcp:
 	for (int i = 0; i < length; i++)
 	{
-		c[i] = 1.0 / b[i];
+		c[i] = 1 / a[i];
 	}
 	while (l < loops)
 	{

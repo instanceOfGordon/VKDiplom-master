@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace HermiteInterpolation.Primitives
 {
     /// <summary>
-    ///     Custom struct which allows dynamic lighting on colored vertices using normals.
+    ///     Custom structure which allows dynamic lighting on colored vertices using normals.
     /// </summary>
     public struct VertexPositionNormalColor : IVertexType
     {

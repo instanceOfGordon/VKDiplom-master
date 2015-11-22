@@ -16,7 +16,7 @@ namespace HermiteInterpolation.Shapes
         public MathFunctionSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
             MathExpression mathExpression)
             : this(
-                uDimension, vDimension, mathExpression.Compile()
+                uDimension, vDimension, mathExpression.Interpret()
                 )
         {
            

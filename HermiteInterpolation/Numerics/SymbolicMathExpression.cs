@@ -3,6 +3,9 @@ using SymbolicDifferentiation;
 
 namespace HermiteInterpolation.Numerics
 {
+    /// <summary>
+    /// Default interpreter of mathematic R->RxR functions.
+    /// </summary>
     public class SymbolicMathExpression : MathExpression
     {
         public SymbolicMathExpression(string expression, string[] variables) : base(expression, variables)
@@ -26,12 +29,12 @@ namespace HermiteInterpolation.Numerics
             return diff;
         }
 
-        public override MathFunction Compile()
+        public override MathFunction Interpret()
         {
             return Compile(Expression);
         }
 
-        public override MathFunction CompileDerivative(params string[] respectToVariables)
+        public override MathFunction InterpretMathDifferentiation(params string[] respectToVariables)
         {
             var diff = Differentiate(respectToVariables);
 

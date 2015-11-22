@@ -2,8 +2,16 @@
 
 namespace HermiteInterpolation.Primitives
 {
+    /// <summary>
+    /// Helper class for calculating normal vectors of procedurally created 3D shapes. 
+    /// </summary>
     public static class VertexNormals
     {
+        /// <summary>
+        /// Calculate lighing normals for specified vertex array.
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="indices"></param>
         public static void CalculateTriangleNormals(VertexPositionNormalColor[] vertices, short[] indices)
         {
           

@@ -4,7 +4,9 @@
 namespace HermiteInterpolation.Numerics
 {
     
-
+    /// <summary>
+    /// Abstract interpreter for mathematic R->RxR functions.
+    /// </summary>
     public abstract class MathExpression
     {
         public string Expression { get; }
@@ -17,14 +19,13 @@ namespace HermiteInterpolation.Numerics
             
         }
 
-        public abstract MathFunction Compile();
+        public abstract MathFunction Interpret();
 
-        public abstract MathFunction CompileDerivative(params string[] respectToVariables);
+        public abstract MathFunction InterpretMathDifferentiation(params string[] respectToVariables);
           
 
         public static MathExpression CreateDefault(string expression, params string[] variables)
         {
-            //return new NumericMathExpression(expression, variables);
             return new SymbolicMathExpression(expression, variables);
         }
 
