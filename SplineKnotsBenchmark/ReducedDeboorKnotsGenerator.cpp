@@ -133,21 +133,25 @@ std::vector<double> splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(Kno
 	for (int k = 1, j = 6; k < equationsCount - 1; k++ , j += 2)
 	{
 		//auto i2 = i * 2;
-		rs[k] = one_div7 * (knots(iMin2, j + 2).Dxy() + knots(iMin2, j - 2).Dxy()) - 2 * knots(iMin1, j).Dxy()
-			+ three_div7_hx * (knots(iMin1, j + 2).Dy() + knots(iMin1, j - 2).Dy()) +
-			three_div7_hy * (-knots(iMin2, j + 2).X() + knots(iMin2, j - 2).X())
-			+ nine_div7_hx * (knots(i, j + 2).Dy() + knots(i, j - 2).Dy()) +
-			nine_div7_hxhy * (-knots(iMin2, j + 2).Z() + knots(iMin2, j - 2).Z())
-			+ twelve_div7_hx * (-knots(iMin1, j + 2).Dy() - knots(iMin1, j - 2).Dy()) +
-			twelve_div7_hy * (knots(iMin2, j + 1).X() - knots(iMin2, j - 1).X())
-			+ three_div7_hy * (knots(i, j + 2).Dx() + knots(i, j - 2).Dx()) +
-			twentyseven_div7_hxhy * (-knots(i, j + 2).Z() + knots(i, j - 2).Z())
+		auto j_plus_1 = j + 1;
+		auto j_minus_1 = j - 2;
+		auto j_plus_2 = j + 2;
+		auto j_minus_2 = j - 2;
+		rs[k] = one_div7 * (knots(iMin2, j_plus_2).Dxy() + knots(iMin2, j_minus_2).Dxy()) - 2 * knots(iMin1, j).Dxy()
+			+ three_div7_hx * (knots(iMin1, j_plus_2).Dy() + knots(iMin1, j_minus_2).Dy()) +
+			three_div7_hy * (-knots(iMin2, j_plus_2).X() + knots(iMin2, j_minus_2).X())
+			+ nine_div7_hx * (knots(i, j_plus_2).Dy() + knots(i, j_minus_2).Dy()) +
+			nine_div7_hxhy * (-knots(iMin2, j_plus_2).Z() + knots(iMin2, j_minus_2).Z())
+			+ twelve_div7_hx * (-knots(iMin1, j_plus_2).Dy() - knots(iMin1, j_minus_2).Dy()) +
+			twelve_div7_hy * (knots(iMin2, j_plus_1).X() - knots(iMin2, j_minus_1).X())
+			+ three_div7_hy * (knots(i, j_plus_2).Dx() + knots(i, j_minus_2).Dx()) +
+			twentyseven_div7_hxhy * (-knots(i, j_plus_2).Z() + knots(i, j_minus_2).Z())
 			-
 			thirtysix_div7_hxhy *
-			(knots(iMin1, j + 2).Z() - knots(iMin1, j - 2).Z() + knots(iMin2, j + 1).Z() - knots(iMin2, j - 1).Z())
-			- six_div_hx * knots(iMin2, j).Dy() + twelwe_div_hy * (knots(i, j + 1).Dx() + knots(i, j - 1).Dx()) +
-			onehundredeight_div7_hxhy * (knots(i, j + 1).Z() + knots(i, j - 1).Z())
-			- eighteen_div_hx * knots(i, j).Dy() + onehundredfortyfour_div7_hxhy * (-knots(iMin1, j + 1).Z() + knots(iMin1, j - 1).Z()) +
+			(knots(iMin1, j_plus_2).Z() - knots(iMin1, j_minus_2).Z() + knots(iMin2, j_plus_1).Z() - knots(iMin2, j_minus_1).Z())
+			- six_div_hx * knots(iMin2, j).Dy() + twelwe_div_hy * (knots(i, j_plus_1).Dx() + knots(i, j_minus_1).Dx()) +
+			onehundredeight_div7_hxhy * (knots(i, j_plus_1).Z() + knots(i, j_minus_1).Z())
+			- eighteen_div_hx * knots(i, j).Dy() + onehundredfortyfour_div7_hxhy * (-knots(iMin1, j_plus_1).Z() + knots(iMin1, j_minus_1).Z()) +
 			twentyfour_div_hx * knots(iMin1, j).Z();
 	}
 	return rs;

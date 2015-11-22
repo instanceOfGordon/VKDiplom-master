@@ -23,6 +23,10 @@ void MulVsDiv::Loop()
 		// MSVC cannot vectorize this loop (message 1300).
 		// However, if this loop will not be nested in, autovectorization will happen.
 		// Same condition apply for mul/div/rcp loops
+
+		// ICL does not have this issue, but to provide both vectorized and nonvectorized comparison 
+		// i specifically disabled vectorization in this method
+#pragma novector
 		for (int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] + b[i];
@@ -34,6 +38,7 @@ void MulVsDiv::Loop()
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
+#pragma novector
 		for (int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] * b[i];
@@ -45,6 +50,7 @@ void MulVsDiv::Loop()
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
+#pragma novector
 		for (int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] / b[i];
@@ -56,9 +62,10 @@ void MulVsDiv::Loop()
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
+#pragma novector
 		for (int i = 0; i < length; i++)
 		{
-			c[i] = 1/ b[i];
+			c[i] = 1 / b[i];
 		}
 	}
 	auto rcp_time = clock() - start;
@@ -67,7 +74,7 @@ void MulVsDiv::Loop()
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl ;
 	std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
-	std::cout << "Just ignore it: " <<c[15]+ a[8] + b[1] << std::endl << std::endl;
+	std::cout << "Just ignore it: " << c[15] + a[8] + b[1] << std::endl << std::endl;
 }
 
 void MulVsDiv::LoopVectorized()
@@ -75,7 +82,7 @@ void MulVsDiv::LoopVectorized()
 	const int length = 512;
 	const int loops = 10e6;
 	std::cout << "Vectorized loop: " << std::endl;
-	double a[length], b[length],c[length];
+	double a[length], b[length], c[length];
 	for (size_t i = 0; i < length; i++)
 	{
 		a[i] = rand() % 2048;
@@ -84,7 +91,7 @@ void MulVsDiv::LoopVectorized()
 
 	int l = 0;
 	auto start = clock();
-	add:
+add:
 	for (int i = 0; i < length; i++)
 	{
 		c[i] = a[i] + b[i];
@@ -92,22 +99,22 @@ void MulVsDiv::LoopVectorized()
 	// MSVC doesn't vectorize nested loops (message 1300 - too little computation to vectorize) as mentioned on line 23 in function 'Loop'.
 	// However if nested loop is replaced with this nasty workaround SIMD vectorization will happen.
 	// Same condition apply for mul/div/rcp loops
-	while (l<loops)
+	while (l < loops)
 	{
 		++l;
-		goto add;		
+		goto add;
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
 
 	l = 0;
 	start = clock();
-	mul:
+mul:
 	for (int i = 0; i < length; ++i)
 	{
 		c[i] = a[i] * b[i];
 	}
-	while (l<loops)
+	while (l < loops)
 	{
 		++l;
 		goto mul;
@@ -117,12 +124,12 @@ void MulVsDiv::LoopVectorized()
 
 	l = 0;
 	start = clock();
-	div:
+div:
 	for (int i = 0; i < length; ++i)
 	{
 		c[i] = a[i] / b[i];
 	}
-	while (l<loops)
+	while (l < loops)
 	{
 		++l;
 		goto div;
@@ -132,12 +139,12 @@ void MulVsDiv::LoopVectorized()
 
 	l = 0;
 	start = clock();
-	rcp:
+rcp:
 	for (int i = 0; i < length; i++)
 	{
 		c[i] = 1.0 / b[i];
 	}
-	while (l<loops)
+	while (l < loops)
 	{
 		++l;
 		goto rcp;
@@ -149,11 +156,8 @@ void MulVsDiv::LoopVectorized()
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
 	std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
-	std::cout << "Just ignore it: " << c[7]+ a[8] + b[1] << std::endl << std::endl;
-	//delete[] a,b;
+	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
 }
-
-
 
 
 void MulVsDiv::BenchAll()

@@ -248,7 +248,11 @@
       <UseProcessorExtensions>None</UseProcessorExtensions>
       <InterproceduralOptimization>MultiFile</InterproceduralOptimization>
       <Parallelization>false</Parallelization>
-      <AdditionalOptions>/Qopt-report2 /Qvec-report5 %(AdditionalOptions)</AdditionalOptions>
+      <OptimizationDiagnosticLevel>Disable</OptimizationDiagnosticLevel>
+      <EnableGapAnalysis>Disable</EnableGapAnalysis>
+      <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
+      <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
+      <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
