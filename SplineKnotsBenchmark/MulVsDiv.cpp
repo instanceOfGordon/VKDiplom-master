@@ -6,10 +6,10 @@
 
 void MulVsDiv::Loop()
 {
-	const int length = 16;
-	const int loops = 10e7;
+	const int length = 512;
+	const int loops = 10e6;
 	std::cout << "Loop: " << std::endl;
-	double a[length], b[length];
+	double a[length], b[length], c[length];
 	for (size_t i = 0; i < length; i++)
 	{
 		a[i] = rand() % 2048;
@@ -25,7 +25,7 @@ void MulVsDiv::Loop()
 		// Same condition apply for mul/div/rcp loops
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] + b[i];
+			c[i] = a[i] + b[i];
 		}
 	}
 	auto add_time = clock() - start;
@@ -36,7 +36,7 @@ void MulVsDiv::Loop()
 	{
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] * b[i];
+			c[i] = a[i] * b[i];
 		}
 	}
 	auto mul_time = clock() - start;
@@ -47,7 +47,7 @@ void MulVsDiv::Loop()
 	{
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] / b[i];
+			c[i] = a[i] / b[i];
 		}
 	}
 	auto div_time = clock() - start;
@@ -58,16 +58,16 @@ void MulVsDiv::Loop()
 	{
 		for (int i = 0; i < length; i++)
 		{
-			a[i] = 1.0 / b[i];
+			c[i] = 1/ b[i];
 		}
 	}
 	auto rcp_time = clock() - start;
 	std::cout << "Reciprocal: " << rcp_time << std::endl << std::endl;
 
-	std::cout << "Addition faster than division: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
+	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl ;
 	std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
-	std::cout << "Just ignore it: " << a[8] + b[1] << std::endl << std::endl;
+	std::cout << "Just ignore it: " <<c[15]+ a[8] + b[1] << std::endl << std::endl;
 }
 
 void MulVsDiv::LoopVectorized()
@@ -146,7 +146,7 @@ void MulVsDiv::LoopVectorized()
 	auto rcp_time = clock() - start;
 	std::cout << "Reciprocal: " << rcp_time << std::endl << std::endl;
 
-	std::cout << "Addition faster than division: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
+	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
 	std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
 	std::cout << "Just ignore it: " << c[7]+ a[8] + b[1] << std::endl << std::endl;
@@ -158,7 +158,7 @@ void MulVsDiv::LoopVectorized()
 
 void MulVsDiv::BenchAll()
 {
-	//Loop();
+	Loop();
 	LoopVectorized();
 }
 
