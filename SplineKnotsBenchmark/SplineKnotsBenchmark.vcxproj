@@ -847,7 +847,6 @@
     <ClInclude Include="KnotsGenerator.h" />
     <ClInclude Include="MathFunction.h" />
     <ClInclude Include="MulVsDiv.h" />
-    <ClInclude Include="Parallel.h" />
     <ClInclude Include="ReducedDeboorKnotsGenerator.h" />
     <ClInclude Include="SplineKnots.h" />
     <ClInclude Include="stdafx.h" />
@@ -867,7 +866,6 @@
     <ClCompile Include="KnotsGenerator.cpp" />
     <ClCompile Include="MathFunction.cpp" />
     <ClCompile Include="MulVsDiv.cpp" />
-    <ClCompile Include="Parallel.cpp" />
     <ClCompile Include="ReducedDeboorKnotsGenerator.cpp" />
     <ClCompile Include="SplineKnotsBenchmark.cpp" />
     <ClCompile Include="stdafx.cpp">
