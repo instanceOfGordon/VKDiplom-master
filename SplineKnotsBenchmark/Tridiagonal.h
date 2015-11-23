@@ -14,7 +14,7 @@ namespace utils {
 		Tridiagonal(double lower_value, double main_value, double upper_value);
 		virtual ~Tridiagonal();
 
-		void Resize(size_t newsize);
+		void ResizeBuffer(size_t newsize);
 		virtual void Solve(size_t num_unknowns, double* right_side);
 		
 	private:

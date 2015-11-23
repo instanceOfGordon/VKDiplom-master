@@ -328,7 +328,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::InitializeBuffers(size_t u_count,
 	auto& trid = Tridagonals();
 	for (size_t i = 0; i <Tridagonals().size(); i++)
 	{
-		trid[i]->Resize(size);
+		trid[i]->ResizeBuffer(size);
 	}
 }
 

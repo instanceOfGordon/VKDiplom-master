@@ -21,7 +21,7 @@ utils::Tridiagonal::~Tridiagonal()
 {
 }
 
-void utils::Tridiagonal::Resize(size_t newsize)
+void utils::Tridiagonal::ResizeBuffer(size_t newsize)
 {
 	if (newsize > lu_buffer_.size()) {
 		lu_buffer_.reserve(newsize);
@@ -56,7 +56,7 @@ void utils::Tridiagonal::Solve(size_t num_unknowns, double* right_side)
 {
 	//auto& buffer = *lu_buffer_;
 	if (num_unknowns > BufferElementCount())
-		Resize(num_unknowns);
+		ResizeBuffer(num_unknowns);
 	auto buffer =Buffer();
 	//utils::SolveTridiagonalSystem(&lower_diagonal_->front(), &main_diagonal_->front(), &upper_diagonal_->front(), right_side, num_unknowns);
 	utils::SolveDeboorTridiagonalSystemBuffered(lower_diagonal_value, main_diagonal_value, upper_diagonal_value, right_side, num_unknowns,buffer);
@@ -101,7 +101,7 @@ void utils::ReducedDeBoorTridiagonal::Solve(size_t num_unknowns, double* right_s
 	
 	auto size = BufferElementCount();
 	if (num_equations > size)
-		Resize(num_equations);
+		ResizeBuffer(num_equations);
 	double last_maindiag_value = num_unknowns % 2 == 0 ? -15 : -14;
 	auto buffer = Buffer();
 	utils::SolveDeboorTridiagonalSystemBuffered(LowerDiagonalValue(), MainDiagonalValue(), UpperDiagonalValue(), right_side, num_equations, buffer, last_maindiag_value);

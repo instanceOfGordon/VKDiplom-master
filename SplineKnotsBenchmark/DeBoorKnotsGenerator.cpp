@@ -296,7 +296,7 @@ namespace splineknots
 		}
 		for (size_t i = 0; i <tridagonals_.size(); i++)
 		{
-			tridagonals_[i]->Resize(size);
+			tridagonals_[i]->ResizeBuffer(size);
 		}
 	}
 
