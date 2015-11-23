@@ -19,7 +19,6 @@ namespace utils {
 		
 	private:
 		std::vector<double> lu_buffer_;
-		static const size_t kInitCount = 1501;
 
 		const double lower_diagonal_value;
 		const double main_diagonal_value;

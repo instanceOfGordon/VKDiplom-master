@@ -3,9 +3,13 @@
 #include "DeBoorKnotsGenerator.h"
 
 namespace splineknots {
-	class ReducedDeBoorKnotsGenerator :
+	class ReducedDeBoorKnotsGenerator final :
 		public DeBoorKnotsGenerator
 	{
+		size_t row_buffer_size;
+		size_t column_buffer_size;
+
+		size_t current_buffer_size;
 
 	public:
 		KnotMatrix GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
@@ -14,10 +18,10 @@ namespace splineknots {
 		ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function);
 		~ReducedDeBoorKnotsGenerator();
 
-		std::vector<double> RightSide(RightSideSelector& right_side_autoiables, double h, double dfirst, double dlast,
-			int unknowns_count) override;
-		std::vector<double> RightSideCross(KnotMatrix& knots, int i, double dfirst, double dlast,
-			int unknowns_count);
+		void RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast,
+			int unknowns_count, double* rightside_buffer) override;
+		void RightSideCross(KnotMatrix& knots, int i, double dfirst, double dlast,
+			int unknowns_count, double* rightside_buffer);
 		//void InitializeKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension, KnotMatrix& values) override;
 		void FillXDerivations(KnotMatrix& values) override;
 		void FillXYDerivations(KnotMatrix& values) override;
@@ -27,6 +31,9 @@ namespace splineknots {
 		void SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast,
 			int unknowns_count, UnknownsSetter& unknowns_setter) override;
 		
+	protected:
+		void InitializeBuffers(size_t u_count, size_t v_count) override;
+
 	};
 }
 

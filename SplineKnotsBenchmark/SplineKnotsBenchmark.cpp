@@ -30,8 +30,7 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 
 	splineknots::CurveDeBoorKnotsGenerator full(std::make_unique<splineknots::DeBoorKnotsGenerator>(function));
 	splineknots::CurveDeBoorKnotsGenerator reduced(std::make_unique<splineknots::ReducedDeBoorKnotsGenerator>(function));
-	full.WrappedGenerator().Tridiagonal().Resize(num_knots); 
-	reduced.WrappedGenerator().Tridiagonal().Resize(num_knots);
+	
 	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 
 	std::vector<splineknots::KnotMatrix> calculated_results;

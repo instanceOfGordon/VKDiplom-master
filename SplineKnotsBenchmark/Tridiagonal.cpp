@@ -8,10 +8,7 @@ utils::Tridiagonal* utils::Tridiagonal::Clone() const
 }
 
 utils::Tridiagonal::Tridiagonal(double lower_value, double main_value, double upper_value)
-	://lower_diagonal_(std::make_unique<std::vector<double>>(kInitCount,lower_value)),
-	//main_diagonal_(std::make_unique<std::vector<double>>(kInitCount, main_value)),
-	//upper_diagonal_(std::make_unique<std::vector<double>>(kInitCount, upper_value)),
-	lu_buffer_(kInitCount, upper_value),
+	:lu_buffer_(),
 	lower_diagonal_value(lower_value),
 	main_diagonal_value(main_value),
 	upper_diagonal_value(upper_value)

@@ -17,15 +17,12 @@ namespace splineknots
 	typedef std::vector<std::unique_ptr<utils::Tridiagonal>> Tridiagonals;
 	class DeBoorKnotsGenerator : public KnotsGenerator
 	{
-	
-	private:
-		//InterpolativeMathFunction function_;
-		//std::unique_ptr<utils::Tridiagonal> tridiagonal_;
 		Tridiagonals tridagonals_;
-		//utils::Loop loop_;
-		//utils::Loop::Parallelization parallelization_type_;
-		bool is_parallel_ = false;
+	
+		std::vector<std::vector<double>> rightsides_buffers_;
 		
+		bool is_parallel_ = false;
+
 	public:
 		DeBoorKnotsGenerator(MathFunction math_function);
 		DeBoorKnotsGenerator(InterpolativeMathFunction math_function);
@@ -34,8 +31,8 @@ namespace splineknots
 	 KnotMatrix GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension) override;
 		//virtual KnotMatrix* GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension);
 	
-		virtual std::vector<double> RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast,
-			int unknowns_count);
+	 virtual void RightSide(RightSideSelector& right_side_variables, double h, double dfirst, double dlast,
+		 int unknowns_count, double* rightside_buffer);
 		void InitializeKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension, KnotMatrix& values);
 		virtual void FillXDerivations(KnotMatrix& values);
 		virtual void FillXYDerivations(KnotMatrix& values);
@@ -47,15 +44,21 @@ namespace splineknots
 		virtual void FillYXDerivations(int row_index, KnotMatrix& values);
 		virtual void SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast,
 			int unknowns_count, UnknownsSetter& unknowns_setter);
-		utils::Tridiagonal& Tridiagonal(int index = 0);
+		
+		
 		/*void EnableParallelization();
 		void DisableParallelization();*/
 		void InParallel(bool value);
 		bool IsParallel();
 	protected:
+
 		DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal);
 		DeBoorKnotsGenerator(InterpolativeMathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal);
-		
 
+		std::vector<std::vector<double>>& RightSidesBuffers();
+		Tridiagonals& Tridagonals();
+		virtual void InitializeBuffers(size_t u_count, size_t v_count);
+		utils::Tridiagonal& Tridiagonal(int index = 0);
+		double* RightSideBuffer(int index = 0);	
 	};
 }
