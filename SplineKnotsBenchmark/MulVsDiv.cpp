@@ -164,7 +164,7 @@ rcp:
 void MulVsDiv::DynamicArrayLoop()
 {
 	const int length = 1024;
-	const int loops = 10e7/2;
+	const int loops = 10e7/16;
 	std::cout << "Loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
