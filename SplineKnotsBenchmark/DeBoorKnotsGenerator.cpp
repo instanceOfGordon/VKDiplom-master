@@ -153,11 +153,11 @@ namespace splineknots
 		auto unknowns_count = values.RowsCount() - 2;
 		if (unknowns_count == 0) return;
 
-		UnknownsSetter dset = [values,column_index](int index, double value)
+		UnknownsSetter dset = [&](int index, double value)
 			{
 				values[index][column_index].SetDx(value);
 			};
-		RightSideSelector rget = [values,column_index](int index)
+		RightSideSelector rget = [&](int index)
 			{
 				return values[index][column_index].Z();
 			};
@@ -174,11 +174,11 @@ namespace splineknots
 		auto unknowns_count = values.RowsCount() - 2;
 		if (unknowns_count == 0) return;
 
-		UnknownsSetter dset = [values, column_index](int index, double value)
+		UnknownsSetter dset = [&](int index, double value)
 			{
 				values[index][column_index].SetDxy(value);
 			};
-		RightSideSelector rget = [values, column_index](int index)
+		RightSideSelector rget = [&](int index)
 			{
 				return values(index, column_index).Dy();
 			};
@@ -195,11 +195,11 @@ namespace splineknots
 		auto unknowns_count = values.ColumnsCount() - 2;
 		if (unknowns_count == 0) return;
 
-		UnknownsSetter dset = [values, row_index](int index, double value)
+		UnknownsSetter dset = [&](int index, double value)
 			{
 				values[row_index][index].SetDy(value);
 			};
-		RightSideSelector rget = [values, row_index](int index)
+		RightSideSelector rget = [&](int index)
 			{
 				return values(row_index, index).Z();
 			};
@@ -216,11 +216,11 @@ namespace splineknots
 		auto unknowns_count = values.ColumnsCount() - 2;
 		if (unknowns_count == 0) return;
 
-		UnknownsSetter dset = [values, row_index](int index, double value)
+		UnknownsSetter dset = [&](int index, double value)
 			{
 				values[row_index][index].SetDxy(value);
 			};
-		RightSideSelector rget = [values, row_index](int index)
+		RightSideSelector rget = [&](int index)
 			{
 				return values(row_index, index).Dx();
 			};
