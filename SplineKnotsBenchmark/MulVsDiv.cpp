@@ -163,8 +163,8 @@ rcp:
 
 void MulVsDiv::DynamicArrayLoop()
 {
-	const int length = 1024*1024*8;
-	const int loops = 10e4;
+	const int length = 1024*1024;
+	const int loops = 3*10e2;
 	std::cout << "Loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
@@ -238,8 +238,8 @@ void MulVsDiv::DynamicArrayLoop()
 
 void MulVsDiv::DynamicArrayLoopVectorized()
 {
-	const int length = 1024 * 1024 * 8;
-	const int loops = 10e4;
+	const int length = 1024 * 1024;
+	const int loops = 3*10e2;
 	std::cout << "Vectorized loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();

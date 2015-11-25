@@ -486,6 +486,7 @@
       <SDLCheck>true</SDLCheck>
       <OpenMPSupport>true</OpenMPSupport>
       <OpenMP>GenerateParallelCode</OpenMP>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -524,6 +525,7 @@
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
       <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
       <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
+      <FloatingPointModel>Fast2</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -564,7 +566,7 @@
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
       <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
       <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
-      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -605,7 +607,7 @@
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
       <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
       <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
-      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -687,7 +689,7 @@
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
       <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
       <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
-      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -761,6 +763,7 @@
       <GenerateAlternateCodePaths>AVX</GenerateAlternateCodePaths>
       <OpenMP>GenerateParallelCode</OpenMP>
       <Cpp0xSupport>true</Cpp0xSupport>
+      <FloatingPointModel>Fast2</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -797,6 +800,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <OpenMPSupport>true</OpenMPSupport>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
