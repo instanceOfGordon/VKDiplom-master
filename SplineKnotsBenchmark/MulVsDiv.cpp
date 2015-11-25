@@ -13,9 +13,9 @@ void MulVsDiv::Loop()
 	double a[length], b[length],c[length];
 	for (size_t i = 0; i < length; i++)
 	{
-		a[i] = rand() % 2048;
-		b[i] = rand() % 2048;
-		c[i] = rand() % 2048;
+		a[i] = (rand() % 256) / 16.0 + 1.3;
+		b[i] = (rand() % 256) / 16.0 + 1.6;
+		c[i] = (rand() % 256) / 16.0 + 1.1;
 	}
 
 	auto start = clock();
@@ -86,9 +86,9 @@ void MulVsDiv::LoopVectorized()
 	double a[length], b[length],c[length];
 	for (size_t i = 0; i < length; i++)
 	{
-		a[i] = rand() % 2048;
-		b[i] = rand() % 2048;
-		c[i] = rand() % 2048;
+		a[i] = (rand() % 256) / 16.0 + 1.3;
+		b[i] = (rand() % 256) / 16.0 + 1.6;
+		c[i] = (rand() % 256) / 16.0 + 1.1;
 	}
 
 	int l = 0;
@@ -163,16 +163,16 @@ rcp:
 
 void MulVsDiv::DynamicArrayLoop()
 {
-	const int length = 1024;
-	const int loops = 10e7/16;
+	const int length = 1024*1024*8;
+	const int loops = 10e4;
 	std::cout << "Loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
 	for (size_t i = 0; i < length; i++)
 	{
-		a[i] = rand() % 2048;
-		b[i] = rand() % 2048;
-		c[i] = rand() % 2048;
+		a[i] = (rand() % 256) / 16.0 + 1.3;
+		b[i] = (rand() % 256) / 16.0 + 1.6;
+		c[i] = (rand() % 256) / 16.0 + 1.1;
 	}
 
 	auto start = clock();
@@ -238,16 +238,16 @@ void MulVsDiv::DynamicArrayLoop()
 
 void MulVsDiv::DynamicArrayLoopVectorized()
 {
-	const int length = 1024;
-	const int loops = 10e7 / 16;
+	const int length = 1024 * 1024 * 8;
+	const int loops = 10e4;
 	std::cout << "Vectorized loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
 	for (size_t i = 0; i < length; i++)
 	{
-		a[i] = rand() % 2048;
-		b[i] = rand() % 2048;
-		c[i] = rand() % 2048;
+		a[i] = (rand() % 256) / 16.0 + 1.3;
+		b[i] = (rand() % 256) / 16.0 + 1.6;
+		c[i] = (rand() % 256) / 16.0 + 1.1;
 	}
 
 	int l = 0;

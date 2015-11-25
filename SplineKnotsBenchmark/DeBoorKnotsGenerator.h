@@ -50,6 +50,7 @@ namespace splineknots
 		void DisableParallelization();*/
 		void InParallel(bool value);
 		bool IsParallel();
+		virtual void InitializeBuffers(size_t u_count, size_t v_count);
 	protected:
 
 		DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<utils::Tridiagonal> tridiagonal);
@@ -57,7 +58,7 @@ namespace splineknots
 
 		std::vector<std::vector<double>>& RightSidesBuffers();
 		Tridiagonals& Tridagonals();
-		virtual void InitializeBuffers(size_t u_count, size_t v_count);
+		
 		utils::Tridiagonal& Tridiagonal(int index = 0);
 		double* RightSideBuffer(int index = 0);	
 	};

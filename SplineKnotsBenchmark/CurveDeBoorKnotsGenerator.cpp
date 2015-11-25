@@ -36,6 +36,7 @@ splineknots::KnotMatrix splineknots::CurveDeBoorKnotsGenerator::GenerateKnots(Su
 	KnotMatrix values(1, dimension.knot_count);
 	
 	InitializeKnots(dimension, values);
+	knot_generator_->InitializeBuffers(dimension.knot_count, 1);
 	knot_generator_->FillYDerivations(values);
 	return values;
 }

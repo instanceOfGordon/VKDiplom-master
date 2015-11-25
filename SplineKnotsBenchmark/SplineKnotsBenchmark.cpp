@@ -8,6 +8,7 @@
 #include "MulVsDiv.h"
 #include "CurveDeBoorKnotsGenerator.h"
 #include "ComparisonBenchmarkResult.h"
+#include <numeric>
 
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::steady_clock::time_point TimePoint;
@@ -25,15 +26,16 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	const int num_repetitions = 100;
 	splineknots::MathFunction function = [](double x, double y)
 		{
-			return sin(sqrt(x * x + y * y));
+			return sin(x);//sin(sqrt(x * x + y * y));
 		};
 
 	splineknots::CurveDeBoorKnotsGenerator full(std::make_unique<splineknots::DeBoorKnotsGenerator>(function));
-	splineknots::CurveDeBoorKnotsGenerator reduced(std::make_unique<splineknots::ReducedDeBoorKnotsGenerator>(function));
+	//splineknots::CurveDeBoorKnotsGenerator reduced(std::make_unique<splineknots::ReducedDeBoorKnotsGenerator>(function));
 	
-	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
+	splineknots::SurfaceDimension udimension(-2, 2, num_iterations);
 
-	std::vector<splineknots::KnotMatrix> calculated_results;
+	//std::vector<splineknots::KnotMatrix> calculated_results;
+	std::vector<double> calculated_results;
 	std::vector<unsigned int> full_times;
 	full_times.reserve(num_iterations);
 	std::vector<unsigned int> reduced_times;
@@ -43,17 +45,17 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	unsigned int start;// = clock();
 	unsigned int finish;
 
-	for (size_t i = 0; i < num_iterations; i++)
+	/*for (size_t i = 0; i < num_iterations; i++)
 	{
 		start = clock();
 		for (size_t i = 0; i < num_repetitions; i++)
 		{
 			auto result = reduced.GenerateKnots(udimension);
-			calculated_results.push_back(std::move(result));
+			calculated_results.push_back(result(3,4).Dx());
 		}
 		finish = clock();
 		reduced_times.push_back(finish - start);
-	}
+	}*/
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
@@ -61,17 +63,20 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 		for (size_t j = 0; j < num_repetitions; j++)
 		{
 			auto result = full.GenerateKnots(udimension);
-			calculated_results.push_back(std::move(result));
+			result.Print();
+			calculated_results.push_back(result(0, 0).Z());
 		}
 		finish = clock();
 
 		full_times.push_back(finish - start);
 	}
 
-	auto full_time = *std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
+	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
+		/static_cast<double>(num_iterations);//*std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
 
-	auto reduced_time = *std::min_element(reduced_times.begin(), reduced_times.end());//reduced_times[reduced_times.size() / 2]; //utils::Average(&reduced_times.front(), reduced_times.size());//clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
-	//std::cout << std::endl << std::endl << "Just ignore it : " << calculated_results[num_iterations]->operator()(0, 0).Dx() << std::endl;
+	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
+		/static_cast<double>(num_iterations);
+	std::cout << "Ignore " << calculated_results[0] << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
 
@@ -89,7 +94,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 	splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 	splineknots::SurfaceDimension vdimension(udimension);
 
-	std::vector<splineknots::KnotMatrix> calculated_results;
+	std::vector<double> calculated_results;
 	std::vector<unsigned int> full_times;
 	full_times.reserve(num_iterations);
 	std::vector<unsigned int> reduced_times;
@@ -107,7 +112,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		finish = clock();
 		//result.Print();
 		
-		calculated_results.push_back(std::move(result));
+		calculated_results.push_back(result(1,0).Dxy());
 		reduced_times.push_back(finish - start);
 	}
 
@@ -118,16 +123,17 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		finish = clock();
 		//result.Print();
 		
-		calculated_results.push_back(std::move(result));
+		calculated_results.push_back(result(1, 0).Dxy());
 		full_times.push_back(finish - start);
 	}
 
 
 
-	auto full_time = *std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
-
-	auto reduced_time = *std::min_element(reduced_times.begin(), reduced_times.end());//reduced_times[reduced_times.size() / 2]; //utils::Average(&reduced_times.front(), reduced_times.size());//clock() - start;//sw.Elapsed<std::chrono::milliseconds>();
-	//std::cout << std::endl << std::endl << "Just ignore it : " << calculated_results[num_iterations]->operator()(0, 0).Dx() << std::endl;
+	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
+		/ static_cast<double>(num_iterations);
+	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
+		/ static_cast<double>(num_iterations);
+	std::cout << "Ignore " << calculated_results[0]<< std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 
 
