@@ -6,24 +6,26 @@ namespace utils
 {
 	extern unsigned int num_threads;
 
-	template <typename Function>
-	void For(int from, int to, Function function, bool in_parallel = false, int increment_by =1)
+	template <typename Iterator,typename Function>
+	void For(Iterator from, Iterator to, Function function, Iterator increment_by = 1, bool in_parallel = false)
 	{
 		if (in_parallel)
 		{
 			#pragma omp parallel for
-			for(int i = from; i < to; i+= increment_by)
+			for(Iterator i = from; i < to; i+= increment_by)
 			{
 				function(i);
 			}
 		}
 		else {
-			for (int i = from; i < to; i+= increment_by)
+			for (Iterator i = from; i < to; i+= increment_by)
 			{
 				function(i);
 			}
 		}
 	}
+
+
 
 	template<typename T>
 	T* InitArray(size_t length, T* arrayToInit, T value);

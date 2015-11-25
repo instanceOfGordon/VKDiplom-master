@@ -18,8 +18,8 @@ splineknots::ReducedDeBoorKnotsGenerator::~ReducedDeBoorKnotsGenerator()
 }
 
 
-void splineknots::ReducedDeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h, 
-	double dfirst, double dlast, int unknowns_count, double* rightside_buffer)
+void splineknots::ReducedDeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h,
+                                                         double dfirst, double dlast, int unknowns_count, double* rightside_buffer)
 {
 	//unknowns_count += 2;
 	auto even = unknowns_count % 2 == 0;
@@ -55,11 +55,10 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSide(RightSideSelector& righ
 	{
 		rs[i] *= 0.5;
 	}
-
 }
 
-void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots, int i, double dfirst, 
-	double dlast, int unknowns_count, double* rightside_buffer)
+void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots, int i, double dfirst,
+                                                              double dlast, int unknowns_count, double* rightside_buffer)
 {
 	//unknowns_count += 2;
 	auto even = unknowns_count % 2 == 0;
@@ -68,13 +67,13 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots,
 	auto eta = even ? -4 : 1;
 	//auto upsilon = even ? unknowns_count - 2 : unknowns_count - 3;
 	//dlast = eta*dlast;
-	
+
 	auto one_div7 = 1 / 7;
 	auto hx = knots(1, 0).X() - knots(0, 0).X();
 	auto hy = knots(0, 1).Y() - knots(0, 0).Y();
 	auto one_div_hx = 1.0 / hx;
 	auto one_div_hy = 1.0 / hy;
-	auto three_div_hx = one_div_hx*3;
+	auto three_div_hx = one_div_hx * 3;
 	auto six_div_hx = 2 * three_div_hx;
 
 	auto eighteen_div_hx = 6 * one_div_hx;
@@ -88,7 +87,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots,
 	auto twelve_div7_hx = 4 * three_div7_hx;
 	auto three_div7_hy = one_div7 * three_div_hy;
 	auto twelve_div7_hy = 4 * three_div7_hy;
-	auto three_div7_hxhy = three_div7_hy *one_div_hy;
+	auto three_div7_hxhy = three_div7_hy * one_div_hy;
 	auto nine_div7_hxhy = 3 * three_div7_hxhy;
 
 	auto thirtysix_div7_hxhy = 12 * three_div7_hxhy;
@@ -160,16 +159,16 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots,
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& values)
 {
-	auto ncols = values.ColumnsCount();
-	utils::For(0, values.ColumnsCount(),
+	int ncols = values.ColumnsCount();
+	utils::For(0, ncols,
 	           [&](int j)
 	           {
 		           DeBoorKnotsGenerator::FillXDerivations(j, values);
 	           },
-	           IsParallel());
+	           1, IsParallel());
 	auto h = values(1, 0).X() - values(0, 0).X();
-	auto three_div_4h = 0.75 /h;
-	auto nrows = values.RowsCount();
+	auto three_div_4h = 0.75 / h;
+	int nrows = values.RowsCount();
 
 	utils::For(1, nrows - 1,
 	           [&](int i)
@@ -182,7 +181,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& valu
 			           );
 		           }
 	           },
-		false, 2);
+	           2, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillXYDerivations(KnotMatrix& values)
@@ -195,17 +194,17 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillXYDerivations(KnotMatrix& val
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& values)
 {
-	auto nrows = values.RowsCount();
-	utils::For(0, values.RowsCount(),
+	int nrows = values.RowsCount();
+	utils::For(0, nrows,
 	           [&](int i)
 	           {
 		           DeBoorKnotsGenerator::FillYDerivations(i, values);
 	           },
-	           IsParallel());
+		1, IsParallel());
 	auto h = values(0, 1).Y() - values(0, 0).Y();
 	auto three_div_4h = 0.75 / h;
-	auto ncols = values.ColumnsCount();
-	
+	int ncols = values.ColumnsCount();
+
 	utils::For(0, nrows,
 	           [&](int i)
 	           {
@@ -217,28 +216,28 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& valu
 			           );
 		           }
 	           },
-		IsParallel());
+	          2, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
 {
-	auto nrows = values.RowsCount();
+	int nrows = values.RowsCount();
 
 	utils::For(2, nrows,
 	           [&](int i)
 	           {
 		           FillYXDerivations(i, values);
 	           },
-	           IsParallel(), 2);
+		2, IsParallel());
 
 	auto one_div_16 = 1.0 / 16.0;
-	auto three_div_16 = 3/ 16;
+	auto three_div_16 = 3 / 16;
 	auto hx = values(1, 0).X() - values(0, 0).X();
 	auto hy = values(0, 1).Y() - values(0, 0).Y();
 	auto three_div_16hy = three_div_16 / hy;
 	auto three_div_16hx = three_div_16 / hx;
 
-	auto ncols = values.ColumnsCount();
+	int ncols = values.ColumnsCount();
 
 	utils::For(1, nrows - 1,
 	           [&](int i)
@@ -258,7 +257,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 			           );
 		           }
 	           },
-		IsParallel(), 2);
+		2, IsParallel());
 
 	auto three_div_4hy = 0.75 / hy;
 
@@ -273,7 +272,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 			           );
 		           }
 	           },
-		IsParallel(), 2);
+		2, IsParallel());
 
 	utils::For(2, nrows - 2,
 	           [&](int i)
@@ -286,7 +285,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 			           );
 		           }
 	           },
-		IsParallel(), 2);
+		2, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, KnotMatrix& values)
@@ -301,7 +300,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, 
 	RightSideCross(values, row_index, dfirst, dlast, unknowns_count, result_buffer);
 
 	Tridiagonal(omp_get_thread_num()).Solve(unknowns_count, result_buffer);
-	for (size_t i = 0; i < unknowns_count/2; i++)
+	for (size_t i = 0; i < unknowns_count / 2; i++)
 	{
 		values(row_index, 2 * i + 1).SetDxy(result_buffer[i]);
 	}
@@ -321,12 +320,12 @@ void splineknots::ReducedDeBoorKnotsGenerator::InitializeBuffers(size_t u_count,
 {
 	auto size = std::max(u_count / 2 - 1, v_count / 2 - 1);
 	auto& rsb = RightSidesBuffers();
-	for (size_t i = 0; i <rsb.size(); i++)
+	for (size_t i = 0; i < rsb.size(); i++)
 	{
 		rsb[i].resize(size);
 	}
 	auto& trid = Tridagonals();
-	for (size_t i = 0; i <Tridagonals().size(); i++)
+	for (size_t i = 0; i < Tridagonals().size(); i++)
 	{
 		trid[i]->ResizeBuffer(size);
 	}

@@ -114,12 +114,12 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::FillXDerivations(KnotMatrix& values)
 	{
-		utils::For(0, values.ColumnsCount(),
+		utils::For(0, static_cast<int>(values.ColumnsCount()),
 		           [&](int j)
 		           {
 			           FillXDerivations(j, values);
 		           },
-		           is_parallel_);
+		           1,is_parallel_);
 	}
 
 	void DeBoorKnotsGenerator::FillXYDerivations(KnotMatrix& values)
@@ -130,22 +130,22 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::FillYDerivations(KnotMatrix& values)
 	{
-		utils::For(0, values.RowsCount(),
+		utils::For(0, static_cast<int>(values.RowsCount()),
 		           [&](int i)
 		           {
 			           FillYDerivations(i, values);
 		           },
-		           is_parallel_);
+		           1,is_parallel_);
 	}
 
 	void DeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
 	{
-		utils::For(0, values.RowsCount(),
+		utils::For(0, static_cast<int>(values.RowsCount()),
 		           [&](int i)
 		           {
 			           FillYXDerivations(i, values);
 		           },
-		           is_parallel_);
+		           1,is_parallel_);
 	}
 
 	void DeBoorKnotsGenerator::FillXDerivations(int column_index, KnotMatrix& values)
