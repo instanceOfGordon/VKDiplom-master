@@ -7,8 +7,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
     {
 
         public BicubicBasis(KnotMatrix knots, Derivation derivation) : base(knots,derivation)
-        {
-          
+        {      
         }
 
         protected override Vector<double> FunctionVector(double t, double t0, double t1)
@@ -57,10 +56,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
 
         internal override Matrix<double> Matrix(int uIdx, int vIdx)
         {
-            
-
             var m = Matrix<double>.Build.Random(4, 4, 0);
-
             var k00 = Knots[uIdx,vIdx];
             var k01 = Knots[uIdx,vIdx + 1];
             var k10 = Knots[uIdx + 1,vIdx];

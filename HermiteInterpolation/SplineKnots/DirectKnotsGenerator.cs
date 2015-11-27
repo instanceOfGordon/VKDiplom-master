@@ -28,13 +28,11 @@ namespace HermiteInterpolation.SplineKnots
             var vSize = Math.Abs(vDimension.Max - vDimension.Min) / (vDimension.KnotCount - 1);
             var u = uDimension.Min;
            
-            for (int i = 0; i < uDimension.KnotCount; i++, u += uSize)
-            //Parallel.For(0, uDimension.KnotCount, i =>
+            for (int i = 0; i < uDimension.KnotCount; i++, u += uSize)        
             {
                 var v = vDimension.Min;
                 for (int j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
-                    //
                     var z = Function.Z.SafeCall(u, v); //Z(u, v);
                     var dx = Function.Dx.SafeCall(u, v); //Dx(u, v);
                     var dy = Function.Dy.SafeCall(u, v); //Dy(u, v);
@@ -42,8 +40,7 @@ namespace HermiteInterpolation.SplineKnots
                     values[i,j] = new Knot(u, v, z, dx, dy, dxy);
 
                 }
-                //u += uSize;
-            }//);
+            }
             return values;
         }  
     }

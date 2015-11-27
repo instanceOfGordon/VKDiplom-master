@@ -432,7 +432,7 @@ namespace SymbolicDifferentiation
                 }
                 MNOutput = MNSign * SupportedCalculationFunctions.Atof(MStrOutput);
                 MStrOutput = (MNSign == -1 ? "-" : "") + MStrOutput;
-                if (bValue && !StringExtensions.IsNumeric(MStrOutput))
+                if (bValue && !MStrOutput.IsNumeric())
                 {
                     //MStrStack = "";
                     return (int)ErrorArgument.NotNumeric;
@@ -440,7 +440,7 @@ namespace SymbolicDifferentiation
 
 
                 MStrOutput = MStrInput;
-                if (bValue && !StringExtensions.IsNumeric(MStrOutput))
+                if (bValue && !MStrOutput.IsNumeric())
                 {
                     //MStrStack = "";
                     return (int)ErrorArgument.NotNumeric;

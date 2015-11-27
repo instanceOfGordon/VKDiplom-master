@@ -1,7 +1,6 @@
 #pragma once
 class MulVsDiv
 {
-	
 public:
 	void Loop();
 	void LoopVectorized();
@@ -11,4 +10,3 @@ public:
 	MulVsDiv();
 	~MulVsDiv();
 };
-

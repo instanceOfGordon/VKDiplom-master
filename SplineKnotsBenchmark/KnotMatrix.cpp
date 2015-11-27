@@ -14,7 +14,6 @@ splineknots::KnotMatrix::~KnotMatrix() noexcept
 	}
 	delete[] matrix_;
 	matrix_ = nullptr;
-	//utils::DeleteJaggedArray(matrix_, rows_count_, columns_count_);
 }
 
 size_t splineknots::KnotMatrix::RowsCount() const
@@ -52,7 +51,7 @@ void splineknots::KnotMatrix::Print()
 		cout << "Row " << i << " :\t";
 		for (size_t j = 0; j < columns_count_; j++)
 		{
-			cout << j << ": " 
+			cout << j << ": "
 				<< matrix_[i][j].X() << ' '
 				<< matrix_[i][j].Y() << ' '
 				<< matrix_[i][j].Z() << ' '
@@ -66,9 +65,9 @@ void splineknots::KnotMatrix::Print()
 }
 
 splineknots::KnotMatrix::KnotMatrix()
-:rows_count_(0),
- columns_count_(0),
-matrix_(nullptr)
+	:rows_count_(0),
+	 columns_count_(0),
+	 matrix_(nullptr)
 {
 }
 
@@ -88,7 +87,6 @@ bool splineknots::KnotMatrix::IsNull()
 splineknots::KnotMatrix::KnotMatrix(size_t rows, size_t columns)
 	: rows_count_(rows),
 	  columns_count_(columns)
-//matrix_(new double*[rows])
 {
 	matrix_ = new splineknots::Knot*[rows];
 	for (size_t i = 0; i < rows; i++)
@@ -107,7 +105,6 @@ splineknots::KnotMatrix::KnotMatrix(const KnotMatrix& other)
 		matrix_[i] = new Knot[columns_count_];
 		memcpy(matrix_[i], other.matrix_[i], columns_count_);
 	}
-	
 }
 
 splineknots::KnotMatrix::KnotMatrix(KnotMatrix&& other)

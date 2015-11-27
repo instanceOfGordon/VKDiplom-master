@@ -1,8 +1,10 @@
+#pragma once
 #include <functional>
 
-namespace splineknots {
+namespace splineknots
+{
 	typedef std::function<double(double, double)> MathFunction;
-	
+
 	class InterpolativeMathFunction
 	{
 		MathFunction z_;
@@ -10,15 +12,10 @@ namespace splineknots {
 		MathFunction dy_;
 		MathFunction dxy_;
 	public:
-		InterpolativeMathFunction(const MathFunction function);
-
-
+		explicit InterpolativeMathFunction(const MathFunction function);
 		const MathFunction& Z() const;
-
 		const MathFunction& Dx() const;
-
 		const MathFunction& Dy() const;
-
 		const MathFunction& Dxy() const;
 	};
 }

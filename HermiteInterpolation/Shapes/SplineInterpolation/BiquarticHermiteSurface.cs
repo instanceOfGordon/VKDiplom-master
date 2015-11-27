@@ -162,7 +162,6 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             }
         }
 
-
         public BiquarticHermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension, MathExpression mathExpression, Derivation derivation = Derivation.Zero) : this(uDimension, vDimension, InterpolativeMathFunction.FromExpression(mathExpression), derivation)
         {
         }

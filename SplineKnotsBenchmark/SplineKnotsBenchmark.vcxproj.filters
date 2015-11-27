@@ -54,9 +54,6 @@
     <ClInclude Include="ReducedDeboorKnotsGenerator.h">
       <Filter>Header Files\SplineKnots</Filter>
     </ClInclude>
-    <ClInclude Include="Tridiagonal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StopWatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,14 +63,26 @@
     <ClInclude Include="MulVsDiv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CurveDeBoorKnotsGenerator.h">
-      <Filter>Header Files\SplineKnots</Filter>
-    </ClInclude>
     <ClInclude Include="ComparisonBenchmarkResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cloneable.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CurveDeboorKnotsGenerator.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="CurveKnotsGenerator.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="ReducedCurveDeboorGenerator.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="ReducedDeboorTridiagonal.h">
+      <Filter>Header Files\SplineKnots</Filter>
+    </ClInclude>
+    <ClInclude Include="Tridiagonal.h">
+      <Filter>Header Files\SplineKnots</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +110,6 @@
     <ClCompile Include="ReducedDeboorKnotsGenerator.cpp">
       <Filter>Source Files\SplineKnots</Filter>
     </ClCompile>
-    <ClCompile Include="Tridiagonal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="utils_template.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -116,14 +122,26 @@
     <ClCompile Include="MulVsDiv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CurveDeBoorKnotsGenerator.cpp">
-      <Filter>Source Files\SplineKnots</Filter>
-    </ClCompile>
     <ClCompile Include="ComparisonBenchmarkResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cloneable.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CurveDeboorKnotsGenerator.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="CurveKnotsGenerator.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="ReducedCurveDeboorGenerator.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="ReducedDeboorTridiagonal.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
+    </ClCompile>
+    <ClCompile Include="Tridiagonal.cpp">
+      <Filter>Source Files\SplineKnots</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

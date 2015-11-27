@@ -2,13 +2,12 @@
 #include "SurfaceDimension.h"
 
 
-namespace splineknots {
-
+namespace splineknots
+{
 	SurfaceDimension::SurfaceDimension(double min, double max, int knotCount)
 		:min(min),
-		max(max),
-		knot_count(knotCount)
+		 max(max),
+		 knot_count(knotCount)
 	{
 	}
-
 }

@@ -1,18 +1,15 @@
 #pragma once
 #include <chrono>
-template<typename C>
+
+template <typename C>
 class StopWatch
 {
 	std::chrono::time_point<C> start_;
 public:
-
 	StopWatch();
-
-	template<typename U>
+	template <typename U>
 	typename U::rep Elapsed() const;
-
 	void Reset();
-
 	~StopWatch() = default;
 };
 

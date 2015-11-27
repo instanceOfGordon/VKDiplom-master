@@ -77,7 +77,7 @@ namespace HermiteInterpolation.SplineKnots
             var dxy = leftOp.Dxy * rightOp.Dxy;
 
             return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
-        }//
+        }
 
         public static Knot operator /(Knot leftOp, Knot rightOp)
         {
@@ -89,11 +89,6 @@ namespace HermiteInterpolation.SplineKnots
             return new Knot(leftOp.X, leftOp.Y, z, dx, dy, dxy);
         }
 
-        //public bool EqualsPosition(Knot knot)
-        //{
-        //    return Math.Abs(X - knot.X) < Constants.MeshDensity && Math.Abs(Y - knot.Y) < Constants.MeshDensity;
-        //}
-
         public bool Equals(Knot knot)
         {
             if (ReferenceEquals(null, knot)) return false;
@@ -101,10 +96,6 @@ namespace HermiteInterpolation.SplineKnots
             return X.Equals(knot.X) && Y.Equals(knot.Y) && Z.Equals(knot.Z) && Dx.Equals(knot.Dx) && Dy.Equals(knot.Dy) && Dxy.Equals(knot.Dxy);
         }
 
-        //public override int GetHashCode()
-        //{
-        //    return base.GetHashCode();
-        //}
         public override int GetHashCode()
         {
             unchecked

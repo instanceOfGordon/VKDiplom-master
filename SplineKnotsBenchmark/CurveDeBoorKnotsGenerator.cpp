@@ -1,47 +1,60 @@
-#include "stdafx.h"
-#include "CurveDeBoorKnotsGenerator.h"
+﻿#include "stdafx.h"
+#include "CurveDeboorKnotsGenerator.h"
+#include "SplineKnots.h"
 
-splineknots::CurveDeBoorKnotsGenerator::CurveDeBoorKnotsGenerator(std::unique_ptr<DeBoorKnotsGenerator> de_boor_knots_generator)
-	: knot_generator_(move(de_boor_knots_generator))
-{
-}
 
-void splineknots::CurveDeBoorKnotsGenerator::InitializeKnots(SurfaceDimension& dimension, KnotMatrix& values)
+splineknots::KnotVector splineknots::CurveDeboorKnotsGenerator::RightSide(const KnotVector& knots, double h, double dfirst, double dlast)
 {
-	auto uSize = abs(dimension.max - dimension.min) / (dimension.knot_count - 1);
-	//auto vSize = abs(vdimension.max - vdimension.min) / (vdimension.knot_count - 1);
-	auto v = dimension.min;
-	const InterpolativeMathFunction& f = knot_generator_->Function();
-	// Init Z
-	for (auto i = 0; i < dimension.knot_count; i++, v += uSize)
+	int num_unknowns = knots.size() - 2;
+	auto mu1 = 3 / h;
+	KnotVector rhs(num_unknowns);
+	for (int i = 0; i < num_unknowns; i++)
 	{
-		auto z = f.Z()(v, 0);
-		//Function.Z(u,v); //Z(u, v);
-		values[0][i] = Knot(0, v, z);
+		rhs[i] = mu1 * (knots[i + 2] - knots[i]);
 	}
-	// Init Dx
-	auto knotCountMin1 = dimension.knot_count - 1;
-	auto dy = f.Dy()(values[0][0].X(), values[0][0].Y());
-	values[0][0].SetDy(dy); //Function.Dx(values[0,j].X, values[0,j].Y);
-	values[0][knotCountMin1].SetDy(f.Dy()(values[0][knotCountMin1].X(), values[0][knotCountMin1].Y()));
+	rhs[0] = rhs[0] - dfirst;
+	rhs[num_unknowns - 1] = rhs[num_unknowns - 1] - dlast;
+	return rhs;
 }
 
-splineknots::KnotMatrix splineknots::CurveDeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& dimension)
+splineknots::CurveDeboorKnotsGenerator::~CurveDeboorKnotsGenerator()
 {
-	if (dimension.knot_count < 6) {
-		CurveDeBoorKnotsGenerator cdeboor(std::make_unique<DeBoorKnotsGenerator>(knot_generator_->Function()));
-		return cdeboor.GenerateKnots(dimension);
-	}
-	//SurfaceDimension vdim(1, 1, 1);
-	KnotMatrix values(1, dimension.knot_count);
-	
-	InitializeKnots(dimension, values);
-	knot_generator_->InitializeBuffers(dimension.knot_count, 1);
-	knot_generator_->FillYDerivations(values);
-	return values;
 }
 
-splineknots::DeBoorKnotsGenerator& splineknots::CurveDeBoorKnotsGenerator::WrappedGenerator()
+splineknots::CurveDeboorKnotsGenerator::CurveDeboorKnotsGenerator(const MathFunction function): splineknots::CurveKnotsGenerator(function)
 {
-	return *knot_generator_;
+}
+
+splineknots::CurveDeboorKnotsGenerator::CurveDeboorKnotsGenerator(const InterpolativeMathFunction function)
+	:CurveKnotsGenerator(function)
+{
+}
+
+void splineknots::CurveDeboorKnotsGenerator::InitializeKnots(const SurfaceDimension& dimension, KnotVector& knots)
+{
+	auto h = abs(dimension.max - dimension.min) / (dimension.knot_count - 1);
+	auto x = dimension.min;
+	auto f = Function();
+	for (auto i = 0; i < dimension.knot_count; i++ , x += h)
+	{
+		auto y = f.Z()(x, 0);
+		knots[i] = y;
+	}
+}
+
+splineknots::KnotVector splineknots::CurveDeboorKnotsGenerator::GenerateKnots(const SurfaceDimension& dimension)
+{
+	KnotVector knots(dimension.knot_count);
+	InitializeKnots(dimension, knots);
+	auto dfirst = Function().Dx()(dimension.min, 0);
+	auto dlast = Function().Dx()(dimension.max, 0);
+	auto rhs = RightSide(knots, abs(dimension.max - dimension.min) / (dimension.knot_count - 1), dfirst, dlast);
+
+	utils::SolveDeboorTridiagonalSystem(1, 4, 1, &rhs.front(), rhs.size());
+
+	KnotVector result(knots.size());
+	result[0] = dfirst;
+	result[result.size() - 1] = dlast;
+	memcpy(&result.front() + 1, &rhs.front(), rhs.size());
+	return result;
 }

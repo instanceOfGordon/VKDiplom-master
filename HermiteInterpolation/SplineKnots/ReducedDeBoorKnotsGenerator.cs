@@ -3,12 +3,12 @@ using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
+using MathNet.Numerics.LinearRegression;
 
 namespace HermiteInterpolation.SplineKnots
 {
     public sealed class ReducedDeBoorKnotsGenerator : DeBoorKnotsGenerator
     {
-        //private readonly DeBoorKnotsGenerator _initializator;
         public ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function) : base(function)
         {
         }
@@ -25,14 +25,11 @@ namespace HermiteInterpolation.SplineKnots
             }
 
             var values = new KnotMatrix(uDimension.KnotCount, vDimension.KnotCount);
-            //_rowsEven = uDimension.KnotCount % 2 == 0;
-            //_columnsEven = vDimension.KnotCount % 2 == 0;
-
             InitializeKnots(uDimension, vDimension, values);
 
-            FillXDerivations(values);         
+            FillXDerivations(values);
             FillYDerivations(values);
-            FillXYDerivations(values);
+            FillXYDerivations(values);          
             FillYXDerivations(values);
 
             return values;
@@ -41,22 +38,19 @@ namespace HermiteInterpolation.SplineKnots
 
         protected override double[] MainDiagonal(int unknownsCount)
         {
-            //var even = unknownsCount%2 == 0;
-            //var unknownsCount = even ? unknownsCount/2 - 2 : unknownsCount/2 - 3;
-            //var equationsCount = (unknownsCount+2)/2 - 1;
-            var diag = MyArrays.InitalizedArray<double>((unknownsCount + 2) / 2 - 1, -14);
+            var diag = MyArrays.InitalizedArray<double>(unknownsCount % 2 == 0 ? unknownsCount / 2 - 1 : unknownsCount / 2, -14);
             diag[diag.Length-1] = unknownsCount%2==0 ? -15 : -14;
             return diag;
         }
 
         protected override double[] LowerDiagonal(int unknownsCount)
         {
-            return base.LowerDiagonal((unknownsCount + 2) / 2 - 1);
+            return base.LowerDiagonal(unknownsCount%2==0? unknownsCount / 2 - 1 : unknownsCount / 2);
         }
 
         protected override double[] UpperDiagonal(int unknownsCount)
         {
-            return base.UpperDiagonal((unknownsCount + 2) / 2 - 1);
+            return base.UpperDiagonal(unknownsCount % 2 == 0 ? unknownsCount / 2 - 1 : unknownsCount / 2);
         }
 
         protected override void FillXDerivations(KnotMatrix values)
@@ -164,8 +158,6 @@ namespace HermiteInterpolation.SplineKnots
         {
             var unknownsCount = values.Columns - 2;
             if (unknownsCount == 0) return;
-            //Action<int, double> dset = (idx, value) => values[rowIndex, idx].Dxy = value;
-            //Func<int, double> rget = idx => values[rowIndex, idx].Dx;
             var h = values[0, 1].Y - values[0, 0].Y;
             var dfirst = values[rowIndex, 0].Dxy;
             var dlast = values[rowIndex, values.Columns - 1].Dxy;
@@ -185,16 +177,13 @@ namespace HermiteInterpolation.SplineKnots
             int unknownsCount)
         {
        
-            unknownsCount += 2;//; even ? unknownsCount/2 - 2 : unknownsCount/2 - 3;
+           
             var even = unknownsCount%2 == 0;
             var tau = even ? 0 : 2;
             var eta = even ? -4 : 1;
-            var upsilon = even ? unknownsCount - 2 : unknownsCount - 3;
-            //dlast = eta*dlast;
-            var equationsCount = unknownsCount / 2 - 1;
+            var upsilon = even ? unknownsCount : unknownsCount-1;
+            int equationsCount = even ? unknownsCount / 2 - 1 : unknownsCount / 2;
             var rs = new double[equationsCount];
-                                 
-            //var threeDivH = 1.5 / h;
             var threeDivH = 3/h;
             var twelveDivH = threeDivH * 4;
             rs[0] = threeDivH*(rightSideVariables(4) - rightSideVariables(0)) - twelveDivH*(rightSideVariables(3) - rightSideVariables(1)) - dfirst;
@@ -205,7 +194,7 @@ namespace HermiteInterpolation.SplineKnots
                                      -
                                      twelveDivH *
                                      (rightSideVariables(upsilon + 1) - rightSideVariables(upsilon - 1)) -
-                                     eta * dlast;
+                                      eta*dlast;
             for (var k = 2; k < equationsCount; k++)
             {
                 var k2 = k * 2;
@@ -214,7 +203,7 @@ namespace HermiteInterpolation.SplineKnots
 
             //I do not know (yet) why but these must be half of values designed by L. Mino
             //This cycle shouldn't be here
-            for (int i = 0; i < rs.Length; i++)
+            for (int i = 1; i < rs.Length-1; i++)
             {
                 rs[i] *= 0.5;
             }
@@ -225,75 +214,29 @@ namespace HermiteInterpolation.SplineKnots
         private double[] RightSideCross(KnotMatrix knots, int i, double dfirst, double dlast,
             int unknownsCount)
         {
-            unknownsCount += 2;
+      
             var even = unknownsCount%2 == 0;
-            var equationsCount = unknownsCount / 2 - 1; //even ? unknownsCount/2 - 2 : unknownsCount/2 - 3;
-            var tau = even ? 0 : 2;
-            var eta = even ? -4 : 1;
-            var upsilon = even ? unknownsCount - 2 : unknownsCount - 3;
-            //dlast = eta*dlast;
+            var equationsCount = even? unknownsCount / 2-1 : unknownsCount / 2;           
+            var eta = even ? -4 : 1;        
             var rs = new double[equationsCount];
             var oneDiv7 = 1/7;
             var hx = knots[1, 0].X - knots[0, 0].X;
             var hy = knots[0, 1].Y - knots[0, 0].Y;
             var oneDivHx = 1d/hx;
             var oneDivHy = 1d/hy;
-            var threeDivHx = 3/hx;
-            //var twelweDivHx = threeDivHx * 4;
-            var threeDivHy = 3/hy;
-            //var twelweDivHy = threeDivHy * 4;
+            var threeDivHx = 3/hx;        
+            var threeDivHy = 3/hy;         
             var threeDiv7hx = oneDiv7*threeDivHx;
             var threeDiv7hy = oneDiv7*threeDivHy;
             var threeDiv7hxhy = threeDiv7hy/hy;
-            var rows = knots.Rows;
+          
             var columns = knots.Columns;
-
-            //rs[0] = oneDiv7*(knots[0, 6].Dxy + knots[0, 2].Dxy) - 2*knots[1, 4].Dxy
-            //        + threeDiv7hx*(knots[1, 6].Dy + knots[1, 2].Dy) + threeDiv7hy*(-knots[0, 6].X + knots[0, 2].X)
-            //        + 3*threeDivHx*(knots[i, 6].Dy + knots[i, 2].Dy) + 3*threeDiv7hxhy*(-knots[0, 6].Z + knots[0, 2].Z)
-            //        + 4*threeDiv7hx*(-knots[1, 6].Dy - knots[1, 2].Dy) + 4*threeDiv7hy*(knots[0, 5].X - knots[0, 3].X)
-            //        + threeDiv7hy*(knots[i, 6].Dx + knots[i, 2].Dx) + 9*threeDiv7hxhy*(-knots[i, 6].Z + knots[i, 2].Z)
-            //        - 12*threeDiv7hxhy*(knots[1, 6].Z - knots[1, 2].Z + knots[0, 5].Z - knots[0, 3].Z)
-            //        - 6*oneDivHx*knots[0, 4].Dy + 12*oneDivHy*(knots[i, 5].Dx + knots[i, 3].Dx) +
-            //        36*threeDiv7hxhy*(knots[i, 5].Z + knots[i, 3].Z)
-            //        - 18*oneDivHx*knots[i, 4].Dy + 48*threeDiv7hxhy*(-knots[1, 5].Z + knots[1, 3].Z) +
-            //        24*oneDivHx*knots[1, 4].Z - dfirst;
+         
             var iMin1 = i - 1;
             var iMin2 = i - 2;
-            rs[0] = oneDiv7 * (knots[iMin2, 6].Dxy + knots[iMin2, 2].Dxy) - 2 * knots[iMin1, 4].Dxy
-                    + threeDiv7hx * (knots[iMin1, 6].Dy + knots[iMin1, 2].Dy) + threeDiv7hy * (-knots[iMin2, 6].X + knots[iMin2, 2].X)
-                    + 3 * threeDivHx * (knots[i, 6].Dy + knots[i, 2].Dy) + 3 * threeDiv7hxhy * (-knots[iMin2, 6].Z + knots[iMin2, 2].Z)
-                    + 4 * threeDiv7hx * (-knots[iMin1, 6].Dy - knots[iMin1, 2].Dy) + 4 * threeDiv7hy * (knots[iMin2, 5].X - knots[iMin2, 3].X)
-                    + threeDiv7hy * (knots[i, 6].Dx + knots[i, 2].Dx) + 9 * threeDiv7hxhy * (-knots[i, 6].Z + knots[i, 2].Z)
-                    - 12 * threeDiv7hxhy * (knots[iMin1, 6].Z - knots[iMin1, 2].Z + knots[iMin2, 5].Z - knots[0, 3].Z)
-                    - 6 * oneDivHx * knots[iMin2, 4].Dy + 12 * oneDivHy * (knots[i, 5].Dx + knots[i, 3].Dx) +
-                    36 * threeDiv7hxhy * (knots[i, 5].Z + knots[i, 3].Z)
-                    - 18 * oneDivHx * knots[i, 4].Dy + 48 * threeDiv7hxhy * (-knots[iMin1, 5].Z + knots[iMin1, 3].Z) +
-                    24 * oneDivHx * knots[iMin1, 4].Z - dfirst;
-            rs[equationsCount - 1] = oneDiv7*(knots[iMin2, columns - 1].Dxy + knots[iMin2, columns - 5].Dxy) -
-                                     2*knots[iMin1, columns - 3].Dxy
-                                     + threeDiv7hx*(knots[iMin1, columns - 1].Dy + knots[iMin1, columns - 5].Dy) +
-                                     threeDiv7hy*(-knots[iMin2, columns - 1].X + knots[iMin2, columns - 5].X)
-                                     + 3*threeDivHx*(knots[i, columns - 1].Dy + knots[i, columns - 5].Dy) +
-                                     3*threeDiv7hxhy*(-knots[iMin2, columns - 1].Z + knots[iMin2, columns - 5].Z)
-                                     +
-                                     4*threeDiv7hx*(-knots[iMin1, columns - 1].Dy - knots[iMin1, columns - 5].Dy) +
-                                     4*threeDiv7hy*(knots[iMin2, columns - 2].X - knots[iMin2, columns - 4].X)
-                                     + threeDiv7hy*(knots[i, columns - 1].Dx + knots[i, columns - 5].Dx) +
-                                     9*threeDiv7hxhy*(-knots[i, columns - 1].Z + knots[i, columns - 5].Z)
-                                     -
-                                     12*threeDiv7hxhy*
-                                     (knots[iMin1, columns - 1].Z - knots[iMin1, columns - 5].Z +
-                                      knots[iMin2, columns - 2].Z - knots[iMin2, columns - 4].Z)
-                                     - 6*oneDivHx*knots[iMin2, columns - 3].Dy +
-                                     12*oneDivHy*(knots[i, columns - 2].Dx + knots[i, columns - 4].Dx) +
-                                     36*threeDiv7hxhy*(knots[i, columns - 2].Z + knots[i, columns - 4].Z)
-                                     - 18*oneDivHx*knots[i, columns - 3].Dy +
-                                     48*threeDiv7hxhy*(-knots[iMin1, columns - 2].Z + knots[iMin1, columns - 4].Z) +
-                                     24*oneDivHx*knots[iMin1, columns - 3].Z - eta*dlast;
-            for (int k = 1, j = 6; k < equationsCount - 1; k++,j += 2)
+                    
+            for (int k = 0, j = 4; k < equationsCount-1; k++,j += 2)
             {
-                //var i2 = i * 2;
                 rs[k] = oneDiv7*(knots[iMin2, j + 2].Dxy + knots[iMin2, j - 2].Dxy) - 2*knots[iMin1, j].Dxy
                         + threeDiv7hx*(knots[iMin1, j + 2].Dy + knots[iMin1, j - 2].Dy) +
                         threeDiv7hy*(-knots[iMin2, j + 2].X + knots[iMin2, j - 2].X)
@@ -311,26 +254,34 @@ namespace HermiteInterpolation.SplineKnots
                         - 18*oneDivHx*knots[i, j].Dy + 48*threeDiv7hxhy*(-knots[iMin1, j + 1].Z + knots[iMin1, j - 1].Z) +
                         24*oneDivHx*knots[iMin1, j].Z;
             }
+            rs[0] -= dfirst;
+            rs[equationsCount - 1] = oneDiv7 * (knots[iMin2, columns - 1].Dxy + knots[iMin2, columns - 5].Dxy) -
+                                     2 * knots[iMin1, columns - 3].Dxy
+                                     + threeDiv7hx * (knots[iMin1, columns - 1].Dy + knots[iMin1, columns - 5].Dy) +
+                                     threeDiv7hy * (-knots[iMin2, columns - 1].X + knots[iMin2, columns - 5].X)
+                                     + 3 * threeDivHx * (knots[i, columns - 1].Dy + knots[i, columns - 5].Dy) +
+                                     3 * threeDiv7hxhy * (-knots[iMin2, columns - 1].Z + knots[iMin2, columns - 5].Z)
+                                     +
+                                     4 * threeDiv7hx * (-knots[iMin1, columns - 1].Dy - knots[iMin1, columns - 5].Dy) +
+                                     4 * threeDiv7hy * (knots[iMin2, columns - 2].X - knots[iMin2, columns - 4].X)
+                                     + threeDiv7hy * (knots[i, columns - 1].Dx + knots[i, columns - 5].Dx) +
+                                     9 * threeDiv7hxhy * (-knots[i, columns - 1].Z + knots[i, columns - 5].Z)
+                                     -
+                                     12 * threeDiv7hxhy *
+                                     (knots[iMin1, columns - 1].Z - knots[iMin1, columns - 5].Z +
+                                      knots[iMin2, columns - 2].Z - knots[iMin2, columns - 4].Z)
+                                     - 6 * oneDivHx * knots[iMin2, columns - 3].Dy +
+                                     12 * oneDivHy * (knots[i, columns - 2].Dx + knots[i, columns - 4].Dx) +
+                                     36 * threeDiv7hxhy * (knots[i, columns - 2].Z + knots[i, columns - 4].Z)
+                                     - 18 * oneDivHx * knots[i, columns - 3].Dy +
+                                     48 * threeDiv7hxhy * (-knots[iMin1, columns - 2].Z + knots[iMin1, columns - 4].Z) +
+                                     24 * oneDivHx * knots[iMin1, columns - 3].Z - eta * dlast;
             return rs;
         }
-
-        //private void FillYDerivations(int rowIndex, StaticKnotMatrix values)
-        //{
-        //    var unknownsCount = values.Columns/2 - 1;
-        //    if (unknownsCount == 0) return;
-        //    Action<int, double> dset = (idx, value) => values[rowIndex, idx].Dy = value;
-        //    Func<int, double> rget = idx => values[rowIndex, idx].Z;
-        //    var h = values[0, 1].Y - values[0, 0].Y;
-        //    var dfirst = values[rowIndex, 0].Dy;
-        //    var dlast = values[rowIndex, values.Columns - 1].Dy;
-
-        //   SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, values.Columns % 2 == 0, dset);
-        //}
 
         protected override void SolveTridiagonal(Func<int, double> rightSideValuesSelector, double h, double dfirst, double dlast, int unknownsCount, Action<int, double> unknownsSetter)
         {
             var result = RightSide(rightSideValuesSelector, h, dfirst, dlast, unknownsCount);
-            var equationsCount = result.Length;
             LinearSystems.SolveTridiagonalSystem(UpperDiagonal(unknownsCount), MainDiagonal(unknownsCount),
                 LowerDiagonal(unknownsCount), result);
 

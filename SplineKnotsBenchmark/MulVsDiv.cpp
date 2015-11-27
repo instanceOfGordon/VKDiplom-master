@@ -10,7 +10,7 @@ void MulVsDiv::Loop()
 	const int length = 64;
 	const int loops = 10e7;
 	std::cout << "Loop:\n---" << std::endl;
-	double a[length], b[length],c[length];
+	double a[length], b[length], c[length];
 	for (size_t i = 0; i < length; i++)
 	{
 		a[i] = (rand() % 256) / 16.0 + 1.3;
@@ -60,17 +60,17 @@ void MulVsDiv::Loop()
 	auto div_time = clock() - start;
 	std::cout << "Division: " << div_time << std::endl;
 
-//	start = clock();
-//	for (size_t l = 0; l < loops; l++)
-//	{
-//#pragma novector
-//		for (int i = 0; i < length; i++)
-//		{
-//			c[i] = 1 / a[i];
-//		}
-//	}
-//	auto rcp_time = clock() - start;
-//	std::cout << "Reciprocal: " << rcp_time << std::endl << std::endl;
+	//	start = clock();
+	//	for (size_t l = 0; l < loops; l++)
+	//	{
+	//#pragma novector
+	//		for (int i = 0; i < length; i++)
+	//		{
+	//			c[i] = 1 / a[i];
+	//		}
+	//	}
+	//	auto rcp_time = clock() - start;
+	//	std::cout << "Reciprocal: " << rcp_time << std::endl << std::endl;
 
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl ;
@@ -83,7 +83,7 @@ void MulVsDiv::LoopVectorized()
 	const int length = 64;
 	const int loops = 10e7;
 	std::cout << "Vectorized loop:\n---" << std::endl;
-	double a[length], b[length],c[length];
+	double a[length], b[length], c[length];
 	for (size_t i = 0; i < length; i++)
 	{
 		a[i] = (rand() % 256) / 16.0 + 1.3;
@@ -137,34 +137,17 @@ div:
 		goto div;
 	}
 	auto div_time = clock() - start;
+
 	std::cout << "Division: " << div_time << std::endl;
-
-	/*l = 0;
-	start = clock();
-rcp:
-	for (int i = 0; i < length; i++)
-	{
-		c[i] = 1 / a[i];
-	}
-	while (l < loops)
-	{
-		++l;
-		goto rcp;
-	}
-
-	auto rcp_time = clock() - start;
-	std::cout << "Reciprocal: " << rcp_time << std::endl << std::endl;*/
-
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
-	//std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
 	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
 }
 
 void MulVsDiv::DynamicArrayLoop()
 {
-	const int length = 1024*1024;
-	const int loops = 3*10e2;
+	const int length = 1024 * 1024;
+	const int loops = 3 * 10e2;
 	std::cout << "Loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
@@ -215,31 +198,17 @@ void MulVsDiv::DynamicArrayLoop()
 		}
 	}
 	auto div_time = clock() - start;
+
 	std::cout << "Division: " << div_time << std::endl;
-
-	/*start = clock();
-	for (size_t l = 0; l < loops; l++)
-	{
-#pragma novector
-		for (int i = 0; i < length; i++)
-		{
-			c[i] = 1 / a[i];
-		}
-	}
-	auto rcp_time = clock() - start;
-	std::cout << "Reciprocal: " << rcp_time << std::endl << std::endl;*/
-
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
-	//std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
 	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
-	
 }
 
 void MulVsDiv::DynamicArrayLoopVectorized()
 {
 	const int length = 1024 * 1024;
-	const int loops = 3*10e2;
+	const int loops = 3 * 10e2;
 	std::cout << "Vectorized loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
@@ -300,23 +269,9 @@ div:
 
 	l = 0;
 	start = clock();
-//rcp:
-//	for (int i = 0; i < length; i++)
-//	{
-//		c[i] = 1 / a[i];
-//	}
-//	while (l < loops)
-//	{
-//		++l;
-//		goto rcp;
-//	}
-//
-//	auto rcp_time = clock() - start;
-//	std::cout << "Reciprocal: " << rcp_time << std::endl << std::endl;
 
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
-	//std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
 	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
 }
 

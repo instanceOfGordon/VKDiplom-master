@@ -845,14 +845,17 @@
   <ItemGroup>
     <ClInclude Include="Cloneable.h" />
     <ClInclude Include="ComparisonBenchmarkResult.h" />
-    <ClInclude Include="CurveDeBoorKnotsGenerator.h" />
+    <ClInclude Include="CurveDeboorKnotsGenerator.h" />
+    <ClInclude Include="CurveKnotsGenerator.h" />
     <ClInclude Include="KnotMatrix.h" />
     <ClInclude Include="DeBoorKnotsGenerator.h" />
     <ClInclude Include="Knot.h" />
     <ClInclude Include="KnotsGenerator.h" />
     <ClInclude Include="MathFunction.h" />
     <ClInclude Include="MulVsDiv.h" />
+    <ClInclude Include="ReducedCurveDeboorGenerator.h" />
     <ClInclude Include="ReducedDeboorKnotsGenerator.h" />
+    <ClInclude Include="ReducedDeboorTridiagonal.h" />
     <ClInclude Include="SplineKnots.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StopWatch.h" />
@@ -864,14 +867,17 @@
   <ItemGroup>
     <ClCompile Include="Cloneable.cpp" />
     <ClCompile Include="ComparisonBenchmarkResult.cpp" />
-    <ClCompile Include="CurveDeBoorKnotsGenerator.cpp" />
+    <ClCompile Include="CurveDeboorKnotsGenerator.cpp" />
+    <ClCompile Include="CurveKnotsGenerator.cpp" />
     <ClCompile Include="KnotMatrix.cpp" />
     <ClCompile Include="DeBoorKnotsGenerator.cpp" />
     <ClCompile Include="Knot.cpp" />
     <ClCompile Include="KnotsGenerator.cpp" />
     <ClCompile Include="MathFunction.cpp" />
     <ClCompile Include="MulVsDiv.cpp" />
+    <ClCompile Include="ReducedCurveDeboorGenerator.cpp" />
     <ClCompile Include="ReducedDeboorKnotsGenerator.cpp" />
+    <ClCompile Include="ReducedDeboorTridiagonal.cpp" />
     <ClCompile Include="SplineKnotsBenchmark.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

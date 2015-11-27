@@ -29,9 +29,9 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 			return sin(x);//sin(sqrt(x * x + y * y));
 		};
 
-	splineknots::CurveDeBoorKnotsGenerator full(std::make_unique<splineknots::DeBoorKnotsGenerator>(function));
+	splineknots::CurveDeboorKnotsGenerator full(function);
 	//splineknots::CurveDeBoorKnotsGenerator reduced(std::make_unique<splineknots::ReducedDeBoorKnotsGenerator>(function));
-	
+
 	splineknots::SurfaceDimension udimension(-2, 2, num_iterations);
 
 	//std::vector<splineknots::KnotMatrix> calculated_results;
@@ -63,8 +63,8 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 		for (size_t j = 0; j < num_repetitions; j++)
 		{
 			auto result = full.GenerateKnots(udimension);
-			result.Print();
-			calculated_results.push_back(result(0, 0).Z());
+			//result.Print();
+			calculated_results.push_back(result[0]);
 		}
 		finish = clock();
 
@@ -72,10 +72,10 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	}
 
 	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
-		/static_cast<double>(num_iterations);//*std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
+		/ static_cast<double>(num_iterations);//*std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
 
 	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
-		/static_cast<double>(num_iterations);
+		/ static_cast<double>(num_iterations);
 	std::cout << "Ignore " << calculated_results[0] << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
@@ -101,7 +101,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 	reduced_times.reserve(num_iterations);
 	calculated_results.reserve(num_iterations * 2);
 
-	unsigned int start;// = clock();
+	unsigned int start;
 	unsigned int finish;
 
 
@@ -111,8 +111,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		auto result = reduced.GenerateKnots(udimension, vdimension);
 		finish = clock();
 		//result.Print();
-		
-		calculated_results.push_back(result(1,0).Dxy());
+		calculated_results.push_back(result(1, 0).Dxy());
 		reduced_times.push_back(finish - start);
 	}
 
@@ -122,22 +121,17 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		auto result = full.GenerateKnots(udimension, vdimension);
 		finish = clock();
 		//result.Print();
-		
 		calculated_results.push_back(result(1, 0).Dxy());
 		full_times.push_back(finish - start);
 	}
-
 
 
 	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
 		/ static_cast<double>(num_iterations);
 	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
 		/ static_cast<double>(num_iterations);
-	std::cout << "Ignore " << calculated_results[0]<< std::endl;
+	std::cout << "Ignore " << calculated_results[0] << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
-
-
-	//std::cout << std::endl << std::endl << "Just ignore it : " << calculated_results[num_iterations]->operator()(0, 0).Dx() + dumb1->operator()(0, 0).Dx() + dumb2->operator()(0, 0).Dx() << dumbfinish << std::endl;
 }
 
 void PrintDeboorResult(ComparisonBenchmarkResult& result)
@@ -153,10 +147,7 @@ int main()
 
 	while (repeat)
 	{
-		/*auto dumb = SurfaceBenchmark(1, 199);
-		std::cout << "Random number (ignore it)" << dumb.Ratio() << std::endl << std::endl;*/
 		std::cout << clock();
-		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		// Console clear ...
 		// ... for Windows, 
 		system("cls");
@@ -210,7 +201,7 @@ int main()
 			std::cout << "Enter number of knots: " << std::endl;
 			std::cin >> num_knots;
 			std::cin.get();
-			result = SurfaceBenchmark(num_iterations, num_knots,true);
+			result = SurfaceBenchmark(num_iterations, num_knots, true);
 			PrintDeboorResult(result);
 			break;
 		case 'q':

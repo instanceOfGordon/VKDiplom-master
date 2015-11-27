@@ -1,14 +1,18 @@
 #include "stdafx.h"
-#include "ReducedDeboorKnotsGenerator.h"
 #include <omp.h>
+#include "ReducedDeboorTridiagonal.h"
+#include "ReducedDeboorKnotsGenerator.h"
+#include "utils.h"
+#include <algorithm>
+
 
 splineknots::ReducedDeBoorKnotsGenerator::ReducedDeBoorKnotsGenerator(MathFunction math_function)
-	: DeBoorKnotsGenerator(math_function, std::make_unique<utils::ReducedDeBoorTridiagonal>())
+	: DeBoorKnotsGenerator(math_function, std::make_unique<splineknots::ReducedDeBoorTridiagonal>())
 {
 }
 
 splineknots::ReducedDeBoorKnotsGenerator::ReducedDeBoorKnotsGenerator(InterpolativeMathFunction math_function)
-	: DeBoorKnotsGenerator(math_function, std::make_unique<utils::ReducedDeBoorTridiagonal>())
+	: DeBoorKnotsGenerator(math_function, std::make_unique<splineknots::ReducedDeBoorTridiagonal>())
 
 {
 }
@@ -17,25 +21,19 @@ splineknots::ReducedDeBoorKnotsGenerator::~ReducedDeBoorKnotsGenerator()
 {
 }
 
-
-void splineknots::ReducedDeBoorKnotsGenerator::RightSide(RightSideSelector& right_side_variables, double h,
+void splineknots::ReducedDeBoorKnotsGenerator::RightSide(const RightSideSelector& right_side_variables, double h,
                                                          double dfirst, double dlast, int unknowns_count, double* rightside_buffer)
 {
-	//unknowns_count += 2;
 	auto even = unknowns_count % 2 == 0;
 	auto tau = even ? 0 : 2;
 	auto eta = even ? -4 : 1;
-	auto upsilon = even ? unknowns_count : unknowns_count - 1;//unknowns_count - 2 : unknowns_count - 3;
-	//dlast = eta*dlast;
-	auto equations_count = unknowns_count / 2;//unknowns_count / 2 - 1;
-	auto rs = std::vector<double>(equations_count);
-
-	//auto threeDivH = 1.5 / h;
+	auto upsilon = even ? unknowns_count : unknowns_count - 1;
+	auto equations_count = even ? unknowns_count / 2 - 1 : unknowns_count / 2;
 	auto three_div_h = 3 / h;
 	auto twelve_div_h = three_div_h * 4;
-	rs[0] = three_div_h * (right_side_variables(4) - right_side_variables(0)) - twelve_div_h * (right_side_variables(3) - right_side_variables(1)) - dfirst;
+	rightside_buffer[0] = three_div_h * (right_side_variables(4) - right_side_variables(0)) - twelve_div_h * (right_side_variables(3) - right_side_variables(1)) - dfirst;
 
-	rs[equations_count - 1] = three_div_h *
+	rightside_buffer[equations_count - 1] = three_div_h *
 		(right_side_variables(upsilon + tau) -
 			right_side_variables(upsilon - 2))
 		-
@@ -46,28 +44,23 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSide(RightSideSelector& righ
 	for (auto k = 2; k < equations_count; k++)
 	{
 		auto k2 = k * 2;
-		rs[k - 1] = three_div_h * (right_side_variables(2 * (k + 1)) - right_side_variables(2 * (k - 1)) - twelve_div_h * (right_side_variables(k2 + 1) - right_side_variables(k2 - 1)));
+		rightside_buffer[k - 1] = three_div_h * (right_side_variables(2 * (k + 1)) - right_side_variables(2 * (k - 1)) - twelve_div_h * (right_side_variables(k2 + 1) - right_side_variables(k2 - 1)));
 	}
 
 	//I do not know (yet) why but these must be half of values designed by L. Mino
 	//This cycle shouldn't be here
-	for (int i = 0; i < rs.size(); i++)
+	for (int i = 1; i < equations_count - 1; i++)
 	{
-		rs[i] *= 0.5;
+		rightside_buffer[i] *= 0.5;
 	}
 }
 
-void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots, int i, double dfirst,
+void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(const KnotMatrix& knots, int i, double dfirst,
                                                               double dlast, int unknowns_count, double* rightside_buffer)
 {
-	//unknowns_count += 2;
 	auto even = unknowns_count % 2 == 0;
-	auto equationsCount = unknowns_count / 2;//unknowns_count / 2 - 1; //even ? unknowns_count/2 - 2 : unknowns_count/2 - 3;
-	//auto tau = even ? 0 : 2;
+	auto equations_count = even ? unknowns_count / 2 - 1 : unknowns_count / 2;
 	auto eta = even ? -4 : 1;
-	//auto upsilon = even ? unknowns_count - 2 : unknowns_count - 3;
-	//dlast = eta*dlast;
-
 	auto one_div7 = 1 / 7;
 	auto hx = knots(1, 0).X() - knots(0, 0).X();
 	auto hy = knots(0, 1).Y() - knots(0, 0).Y();
@@ -75,12 +68,9 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots,
 	auto one_div_hy = 1.0 / hy;
 	auto three_div_hx = one_div_hx * 3;
 	auto six_div_hx = 2 * three_div_hx;
-
 	auto eighteen_div_hx = 6 * one_div_hx;
 	auto twentyfour_div_hx = 8 * three_div_hx;
-	//auto twelweDivHx = threeDivHx * 4;
 	auto three_div_hy = 3.0 * one_div_hy;
-	//auto nine_div_hy = 3 * three_div_hy;
 	auto twelwe_div_hy = three_div_hy * 4;
 	auto three_div7_hx = one_div7 * three_div_hx;
 	auto nine_div7_hx = 3 * three_div7_hx;
@@ -89,51 +79,16 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots,
 	auto twelve_div7_hy = 4 * three_div7_hy;
 	auto three_div7_hxhy = three_div7_hy * one_div_hy;
 	auto nine_div7_hxhy = 3 * three_div7_hxhy;
-
 	auto thirtysix_div7_hxhy = 12 * three_div7_hxhy;
 	auto onehundredeight_div7_hxhy = 3 * thirtysix_div7_hxhy;
 	auto onehundredfortyfour_div7_hxhy = 4 * thirtysix_div7_hxhy;
 	auto twentyseven_div7_hxhy = 9 * three_div7_hxhy;
-
-	auto rows = knots.RowsCount();
 	auto columns = knots.ColumnsCount();
 
 	auto iMin1 = i - 1;
 	auto iMin2 = i - 2;
-	rightside_buffer[0] = one_div7 * (knots(iMin2, 6).Dxy() + knots(iMin2, 2).Dxy()) - 2 * knots(iMin1, 4).Dxy()
-		+ three_div7_hx * (knots(iMin1, 6).Dy() + knots(iMin1, 2).Dy()) + three_div7_hy * (-knots(iMin2, 6).X() + knots(iMin2, 2).X())
-		+ nine_div7_hx * (knots(i, 6).Dy() + knots(i, 2).Dy()) + nine_div7_hxhy * (-knots(iMin2, 6).Z() + knots(iMin2, 2).Z())
-		+ twelve_div7_hx * (-knots(iMin1, 6).Dy() - knots(iMin1, 2).Dy()) + twelve_div7_hy * (knots(iMin2, 5).X() - knots(iMin2, 3).X())
-		+ three_div7_hy * (knots(i, 6).Dx() + knots(i, 2).Dx()) + twentyseven_div7_hxhy * (-knots(i, 6).Z() + knots(i, 2).Z())
-		- thirtysix_div7_hxhy * (knots(iMin1, 6).Z() - knots(iMin1, 2).Z() + knots(iMin2, 5).Z() - knots(0, 3).Z())
-		- six_div_hx * knots(iMin2, 4).Dy() + twelwe_div_hy * (knots(i, 5).Dx() + knots(i, 3).Dx()) +
-		onehundredeight_div7_hxhy * (knots(i, 5).Z() + knots(i, 3).Z())
-		- eighteen_div_hx * knots(i, 4).Dy() + onehundredfortyfour_div7_hxhy * (-knots(iMin1, 5).Z() + knots(iMin1, 3).Z()) +
-		twentyfour_div_hx * knots(iMin1, 4).Z() - dfirst;
-	rightside_buffer[equationsCount - 1] = one_div7 * (knots(iMin2, columns - 1).Dxy() + knots(iMin2, columns - 5).Dxy()) -
-		2 * knots(iMin1, columns - 3).Dxy()
-		+ three_div7_hx * (knots(iMin1, columns - 1).Dy() + knots(iMin1, columns - 5).Dy()) +
-		three_div7_hy * (-knots(iMin2, columns - 1).X() + knots(iMin2, columns - 5).X())
-		+ nine_div7_hx * (knots(i, columns - 1).Dy() + knots(i, columns - 5).Dy()) +
-		nine_div7_hxhy * (-knots(iMin2, columns - 1).Z() + knots(iMin2, columns - 5).Z())
-		+
-		twelve_div7_hx * (-knots(iMin1, columns - 1).Dy() - knots(iMin1, columns - 5).Dy()) +
-		twelve_div7_hy * (knots(iMin2, columns - 2).X() - knots(iMin2, columns - 4).X())
-		+ three_div7_hy * (knots(i, columns - 1).Dx() + knots(i, columns - 5).Dx()) +
-		twentyseven_div7_hxhy * (-knots(i, columns - 1).Z() + knots(i, columns - 5).Z())
-		-
-		thirtysix_div7_hxhy *
-		(knots(iMin1, columns - 1).Z() - knots(iMin1, columns - 5).Z() +
-			knots(iMin2, columns - 2).Z() - knots(iMin2, columns - 4).Z())
-		- six_div_hx * knots(iMin2, columns - 3).Dy() +
-		twelwe_div_hy * (knots(i, columns - 2).Dx() + knots(i, columns - 4).Dx()) +
-		onehundredeight_div7_hxhy * (knots(i, columns - 2).Z() + knots(i, columns - 4).Z())
-		- eighteen_div_hx * knots(i, columns - 3).Dy() +
-		onehundredfortyfour_div7_hxhy * (-knots(iMin1, columns - 2).Z() + knots(iMin1, columns - 4).Z()) +
-		twentyfour_div_hx * knots(iMin1, columns - 3).Z() - eta * dlast;
-	for (int k = 1, j = 6; k < equationsCount - 1; k++ , j += 2)
+	for (int k = 0, j = 4; k < equations_count - 1; k++ , j += 2)
 	{
-		//auto i2 = i * 2;
 		auto j_plus_1 = j + 1;
 		auto j_minus_1 = j - 2;
 		auto j_plus_2 = j + 2;
@@ -155,6 +110,28 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(KnotMatrix& knots,
 			- eighteen_div_hx * knots(i, j).Dy() + onehundredfortyfour_div7_hxhy * (-knots(iMin1, j_plus_1).Z() + knots(iMin1, j_minus_1).Z()) +
 			twentyfour_div_hx * knots(iMin1, j).Z();
 	}
+	rightside_buffer[0] -= dfirst;
+	rightside_buffer[equations_count - 1] = one_div7 * (knots(iMin2, columns - 1).Dxy() + knots(iMin2, columns - 5).Dxy()) -
+		2 * knots(iMin1, columns - 3).Dxy()
+		+ three_div7_hx * (knots(iMin1, columns - 1).Dy() + knots(iMin1, columns - 5).Dy()) +
+		three_div7_hy * (-knots(iMin2, columns - 1).X() + knots(iMin2, columns - 5).X())
+		+ nine_div7_hx * (knots(i, columns - 1).Dy() + knots(i, columns - 5).Dy()) +
+		nine_div7_hxhy * (-knots(iMin2, columns - 1).Z() + knots(iMin2, columns - 5).Z())
+		+
+		twelve_div7_hx * (-knots(iMin1, columns - 1).Dy() - knots(iMin1, columns - 5).Dy()) +
+		twelve_div7_hy * (knots(iMin2, columns - 2).X() - knots(iMin2, columns - 4).X())
+		+ three_div7_hy * (knots(i, columns - 1).Dx() + knots(i, columns - 5).Dx()) +
+		twentyseven_div7_hxhy * (-knots(i, columns - 1).Z() + knots(i, columns - 5).Z())
+		-
+		thirtysix_div7_hxhy *
+		(knots(iMin1, columns - 1).Z() - knots(iMin1, columns - 5).Z() +
+			knots(iMin2, columns - 2).Z() - knots(iMin2, columns - 4).Z())
+		- six_div_hx * knots(iMin2, columns - 3).Dy() +
+		twelwe_div_hy * (knots(i, columns - 2).Dx() + knots(i, columns - 4).Dx()) +
+		onehundredeight_div7_hxhy * (knots(i, columns - 2).Z() + knots(i, columns - 4).Z())
+		- eighteen_div_hx * knots(i, columns - 3).Dy() +
+		onehundredfortyfour_div7_hxhy * (-knots(iMin1, columns - 2).Z() + knots(iMin1, columns - 4).Z()) +
+		twentyfour_div_hx * knots(iMin1, columns - 3).Z() - eta * dlast;
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& values)
@@ -200,7 +177,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& valu
 	           {
 		           DeBoorKnotsGenerator::FillYDerivations(i, values);
 	           },
-		1, IsParallel());
+	           1, IsParallel());
 	auto h = values(0, 1).Y() - values(0, 0).Y();
 	auto three_div_4h = 0.75 / h;
 	int ncols = values.ColumnsCount();
@@ -216,7 +193,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& valu
 			           );
 		           }
 	           },
-	          2, IsParallel());
+	           2, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
@@ -228,7 +205,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 	           {
 		           FillYXDerivations(i, values);
 	           },
-		2, IsParallel());
+	           2, IsParallel());
 
 	auto one_div_16 = 1.0 / 16.0;
 	auto three_div_16 = 3 / 16;
@@ -257,7 +234,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 			           );
 		           }
 	           },
-		2, IsParallel());
+	           2, IsParallel());
 
 	auto three_div_4hy = 0.75 / hy;
 
@@ -272,7 +249,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 			           );
 		           }
 	           },
-		2, IsParallel());
+	           2, IsParallel());
 
 	utils::For(2, nrows - 2,
 	           [&](int i)
@@ -285,7 +262,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 			           );
 		           }
 	           },
-		2, IsParallel());
+	           2, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, KnotMatrix& values)
@@ -295,10 +272,8 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, 
 	auto h = values(0, 1).Y() - values(0, 0).Y();
 	auto dfirst = values(row_index, 0).Dxy();
 	auto dlast = values(row_index, values.ColumnsCount() - 1).Dxy();
-
 	auto result_buffer = RightSideBuffer(omp_get_thread_num());
 	RightSideCross(values, row_index, dfirst, dlast, unknowns_count, result_buffer);
-
 	Tridiagonal(omp_get_thread_num()).Solve(unknowns_count, result_buffer);
 	for (size_t i = 0; i < unknowns_count / 2; i++)
 	{
@@ -306,11 +281,12 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, 
 	}
 }
 
-void splineknots::ReducedDeBoorKnotsGenerator::SolveTridiagonal(RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
+void splineknots::ReducedDeBoorKnotsGenerator::SolveTridiagonal(const RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
 {
 	auto results_buffer = RightSideBuffer(omp_get_thread_num());
+	RightSide(selector, h, dfirst, dlast, unknowns_count, results_buffer);
 	Tridiagonal(omp_get_thread_num()).Solve(unknowns_count, results_buffer);
-	for (size_t k = 0; k < unknowns_count / 2; k++)
+	for (size_t k = 0; k < unknowns_count / 2 - 1; k++)
 	{
 		unknowns_setter(2 * (k + 1), results_buffer[k]);
 	}
@@ -332,7 +308,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::InitializeBuffers(size_t u_count,
 }
 
 
-splineknots::KnotMatrix splineknots::ReducedDeBoorKnotsGenerator::GenerateKnots(SurfaceDimension& udimension, SurfaceDimension& vdimension)
+splineknots::KnotMatrix splineknots::ReducedDeBoorKnotsGenerator::GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension)
 {
 	if (udimension.knot_count < 6 || vdimension.knot_count < 6)
 	{
@@ -347,7 +323,5 @@ splineknots::KnotMatrix splineknots::ReducedDeBoorKnotsGenerator::GenerateKnots(
 	FillYDerivations(values);
 	FillXYDerivations(values);
 	FillYXDerivations(values);
-
-	//return values;
 	return values;
 }

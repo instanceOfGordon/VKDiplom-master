@@ -1,16 +1,14 @@
 #pragma once
 #include "Knot.h"
 
-namespace splineknots {
-	
+namespace splineknots
+{
 	class KnotMatrix
 	{
 		size_t rows_count_;
 		size_t columns_count_;
-
 		Knot** matrix_;
 		KnotMatrix();
-
 	public:
 		static KnotMatrix NullMatrix();
 		bool IsNull();
@@ -21,15 +19,10 @@ namespace splineknots {
 		KnotMatrix& operator =(KnotMatrix&& other);
 		~KnotMatrix() noexcept;
 		size_t RowsCount() const;
-
 		size_t ColumnsCount() const;
-		//Knot& GetAt(int i, int j);
 		Knot& operator()(int i, int j);
 		const Knot& operator()(int i, int j) const;
-		//friend void swap(KnotMatrix& left, KnotMatrix& right);
 		Knot*& operator[](size_t k) const;
-	
 		void Print();
 	};
 }
-

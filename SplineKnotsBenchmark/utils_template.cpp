@@ -1,20 +1,8 @@
 #include "stdafx.h"
-//#include "utils.h"
 
 
 namespace utils
 {
-	/*template<typename T>
-	T* utils::InitArray(size_t length, T* arrayToInit, T& value)
-	{
-		for (size_t i = 0; i < length; i++)
-		{
-			arrayToInit[i] = std::copy(value);
-		}
-		return arrayToInit;
-	}*/
-
-
 	template <typename T>
 	T* InitArray(size_t length, T* arrayToInit, T value)
 	{

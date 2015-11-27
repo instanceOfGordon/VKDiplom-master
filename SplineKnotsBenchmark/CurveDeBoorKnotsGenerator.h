@@ -1,18 +1,18 @@
-#pragma once
-#include "DeBoorKnotsGenerator.h"
-namespace splineknots {
+﻿#pragma once
 
-	class CurveDeBoorKnotsGenerator final
+#include "CurveKnotsGenerator.h"
+
+namespace splineknots
+{
+	class CurveDeboorKnotsGenerator : public CurveKnotsGenerator
 	{
-		std::unique_ptr<DeBoorKnotsGenerator> knot_generator_;
 	public:
-
-		CurveDeBoorKnotsGenerator(std::unique_ptr<DeBoorKnotsGenerator> deBoorKnotsGenerator);
-		void InitializeKnots(SurfaceDimension& dimension, KnotMatrix& values);
-		KnotMatrix GenerateKnots(SurfaceDimension& dimension);
-		DeBoorKnotsGenerator& WrappedGenerator();
+		~CurveDeboorKnotsGenerator() override;
+		CurveDeboorKnotsGenerator(const MathFunction function);
+		CurveDeboorKnotsGenerator(const InterpolativeMathFunction function);
+		KnotVector GenerateKnots(const SurfaceDimension& dimension) override;
+	protected:
+		virtual KnotVector RightSide(const KnotVector& function_values, double h, double dfirst, double dlast);
+		void InitializeKnots(const SurfaceDimension& dimension, KnotVector& knots);
 	};
-	
 }
-
-//#include "CurveDeBoorKnotsGenerator_template.cpp"

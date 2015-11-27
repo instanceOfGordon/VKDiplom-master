@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-
-namespace HermiteInterpolation.Shapes
+﻿namespace HermiteInterpolation.Shapes
 {
     public interface IDrawable
     {

@@ -40,17 +40,7 @@ namespace HermiteInterpolation.Shapes
             typeof (VertexPositionNormalColor), vertices.Length, BufferUsage.WriteOnly);
             _vertexBuffer.SetData(_vertices);
             DrawStyle = DrawStyle.Surface;
-            //_indices = new short[_xDimension]; //_vertices.Length];
-
-            // SquareIndices();
-            //_vertexBuffer = vertexBuffer;
         }
-
-//        public virtual void Dispose()
-//        {
-//            _vertexBuffer.Dispose();
-//            _indexBuffer.Dispose();
-//        }
 
         public DrawStyle DrawStyle
         {
@@ -108,7 +98,6 @@ namespace HermiteInterpolation.Shapes
             }
             _vertexBuffer?.SetData(_vertices);
         }
-
         public void ColoredHeight()
         {
             ColoredHeight(0f, 300f);
@@ -161,7 +150,6 @@ namespace HermiteInterpolation.Shapes
 
         public void CalculateLightingNormals()
         {
-            //var normalCalc = new VertexNormals();
             switch (_drawStyle)
             {
                 case DrawStyle.Wireframe:
@@ -183,8 +171,6 @@ namespace HermiteInterpolation.Shapes
             }
             _vertexBuffer.SetData(_vertices);
         }
-
-        
 
         private void InitIndexBuffer(short[] indices)
         {
@@ -263,11 +249,6 @@ namespace HermiteInterpolation.Shapes
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-//        ~SimpleSurface()
-//        {
-//            Dispose(false);
-//        }
 
         protected virtual void Dispose(bool disposing)
         {

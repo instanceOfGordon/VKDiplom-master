@@ -8,21 +8,18 @@ namespace HermiteInterpolation.SplineKnots
 {
     public delegate KnotMatrix KnotsOperation(KnotMatrix leftOp, KnotMatrix rightOp);
     /// <summary>
-    /// Enables to chain computation of multiple genrerators.
-    /// Usable for addition/subtraction... of KnotMatrixes and Splines
+    /// Enables chain computation of multiple geneerators.
+    /// Usable for addition/subtraction... of KnotMatrix-es and Spline-s
     /// </summary>
     public sealed class ChainedKnotsGenerator : KnotsGenerator,IEnumerable<KnotsGenerator>
     {
         private readonly IList<KnotsGenerator> _generatorChain;
         private readonly IList<KnotsOperation> _operatorChain;
 
-      
         public ChainedKnotsGenerator(KnotsGenerator first)
         {
             _generatorChain = new List<KnotsGenerator> {first};
             _operatorChain = new List<KnotsOperation> {null};
-            //var s = new Stack();
-
         }
         
         public override KnotMatrix GenerateKnots(SurfaceDimension uDimension, SurfaceDimension vDimension)
@@ -40,7 +37,7 @@ namespace HermiteInterpolation.SplineKnots
         {
             _generatorChain.Add(generator);
             _operatorChain.Add(operation);
-        }//
+        }
 
         public IEnumerator<KnotsGenerator> GetEnumerator()
         {

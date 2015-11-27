@@ -28,7 +28,7 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
                     return FunctionVector(t, t0, t1);
             }
         }
-
+    
         private static void RoundIfInVicinity(ref float value, float target, float vicinitySize)
         {
             if (value <= target + vicinitySize && target - vicinitySize <= value) value = target;

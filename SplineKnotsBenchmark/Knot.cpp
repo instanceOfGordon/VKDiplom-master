@@ -1,34 +1,35 @@
 #include "stdafx.h"
 #include "Knot.h"
 
-namespace splineknots {
+namespace splineknots
+{
 	Knot::Knot(double x, double y, double z, double dx, double dy, double dxy)
 		: x_(x),
-		y_(y),
-		z_(z),
-		dx_(dx),
-		dy_(dy),
-		dxy_(dxy)
+		  y_(y),
+		  z_(z),
+		  dx_(dx),
+		  dy_(dy),
+		  dxy_(dxy)
 	{
 	}
 
 	Knot::Knot(double x, double y, double z)
 		: x_(x),
-		y_(y),
-		z_(z),
-		dx_(0),
-		dy_(0),
-		dxy_(0)
+		  y_(y),
+		  z_(z),
+		  dx_(0),
+		  dy_(0),
+		  dxy_(0)
 	{
 	}
 
 	Knot::Knot()
 		: x_(0),
-		y_(0),
-		z_(0),
-		dx_(0),
-		dy_(0),
-		dxy_(0)
+		  y_(0),
+		  z_(0),
+		  dx_(0),
+		  dy_(0),
+		  dxy_(0)
 	{
 	}
 
@@ -96,11 +97,6 @@ namespace splineknots {
 		dxy_ = dxy;
 	}
 
-	/*std::string Knot::toString()
-	{
-		return
-	}*/
-
 	Knot Knot::operator+(const Knot& other)
 	{
 		Knot temp = *this;
@@ -121,7 +117,7 @@ namespace splineknots {
 		return temp;
 	}
 
-	Knot Knot::operator*(const Knot & other)
+	Knot Knot::operator*(const Knot& other)
 	{
 		Knot temp = *this;
 		temp.SetZ(temp.Z() * other.Z());

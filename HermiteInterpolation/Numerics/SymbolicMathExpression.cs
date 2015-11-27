@@ -12,7 +12,7 @@ namespace HermiteInterpolation.Numerics
         {
         }
 
-        protected MathFunction Compile(string expression) => vals =>
+        protected MathFunction Interpret(string expression) => vals =>
         {
             double result = 0;
             (new Calculator()).Calculate(expression, vals[0], vals[1], ref result);
@@ -31,14 +31,14 @@ namespace HermiteInterpolation.Numerics
 
         public override MathFunction Interpret()
         {
-            return Compile(Expression);
+            return Interpret(Expression);
         }
 
         public override MathFunction InterpretMathDifferentiation(params string[] respectToVariables)
         {
             var diff = Differentiate(respectToVariables);
 
-            return Compile(diff);
+            return Interpret(diff);
         }
     }
 }

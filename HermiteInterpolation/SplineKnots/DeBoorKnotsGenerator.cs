@@ -26,9 +26,7 @@ namespace HermiteInterpolation.SplineKnots
         protected virtual double[] RightSide(Func<int, double> rightSideVariables, double h, double dfirst, double dlast,
             int unknownsCount)
         {
-            //var unknownsCount = unknownsCount - 2;
             var rs = new double[unknownsCount];
-            //var equation
             h = 3/h;
             rs[0] = h*(rightSideVariables(2) - rightSideVariables(0)) - dfirst;
             rs[unknownsCount - 1] = h*(rightSideVariables(unknownsCount + 1) - rightSideVariables(unknownsCount - 1)) - dlast;
@@ -63,16 +61,12 @@ namespace HermiteInterpolation.SplineKnots
             var vSize = Math.Abs(vDimension.Max - vDimension.Min)/(vDimension.KnotCount - 1);
             var u = uDimension.Min;
 
-            // Init Z
             for (var i = 0; i < uDimension.KnotCount; i++, u += uSize)
-                //Parallel.For(0,uDimension.KnotCount,i=>)
             {
                 var v = vDimension.Min;
                 for (var j = 0; j < vDimension.KnotCount; j++, v += vSize)
                 {
                     var z = Function.Z.SafeCall(u, v);
-                        //Function.Z(u,v); //Z(u, v);
-
                     values[i, j] = new Knot(u, v, z);
                 }
             }
@@ -81,7 +75,7 @@ namespace HermiteInterpolation.SplineKnots
             for (var j = 0; j < vDimension.KnotCount; j++)
             {
                 values[0, j].Dx = Function.Dx.SafeCall(values[0, j].X,
-                    values[0, j].Y); //Function.Dx(values[0,j].X, values[0,j].Y);
+                    values[0, j].Y);
                 values[uKnotCountMin1, j].Dx = Function.Dx.SafeCall(values[uKnotCountMin1, j].X,
                     values[uKnotCountMin1, j].Y);
             }

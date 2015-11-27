@@ -28,14 +28,7 @@ namespace SymbolicDifferentiation
 
         public static string OptimizeSign(this string str)
         {
-            var nIndex = 0;
-
-            // replace "--" with "" or "+"
             str = str.Replace("--", "=");
-
-            nIndex = 0;
- 
-            //    str = str.Remove(nIndex);
             str = str.Replace("+-", "-");
             return str;
         }
@@ -60,7 +53,6 @@ namespace SymbolicDifferentiation
             if (operIdx == -1) return str;
             var leftOp = str.Substring(0, operIdx);
             var rightOp = str.Substring(operIdx + 1);
-            //var result = ""//new StringBuilder("");
             var varInLeftOp = leftOp.Contains(variable);
             var varInRightOp = rightOp.Contains(variable);
             if (varInLeftOp && varInRightOp)
@@ -127,7 +119,6 @@ namespace SymbolicDifferentiation
             // initialize parenthesis count to one
             var nOpen = 1;
             // loop in the input to find the close parenthesis
-            //var i = 0;
             while (++i < p.Length)
                 if (p[i] == '(')
                     nOpen++;

@@ -23,7 +23,6 @@ namespace HermiteInterpolation.Numerics
 
         public abstract MathFunction InterpretMathDifferentiation(params string[] respectToVariables);
           
-
         public static MathExpression CreateDefault(string expression, params string[] variables)
         {
             return new SymbolicMathExpression(expression, variables);
