@@ -15,7 +15,7 @@ namespace splineknots
 	class DeBoorKnotsGenerator : public KnotsGenerator
 	{
 		Tridiagonals tridagonals_;
-		std::vector<std::vector<double>> rightsides_buffers_;
+		//std::vector<std::vector<double>> rightsides_buffers_;
 		bool is_parallel_ = false;
 	public:
 		DeBoorKnotsGenerator(MathFunction math_function);
@@ -28,10 +28,8 @@ namespace splineknots
 	protected:
 		DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<Tridiagonal> tridiagonal);
 		DeBoorKnotsGenerator(InterpolativeMathFunction math_function, std::unique_ptr<Tridiagonal> tridiagonal);
-		std::vector<std::vector<double>>& RightSidesBuffers();
 		Tridiagonals& Tridagonals();
 		Tridiagonal& Tridiagonal(int index = 0);
-		double* RightSideBuffer(int index = 0);
 		virtual void RightSide(const RightSideSelector& right_side_variables, double h, double dfirst, double dlast,
 		                       int unknowns_count, double* rightside_buffer);
 		void InitializeKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, KnotMatrix& values);

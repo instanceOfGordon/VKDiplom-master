@@ -7,14 +7,11 @@ namespace splineknots
 	class ReducedDeBoorKnotsGenerator final :
 		public DeBoorKnotsGenerator
 	{
-		size_t row_buffer_size;
-		size_t column_buffer_size;
-		size_t current_buffer_size;
-	public:
-		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension) override;
+	public:	
 		ReducedDeBoorKnotsGenerator(MathFunction function);
 		ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function);
 		~ReducedDeBoorKnotsGenerator() override;
+		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension) override;
 	protected:
 		void InitializeBuffers(size_t u_count, size_t v_count) override;
 		void RightSide(const RightSideSelector& right_side_variables, double h, double dfirst, double dlast,

@@ -13,7 +13,6 @@ splineknots::ReducedDeBoorKnotsGenerator::ReducedDeBoorKnotsGenerator(MathFuncti
 
 splineknots::ReducedDeBoorKnotsGenerator::ReducedDeBoorKnotsGenerator(InterpolativeMathFunction math_function)
 	: DeBoorKnotsGenerator(math_function, std::make_unique<splineknots::ReducedDeBoorTridiagonal>())
-
 {
 }
 
@@ -272,9 +271,10 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, 
 	auto h = values(0, 1).Y() - values(0, 0).Y();
 	auto dfirst = values(row_index, 0).Dxy();
 	auto dlast = values(row_index, values.ColumnsCount() - 1).Dxy();
-	auto result_buffer = RightSideBuffer(omp_get_thread_num());
+	auto& tridiagonal = Tridiagonal(omp_get_thread_num());
+	auto result_buffer = tridiagonal.RightSideBuffer();
 	RightSideCross(values, row_index, dfirst, dlast, unknowns_count, result_buffer);
-	Tridiagonal(omp_get_thread_num()).Solve(unknowns_count, result_buffer);
+	tridiagonal.Solve(unknowns_count);
 	for (size_t i = 0; i < unknowns_count / 2; i++)
 	{
 		values(row_index, 2 * i + 1).SetDxy(result_buffer[i]);
@@ -283,9 +283,10 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, 
 
 void splineknots::ReducedDeBoorKnotsGenerator::SolveTridiagonal(const RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
 {
-	auto results_buffer = RightSideBuffer(omp_get_thread_num());
+	auto& tridiagonal = Tridiagonal(omp_get_thread_num());
+	auto results_buffer = tridiagonal.RightSideBuffer();
 	RightSide(selector, h, dfirst, dlast, unknowns_count, results_buffer);
-	Tridiagonal(omp_get_thread_num()).Solve(unknowns_count, results_buffer);
+	tridiagonal.Solve(unknowns_count);
 	for (size_t k = 0; k < unknowns_count / 2 - 1; k++)
 	{
 		unknowns_setter(2 * (k + 1), results_buffer[k]);
@@ -295,15 +296,10 @@ void splineknots::ReducedDeBoorKnotsGenerator::SolveTridiagonal(const RightSideS
 void splineknots::ReducedDeBoorKnotsGenerator::InitializeBuffers(size_t u_count, size_t v_count)
 {
 	auto size = std::max(u_count / 2 - 1, v_count / 2 - 1);
-	auto& rsb = RightSidesBuffers();
-	for (size_t i = 0; i < rsb.size(); i++)
-	{
-		rsb[i].resize(size);
-	}
 	auto& trid = Tridagonals();
 	for (size_t i = 0; i < Tridagonals().size(); i++)
 	{
-		trid[i]->ResizeBuffer(size);
+		trid[i]->ResizeBuffers(size);
 	}
 }
 

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SplineKnots.h"
 #include "ReducedDeboorTridiagonal.h"
+#include <algorithm>
 
 splineknots::ReducedDeBoorTridiagonal* splineknots::ReducedDeBoorTridiagonal::Clone() const
 {
@@ -16,15 +17,16 @@ splineknots::ReducedDeBoorTridiagonal::~ReducedDeBoorTridiagonal()
 {
 }
 
-void splineknots::ReducedDeBoorTridiagonal::Solve(size_t num_unknowns, double* right_side)
+void splineknots::ReducedDeBoorTridiagonal::Solve(size_t num_unknowns)
 {
 	auto even = num_unknowns % 2 == 0;
 	auto num_equations = even ? num_unknowns / 2 - 1 : num_unknowns / 2;
-
-	auto size = BufferElementCount();
-	if (num_equations > size)
-		ResizeBuffer(num_equations);
+	auto rightside = RightSideBuffer();
+	auto resize = std::max(num_equations, RightSideBufferSize());
+	auto minsize = std::min(BufferSize(), RightSideBufferSize());
+	if (resize > minsize)
+		ResizeBuffers(resize);
 	double last_maindiag_value = even ? -15 : -14;
 	auto buffer = Buffer();
-	utils::SolveDeboorTridiagonalSystemBuffered(LowerDiagonalValue(), MainDiagonalValue(), UpperDiagonalValue(), right_side, num_equations, buffer, last_maindiag_value);
+	utils::SolveDeboorTridiagonalSystemBuffered(LowerDiagonalValue(), MainDiagonalValue(), UpperDiagonalValue(), rightside, num_equations, buffer, last_maindiag_value);
 }

@@ -9,11 +9,7 @@
 
 namespace splineknots
 {
-	std::vector<std::vector<double>>& DeBoorKnotsGenerator::RightSidesBuffers()
-	{
-		return rightsides_buffers_;
-	}
-
+	
 	Tridiagonals& DeBoorKnotsGenerator::Tridagonals()
 	{
 		return tridagonals_;
@@ -21,36 +17,29 @@ namespace splineknots
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function)
 		: KnotsGenerator(math_function),
-		  tridagonals_(),
-		  rightsides_buffers_(1)
-	//tridiagonal_(new utils::Tridiagonal(1, 4, 1))
+		  tridagonals_()
 	{
-		//tridagonals_.reserve(utils::num_threads);
 		tridagonals_.push_back(std::make_unique<splineknots::Tridiagonal>(1, 4, 1));
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function)
 		: KnotsGenerator(math_function),
-		  tridagonals_(),
-		  rightsides_buffers_(1)
+		  tridagonals_()
 	{
-		//tridagonals_.reserve(utils::num_threads);
 		tridagonals_.push_back(std::make_unique<splineknots::Tridiagonal>(1, 4, 1));
 	}
 
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<splineknots::Tridiagonal> tridiagonal)
 		: KnotsGenerator(math_function),
-		  tridagonals_(),
-		  rightsides_buffers_(1)
+		  tridagonals_()
 	{
 		tridagonals_.push_back(std::move(tridiagonal));
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function, std::unique_ptr<splineknots::Tridiagonal> tridiagonal)
 		: KnotsGenerator(math_function),
-		  tridagonals_(),
-		  rightsides_buffers_(1)
+		  tridagonals_()
 	{
 		tridagonals_.push_back(std::move(tridiagonal));
 	}
@@ -257,13 +246,14 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::SolveTridiagonal(const RightSideSelector& selector, double h, double dfirst, double dlast, int unknowns_count, UnknownsSetter& unknowns_setter)
 	{
-		auto results_buffer = RightSideBuffer(omp_get_thread_num());
-		RightSide(selector, h, dfirst, dlast, unknowns_count, results_buffer);
+		auto& tridiagonal = Tridiagonal(omp_get_thread_num());
+		auto rightside = tridiagonal.RightSideBuffer();
+		RightSide(selector, h, dfirst, dlast, unknowns_count, rightside);
 
-		Tridiagonal(omp_get_thread_num()).Solve(unknowns_count, results_buffer);
+		tridiagonal.Solve(unknowns_count);
 		for (int k = 0; k < unknowns_count; k++)
 		{
-			unknowns_setter(k + 1, results_buffer[k]);
+			unknowns_setter(k + 1, rightside[k]);
 		}
 	}
 
@@ -280,32 +270,20 @@ namespace splineknots
 				std::unique_ptr<splineknots::Tridiagonal> copy_of_first(tridagonals_[0]->Clone());
 				tridagonals_.push_back(std::move(copy_of_first));
 			}
-			rightsides_buffers_.resize(threads);
 		}
 		else
 		{
 			tridagonals_._Pop_back_n(tridagonals_.size() - 1);
-			rightsides_buffers_._Pop_back_n(rightsides_buffers_.size() - 1);
 		}
 	}
-
 
 	void DeBoorKnotsGenerator::InitializeBuffers(size_t u_count, size_t v_count)
 	{
 		auto size = std::max(u_count - 2, v_count - 2);
-		for (size_t i = 0; i < rightsides_buffers_.size(); i++)
-		{
-			rightsides_buffers_[i].resize(size);
-		}
 		for (size_t i = 0; i < tridagonals_.size(); i++)
 		{
-			tridagonals_[i]->ResizeBuffer(size);
+			tridagonals_[i]->ResizeBuffers(size);
 		}
-	}
-
-	double* DeBoorKnotsGenerator::RightSideBuffer(int index)
-	{
-		return &rightsides_buffers_[index].front();
 	}
 
 	splineknots::Tridiagonal& DeBoorKnotsGenerator::Tridiagonal(int index)
