@@ -41,7 +41,7 @@ void splineknots::Tridiagonal::ResizeBuffer(size_t newsize, bool shrinking_allow
 	{
 		lu_buffer_.resize(newsize);
 	}
-	for (size_t i = lu_buffer_.size(); i < newsize; i++)
+	for (size_t i = oldsize; i < newsize; i++)
 	{
 		lu_buffer_.push_back(upper_diagonal_value);
 	}
@@ -50,11 +50,7 @@ void splineknots::Tridiagonal::ResizeBuffer(size_t newsize, bool shrinking_allow
 void splineknots::Tridiagonal::ResizeRightSide(size_t newsize, bool shrinking_allowed)
 {
 	auto oldsize = right_side_buffer_.size();
-	if (newsize > oldsize)
-	{
-		right_side_buffer_.resize(newsize);
-	}
-	else if(shrinking_allowed)
+	if (newsize > oldsize || shrinking_allowed)
 	{
 		right_side_buffer_.resize(newsize);
 	}

@@ -43,10 +43,11 @@ namespace utils
 
 	void SolveTridiagonalSystemBuffered(double* lower_diagonal, double* main_diagonal, double* upper_diagonal, double* right_side, size_t num_equations, double* buffer)
 	{
+		//std::copy(upper_diagonal, upper_diagonal + num_equations, buffer);
 		memcpy(buffer, upper_diagonal, num_equations);
 		buffer[0] /= main_diagonal[0];
 		right_side[0] /= main_diagonal[0];
-		for (size_t i = 0; i < num_equations; i++)
+		for (size_t i = 1; i < num_equations; i++)
 		{
 			auto m = 1 / (main_diagonal[i] - lower_diagonal[i] * buffer[i - 1]);
 			buffer[i] *= m;
@@ -68,20 +69,21 @@ namespace utils
 	void SolveDeboorTridiagonalSystemBuffered(double lower_diagonal_value, double main_diagonal_value, double upper_diagonal_value, double* right_side, size_t num_equations, double* buffer, double last_main_diagonal_value)
 	{
 		if (last_main_diagonal_value == DBL_TRUE_MIN)
-			last_main_diagonal_value = lower_diagonal_value;
-		auto mdv_rcp = 1 / main_diagonal_value;
-		buffer[0] = upper_diagonal_value * mdv_rcp;
-		right_side[0] *= mdv_rcp;
+			last_main_diagonal_value = main_diagonal_value;
+		auto m0 = 1 / main_diagonal_value;
+		buffer[0] = upper_diagonal_value * m0;
+		right_side[0] *= m0;
 		auto lastindex = num_equations - 1;
-		for (size_t i = 0; i < lastindex; i++)
+		for (size_t i = 1; i < lastindex; i++)
 		{
 			auto m = 1 / (main_diagonal_value - lower_diagonal_value * buffer[i - 1]);
 			buffer[i] = upper_diagonal_value * m;
 			right_side[i] = (right_side[i] - lower_diagonal_value * right_side[i - 1]) * m;
 		}
-		auto m = 1 / (last_main_diagonal_value - lower_diagonal_value * buffer[lastindex - 1]);
-		buffer[lastindex] = upper_diagonal_value * m;
-		right_side[lastindex] = (right_side[lastindex] - lower_diagonal_value * right_side[lastindex - 1]) * m;
+		
+		m0 = 1 / (last_main_diagonal_value - lower_diagonal_value * buffer[lastindex-1]);
+		buffer[lastindex] = upper_diagonal_value * m0;
+		right_side[lastindex] = (right_side[lastindex] - lower_diagonal_value * right_side[lastindex - 1]) * m0;
 
 		for (size_t i = num_equations - 1; i-- > 0;)
 		{

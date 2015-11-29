@@ -1,5 +1,5 @@
 // SplineKnotsBenchmark.cpp : Defines the entry point for the console application.
-//
+
 
 #include "stdafx.h"
 #include "SplineKnots.h"
@@ -7,12 +7,39 @@
 #include <algorithm>
 #include "MulVsDiv.h"
 #include "CurveDeBoorKnotsGenerator.h"
+#include "ReducedCurveDeboorGenerator.h"
 #include "ComparisonBenchmarkResult.h"
 #include <numeric>
 
-typedef std::chrono::high_resolution_clock Clock;
-typedef std::chrono::steady_clock::time_point TimePoint;
-typedef std::chrono::duration<long long, std::nano> Duration;
+void LUComparison()
+{
+	using namespace std;
+	using namespace utils;
+	const size_t num_equations = 9;
+	vector<double> right_side_cs(num_equations);
+	for (size_t i = 0; i < num_equations; i++)
+	{
+		right_side_cs[i] = sin(i);
+	}
+	/*auto dfirst = cos(0);
+	auto dlast = cos(num_equations - 1);*/
+	auto right_side_vk = right_side_cs;
+	auto right_side_vk2 = right_side_cs;
+	SolveCsabaTridiagonalSystem(4, &right_side_cs.front(), num_equations);
+	vector<double> buffer(num_equations);
+	SolveDeboorTridiagonalSystemBuffered(1, 4, 1, &right_side_vk.front(), num_equations, &buffer.front());
+
+	vector<double> L(num_equations, 1);
+	vector<double> M(num_equations, 4);
+	vector<double> U(num_equations, 1);
+
+	SolveTridiagonalSystemBuffered(&L.front(), &M.front(), &U.front(), &right_side_vk2.front(), num_equations, &buffer.front());
+	for (size_t i = 0; i < num_equations; i++)
+	{
+		cout << "Csaba LU: " << right_side_cs[i] << "; Vilo LU: " << right_side_vk[i] << endl;
+	}
+	cout << endl;
+}
 
 void MulDivBenchmark()
 {
@@ -26,15 +53,14 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	const int num_repetitions = 100;
 	splineknots::MathFunction function = [](double x, double y)
 		{
-			return sin(x);//sin(sqrt(x * x + y * y));
+			return sin(sqrt(x * x));
 		};
 
 	splineknots::CurveDeboorKnotsGenerator full(function);
-	//splineknots::CurveDeBoorKnotsGenerator reduced(std::make_unique<splineknots::ReducedDeBoorKnotsGenerator>(function));
+	splineknots::ReducedCurveDeboorKnotsGenerator reduced(function);
 
-	splineknots::SurfaceDimension udimension(-2, 2, num_iterations);
+	splineknots::SurfaceDimension udimension(-2, 2, num_knots);
 
-	//std::vector<splineknots::KnotMatrix> calculated_results;
 	std::vector<double> calculated_results;
 	std::vector<unsigned int> full_times;
 	full_times.reserve(num_iterations);
@@ -45,35 +71,26 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	unsigned int start;// = clock();
 	unsigned int finish;
 
-	/*for (size_t i = 0; i < num_iterations; i++)
+	for (size_t i = 0; i < num_iterations; i++)
 	{
 		start = clock();
-		for (size_t i = 0; i < num_repetitions; i++)
-		{
-			auto result = reduced.GenerateKnots(udimension);
-			calculated_results.push_back(result(3,4).Dx());
-		}
+		auto result = reduced.GenerateKnots(udimension);
 		finish = clock();
+		calculated_results.push_back(result[0]);
 		reduced_times.push_back(finish - start);
-	}*/
+	}
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
 		start = clock();
-		for (size_t j = 0; j < num_repetitions; j++)
-		{
-			auto result = full.GenerateKnots(udimension);
-			//result.Print();
-			calculated_results.push_back(result[0]);
-		}
+		auto result = full.GenerateKnots(udimension);
 		finish = clock();
-
+		calculated_results.push_back(result[0]);
 		full_times.push_back(finish - start);
 	}
 
 	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
-		/ static_cast<double>(num_iterations);//*std::min_element(full_times.begin(), full_times.end());//full_times[full_times.size()/2];//utils::Average(&full_times.front(),full_times.size());//clock() - start;;//sw.Elapsed<std::chrono::microseconds>();
-
+		/ static_cast<double>(num_iterations);
 	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
 		/ static_cast<double>(num_iterations);
 	std::cout << "Ignore " << calculated_results[0] << std::endl;
@@ -125,7 +142,8 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		full_times.push_back(finish - start);
 	}
 
-
+	/*auto full_time = *std::min_element(std::begin(full_times), std::end(full_times));
+	auto reduced_time = *std::min_element(std::begin(reduced_times), std::end(reduced_times));*/
 	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
 		/ static_cast<double>(num_iterations);
 	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
@@ -157,6 +175,7 @@ int main()
 		std::cout << "2: Spline curve benchmark." << std::endl;
 		std::cout << "3: Spline surface benchmark." << std::endl;
 		std::cout << "4: Spline surface benchmark (in parallel)." << std::endl;
+		std::cout << "5: Compare Csaba T. vs. Vilo K. LU decomposition." << std::endl;
 		std::cout << "Q: End program" << std::endl;
 		char input;
 		std::cin >> input;
@@ -203,6 +222,9 @@ int main()
 			std::cin.get();
 			result = SurfaceBenchmark(num_iterations, num_knots, true);
 			PrintDeboorResult(result);
+			break;
+		case '5':
+			LUComparison();
 			break;
 		case 'q':
 		case 'Q':

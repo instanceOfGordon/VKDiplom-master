@@ -3,6 +3,29 @@
 
 namespace utils
 {
+	template <typename Iterator, typename Function>
+	void For(Iterator from, Iterator to, Function function, Iterator increment_by, bool in_parallel)
+	{
+		if (in_parallel)
+		{
+#pragma omp parallel for
+			for (Iterator i = from; i < to; i += increment_by)
+			{
+				function(i);
+			}
+		}
+		else
+		{
+			// Loop for sequential computations. 
+			// '#pragma omp parallel for if(in_parallel)' in above loop will execute that loop in one thread, 
+			// but still with overhead of OpenMP thread creation. 
+			for (Iterator i = from; i < to; i += increment_by)
+			{
+				function(i);
+			}
+		}
+	}
+
 	template <typename T>
 	T* InitArray(size_t length, T* arrayToInit, T value)
 	{
@@ -13,7 +36,7 @@ namespace utils
 		return arrayToInit;
 	}
 
-	template<typename T>
+	template <typename T>
 	void DeleteJaggedArray(T**& jaggedArray, size_t rows, size_t columns)
 	{
 		for (size_t i = 0; i < rows; i++)
@@ -33,14 +56,14 @@ namespace utils
 		{
 			res[i] = new T[columns];
 		}
-		
+
 		return res;
 	}
 
-	template<typename T>
+	template <typename T>
 	double Average(T* arr, size_t arr_size)
 	{
-		T sum =0;
+		T sum = 0;
 		for (size_t i = 0; i < arr_size; i++)
 		{
 			sum += arr[i];

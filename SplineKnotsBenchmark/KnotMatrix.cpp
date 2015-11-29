@@ -48,16 +48,16 @@ void splineknots::KnotMatrix::Print()
 	cout << "---------- Knot matrix ----------" << endl;
 	for (size_t i = 0; i < rows_count_; i++)
 	{
-		cout << "Row " << i << " :\t";
+		cout << "Row " << i << " :\n";
 		for (size_t j = 0; j < columns_count_; j++)
 		{
-			cout << j << ": "
-				<< matrix_[i][j].X() << ' '
-				<< matrix_[i][j].Y() << ' '
-				<< matrix_[i][j].Z() << ' '
-				<< matrix_[i][j].Dx() << ' '
-				<< matrix_[i][j].Dy() << ' '
-				<< matrix_[i][j].Dxy() << '\t';
+			cout << j << ":\n"
+				<< "x: " << matrix_[i][j].X() << '\n'
+				<< "y: " << matrix_[i][j].Y() << '\n'
+				<< "z: " << matrix_[i][j].Z() << '\n'
+				<< "dx: " << matrix_[i][j].Dx() << '\n'
+				<< "dy: " << matrix_[i][j].Dy() << '\n'
+				<< "dxy: " << matrix_[i][j].Dxy() << '\n';
 		}
 		cout << endl;
 	}

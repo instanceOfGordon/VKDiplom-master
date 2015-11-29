@@ -566,7 +566,8 @@
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
       <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
       <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
-      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <AdditionalOptions>/Qvec-report:2 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -607,7 +608,7 @@
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
       <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
       <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
-      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -689,7 +690,7 @@
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
       <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
       <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
-      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -8,24 +8,7 @@ namespace utils
 	extern unsigned int num_threads;
 
 	template <typename Iterator, typename Function>
-	void For(Iterator from, Iterator to, Function function, Iterator increment_by = 1, bool in_parallel = false)
-	{
-		if (in_parallel)
-		{
-			#pragma omp parallel for
-			for (Iterator i = from; i < to; i += increment_by)
-			{
-				function(i);
-			}
-		}
-		else
-		{
-			for (Iterator i = from; i < to; i += increment_by)
-			{
-				function(i);
-			}
-		}
-	}
+	void For(Iterator from, Iterator to, Function function, Iterator increment_by = 1, bool in_parallel = false);
 
 	template <typename T>
 	T* InitArray(size_t length, T* arrayToInit, T value);

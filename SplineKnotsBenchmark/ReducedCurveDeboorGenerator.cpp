@@ -3,19 +3,19 @@
 #include "utils.h"
 
 
-splinkeknots::ReducedCurveDeboorGenerator::ReducedCurveDeboorGenerator(const splineknots::MathFunction& function): CurveDeboorKnotsGenerator(function)
+splineknots::ReducedCurveDeboorKnotsGenerator::ReducedCurveDeboorKnotsGenerator(const splineknots::MathFunction& function): CurveDeboorKnotsGenerator(function)
 {
 }
 
-splinkeknots::ReducedCurveDeboorGenerator::ReducedCurveDeboorGenerator(const splineknots::InterpolativeMathFunction& function): CurveDeboorKnotsGenerator(function)
+splineknots::ReducedCurveDeboorKnotsGenerator::ReducedCurveDeboorKnotsGenerator(const splineknots::InterpolativeMathFunction& function): CurveDeboorKnotsGenerator(function)
 {
 }
 
-splinkeknots::ReducedCurveDeboorGenerator::~ReducedCurveDeboorGenerator()
+splineknots::ReducedCurveDeboorKnotsGenerator::~ReducedCurveDeboorKnotsGenerator()
 {
 }
 
-splineknots::KnotVector splinkeknots::ReducedCurveDeboorGenerator::RightSide(const splineknots::KnotVector& function_values, double h, double dfirst, double dlast)
+splineknots::KnotVector splineknots::ReducedCurveDeboorKnotsGenerator::RightSide(const splineknots::KnotVector& function_values, double h, double dfirst, double dlast)
 {
 	int n1, n2, N = function_values.size();
 	n1 = (N % 2 == 0) ? (N - 2) / 2 : (N - 3) / 2;
@@ -25,7 +25,7 @@ splineknots::KnotVector splinkeknots::ReducedCurveDeboorGenerator::RightSide(con
 	double mu1 = 3.0 / h;
 	double mu2 = 4.0 / mu1;
 	int k = -1;
-	for (int i = 0; i < n2; i++)
+	for (int i = 2; i < n2; i+=2)
 	{
 		++k;
 		rhs[k] = mu1 * (function_values[i + 1] - function_values[i - 2]) - mu2 * (function_values[i + 1] - function_values[i - 1]);
@@ -35,7 +35,7 @@ splineknots::KnotVector splinkeknots::ReducedCurveDeboorGenerator::RightSide(con
 	return rhs;
 }
 
-splineknots::KnotVector splinkeknots::ReducedCurveDeboorGenerator::GenerateKnots(const splineknots::SurfaceDimension& dimension)
+splineknots::KnotVector splineknots::ReducedCurveDeboorKnotsGenerator::GenerateKnots(const splineknots::SurfaceDimension& dimension)
 {
 	splineknots::KnotVector knots(dimension.knot_count);
 	InitializeKnots(dimension, knots);

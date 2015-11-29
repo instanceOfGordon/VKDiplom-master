@@ -3,7 +3,7 @@ using System.CodeDom;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymbolicDifferentiation;
 
-namespace Test
+namespace LUTest
 {
     [TestClass]
     public class SymbolicCalculationTest

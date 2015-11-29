@@ -8,7 +8,7 @@
         /// </summary>
         /// <param name="lowerDiagonal">Lower diagonal.</param>
         /// <param name="mainDiagonal">Main diagonal.</param>
-        /// <param name="upperDiagonal">Upper diagonal.</param>
+        /// <param name="upperDiagonal">Upper diagonal. Content of array will be changed.</param>
         /// <param name="rightSide">Right side. Will contains result when completed.</param>
         /// <returns>Result (== rightSide when completed)</returns>
         internal static double[] SolveTridiagonalSystem(double[] lowerDiagonal, double[] mainDiagonal, double[] upperDiagonal,

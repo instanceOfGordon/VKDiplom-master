@@ -4,6 +4,10 @@
 #include <iostream>
 #include <locale>
 #include <vector>
+#include <algorithm>
+#include <random>
+
+
 
 void MulVsDiv::Loop()
 {
@@ -17,7 +21,10 @@ void MulVsDiv::Loop()
 		b[i] = (rand() % 256) / 16.0 + 1.6;
 		c[i] = (rand() % 256) / 16.0 + 1.1;
 	}
-
+	std::random_device rd; // obtain a random number from hardware
+	std::mt19937 eng(rd()); // seed the generator
+	std::uniform_int_distribution<> distr(0, length-1); // define the range
+	double ignoreit = 0;
 	auto start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -28,54 +35,45 @@ void MulVsDiv::Loop()
 		// ICL does not have this issue, but to provide both vectorized and nonvectorized comparison 
 		// i specifically disabled vectorization in this method
 #pragma novector
+#pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			c[i] = a[i] + b[i];
+			a[i] = a[i] + b[i];
 		}
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-
+	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
 #pragma novector
+#pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			c[i] = a[i] * b[i];
+			a[i] = a[i] * b[i];
 		}
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-
+	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
 #pragma novector
+#pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			c[i] = a[i] / b[i];
+			a[i] = a[i] / b[i];
 		}
 	}
 	auto div_time = clock() - start;
 	std::cout << "Division: " << div_time << std::endl;
 
-	//	start = clock();
-	//	for (size_t l = 0; l < loops; l++)
-	//	{
-	//#pragma novector
-	//		for (int i = 0; i < length; i++)
-	//		{
-	//			c[i] = 1 / a[i];
-	//		}
-	//	}
-	//	auto rcp_time = clock() - start;
-	//	std::cout << "Reciprocal: " << rcp_time << std::endl << std::endl;
-
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl ;
 	//std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
-	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
+	std::cout << "Just ignore it: " <<ignoreit << std::endl << std::endl;
 }
 
 void MulVsDiv::LoopVectorized()
@@ -90,13 +88,16 @@ void MulVsDiv::LoopVectorized()
 		b[i] = (rand() % 256) / 16.0 + 1.6;
 		c[i] = (rand() % 256) / 16.0 + 1.1;
 	}
-
+	std::random_device rd; // obtain a random number from hardware
+	std::mt19937 eng(rd()); // seed the generator
+	std::uniform_int_distribution<> distr(0, length - 1); // define the range
+	auto ignoreit = 0;
 	int l = 0;
 	auto start = clock();
 add:
 	for (int i = 0; i < length; i++)
 	{
-		c[i] = a[i] + b[i];
+		a[i] = a[i] + b[i];
 	}
 	// MSVC doesn't vectorize nested loops (message 1300 - too little computation to vectorize) as mentioned on line 23 in function 'Loop'.
 	// However if nested loop is replaced with this nasty workaround SIMD vectorization will happen.
@@ -108,13 +109,13 @@ add:
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-
+	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
 	l = 0;
 	start = clock();
 mul:
 	for (int i = 0; i < length; ++i)
 	{
-		c[i] = a[i] * b[i];
+		a[i] = a[i] * b[i];
 	}
 	while (l < loops)
 	{
@@ -123,13 +124,13 @@ mul:
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-
+	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
 	l = 0;
 	start = clock();
 div:
 	for (int i = 0; i < length; ++i)
 	{
-		c[i] = a[i] / b[i];
+		a[i] = a[i] / b[i];
 	}
 	while (l < loops)
 	{
@@ -141,13 +142,13 @@ div:
 	std::cout << "Division: " << div_time << std::endl;
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
-	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
 void MulVsDiv::DynamicArrayLoop()
 {
-	const int length = 1024 * 1024;
-	const int loops = 3 * 10e2;
+	const int length = 1024;
+	const int loops = 5 * 10e5;
 	std::cout << "Loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
@@ -157,7 +158,10 @@ void MulVsDiv::DynamicArrayLoop()
 		b[i] = (rand() % 256) / 16.0 + 1.6;
 		c[i] = (rand() % 256) / 16.0 + 1.1;
 	}
-
+	std::random_device rd; // obtain a random number from hardware
+	std::mt19937 eng(rd()); // seed the generator
+	std::uniform_int_distribution<> distr(0, length - 1); // define the range
+	auto ignoreit = 0;
 	auto start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -168,33 +172,36 @@ void MulVsDiv::DynamicArrayLoop()
 		// ICL does not have this issue, but to provide both vectorized and nonvectorized comparison 
 		// i specifically disabled vectorization in this method
 #pragma novector
+#pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			c[i] = a[i] + b[i];
+			a[i] = a[i] + b[i];
 		}
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-
+	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
 #pragma novector
+#pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			c[i] = a[i] * b[i];
+			a[i] = a[i] * b[i];
 		}
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-
+	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
 #pragma novector
+#pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			c[i] = a[i] / b[i];
+			a[i] = a[i] / b[i];
 		}
 	}
 	auto div_time = clock() - start;
@@ -202,13 +209,13 @@ void MulVsDiv::DynamicArrayLoop()
 	std::cout << "Division: " << div_time << std::endl;
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
-	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
 void MulVsDiv::DynamicArrayLoopVectorized()
 {
-	const int length = 1024 * 1024;
-	const int loops = 3 * 10e2;
+	const int length = 1024;
+	const int loops = 5 * 10e5;
 	std::cout << "Vectorized loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
@@ -218,13 +225,16 @@ void MulVsDiv::DynamicArrayLoopVectorized()
 		b[i] = (rand() % 256) / 16.0 + 1.6;
 		c[i] = (rand() % 256) / 16.0 + 1.1;
 	}
-
+	std::random_device rd; // obtain a random number from hardware
+	std::mt19937 eng(rd()); // seed the generator
+	std::uniform_int_distribution<> distr(0, length - 1); // define the range
+	auto ignoreit = 0;
 	int l = 0;
 	auto start = clock();
 add:
 	for (int i = 0; i < length; i++)
 	{
-		c[i] = a[i] + b[i];
+		a[i] = a[i] + b[i];
 	}
 	// MSVC doesn't vectorize nested loops (message 1300 - too little computation to vectorize) in function 'DynamicArrayLoop'.
 	// However if nested loop is replaced with this nasty workaround SIMD vectorization will happen.
@@ -236,13 +246,13 @@ add:
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-
+	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
 	l = 0;
 	start = clock();
 mul:
 	for (int i = 0; i < length; ++i)
 	{
-		c[i] = a[i] * b[i];
+		a[i] = a[i] * b[i];
 	}
 	while (l < loops)
 	{
@@ -251,13 +261,13 @@ mul:
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-
+	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
 	l = 0;
 	start = clock();
 div:
 	for (int i = 0; i < length; ++i)
 	{
-		c[i] = a[i] / b[i];
+		a[i] = a[i] / b[i];
 	}
 	while (l < loops)
 	{
@@ -272,7 +282,7 @@ div:
 
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
-	std::cout << "Just ignore it: " << c[7] + a[8] + b[1] << std::endl << std::endl;
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
 
