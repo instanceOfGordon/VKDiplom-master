@@ -137,27 +137,27 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& valu
 {
 	int ncols = values.ColumnsCount();
 	utils::For(0, ncols,
-	           [&](int j)
-	           {
-		           DeBoorKnotsGenerator::FillXDerivations(j, values);
-	           },
-	           1, IsParallel());
+		[&](int j)
+	{
+		DeBoorKnotsGenerator::FillXDerivations(j, values);
+	},
+		1, IsParallel());
 	auto h = values(1, 0).X() - values(0, 0).X();
 	auto three_div_4h = 0.75 / h;
 	int nrows = values.RowsCount();
 
 	utils::For(1, nrows - 1,
-	           [&](int i)
-	           {
-		           for (size_t j = 0; j < ncols; j++)
-		           {
-			           values(i, j).SetDx(
-				           three_div_4h * (values(i + 1, j).Z() - values(i - 1, j).Z())
-				           - 0.25 * (values(i + 1, j).Dx() + values(i - 1, j).Dx())
-			           );
-		           }
-	           },
-	           2, IsParallel());
+		[&](int i)
+	{
+		for (size_t j = 0; j < ncols; j++)
+		{
+			values(i, j).SetDx(
+				three_div_4h * (values(i + 1, j).Z() - values(i - 1, j).Z())
+				- 0.25 * (values(i + 1, j).Dx() + values(i - 1, j).Dx())
+				);
+		}
+	},
+		2, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillXYDerivations(KnotMatrix& values)
@@ -172,27 +172,27 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& valu
 {
 	int nrows = values.RowsCount();
 	utils::For(0, nrows,
-	           [&](int i)
-	           {
-		           DeBoorKnotsGenerator::FillYDerivations(i, values);
-	           },
-	           1, IsParallel());
+		[&](int i)
+	{
+		DeBoorKnotsGenerator::FillYDerivations(i, values);
+	},
+		1, IsParallel());
 	auto h = values(0, 1).Y() - values(0, 0).Y();
 	auto three_div_4h = 0.75 / h;
 	int ncols = values.ColumnsCount();
 
 	utils::For(0, nrows,
-	           [&](int i)
-	           {
-		           for (size_t j = 1; j < ncols - 1; j += 2)
-		           {
-			           values(i, j).SetDy(
-				           three_div_4h * (values(i, j + 1).Z() - values(i, j - 1).Z())
-				           - 0.25 * (values(i, j + 1).Dy() + values(i, j - 1).Dy())
-			           );
-		           }
-	           },
-	           2, IsParallel());
+		[&](int i)
+	{
+		for (size_t j = 1; j < ncols - 1; j += 2)
+		{
+			values(i, j).SetDy(
+				three_div_4h * (values(i, j + 1).Z() - values(i, j - 1).Z())
+				- 0.25 * (values(i, j + 1).Dy() + values(i, j - 1).Dy())
+				);
+		}
+	},
+		2, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
@@ -200,11 +200,11 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 	int nrows = values.RowsCount();
 
 	utils::For(2, nrows,
-	           [&](int i)
-	           {
-		           FillYXDerivations(i, values);
-	           },
-	           2, IsParallel());
+		[&](int i)
+	{
+		FillYXDerivations(i, values);
+	},
+		2, IsParallel());
 
 	auto one_div_16 = 1.0 / 16.0;
 	auto three_div_16 = 3 / 16;
@@ -216,52 +216,52 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 	int ncols = values.ColumnsCount();
 
 	utils::For(1, nrows - 1,
-	           [&](int i)
-	           {
-		           for (size_t j = 1; j < ncols - 1; j += 2)
-		           {
-			           values(i, j).SetDxy(
-				           one_div_16 *
-				           (values(i + 1, j + 1).Dxy() + values(i + 1, j - 1).Dxy() + values(i - 1, j + 1).Dxy() +
-					           values(i - 1, j - 1).Dxy())
-				           - three_div_16hy *
-				           (values(i + 1, j + 1).Dx() + values(i + 1, j - 1).Dx() + values(i - 1, j + 1).Dx() +
-					           values(i - 1, j - 1).Dx())
-				           - three_div_16hx *
-				           (values(i + 1, j + 1).Dy() + values(i + 1, j - 1).Dy() + values(i - 1, j + 1).Dy() +
-					           values(i - 1, j - 1).Dy())
-			           );
-		           }
-	           },
-	           2, IsParallel());
+		[&](int i)
+	{
+		for (size_t j = 1; j < ncols - 1; j += 2)
+		{
+			values(i, j).SetDxy(
+				one_div_16 *
+				(values(i + 1, j + 1).Dxy() + values(i + 1, j - 1).Dxy() + values(i - 1, j + 1).Dxy() +
+					values(i - 1, j - 1).Dxy())
+				- three_div_16hy *
+				(values(i + 1, j + 1).Dx() + values(i + 1, j - 1).Dx() + values(i - 1, j + 1).Dx() +
+					values(i - 1, j - 1).Dx())
+				- three_div_16hx *
+				(values(i + 1, j + 1).Dy() + values(i + 1, j - 1).Dy() + values(i - 1, j + 1).Dy() +
+					values(i - 1, j - 1).Dy())
+				);
+		}
+	},
+		2, IsParallel());
 
 	auto three_div_4hy = 0.75 / hy;
 
 	utils::For(1, nrows - 1,
-	           [&](int i)
-	           {
-		           for (size_t j = 2; j < ncols - 2; j += 2)
-		           {
-			           values(i, j).SetDxy(
-				           three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
-				           - 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
-			           );
-		           }
-	           },
-	           2, IsParallel());
+		[&](int i)
+	{
+		for (size_t j = 2; j < ncols - 2; j += 2)
+		{
+			values(i, j).SetDxy(
+				three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
+				- 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
+				);
+		}
+	},
+		2, IsParallel());
 
 	utils::For(2, nrows - 2,
-	           [&](int i)
-	           {
-		           for (size_t j = 1; j < ncols - 2; j += 2)
-		           {
-			           values(i, j).SetDxy(
-				           three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
-				           - 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
-			           );
-		           }
-	           },
-	           2, IsParallel());
+		[&](int i)
+	{
+		for (size_t j = 1; j < ncols - 2; j += 2)
+		{
+			values(i, j).SetDxy(
+				three_div_4hy * (values(i, j + 1).Dx() - values(i, j - 1).Dx())
+				- 0.25 * (values(i, j + 1).Dxy() - values(i, j - 1).Dxy())
+				);
+		}
+	},
+		2, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(int row_index, KnotMatrix& values)

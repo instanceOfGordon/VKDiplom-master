@@ -4,27 +4,30 @@
 #include <iostream>
 #include <locale>
 #include <vector>
-#include <algorithm>
-#include <random>
 
-
+void MulVsDiv::ResetArrays(const int length, double* a, double* b, double& ignoreit)
+{
+	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
+	for (size_t i = 0; i < length; i++)
+	{
+		a[i] = 6 * ((double)rand() / (RAND_MAX)) + 2;
+		b[i] = 2 * ((double)rand() / (RAND_MAX)) + 1;
+	}
+	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
+	ignoreit = 1/ignoreit;
+}
 
 void MulVsDiv::Loop()
 {
-	const int length = 64;
-	const int loops = 10e7;
+	const int length = 256;
+	const int loops = 10e7/4;
 	std::cout << "Loop:\n---" << std::endl;
-	double a[length], b[length], c[length];
-	for (size_t i = 0; i < length; i++)
-	{
-		a[i] = (rand() % 256) / 16.0 + 1.3;
-		b[i] = (rand() % 256) / 16.0 + 1.6;
-		c[i] = (rand() % 256) / 16.0 + 1.1;
-	}
-	std::random_device rd; // obtain a random number from hardware
-	std::mt19937 eng(rd()); // seed the generator
-	std::uniform_int_distribution<> distr(0, length-1); // define the range
-	double ignoreit = 0;
+	double a[length], b[length];
+	auto ignoreit = 0.0;
+
+	ResetArrays(length, a, b, ignoreit);
+
+
 	auto start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -43,7 +46,9 @@ void MulVsDiv::Loop()
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
+
+	ResetArrays(length, a, b, ignoreit);
+
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -56,7 +61,9 @@ void MulVsDiv::Loop()
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
+
+	ResetArrays(length, a, b, ignoreit);
+
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -68,30 +75,23 @@ void MulVsDiv::Loop()
 		}
 	}
 	auto div_time = clock() - start;
+	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	std::cout << "Division: " << div_time << std::endl;
-
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
-	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl ;
-	//std::cout << "Multiplication faster than reciprocal: " << static_cast<double>(rcp_time) / static_cast<double>(mul_time) << std::endl << std::endl;
-	std::cout << "Just ignore it: " <<ignoreit << std::endl << std::endl;
+	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
 void MulVsDiv::LoopVectorized()
 {
-	const int length = 64;
-	const int loops = 10e7;
+	const int length = 256;
+	const int loops = 10e7/4;
 	std::cout << "Vectorized loop:\n---" << std::endl;
-	double a[length], b[length], c[length];
-	for (size_t i = 0; i < length; i++)
-	{
-		a[i] = (rand() % 256) / 16.0 + 1.3;
-		b[i] = (rand() % 256) / 16.0 + 1.6;
-		c[i] = (rand() % 256) / 16.0 + 1.1;
-	}
-	std::random_device rd; // obtain a random number from hardware
-	std::mt19937 eng(rd()); // seed the generator
-	std::uniform_int_distribution<> distr(0, length - 1); // define the range
-	auto ignoreit = 0;
+	double a[length], b[length];
+	auto ignoreit = 0.0;
+
+	ResetArrays(length, a, b, ignoreit);
+
 	int l = 0;
 	auto start = clock();
 add:
@@ -109,7 +109,9 @@ add:
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
+
+	ResetArrays(length, a, b, ignoreit);
+
 	l = 0;
 	start = clock();
 mul:
@@ -124,7 +126,9 @@ mul:
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
+
+	ResetArrays(length, a, b, ignoreit);
+
 	l = 0;
 	start = clock();
 div:
@@ -138,7 +142,7 @@ div:
 		goto div;
 	}
 	auto div_time = clock() - start;
-
+	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	std::cout << "Division: " << div_time << std::endl;
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
@@ -147,21 +151,16 @@ div:
 
 void MulVsDiv::DynamicArrayLoop()
 {
-	const int length = 1024;
-	const int loops = 5 * 10e5;
+	const int length = 1024*1024*8;
+	const int loops = 1e3/2;
 	std::cout << "Loop:\n---" << std::endl;
-	std::vector<double> av(length), bv(length), cv(length);
-	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
-	for (size_t i = 0; i < length; i++)
-	{
-		a[i] = (rand() % 256) / 16.0 + 1.3;
-		b[i] = (rand() % 256) / 16.0 + 1.6;
-		c[i] = (rand() % 256) / 16.0 + 1.1;
-	}
-	std::random_device rd; // obtain a random number from hardware
-	std::mt19937 eng(rd()); // seed the generator
-	std::uniform_int_distribution<> distr(0, length - 1); // define the range
-	auto ignoreit = 0;
+	std::vector<double> av(length), bv(length);
+	double *a = &av.front(), *b = &bv.front();
+	auto ignoreit = 0.0;
+
+	ResetArrays(length, a, b, ignoreit);
+
+	
 	auto start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -180,7 +179,9 @@ void MulVsDiv::DynamicArrayLoop()
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
+
+	ResetArrays(length, a, b, ignoreit);
+
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -193,7 +194,9 @@ void MulVsDiv::DynamicArrayLoop()
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
+
+	ResetArrays(length, a, b, ignoreit);
+
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -205,7 +208,7 @@ void MulVsDiv::DynamicArrayLoop()
 		}
 	}
 	auto div_time = clock() - start;
-
+	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	std::cout << "Division: " << div_time << std::endl;
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
@@ -214,21 +217,15 @@ void MulVsDiv::DynamicArrayLoop()
 
 void MulVsDiv::DynamicArrayLoopVectorized()
 {
-	const int length = 1024;
-	const int loops = 5 * 10e5;
+	const int length = 1024 *1024* 8;
+	const int loops = 1e3/2;
 	std::cout << "Vectorized loop:\n---" << std::endl;
-	std::vector<double> av(length), bv(length), cv(length);
-	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
-	for (size_t i = 0; i < length; i++)
-	{
-		a[i] = (rand() % 256) / 16.0 + 1.3;
-		b[i] = (rand() % 256) / 16.0 + 1.6;
-		c[i] = (rand() % 256) / 16.0 + 1.1;
-	}
-	std::random_device rd; // obtain a random number from hardware
-	std::mt19937 eng(rd()); // seed the generator
-	std::uniform_int_distribution<> distr(0, length - 1); // define the range
-	auto ignoreit = 0;
+	std::vector<double> av(length), bv(length);
+	double *a = &av.front(), *b = &bv.front();
+	auto ignoreit = 0.0;
+
+	ResetArrays(length, a, b, ignoreit);
+
 	int l = 0;
 	auto start = clock();
 add:
@@ -246,7 +243,9 @@ add:
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
+
+	ResetArrays(length, a, b, ignoreit);
+
 	l = 0;
 	start = clock();
 mul:
@@ -261,7 +260,9 @@ mul:
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-	ignoreit += c[distr(eng)] + a[distr(eng)] + b[distr(eng)];
+
+	ResetArrays(length, a, b, ignoreit);
+
 	l = 0;
 	start = clock();
 div:
@@ -275,10 +276,8 @@ div:
 		goto div;
 	}
 	auto div_time = clock() - start;
+	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	std::cout << "Division: " << div_time << std::endl;
-
-	l = 0;
-	start = clock();
 
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
@@ -288,12 +287,12 @@ div:
 
 void MulVsDiv::BenchAll()
 {
-	std::cout << "--- Static arrays ---" << std::endl;
+	/*std::cout << "--- Static arrays ---" << std::endl;
 	Loop();
 	LoopVectorized();
-	std::cout << "--- Dynamic arrays ---" << std::endl;
+	std::cout << "--- Dynamic arrays ---" << std::endl;*/
 	DynamicArrayLoop();
-	DynamicArrayLoopVectorized();
+	//DynamicArrayLoopVectorized();
 }
 
 MulVsDiv::MulVsDiv()
