@@ -60,7 +60,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(const KnotMatrix& 
 	auto even = unknowns_count % 2 == 0;
 	auto equations_count = even ? unknowns_count / 2 - 1 : unknowns_count / 2;
 	auto eta = even ? -4 : 1;
-	auto one_div7 = 1 / 7;
+	auto one_div7 = 1.0 / 7.0;
 	auto hx = knots(1, 0).X() - knots(0, 0).X();
 	auto hy = knots(0, 1).Y() - knots(0, 0).Y();
 	auto one_div_hx = 1.0 / hx;
@@ -94,33 +94,33 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(const KnotMatrix& 
 		auto j_minus_2 = j - 2;
 		rightside_buffer[k] = one_div7 * (knots(iMin2, j_plus_2).Dxy() + knots(iMin2, j_minus_2).Dxy()) - 2 * knots(iMin1, j).Dxy()
 			+ three_div7_hx * (knots(iMin1, j_plus_2).Dy() + knots(iMin1, j_minus_2).Dy()) +
-			three_div7_hy * (-knots(iMin2, j_plus_2).X() + knots(iMin2, j_minus_2).X())
+			three_div7_hy * (knots(iMin2, j_minus_2).X() - knots(iMin2, j_plus_2).X())
 			+ nine_div7_hx * (knots(i, j_plus_2).Dy() + knots(i, j_minus_2).Dy()) +
-			nine_div7_hxhy * (-knots(iMin2, j_plus_2).Z() + knots(iMin2, j_minus_2).Z())
+			nine_div7_hxhy * (knots(iMin2, j_minus_2).Z() - knots(iMin2, j_plus_2).Z())
 			+ twelve_div7_hx * (-knots(iMin1, j_plus_2).Dy() - knots(iMin1, j_minus_2).Dy()) +
 			twelve_div7_hy * (knots(iMin2, j_plus_1).X() - knots(iMin2, j_minus_1).X())
 			+ three_div7_hy * (knots(i, j_plus_2).Dx() + knots(i, j_minus_2).Dx()) +
-			twentyseven_div7_hxhy * (-knots(i, j_plus_2).Z() + knots(i, j_minus_2).Z())
+			twentyseven_div7_hxhy * (knots(i, j_minus_2).Z() -knots(i, j_plus_2).Z())
 			-
 			thirtysix_div7_hxhy *
 			(knots(iMin1, j_plus_2).Z() - knots(iMin1, j_minus_2).Z() + knots(iMin2, j_plus_1).Z() - knots(iMin2, j_minus_1).Z())
 			- six_div_hx * knots(iMin2, j).Dy() + twelwe_div_hy * (knots(i, j_plus_1).Dx() + knots(i, j_minus_1).Dx()) +
 			onehundredeight_div7_hxhy * (knots(i, j_plus_1).Z() + knots(i, j_minus_1).Z())
-			- eighteen_div_hx * knots(i, j).Dy() + onehundredfortyfour_div7_hxhy * (-knots(iMin1, j_plus_1).Z() + knots(iMin1, j_minus_1).Z()) +
+			- eighteen_div_hx * knots(i, j).Dy() + onehundredfortyfour_div7_hxhy * (knots(iMin1, j_minus_1).Z() -knots(iMin1, j_plus_1).Z()) +
 			twentyfour_div_hx * knots(iMin1, j).Z();
 	}
 	rightside_buffer[0] -= dfirst;
 	rightside_buffer[equations_count - 1] = one_div7 * (knots(iMin2, columns - 1).Dxy() + knots(iMin2, columns - 5).Dxy()) -
 		2 * knots(iMin1, columns - 3).Dxy()
 		+ three_div7_hx * (knots(iMin1, columns - 1).Dy() + knots(iMin1, columns - 5).Dy()) +
-		three_div7_hy * (-knots(iMin2, columns - 1).X() + knots(iMin2, columns - 5).X())
+		three_div7_hy * (knots(iMin2, columns - 5).X() - knots(iMin2, columns - 1).X())
 		+ nine_div7_hx * (knots(i, columns - 1).Dy() + knots(i, columns - 5).Dy()) +
-		nine_div7_hxhy * (-knots(iMin2, columns - 1).Z() + knots(iMin2, columns - 5).Z())
+		nine_div7_hxhy * (knots(iMin2, columns - 5).Z() - knots(iMin2, columns - 1).Z())
 		+
 		twelve_div7_hx * (-knots(iMin1, columns - 1).Dy() - knots(iMin1, columns - 5).Dy()) +
 		twelve_div7_hy * (knots(iMin2, columns - 2).X() - knots(iMin2, columns - 4).X())
 		+ three_div7_hy * (knots(i, columns - 1).Dx() + knots(i, columns - 5).Dx()) +
-		twentyseven_div7_hxhy * (-knots(i, columns - 1).Z() + knots(i, columns - 5).Z())
+		twentyseven_div7_hxhy * (knots(i, columns - 5).Z() - knots(i, columns - 1).Z())
 		-
 		thirtysix_div7_hxhy *
 		(knots(iMin1, columns - 1).Z() - knots(iMin1, columns - 5).Z() +
@@ -129,7 +129,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::RightSideCross(const KnotMatrix& 
 		twelwe_div_hy * (knots(i, columns - 2).Dx() + knots(i, columns - 4).Dx()) +
 		onehundredeight_div7_hxhy * (knots(i, columns - 2).Z() + knots(i, columns - 4).Z())
 		- eighteen_div_hx * knots(i, columns - 3).Dy() +
-		onehundredfortyfour_div7_hxhy * (-knots(iMin1, columns - 2).Z() + knots(iMin1, columns - 4).Z()) +
+		onehundredfortyfour_div7_hxhy * (knots(iMin1, columns - 4).Z() - knots(iMin1, columns - 2).Z()) +
 		twentyfour_div_hx * knots(iMin1, columns - 3).Z() - eta * dlast;
 }
 
@@ -145,7 +145,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillXDerivations(KnotMatrix& valu
 	auto h = values(1, 0).X() - values(0, 0).X();
 	auto three_div_4h = 0.75 / h;
 	int nrows = values.RowsCount();
-
+	// Rest
 	utils::For(1, nrows - 1,
 		[&](int i)
 	{
@@ -192,7 +192,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYDerivations(KnotMatrix& valu
 				);
 		}
 	},
-		2, IsParallel());
+		1, IsParallel());
 }
 
 void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
@@ -214,7 +214,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 	auto three_div_16hx = three_div_16 / hx;
 
 	int ncols = values.ColumnsCount();
-
+	// Rest 1
 	utils::For(1, nrows - 1,
 		[&](int i)
 	{
@@ -236,7 +236,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 		2, IsParallel());
 
 	auto three_div_4hy = 0.75 / hy;
-
+	// Rest 2
 	utils::For(1, nrows - 1,
 		[&](int i)
 	{
@@ -249,7 +249,7 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 		}
 	},
 		2, IsParallel());
-
+	// Rest 3
 	utils::For(2, nrows - 2,
 		[&](int i)
 	{

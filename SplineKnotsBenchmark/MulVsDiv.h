@@ -7,6 +7,7 @@ public:
 	void LoopVectorized();
 	void DynamicArrayLoop();
 	void DynamicArrayLoopVectorized();
+	void CsabaDynamicArrayLoop();
 	void DependentDynamicArrayLoop();
 	void BenchAll();
 	MulVsDiv();

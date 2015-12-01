@@ -83,10 +83,10 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 		full_times.push_back(finish - start);
 	}
 
-	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
-		/ static_cast<double>(num_iterations);
-	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
-		/ static_cast<double>(num_iterations);
+	auto full_time = std::accumulate(full_times.begin(), full_times.end(), 0)
+		/ num_iterations;
+	auto reduced_time = std::accumulate(reduced_times.begin(), reduced_times.end(), 0)
+		/ num_iterations;
 	std::cout << "Ignore " << calculated_results[0] << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
