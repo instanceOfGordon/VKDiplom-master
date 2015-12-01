@@ -4,6 +4,7 @@
 #include <iostream>
 #include <locale>
 #include <vector>
+#include <numeric>
 
 void MulVsDiv::ResetArrays(const int length, double* a, double* b, double& ignoreit)
 {
@@ -284,6 +285,76 @@ div:
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
+void MulVsDiv::DependentDynamicArrayLoop()
+{
+	const int length = 1+1*100000;
+	const int loops = 50;
+	std::cout << "Dynamic loop:\n---" << std::endl;
+	std::vector<double> av(length), bv(length);
+	double *a = &av.front(), *b = &bv.front();
+	
+	std::vector<long> add_times(loops);
+	std::vector<long> mul_times(loops);
+	std::vector<long> div_times(loops);
+	unsigned long long ignoreit[]{0,0,0};
+	
+	for (size_t i = 0; i < length; i++)
+	{
+		av[i] = (rand() % int(length));
+		bv[i] = DBL_MIN;
+	}
+
+	//Division
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 0; j < length-1; j++)
+		{
+			b[i] = a[i + 1] / a[i];
+		}
+		auto finish = clock() - start;
+		div_times[i] = finish;
+		ignoreit[0] += std::accumulate(bv.begin(), bv.end(), 0) & 256;
+	}
+	auto div_time = std::accumulate(div_times.begin(), div_times.end(), 0)
+		/ loops;
+	std::cout << "Division:\t\t" << div_time << std::endl;
+	//Multiplication
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 0; j < length - 1; j++)
+		{
+			b[i] = a[i + 1] * a[i];
+		}
+		auto finish = clock() - start;
+		mul_times[i] = finish;
+		ignoreit[1] += std::accumulate(bv.begin(),bv.end(), 0) & 256;
+	}
+	auto mul_time = std::accumulate(mul_times.begin(), mul_times.end(), 0)
+		/ loops;
+	std::cout << "Multiplication:\t\t" << mul_time << std::endl;
+	//Addition
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 0; j < length - 1; j++)
+		{
+			b[i] = a[i + 1] + a[i];
+		}
+		auto finish = clock() - start;
+		add_times[i] = finish;
+		ignoreit[2] += std::accumulate(bv.begin(), bv.end(), 0) & 256;
+	}
+	auto add_time = std::accumulate(add_times.begin(), add_times.end(), 0)
+		/ loops;
+	std::cout << "Addition:\t\t" << add_time << std::endl;
+
+	std::cout << "Addition faster than multiplication:\t" << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
+	std::cout << "Multiplication faster than division:\t" << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
+}
+
 
 void MulVsDiv::BenchAll()
 {
@@ -291,7 +362,8 @@ void MulVsDiv::BenchAll()
 	Loop();
 	LoopVectorized();
 	std::cout << "--- Dynamic arrays ---" << std::endl;*/
-	DynamicArrayLoop();
+	//DynamicArrayLoop();
+	DependentDynamicArrayLoop();
 	//DynamicArrayLoopVectorized();
 }
 

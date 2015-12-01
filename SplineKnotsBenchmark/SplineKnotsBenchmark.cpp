@@ -24,19 +24,13 @@ void LUComparison()
 	/*auto dfirst = cos(0);
 	auto dlast = cos(num_equations - 1);*/
 	auto right_side_vk = right_side_cs;
-	auto right_side_vk2 = right_side_cs;
-	SolveCsabaTridiagonalSystem(4, &right_side_cs.front(), num_equations);
+	auto result_cs = SolveCsabaTridiagonalSystem(4, &right_side_cs.front(), num_equations);
 	vector<double> buffer(num_equations);
 	SolveDeboorTridiagonalSystemBuffered(1, 4, 1, &right_side_vk.front(), num_equations, &buffer.front());
-
-	vector<double> L(num_equations, 1);
-	vector<double> M(num_equations, 4);
-	vector<double> U(num_equations, 1);
-
-	SolveTridiagonalSystemBuffered(&L.front(), &M.front(), &U.front(), &right_side_vk2.front(), num_equations, &buffer.front());
+	auto result_vk(move(right_side_vk));
 	for (size_t i = 0; i < num_equations; i++)
 	{
-		cout << "Csaba LU: " << right_side_cs[i] << "; Vilo LU: " << right_side_vk[i] << endl;
+		cout << "Csaba LU: " << result_cs[i] << "; Vilo LU: " << result_vk[i] << endl;
 	}
 	cout << endl;
 }
