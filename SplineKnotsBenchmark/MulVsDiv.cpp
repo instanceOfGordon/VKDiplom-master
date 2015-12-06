@@ -21,9 +21,9 @@ void MulVsDiv::ResetArrays(const int length, double* a, double* b, double& ignor
 void MulVsDiv::Loop()
 {
 	const int length = 256;
-	const int loops = 10e7/4;
+	const int loops = 10e5;
 	std::cout << "Loop:\n---" << std::endl;
-	double a[length], b[length];
+	double a[length], b[length], c[length];
 	auto ignoreit = 0.0;
 
 	ResetArrays(length, a, b, ignoreit);
@@ -42,12 +42,12 @@ void MulVsDiv::Loop()
 #pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] + b[i];
+			c[i] = a[i] + b[i];
 		}
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-
+	ignoreit -= c[(rand() % (int)(length))];
 	ResetArrays(length, a, b, ignoreit);
 
 	start = clock();
@@ -57,12 +57,12 @@ void MulVsDiv::Loop()
 #pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] * b[i];
+			c[i] = a[i] * b[i];
 		}
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-
+	ignoreit -= c[(rand() % (int)(length))];
 	ResetArrays(length, a, b, ignoreit);
 
 	start = clock();
@@ -72,10 +72,11 @@ void MulVsDiv::Loop()
 #pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] / b[i];
+			c[i] = a[i] / b[i];
 		}
 	}
 	auto div_time = clock() - start;
+	ignoreit -= c[(rand() % (int)(length))];
 	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	std::cout << "Division: " << div_time << std::endl;
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
@@ -86,19 +87,19 @@ void MulVsDiv::Loop()
 void MulVsDiv::LoopVectorized()
 {
 	const int length = 256;
-	const int loops = 10e7/4;
+	const int loops = 10e5;
 	std::cout << "Vectorized loop:\n---" << std::endl;
-	double a[length], b[length];
+	double a[length], b[length],c[length];
 	auto ignoreit = 0.0;
 
 	ResetArrays(length, a, b, ignoreit);
-
+	ignoreit -= c[(rand() % (int)(length))];
 	int l = 0;
 	auto start = clock();
 add:
 	for (int i = 0; i < length; i++)
 	{
-		a[i] = a[i] + b[i];
+		c[i] = a[i] + b[i];
 	}
 	// MSVC doesn't vectorize nested loops (message 1300 - too little computation to vectorize) as mentioned on line 23 in function 'Loop'.
 	// However if nested loop is replaced with this nasty workaround SIMD vectorization will happen.
@@ -110,7 +111,7 @@ add:
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
-
+	ignoreit -= c[(rand() % (int)(length))];
 	ResetArrays(length, a, b, ignoreit);
 
 	l = 0;
@@ -118,7 +119,7 @@ add:
 mul:
 	for (int i = 0; i < length; ++i)
 	{
-		a[i] = a[i] * b[i];
+		c[i] = a[i] * b[i];
 	}
 	while (l < loops)
 	{
@@ -127,7 +128,7 @@ mul:
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
-
+	ignoreit -= c[(rand() % (int)(length))];
 	ResetArrays(length, a, b, ignoreit);
 
 	l = 0;
@@ -135,7 +136,7 @@ mul:
 div:
 	for (int i = 0; i < length; ++i)
 	{
-		a[i] = a[i] / b[i];
+		c[i] = a[i] / b[i];
 	}
 	while (l < loops)
 	{
@@ -143,6 +144,7 @@ div:
 		goto div;
 	}
 	auto div_time = clock() - start;
+	ignoreit -= c[(rand() % (int)(length))];
 	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	std::cout << "Division: " << div_time << std::endl;
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
@@ -152,11 +154,11 @@ div:
 
 void MulVsDiv::DynamicArrayLoop()
 {
-	const int length = 1024*8;
-	const int loops = 1e6/2;
+	const int length = 1024;
+	const int loops = 1e6;
 	std::cout << "Loop:\n---" << std::endl;
-	std::vector<double> av(length), bv(length);
-	double *a = &av.front(), *b = &bv.front();
+	std::vector<double> av(length), bv(length), cv(length);
+	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
 	auto ignoreit = 0.0;
 
 	ResetArrays(length, a, b, ignoreit);
@@ -175,13 +177,14 @@ void MulVsDiv::DynamicArrayLoop()
 #pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] + b[i];
+			c[i] = a[i] + b[i];
 		}
 	}
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
 
 	ResetArrays(length, a, b, ignoreit);
+	ignoreit /= c[(rand() % (int)(length))];
 
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
@@ -190,14 +193,14 @@ void MulVsDiv::DynamicArrayLoop()
 #pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] * b[i];
+			c[i] = a[i] * b[i];
 		}
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
 
 	ResetArrays(length, a, b, ignoreit);
-
+	ignoreit -= c[(rand() % (int)(length))];
 	start = clock();
 	for (size_t l = 0; l < loops; l++)
 	{
@@ -205,11 +208,12 @@ void MulVsDiv::DynamicArrayLoop()
 #pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			a[i] = a[i] / b[i];
+			c[i] = a[i] / b[i];
 		}
 	}
 	auto div_time = clock() - start;
 	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
+	ignoreit /= c[(rand() % (int)(length))];
 	std::cout << "Division: " << div_time << std::endl;
 	std::cout << "Addition faster than multiplication: " << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
 	std::cout << "Multiplication faster than division: " << static_cast<double>(div_time) / static_cast<double>(mul_time) << std::endl;
@@ -218,11 +222,11 @@ void MulVsDiv::DynamicArrayLoop()
 
 void MulVsDiv::DynamicArrayLoopVectorized()
 {
-	const int length = 1024 * 8;
-	const int loops = 1e6/2;
+	const int length = 1024;
+	const int loops = 1e6;
 	std::cout << "Vectorized loop:\n---" << std::endl;
-	std::vector<double> av(length), bv(length);
-	double *a = &av.front(), *b = &bv.front();
+	std::vector<double> av(length), bv(length), cv(length);
+	double *a = &av.front(), *b = &bv.front(), *c = &bv.front();
 	auto ignoreit = 0.0;
 
 	ResetArrays(length, a, b, ignoreit);
@@ -232,7 +236,7 @@ void MulVsDiv::DynamicArrayLoopVectorized()
 add:
 	for (int i = 0; i < length; i++)
 	{
-		a[i] = a[i] + b[i];
+		c[i] = a[i] + b[i];
 	}
 	// MSVC doesn't vectorize nested loops (message 1300 - too little computation to vectorize) in function 'DynamicArrayLoop'.
 	// However if nested loop is replaced with this nasty workaround SIMD vectorization will happen.
@@ -246,13 +250,13 @@ add:
 	std::cout << "Addition: " << add_time << std::endl;
 
 	ResetArrays(length, a, b, ignoreit);
-
+	ignoreit /= c[(rand() % (int)(length))];
 	l = 0;
 	start = clock();
 mul:
 	for (int i = 0; i < length; ++i)
 	{
-		a[i] = a[i] * b[i];
+		c[i] = a[i] * b[i];
 	}
 	while (l < loops)
 	{
@@ -263,13 +267,13 @@ mul:
 	std::cout << "Multiplication: " << mul_time << std::endl;
 
 	ResetArrays(length, a, b, ignoreit);
-
+	ignoreit /= c[(rand() % (int)(length))];
 	l = 0;
 	start = clock();
 div:
 	for (int i = 0; i < length; ++i)
 	{
-		a[i] = a[i] / b[i];
+		c[i] = a[i] / b[i];
 	}
 	while (l < loops)
 	{
@@ -277,6 +281,7 @@ div:
 		goto div;
 	}
 	auto div_time = clock() - start;
+	ignoreit /= c[(rand() % (int)(length))];
 	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	std::cout << "Division: " << div_time << std::endl;
 
