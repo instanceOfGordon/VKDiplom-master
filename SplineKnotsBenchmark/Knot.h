@@ -14,7 +14,6 @@ namespace splineknots
 		Knot(double x, double y, double z, double dx, double dy, double dxy);
 		Knot(double x, double y, double z);
 		Knot();
-		~Knot();
 		double X() const;
 		void SetX(const double x);
 		double Y() const;
@@ -32,5 +31,6 @@ namespace splineknots
 		Knot operator*(const Knot& other);
 		Knot operator/(const Knot& other);
 		bool operator==(const Knot& other);
+		bool operator!=(const Knot& other);
 	};
 }

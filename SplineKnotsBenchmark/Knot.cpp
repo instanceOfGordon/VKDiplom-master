@@ -33,10 +33,6 @@ namespace splineknots
 	{
 	}
 
-	Knot::~Knot()
-	{
-	}
-
 	double Knot::X() const
 	{
 		return x_;
@@ -145,5 +141,10 @@ namespace splineknots
 		result = result && this->Dy() == other.Dy();
 		result = result && this->Dxy() == other.Dxy();
 		return result;
+	}
+
+	bool Knot::operator!=(const Knot& other)
+	{
+		return !(*this == other);
 	}
 }

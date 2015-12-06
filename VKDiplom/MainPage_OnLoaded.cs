@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Graphics;
 using HermiteInterpolation;
 using HermiteInterpolation.Numerics;
+using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.SplineKnots;

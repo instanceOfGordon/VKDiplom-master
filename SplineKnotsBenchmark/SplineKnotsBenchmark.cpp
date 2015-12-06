@@ -122,7 +122,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		auto result = reduced.GenerateKnots(udimension, vdimension);
 		finish = clock();
 		//result.Print();
-		calculated_results.push_back(result(1, 0).Dxy());
+		calculated_results.push_back(result(1, 1).Dxy());
 		reduced_times.push_back(finish - start);
 	}
 
@@ -132,7 +132,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		auto result = full.GenerateKnots(udimension, vdimension);
 		finish = clock();
 		//result.Print();
-		calculated_results.push_back(result(1, 0).Dxy());
+		calculated_results.push_back(result(1, 1).Dxy());
 		full_times.push_back(finish - start);
 	}
 
@@ -225,6 +225,7 @@ int main()
 			repeat = false;
 			break;
 		}
+
 		std::cout << "===================" << std::endl;
 		std::cout << "any key: Restart program." << std::endl;
 		std::cout << "Q: End program" << std::endl;

@@ -55,13 +55,19 @@ namespace HermiteInterpolation.SplineKnots
 
         protected override void FillXDerivations(KnotMatrix values)
         {
-            for (var j = 0; j < values.Columns; j++)
-            {
-                FillXDerivations(j, values);
-            }
             var h = values[1, 0].X - values[0, 0].X;
             var oneDivH = 1 / h;
             var threeDiv4H = 0.75 * oneDivH;
+            for (var j = 0; j < values.Columns; j++)
+            {
+                FillXDerivations(j, values);
+                //for (var i = 1; i < values.Rows - 1; i += 2)
+                //{
+                //    values[i, j].Dx = threeDiv4H * (values[i + 1, j].Z - values[i - 1, j].Z)
+                //                      - 0.25 * (values[i + 1, j].Dx + values[i - 1, j].Dx);
+                //}
+            }
+
             for (var i = 1; i < values.Rows - 1; i += 2)
             {
                 for (var j = 0; j < values.Columns; j++)

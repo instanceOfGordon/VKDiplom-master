@@ -152,8 +152,8 @@ div:
 
 void MulVsDiv::DynamicArrayLoop()
 {
-	const int length = 1024*1024*8;
-	const int loops = 1e3/2;
+	const int length = 1024*8;
+	const int loops = 1e6/2;
 	std::cout << "Loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length);
 	double *a = &av.front(), *b = &bv.front();
@@ -218,8 +218,8 @@ void MulVsDiv::DynamicArrayLoop()
 
 void MulVsDiv::DynamicArrayLoopVectorized()
 {
-	const int length = 1024 *1024* 8;
-	const int loops = 1e3/2;
+	const int length = 1024 * 8;
+	const int loops = 1e6/2;
 	std::cout << "Vectorized loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length);
 	double *a = &av.front(), *b = &bv.front();
@@ -370,7 +370,7 @@ void MulVsDiv::DependentDynamicArrayLoop()
 	
 	for (size_t i = 0; i < length; i++)
 	{
-		av[i] = 1 * ((double)rand() / (RAND_MAX)) + 0;
+		av[i] = 8 * ((double)rand() / (RAND_MAX)) + 1;
 		//bv[i] = DBL_MIN;
 	}
 
@@ -428,11 +428,13 @@ void MulVsDiv::DependentDynamicArrayLoop()
 
 void MulVsDiv::BenchAll()
 {
+	Loop();
 	/*std::cout << "--- Static arrays ---" << std::endl;
 	Loop();
 	LoopVectorized();
 	std::cout << "--- Dynamic arrays ---" << std::endl;*/
-	DynamicArrayLoop();
+	//DynamicArrayLoop();
+	//DependentDynamicArrayLoop();
 	//CsabaDynamicArrayLoop();
 	//DynamicArrayLoopVectorized();
 }
