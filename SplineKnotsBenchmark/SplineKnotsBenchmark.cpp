@@ -10,6 +10,7 @@
 #include "ReducedCurveDeboorGenerator.h"
 #include "ComparisonBenchmarkResult.h"
 #include <numeric>
+#include <time.h>  
 
 void LUComparison()
 {

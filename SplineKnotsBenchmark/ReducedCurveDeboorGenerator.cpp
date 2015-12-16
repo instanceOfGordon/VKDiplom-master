@@ -23,7 +23,7 @@ splineknots::KnotVector splineknots::ReducedCurveDeboorKnotsGenerator::RightSide
 
 	splineknots::KnotVector rhs(n1);
 	double mu1 = 3.0 / h;
-	double mu2 = 4.0 / mu1;
+	double mu2 = 4.0 * mu1;
 	int k = -1;
 	for (int i = 2; i < n2; i+=2)
 	{
