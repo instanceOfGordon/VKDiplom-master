@@ -11,10 +11,6 @@ splineknots::ReducedCurveDeboorKnotsGenerator::ReducedCurveDeboorKnotsGenerator(
 {
 }
 
-splineknots::ReducedCurveDeboorKnotsGenerator::~ReducedCurveDeboorKnotsGenerator()
-{
-}
-
 splineknots::KnotVector splineknots::ReducedCurveDeboorKnotsGenerator::RightSide(const splineknots::KnotVector& function_values, double h, double dfirst, double dlast)
 {
 	int n1, n2, N = function_values.size();

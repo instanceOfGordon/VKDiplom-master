@@ -12,6 +12,11 @@ namespace splineknots
 		InterpolativeMathFunction function_;
 	public:
 		virtual ~CurveKnotsGenerator() = default;
+
+		CurveKnotsGenerator(const CurveKnotsGenerator& other) = default;
+		CurveKnotsGenerator(CurveKnotsGenerator&& other) = default;
+		CurveKnotsGenerator& operator=(const CurveKnotsGenerator& other) = default;
+		CurveKnotsGenerator& operator=(CurveKnotsGenerator&& other) = default;
 		const InterpolativeMathFunction& Function() const;
 		virtual KnotVector GenerateKnots(const SurfaceDimension& dimension) = 0;
 	protected:

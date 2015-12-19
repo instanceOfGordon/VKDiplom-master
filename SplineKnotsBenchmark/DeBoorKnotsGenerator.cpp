@@ -62,14 +62,16 @@ namespace splineknots
 	{
 	}
 
-	DeBoorKnotsGenerator::DeBoorKnotsGenerator(const DeBoorKnotsGenerator& other): 
+	DeBoorKnotsGenerator::DeBoorKnotsGenerator(const DeBoorKnotsGenerator& other) :
 		KnotsGenerator(other),
+		tridagonals_(other.tridagonals_),
 		is_parallel_(other.is_parallel_)
 	{
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(DeBoorKnotsGenerator&& other): 
 		KnotsGenerator(std::move(other)),
+		tridagonals_(std::move(other.tridagonals_)),
 		is_parallel_(other.is_parallel_)
 	{
 	}
@@ -79,6 +81,7 @@ namespace splineknots
 		if (this == &other)
 			return *this;
 		KnotsGenerator::operator =(other);
+		tridagonals_= other.tridagonals_;
 		is_parallel_ = other.is_parallel_;
 		return *this;
 	}
@@ -88,6 +91,7 @@ namespace splineknots
 		if (this == &other)
 			return *this;
 		KnotsGenerator::operator =(std::move(other));
+		tridagonals_ = std::move(other.tridagonals_);
 		is_parallel_ = other.is_parallel_;
 		return *this;
 	}

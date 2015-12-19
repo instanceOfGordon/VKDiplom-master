@@ -7,7 +7,6 @@ namespace splineknots
 	class CurveDeboorKnotsGenerator : public CurveKnotsGenerator
 	{
 	public:
-		~CurveDeboorKnotsGenerator() override;
 		CurveDeboorKnotsGenerator(const MathFunction function);
 		CurveDeboorKnotsGenerator(const InterpolativeMathFunction function);
 		KnotVector GenerateKnots(const SurfaceDimension& dimension) override;

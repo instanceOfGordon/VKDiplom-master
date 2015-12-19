@@ -7,7 +7,6 @@ namespace splineknots
 	{
 	public:
 		splineknots::KnotVector GenerateKnots(const splineknots::SurfaceDimension& dimension) override;
-		~ReducedCurveDeboorKnotsGenerator() override;
 		ReducedCurveDeboorKnotsGenerator(const splineknots::MathFunction& function);
 		ReducedCurveDeboorKnotsGenerator(const splineknots::InterpolativeMathFunction& function);
 	protected:

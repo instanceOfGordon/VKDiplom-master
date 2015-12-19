@@ -17,10 +17,6 @@ splineknots::KnotVector splineknots::CurveDeboorKnotsGenerator::RightSide(const 
 	return rhs;
 }
 
-splineknots::CurveDeboorKnotsGenerator::~CurveDeboorKnotsGenerator()
-{
-}
-
 splineknots::CurveDeboorKnotsGenerator::CurveDeboorKnotsGenerator(const MathFunction function): splineknots::CurveKnotsGenerator(function)
 {
 }
