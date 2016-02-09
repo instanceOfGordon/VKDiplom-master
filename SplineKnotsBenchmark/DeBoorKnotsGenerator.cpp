@@ -19,26 +19,16 @@ namespace splineknots
 	{
 	}
 
-	/*DeBoorKnotsGenerator::Precalculated::Precalculated(const Precalculated& other): h(other.h),
-	                                                                                three_div_h(other.three_div_h)
-	{
-	}
-
-	DeBoorKnotsGenerator::Precalculated::Precalculated(Precalculated&& other): h(other.h),
-	                                                                           three_div_h(other.three_div_h)
-	{
-	}*/
-
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function)
 		: KnotsGenerator(math_function),
-		  tridagonals_(), is_parallel_(false)
+		tridagonals_(), is_parallel_(false)
 	{
 		tridagonals_.push_back(std::make_unique<splineknots::Tridiagonal>(1, 4, 1));
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function)
 		: KnotsGenerator(math_function),
-		  tridagonals_(), is_parallel_(false)
+		tridagonals_(), is_parallel_(false)
 	{
 		tridagonals_.push_back(std::make_unique<splineknots::Tridiagonal>(1, 4, 1));
 	}
@@ -46,14 +36,14 @@ namespace splineknots
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(MathFunction math_function, std::unique_ptr<splineknots::Tridiagonal> tridiagonal)
 		: KnotsGenerator(math_function),
-		  tridagonals_(), is_parallel_(false)
+		tridagonals_(), is_parallel_(false)
 	{
 		tridagonals_.push_back(std::move(tridiagonal));
 	}
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(InterpolativeMathFunction math_function, std::unique_ptr<splineknots::Tridiagonal> tridiagonal)
 		: KnotsGenerator(math_function),
-		  tridagonals_(), is_parallel_(false)
+		tridagonals_(), is_parallel_(false)
 	{
 		tridagonals_.push_back(std::move(tridiagonal));
 	}
@@ -64,12 +54,17 @@ namespace splineknots
 
 	DeBoorKnotsGenerator::DeBoorKnotsGenerator(const DeBoorKnotsGenerator& other) :
 		KnotsGenerator(other),
-		tridagonals_(other.tridagonals_),
+		tridagonals_(other.tridagonals_.size()),
 		is_parallel_(other.is_parallel_)
 	{
+		for (size_t i = 0; i < other.tridagonals_.size(); i++)
+		{
+			auto trid = std::unique_ptr<splineknots::Tridiagonal>(other.tridagonals_[i]->Clone());
+			tridagonals_.push_back(std::move(trid));
+		}
 	}
 
-	DeBoorKnotsGenerator::DeBoorKnotsGenerator(DeBoorKnotsGenerator&& other): 
+	DeBoorKnotsGenerator::DeBoorKnotsGenerator(DeBoorKnotsGenerator&& other) :
 		KnotsGenerator(std::move(other)),
 		tridagonals_(std::move(other.tridagonals_)),
 		is_parallel_(other.is_parallel_)
@@ -81,7 +76,12 @@ namespace splineknots
 		if (this == &other)
 			return *this;
 		KnotsGenerator::operator =(other);
-		tridagonals_= other.tridagonals_;
+		tridagonals_.clear();
+		for (size_t i = 0; i < other.tridagonals_.size(); i++)
+		{
+			auto trid = std::unique_ptr<splineknots::Tridiagonal>(other.tridagonals_[i]->Clone());
+			tridagonals_.push_back(std::move(trid));
+		}
 		is_parallel_ = other.is_parallel_;
 		return *this;
 	}
@@ -113,7 +113,7 @@ namespace splineknots
 	}
 
 	void DeBoorKnotsGenerator::RightSide(const RightSideSelector& right_side_variables, const Precalculated& precalculated, const double dfirst, const double dlast,
-	                                     const int unknowns_count, double* rightside_buffer)
+		const int unknowns_count, double* rightside_buffer)
 	{
 		auto h3 = precalculated.three_div_h;
 		rightside_buffer[0] = h3 * (right_side_variables(2) - right_side_variables(0)) - dfirst;
@@ -132,16 +132,16 @@ namespace splineknots
 
 	void DeBoorKnotsGenerator::InitializeKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, KnotMatrix& values)
 	{
-		Precalculate(udimension,vdimension);
+		Precalculate(udimension, vdimension);
 		auto hx = precalculated_hx_->h;
 		auto hy = precalculated_hy_->h;
 		auto u = udimension.min;
 		auto f = Function();
 		// Init Z
-		for (auto i = 0; i < udimension.knot_count; i++ , u += hx)
+		for (auto i = 0; i < udimension.knot_count; i++, u += hx)
 		{
 			auto v = vdimension.min;
-			for (auto j = 0; j < vdimension.knot_count; j++ , v += hy)
+			for (auto j = 0; j < vdimension.knot_count; j++, v += hy)
 			{
 				auto z = f.Z()(u, v);
 				//Function.Z(u,v); //Z(u, v);
@@ -163,7 +163,7 @@ namespace splineknots
 			values(i, 0).SetDy(f.Dy()(values(i, 0).X(), values(i, 0).Y()));
 			values(i, vKnotCountMin1).SetDy(
 				f.Dy()(values(i, vKnotCountMin1).X(), values(i, vKnotCountMin1).Y())
-			);
+				);
 		}
 		// Init Dxy
 		values(0, 0).SetDxy(f.Dxy()(values(0, 0).X(), values(0, 0).Y()));
@@ -175,11 +175,11 @@ namespace splineknots
 	void DeBoorKnotsGenerator::FillXDerivations(KnotMatrix& values)
 	{
 		utils::For(0, static_cast<int>(values.ColumnsCount()),
-		           [&](int j)
-		           {
-			           FillXDerivations(j, values);
-		           },
-		           1, is_parallel_);
+			[&](int j)
+		{
+			FillXDerivations(j, values);
+		},
+			1, is_parallel_);
 	}
 
 	void DeBoorKnotsGenerator::FillXYDerivations(KnotMatrix& values)
@@ -191,21 +191,21 @@ namespace splineknots
 	void DeBoorKnotsGenerator::FillYDerivations(KnotMatrix& values)
 	{
 		utils::For(0, static_cast<int>(values.RowsCount()),
-		           [&](int i)
-		           {
-			           FillYDerivations(i, values);
-		           },
-		           1, is_parallel_);
+			[&](int i)
+		{
+			FillYDerivations(i, values);
+		},
+			1, is_parallel_);
 	}
 
 	void DeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& values)
 	{
 		utils::For(0, static_cast<int>(values.RowsCount()),
-		           [&](int i)
-		           {
-			           FillYXDerivations(i, values);
-		           },
-		           1, is_parallel_);
+			[&](int i)
+		{
+			FillYXDerivations(i, values);
+		},
+			1, is_parallel_);
 	}
 
 	void DeBoorKnotsGenerator::FillXDerivations(const int column_index, KnotMatrix& values)
@@ -214,13 +214,13 @@ namespace splineknots
 		if (unknowns_count == 0) return;
 
 		UnknownsSetter dset = [&](int index, double value)
-			{
-				values[index][column_index].SetDx(value);
-			};
+		{
+			values[index][column_index].SetDx(value);
+		};
 		RightSideSelector rget = [&](int index)
-			{
-				return values[index][column_index].Z();
-			};
+		{
+			return values[index][column_index].Z();
+		};
 
 		auto dlast = values(values.RowsCount() - 1, column_index).Dx();
 		auto dfirst = values(0, column_index).Dx();
@@ -234,13 +234,13 @@ namespace splineknots
 		if (unknowns_count == 0) return;
 
 		UnknownsSetter dset = [&](int index, double value)
-			{
-				values[index][column_index].SetDxy(value);
-			};
+		{
+			values[index][column_index].SetDxy(value);
+		};
 		RightSideSelector rget = [&](int index)
-			{
-				return values(index, column_index).Dy();
-			};
+		{
+			return values(index, column_index).Dy();
+		};
 
 		auto h = precalculated_hx_->h;
 		auto dlast = values(values.RowsCount() - 1, column_index).Dxy();
@@ -255,13 +255,13 @@ namespace splineknots
 		if (unknowns_count == 0) return;
 
 		UnknownsSetter dset = [&](int index, double value)
-			{
-				values[row_index][index].SetDy(value);
-			};
+		{
+			values[row_index][index].SetDy(value);
+		};
 		RightSideSelector rget = [&](int index)
-			{
-				return values(row_index, index).Z();
-			};
+		{
+			return values(row_index, index).Z();
+		};
 
 		auto dlast = values(row_index, values.ColumnsCount() - 1).Dy();
 		auto dfirst = values(row_index, 0).Dy();
@@ -275,13 +275,13 @@ namespace splineknots
 		if (unknowns_count == 0) return;
 
 		UnknownsSetter dset = [&](int index, double value)
-			{
-				values[row_index][index].SetDxy(value);
-			};
+		{
+			values[row_index][index].SetDxy(value);
+		};
 		RightSideSelector rget = [&](int index)
-			{
-				return values(row_index, index).Dx();
-			};
+		{
+			return values(row_index, index).Dx();
+		};
 
 		auto dlast = values(row_index, values.ColumnsCount() - 1).Dxy();
 		auto dfirst = values(row_index, 0).Dxy();
