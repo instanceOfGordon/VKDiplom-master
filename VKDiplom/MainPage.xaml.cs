@@ -204,5 +204,7 @@ namespace VKDiplom
                 KnotsGeneratorComboBox.IsEnabled = true;
             }
         }
+
+       
     }
 }

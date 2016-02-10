@@ -15,7 +15,6 @@ namespace splineknots
 	class DeBoorKnotsGenerator : public KnotsGenerator
 	{
 		Tridiagonals tridagonals_;
-		//std::vector<std::vector<double>> rightsides_buffers_;
 		bool is_parallel_;
 	public:
 		DeBoorKnotsGenerator(MathFunction math_function);
@@ -28,7 +27,6 @@ namespace splineknots
 		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension) override;
 		void InParallel(bool value);
 		bool IsParallel();
-
 	protected:
 		struct Precalculated
 		{
@@ -38,7 +36,6 @@ namespace splineknots
 			Precalculated(const Precalculated& other) = default;
 			Precalculated& operator=(const Precalculated& other) = default;
 		};
-
 		virtual void InitializeBuffers(const size_t u_count, const size_t v_count);
 		DeBoorKnotsGenerator(const MathFunction math_function, std::unique_ptr<Tridiagonal> tridiagonal);
 		DeBoorKnotsGenerator(const InterpolativeMathFunction math_function, std::unique_ptr<Tridiagonal> tridiagonal);
@@ -56,7 +53,7 @@ namespace splineknots
 		virtual void FillXYDerivations(const int column_index, KnotMatrix& values);
 		virtual void FillYDerivations(const int row_index, KnotMatrix& values);
 		virtual void FillYXDerivations(const int row_index, KnotMatrix& values);
-		virtual void SolveTridiagonal(const RightSideSelector& selector,const Precalculated& precalculated, const double dfirst, const double dlast,
+		virtual void SolveTridiagonal(const RightSideSelector& selector, const Precalculated& precalculated, const double dfirst, const double dlast,
 		                              const int unknowns_count, UnknownsSetter& unknowns_setter);
 	private:
 		std::unique_ptr<Precalculated> precalculated_hx_;

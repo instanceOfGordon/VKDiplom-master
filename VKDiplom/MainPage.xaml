@@ -77,14 +77,28 @@
                             Draw="FunctionDrawingSurface_OnDraw"
                             SizeChanged="FunctionDrawingSurface_OnSizeChanged"
                             MouseWheel="DrawingSurface_OnMouseWheel"
-                            MouseLeftButtonDown="FunctionDrawingSurface_OnMouseLeftButtonDown"
-                            MouseLeftButtonUp="FunctionDrawingSurface_OnMouseLeftButtonUp"
-                            MouseRightButtonDown="FunctionDrawingSurface_OnMouseRightButtonDown"
-                            MouseRightButtonUp="FunctionDrawingSurface_OnMouseRightButtonUp"
-                            MouseMove="DrawingSurface_OnMouseMove"
+                           
                             
                             Loaded="FunctionDrawingSurface_OnLoaded"
                             MinWidth="500" MinHeight="300" />
+          
+                <Image Name="HorizontalRotatorImage" Grid.Column="0" Opacity="0.6" Source="Resources/Images/arrvhor.png" 
+                       Height="20" Width="Auto" Stretch="Fill" VerticalAlignment="Bottom" Margin="120,10,120,10"
+                       MouseEnter="RotatorImage_OnMouseEnter"
+                       MouseLeave="RotatorImage_OnMouseLeave"
+                       MouseLeftButtonDown="RotatorImage_OnLeftMouseButtonDown"
+                       MouseMove="HorizontalRotatorImage_OnMouseMove"
+                       MouseLeftButtonUp="RotatorImage_OnLeftMouseButtonUp"
+                       />
+            <Image Name="VerticalRotatorImage" Grid.Column="0" Opacity="0.6" Source="Resources/Images/arrver.png" 
+                       Height="Auto" Width="20" Stretch="Fill" HorizontalAlignment="Right" Margin="10,80,10,80"
+                       MouseEnter="RotatorImage_OnMouseEnter"
+                       MouseLeave="RotatorImage_OnMouseLeave"
+                       MouseLeftButtonDown="RotatorImage_OnLeftMouseButtonDown"
+                       MouseMove="VerticalRotatorImage_OnMouseMove"
+                       MouseLeftButtonUp="RotatorImage_OnLeftMouseButtonUp"
+                       />
+           
             <Line Grid.Column="0" VerticalAlignment="Center" Fill="LightGray" Stroke="LightGray"
                   HorizontalAlignment="Left" X1="0" X2="20" Margin="9" StrokeThickness="1" Y1="0" Y2="0" />
             <Slider MaxHeight="300" Grid.Column="0" Name="ZScaleSlider" Minimum="0" Maximum="2" Value="1"
@@ -93,8 +107,6 @@
             <CheckBox Grid.Column="0" Name="AutoScaleCheckBox"
                      HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="Auto Scale" Foreground="Gray"
                     Margin="10,30,0,5" Checked="AutoScaleCheckBox_OnChecked" Unchecked="AutoScaleCheckBox_OnUnchecked"/>
-            <sdk:Label Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"
-                       Foreground="Gray" Content="Hold 'V' for vertical rotation" />
             <Grid Grid.Column="1" MinWidth="300">
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight="150" />
@@ -107,12 +119,7 @@
                                 Draw="FirstDerivationDrawingSurface_OnDraw"
                                 SizeChanged="FirstDerivationDrawingSurface_OnSizeChanged"
                                 MouseWheel="DrawingSurface_OnMouseWheel"
-                                MouseLeftButtonDown="FirstDerivationDrawingSurface_OnMouseLeftButtonDown"
-                                MouseLeftButtonUp="FirstDerivationDrawingSurface_OnMouseLeftButtonUp"
-                                MouseRightButtonDown="FirstDerivationDrawingSurface_OnMouseRightButtonDown"
-                                MouseRightButtonUp="FirstDerivationDrawingSurface_OnMouseRightButtonUp"
-                                MouseMove="DrawingSurface_OnMouseMove"
-
+                              
                                 Loaded="FirstDerivationDrawingSurface_OnLoaded"
                                 MinWidth="300" MinHeight="150" />
 
@@ -123,11 +130,7 @@
                                 Draw="SecondDerivationDrawingSurface_OnDraw"
                                 SizeChanged="SecondDerivationDrawingSurface_OnSizeChanged"
                                 MouseWheel="DrawingSurface_OnMouseWheel"
-                                MouseLeftButtonDown="SecondDerivationDrawingSurface_OnMouseLeftButtonDown"
-                                MouseLeftButtonUp="SecondDerivationDrawingSurface_OnMouseLeftButtonUp"
-                                MouseRightButtonDown="SecondDerivationDrawingSurface_OnMouseRightButtonDown"
-                                MouseRightButtonUp="SecondDerivationDrawingSurface_OnMouseRightButtonUp"
-                                MouseMove="DrawingSurface_OnMouseMove"
+                              
 
                                 Loaded="SecondDerivationDrawingSurface_OnLoaded"
                                 MinWidth="300" MinHeight="150" />
