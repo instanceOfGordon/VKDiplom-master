@@ -6,8 +6,8 @@ namespace SymbolicDifferentiation
 {
     public class Calculator
     {
-        
 
+        private const double Tolerance = 0.01;
         public int Calculate(string input, double xVal, double yVal, ref double output)
         {
 
@@ -45,9 +45,9 @@ namespace SymbolicDifferentiation
         private int CalculateStack(List<ExpressionItem> vStack, ref int nExpression, ref double output)
         {
             // output = -1;
-            var pQI = vStack[nExpression++];
+            var pqi = vStack[nExpression++];
             int nError;
-            if (pQI.MCOperator != null)
+            if (pqi.MCOperator != null)
             {
                 double cu = 0, cv = 0;
                 // get left operand calculation
@@ -57,38 +57,38 @@ namespace SymbolicDifferentiation
                 if ((nError = CalculateStack(vStack,  ref nExpression, ref cv)) < 0)
                     return nError;
 
-                switch (pQI.MCOperator)
+                switch (pqi.MCOperator)
                 {
                     case '-':   // c(u-v) = cu-cv
-                        pQI.MNOutput = cu - cv;
+                        pqi.MNOutput = cu - cv;
                         break;
                     case '+':   // c(u+v) = cu+cv
-                        pQI.MNOutput = cu + cv;
+                        pqi.MNOutput = cu + cv;
                         break;
                     case '*':   // c(u*v) = cu*cv
-                        pQI.MNOutput = cu * cv;
+                        pqi.MNOutput = cu * cv;
                         break;
                     case '/':   // c(u/v) = cu/cv
-                        if (cv == 0)
+                        if (Math.Abs(cv) < 0.01)
                             return (int)ErrorArgument.DivideByZero;
-                        pQI.MNOutput = cu / cv;
+                        pqi.MNOutput = cu / cv;
                         break;
                     case '^':   // d(u^v) = cu^cv
-                        if (cu < 0 && (int)cv != (double)cv)
+                        if (cu < 0 && Math.Abs((int)cv - cv) > Tolerance)
                             return (int)ErrorArgument.InvalidArgument;
-                        pQI.MNOutput = Math.Pow(cu, cv);
+                        pqi.MNOutput = Math.Pow(cu, cv);
                         break;
                     case '%':   // d(u%v) = cu%cv
-                        pQI.MNOutput = (int)cu % (int)cv;
+                        pqi.MNOutput = (int)cu % (int)cv;
                         break;
                 }
             }
             else
                 // get Expression calculation
-                if ((nError = pQI.GetCalculation(true)) < 0)
+                if ((nError = pqi.GetCalculation(true)) < 0)
                 return nError;
             // return resultant calculation
-            output = pQI.MNOutput;
+            output = pqi.MNOutput;
 
             return 0;
         }
