@@ -8,7 +8,6 @@ namespace splineknots
 	public:
 		ReducedDeBoorTridiagonal* Clone() const override;
 		ReducedDeBoorTridiagonal();
-		virtual ~ReducedDeBoorTridiagonal();
 		void Solve(size_t num_unknowns) override;
 	};
 }

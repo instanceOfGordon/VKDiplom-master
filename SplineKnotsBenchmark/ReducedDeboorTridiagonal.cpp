@@ -13,10 +13,6 @@ splineknots::ReducedDeBoorTridiagonal::ReducedDeBoorTridiagonal()
 {
 }
 
-splineknots::ReducedDeBoorTridiagonal::~ReducedDeBoorTridiagonal()
-{
-}
-
 void splineknots::ReducedDeBoorTridiagonal::Solve(size_t num_unknowns)
 {
 	auto even = num_unknowns % 2 == 0;

@@ -79,7 +79,9 @@ namespace splineknots
 		tridagonals_.clear();
 		for (size_t i = 0; i < other.tridagonals_.size(); i++)
 		{
-			auto trid = std::unique_ptr<splineknots::Tridiagonal>(other.tridagonals_[i]->Clone());
+			auto other_trid= *other.tridagonals_[i].get();
+			auto trid = std::make_unique<splineknots::Tridiagonal>(other_trid);
+			//auto trid = std::unique_ptr<splineknots::Tridiagonal>(other.tridagonals_[i]->Clone());
 			tridagonals_.push_back(std::move(trid));
 		}
 		is_parallel_ = other.is_parallel_;

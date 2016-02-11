@@ -20,10 +20,6 @@ splineknots::Tridiagonal::Tridiagonal(double lower_value, double main_value, dou
 }
 
 
-splineknots::Tridiagonal::~Tridiagonal()
-{
-}
-
 void splineknots::Tridiagonal::ResizeBuffers(size_t newsize, bool shrinking_allowed)
 {
 	ResizeBuffer(newsize, shrinking_allowed);

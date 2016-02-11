@@ -10,7 +10,12 @@ namespace splineknots
 	public:
 		Tridiagonal* Clone() const override;
 		Tridiagonal(double lower_value, double main_value, double upper_value);
-		virtual ~Tridiagonal();
+		virtual ~Tridiagonal() = default;
+		Tridiagonal(const Tridiagonal& other) = default;
+		Tridiagonal(Tridiagonal&& other) = default;
+		Tridiagonal& operator=(const Tridiagonal& other) = default;
+		Tridiagonal& operator=(Tridiagonal&& other) = default;
+
 		void ResizeBuffers(size_t newsize, bool shrinking_allowed = false);
 		
 		virtual void Solve(size_t num_unknowsns);
