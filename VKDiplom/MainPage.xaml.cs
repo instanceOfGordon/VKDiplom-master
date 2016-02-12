@@ -34,12 +34,13 @@ namespace VKDiplom
         private readonly Color _color = DefaultColor;
         private readonly ColorWheel _colorWheel = new ColorWheel();
         private readonly SolidColorBrush _disabledColorBrush = new SolidColorBrush(Colors.DarkGray);
+        //private readonly SolidColorBrush _disabledColorBrush = new SolidColorBrush(Colors.DarkGray);
         private readonly DrawStyle _drawStyle = DrawStyle.Surface;
         
         //private readonly InterpolativeMathFunction _aproximationFunction = new InterpolativeMathFunction();
 
         private readonly TextureStyle _textureStyle = TextureStyle.HeightColored;
-        private bool _canDrag;
+        private bool _isLeftMouseButtonDown;
         // Scenes
         private Scene _firstDerScene;
         private Derivation _focusedDrawingSurface = Derivation.Zero;
@@ -70,16 +71,20 @@ namespace VKDiplom
             action(_secondDerScene);
         }
 
-        private void ColorSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            //ScenesAction(scene => scene.Shapes.La);
-        }
-
-        private void ColorCheckBox_OnIsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void ColorCheckBox_OnChecked(object sender, RoutedEventArgs e)
         {
             var checkBox = sender as CheckBox;
-            if (checkBox == null) return;
-            ColorSlider.IsEnabled = checkBox.IsEnabled;
+            if (checkBox ==null ||ColorSlider == null) return;
+            if (checkBox.IsChecked.HasValue) ColorSlider.IsEnabled = false;
+           // ShapeInfoTextBox.Text = (checkBox.IsChecked != null && checkBox.IsChecked.Value).ToString();
+        }
+
+
+        private void ColorCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            if (checkBox == null || ColorSlider == null) return;
+            if (checkBox.IsChecked.HasValue) ColorSlider.IsEnabled = true;
         }
 
         private void FocusDrawingSurface_OnClick(object sender, MouseEventArgs e)
@@ -195,16 +200,7 @@ namespace VKDiplom
             var iBox = sender as ComboBox;
             if (iBox == null) return;
             //var selValue = (KeyValuePair<string, SplineFactory>) iBox.;//Dictionary<>
-            if (iBox.SelectedIndex == 0)
-            {
-                KnotsGeneratorComboBox.IsEnabled = false;
-            }
-            else
-            {
-                KnotsGeneratorComboBox.IsEnabled = true;
-            }
+            KnotsGeneratorComboBox.IsEnabled = iBox.SelectedIndex != 0;
         }
-
-       
     }
 }

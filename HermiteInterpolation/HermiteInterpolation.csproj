@@ -120,9 +120,9 @@
     <Compile Include="Shapes\DrawStyle.cs" />
     <Compile Include="Shapes\SplineInterpolation\Basis.cs" />
     <Compile Include="Shapes\SplineInterpolation\BicubicBasis.cs" />
-    <Compile Include="Shapes\SplineInterpolation\BicubicHermiteSurface.cs" />
+    <Compile Include="Shapes\SplineInterpolation\BicubicHermiteSpline.cs" />
     <Compile Include="Shapes\SplineInterpolation\BiquarticBasis.cs" />
-    <Compile Include="Shapes\SplineInterpolation\BiquarticHermiteSurface.cs" />
+    <Compile Include="Shapes\SplineInterpolation\BiquarticHermiteSpline.cs" />
     <Compile Include="Shapes\SplineInterpolation\Derivation.cs" />
     <Compile Include="Shapes\SplineInterpolation\SplineFactory.cs" />
     <Compile Include="Shapes\IDrawable.cs" />

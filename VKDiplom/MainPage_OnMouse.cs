@@ -16,23 +16,25 @@ namespace VKDiplom
         {
             var rotImage = sender as Image;
             if (rotImage == null) return;
-            rotImage.Opacity = 0.8;
+            if(!_isLeftMouseButtonDown)
+                rotImage.Opacity = 0.8;
         }
 
         private void RotatorImage_OnMouseLeave(object sender, MouseEventArgs e)
         {
             var rotImage = sender as Image;
             if (rotImage == null) return;
-            rotImage.Opacity = 0.6;
+            if (!_isLeftMouseButtonDown)
+                rotImage.Opacity = 0.6;
         }
 
         private void RotatorImage_OnLeftMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
             var rotImage = sender as Image;
             if (rotImage == null) return;
-            _previousMousePosition = e.GetPosition(null);
             rotImage.Opacity = 0.95;
-            _canDrag = true;
+            _isLeftMouseButtonDown = true;
+            _previousMousePosition = e.GetPosition(null);
             rotImage.CaptureMouse();
         }
 
@@ -41,24 +43,27 @@ namespace VKDiplom
             var rotImage = sender as Image;
             if (rotImage == null) return;
             rotImage.Opacity = 0.6;
-            _canDrag = false;
+            _isLeftMouseButtonDown = false;
             rotImage.ReleaseMouseCapture();
         }
 
         private void HorizontalRotatorImage_OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (!_canDrag) return;
+            if (!_isLeftMouseButtonDown) return;
             var currentPosition = e.GetPosition(null);
-            var rotation = 0.02f * (float)(_previousMousePosition.X - currentPosition.X);
+            var rotation = 0.005f * (float)(_previousMousePosition.X - currentPosition.X);
             _camera.HorizontalAngle += rotation;
+            _previousMousePosition = e.GetPosition(null);
+
         }
 
         private void VerticalRotatorImage_OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (!_canDrag) return;
+            if (!_isLeftMouseButtonDown) return;
             var currentPosition = e.GetPosition(null);
-            var rotation = 0.02f * (float)(_previousMousePosition.Y - currentPosition.Y);
+            var rotation = 0.005f * (float)(_previousMousePosition.Y - currentPosition.Y);
             _camera.VerticalAngle += rotation;
+            _previousMousePosition = e.GetPosition(null);
         }
     }
 }

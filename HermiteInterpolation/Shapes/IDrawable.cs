@@ -1,4 +1,6 @@
-﻿namespace HermiteInterpolation.Shapes
+﻿using System;
+
+namespace HermiteInterpolation.Shapes
 {
     public interface IDrawable
     {

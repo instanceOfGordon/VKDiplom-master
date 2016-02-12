@@ -49,7 +49,7 @@ namespace VKDiplom
             //  aproximationFunction, derivation);
             //var shape = new ClassicHermiteSurface(new double[] { -2, -1, 0, 1 }, new double[] { -2, -1, 0, 1 },
             // var shape = new HermiteShape(new double[] { -2, -1 }, new double[] { -2, -1 },
-            var shape = new BiquarticHermiteSurface(new SurfaceDimension(-3, 3, 7), new SurfaceDimension(-3, 3, 7),
+            var shape = new BiquarticHermiteSpline(new SurfaceDimension(-3, 3, 7), new SurfaceDimension(-3, 3, 7),
                 //var shape = HermiteSurfaceFactoryHolder.CreateBiquartic(-3, 1, 7, -3, 1, 7,
                 mathExpression, derivation);
             //shape.ColoredHeight();
@@ -87,18 +87,7 @@ namespace VKDiplom
 
         private void LoadScene(DrawingSurface drawingSurface, out Scene scene)
         {
-            //if (VkDiplomGraphicsInitializationUtils.IsHardwareAccelerated()
-            //{
-
-            //    scene = null;
-            //    return;
-            //}
             scene = new Scene(_camera);
-
-
-            //_functionScene.Camera.AspectRatio =1.0f;
-            //GraphicsDeviceManager.Current.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise; 
-
             if (!_isSoftwareRendered)
                 SetMultiSampleAntialiasing(drawingSurface, 8);
 
@@ -114,6 +103,17 @@ namespace VKDiplom
 
         private void SaveToFile_OnClick(object sender, RoutedEventArgs e)
         {
+            double umin = double.NaN,
+                umax = double.NaN, 
+                vmin = double.NaN, 
+                vmax = double.NaN;
+            int ucount = int.MinValue,
+                vcount = int.MinValue;
+
+            foreach (var drawable in _functionScene)
+            {
+                
+            }
         }
 
         private void FileButton_OnClick(object sender, RoutedEventArgs e)
@@ -146,12 +146,12 @@ namespace VKDiplom
                 {
                     "Bicubic",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new BicubicHermiteSurface(uDimension, vDimension, knotsGenerator, derivation)
+                        new BicubicHermiteSpline(uDimension, vDimension, knotsGenerator, derivation)
                 },
                 {
                     "Biquartic",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
-                        new BiquarticHermiteSurface(uDimension, vDimension, knotsGenerator, derivation)
+                        new BiquarticHermiteSpline(uDimension, vDimension, knotsGenerator, derivation)
                 }
             };
             _knotsChoices = new Dictionary<string, KnotsGeneratorFactory>
@@ -212,10 +212,10 @@ namespace VKDiplom
                 HermiteVCountTextBox.Text = selectedSpline.VDimension.KnotCount.ToString(culture);
                 MathExpressionTextBox.Text = selectedSpline.Name;
 
-                if (selectedSpline is BiquarticHermiteSurface)
+                if (selectedSpline is BiquarticHermiteSpline)
 
                     InterpolationTypeComboBox.SelectedIndex = 2;
-                else if (selectedSpline is BicubicHermiteSurface)
+                else if (selectedSpline is BicubicHermiteSpline)
 
                     InterpolationTypeComboBox.SelectedIndex = 1;
 

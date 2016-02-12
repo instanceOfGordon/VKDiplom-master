@@ -5,7 +5,7 @@ using HermiteInterpolation.SplineKnots;
 
 namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
-    public class BiquarticHermiteSurface : BicubicHermiteSurface
+    public class BiquarticHermiteSpline : BicubicHermiteSpline
     {
         private class BiquarticKnotsGenerator : KnotsGenerator
         {
@@ -162,15 +162,15 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             }
         }
 
-        public BiquarticHermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension, MathExpression mathExpression, Derivation derivation = Derivation.Zero) : this(uDimension, vDimension, InterpolativeMathFunction.FromExpression(mathExpression), derivation)
+        public BiquarticHermiteSpline(SurfaceDimension uDimension, SurfaceDimension vDimension, MathExpression mathExpression, Derivation derivation = Derivation.Zero) : this(uDimension, vDimension, InterpolativeMathFunction.FromExpression(mathExpression), derivation)
         {
         }
 
-        public BiquarticHermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolativeMathFunction interpolativeMathFunction, Derivation derivation = Derivation.Zero) : this(uDimension, vDimension, new  DirectKnotsGenerator(interpolativeMathFunction), derivation)
+        public BiquarticHermiteSpline(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolativeMathFunction interpolativeMathFunction, Derivation derivation = Derivation.Zero) : this(uDimension, vDimension, new  DirectKnotsGenerator(interpolativeMathFunction), derivation)
         {
         }
 
-        public BiquarticHermiteSurface(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotsGenerator knotsGenerator, Derivation derivation = Derivation.Zero) : base(uDimension, vDimension, new BiquarticKnotsGenerator(knotsGenerator), derivation)
+        public BiquarticHermiteSpline(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotsGenerator knotsGenerator, Derivation derivation = Derivation.Zero) : base(uDimension, vDimension, new BiquarticKnotsGenerator(knotsGenerator), derivation)
         {
         }
     }

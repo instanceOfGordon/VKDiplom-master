@@ -13,16 +13,16 @@ namespace SymbolicDifferentiation
 
             var xValStr = xVal.ToString();//.Replace("e","");//CultureInfo.InvariantCulture);//.Replace(",",".");
             var yValStr = yVal.ToString();//.Replace("e", "");//CultureInfo.InvariantCulture);//.Replace(",", ".");
-            input = xVal<0? input.Replace("x", "(" + xValStr + ")") : input.Replace("x", xValStr);
-            input = yVal<0? input.Replace("y", "("+ yValStr + ")") : input.Replace("y", yValStr);
+            input = xVal < 0 ? input.Replace("x", "(" + xValStr + ")") : input.Replace("x", xValStr);
+            input = yVal < 0 ? input.Replace("y", "(" + yValStr + ")") : input.Replace("y", yValStr);
             return Calculate(input, ref output);
         }
 
         public int Calculate(string input, ref double output)
         {
-         
+
             // remove spaces
-            input = input.Replace(" ","");
+            input = input.Replace(" ", "");
             // make all characters lower case
             input = input.ToLower();
             // Optimize "--"
@@ -54,7 +54,7 @@ namespace SymbolicDifferentiation
                 if ((nError = CalculateStack(vStack, ref nExpression, ref cu)) < 0)
                     return nError;
                 // get right operand calculation
-                if ((nError = CalculateStack(vStack,  ref nExpression, ref cv)) < 0)
+                if ((nError = CalculateStack(vStack, ref nExpression, ref cv)) < 0)
                     return nError;
 
                 switch (pqi.MCOperator)
@@ -259,36 +259,36 @@ namespace SymbolicDifferentiation
         public static readonly Func<string, string> Atanh = x => "log((1+" + x + ")/(1-" + x + "))/2";
         // supported functions calculation
         public static readonly Func<string, string> C = (u) => (new Calculator()).Calculate(u);
-        public static readonly Func<string, string> CSin = (u)=> "sin(" + C(u)+ ")";
-        public static readonly Func<string, string> CCos = (u)=> "cos(" + C(u)+ ")";
-        public static readonly Func<string, string> CTan = (u)=> "tan(" + C(u)+ ")";
-        public static readonly Func<string, string> CSec = (u)=> "sec(" + C(u)+ ")";
-        public static readonly Func<string, string> CCosec = (u)=> "cosec(" + C(u)+ ")";
-        public static readonly Func<string, string> CCot = (u)=> "cot(" + C(u)+ ")";
-        public static readonly Func<string, string> CSinh = (u)=> "sinh(" + C(u)+ ")";
-        public static readonly Func<string, string> CCosh = (u)=> "cosh(" + C(u)+ ")";
-        public static readonly Func<string, string> CTanh = (u)=> "tanh(" + C(u)+ ")";
-        public static readonly Func<string, string> CSech = (u)=> "sech(" + C(u)+ ")";
-        public static readonly Func<string, string> CCosech = (u)=> "cosech(" + C(u)+ ")";
-        public static readonly Func<string, string> CCoth = (u)=> "coth(" + C(u)+ ")";
-        public static readonly Func<string, string> CAsin = (u)=> "asin(" + C(u)+ ")";
-        public static readonly Func<string, string> CAcos = (u)=> "acos(" + C(u)+ ")";
-        public static readonly Func<string, string> CAtan = (u)=> "atan(" + C(u)+ ")";
-        public static readonly Func<string, string> CAsec = (u)=> "asec(" + C(u)+ ")";
-        public static readonly Func<string, string> CAcosec = (u)=> "acosec(" + C(u)+ ")";
-        public static readonly Func<string, string> CAcot = (u)=> "acot(" + C(u)+ ")";
-        public static readonly Func<string, string> CAsinh = (u)=> "asinh(" + C(u)+ ")";
-        public static readonly Func<string, string> CAcosh = (u)=> "acosh(" + C(u)+ ")";
-        public static readonly Func<string, string> CAtanh = (u)=> "atanh(" + C(u)+ ")";
-        public static readonly Func<string, string> CAsech = (u)=> "asech(" + C(u)+ ")";
-        public static readonly Func<string, string> CAcosech = (u)=> "acosech(" + C(u)+ ")";
-        public static readonly Func<string, string> CAcoth = (u)=> "acoth(" + C(u)+ ")";
-        public static readonly Func<string, string> CSqrt = (u)=> "sqrt(" + C(u)+ ")";
-        public static readonly Func<string, string> CLog10 = (u)=> "log10(" + C(u)+ ")";
-        public static readonly Func<string, string> CLog = (u)=> "log(" + C(u)+ ")";
-        public static readonly Func<string, string> CLn = (u)=> CLog(u);
-        public static readonly Func<string, string> CSign = (u)=> "sign(" + C(u)+ ")";
-        public static readonly Func<string, string> CAbs = (u)=> "abs(" + C(u)+ ")";
+        public static readonly Func<string, string> CSin = (u) => "sin(" + C(u) + ")";
+        public static readonly Func<string, string> CCos = (u) => "cos(" + C(u) + ")";
+        public static readonly Func<string, string> CTan = (u) => "tan(" + C(u) + ")";
+        public static readonly Func<string, string> CSec = (u) => "sec(" + C(u) + ")";
+        public static readonly Func<string, string> CCosec = (u) => "cosec(" + C(u) + ")";
+        public static readonly Func<string, string> CCot = (u) => "cot(" + C(u) + ")";
+        public static readonly Func<string, string> CSinh = (u) => "sinh(" + C(u) + ")";
+        public static readonly Func<string, string> CCosh = (u) => "cosh(" + C(u) + ")";
+        public static readonly Func<string, string> CTanh = (u) => "tanh(" + C(u) + ")";
+        public static readonly Func<string, string> CSech = (u) => "sech(" + C(u) + ")";
+        public static readonly Func<string, string> CCosech = (u) => "cosech(" + C(u) + ")";
+        public static readonly Func<string, string> CCoth = (u) => "coth(" + C(u) + ")";
+        public static readonly Func<string, string> CAsin = (u) => "asin(" + C(u) + ")";
+        public static readonly Func<string, string> CAcos = (u) => "acos(" + C(u) + ")";
+        public static readonly Func<string, string> CAtan = (u) => "atan(" + C(u) + ")";
+        public static readonly Func<string, string> CAsec = (u) => "asec(" + C(u) + ")";
+        public static readonly Func<string, string> CAcosec = (u) => "acosec(" + C(u) + ")";
+        public static readonly Func<string, string> CAcot = (u) => "acot(" + C(u) + ")";
+        public static readonly Func<string, string> CAsinh = (u) => "asinh(" + C(u) + ")";
+        public static readonly Func<string, string> CAcosh = (u) => "acosh(" + C(u) + ")";
+        public static readonly Func<string, string> CAtanh = (u) => "atanh(" + C(u) + ")";
+        public static readonly Func<string, string> CAsech = (u) => "asech(" + C(u) + ")";
+        public static readonly Func<string, string> CAcosech = (u) => "acosech(" + C(u) + ")";
+        public static readonly Func<string, string> CAcoth = (u) => "acoth(" + C(u) + ")";
+        public static readonly Func<string, string> CSqrt = (u) => "sqrt(" + C(u) + ")";
+        public static readonly Func<string, string> CLog10 = (u) => "log10(" + C(u) + ")";
+        public static readonly Func<string, string> CLog = (u) => "log(" + C(u) + ")";
+        public static readonly Func<string, string> CLn = (u) => CLog(u);
+        public static readonly Func<string, string> CSign = (u) => "sign(" + C(u) + ")";
+        public static readonly Func<string, string> CAbs = (u) => "abs(" + C(u) + ")";
         //public delegate string MathFunction(string x);
 
         //public MathFunction Atof = x => (((x) == "e") ? Math.E : ((x) == "pi" ? Math.PI : Atof(x)));

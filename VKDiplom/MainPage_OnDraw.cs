@@ -9,6 +9,7 @@ using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.SplineKnots;
+using HermiteInterpolation.Utils;
 using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
@@ -81,7 +82,7 @@ namespace VKDiplom
                 var minuendGenerator = _minuendKnotsFactory(mathFunction);
                 var subtrahendGenerator = ((KnotsGeneratorFactory) KnotsGeneratorComboBox.SelectedValue)(mathFunction);
                 createKnotsGenerator = (mf)=>minuendGenerator-subtrahendGenerator;
-                createSpline = (u,v,k,d)=>new BicubicHermiteSurface(u,v,k,d);
+                createSpline = (u,v,k,d)=>new BicubicHermiteSpline(u,v,k,d);
                 //_splineSubtractionClicked = false;
             }
             else
@@ -100,7 +101,11 @@ namespace VKDiplom
                 DisableSplineChaining();
             }
 
-            var color = _colorWheel.Next;
+            Color color;
+            if (ColorCheckBox.IsChecked.HasValue && !ColorCheckBox.IsChecked.Value)
+                color = ColorUtils.RandomShade((float)ColorSlider.Value);
+            else
+                color = _colorWheel.Next;
             shape.ColoredByShades(color);
             shape.DrawStyle = DrawStyle.Surface;
             shape.Name = MathExpressionTextBox.Text;

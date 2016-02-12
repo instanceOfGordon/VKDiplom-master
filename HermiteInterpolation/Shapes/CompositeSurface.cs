@@ -10,7 +10,7 @@ namespace HermiteInterpolation.Shapes
         protected static readonly Color DefaultColor = Color.FromNonPremultiplied(128, 128, 128, 255);
         protected static readonly Vector3 DefaultNormal = Vector3.Zero;
 
-        public string Name { get; set; } //= ToString();
+        public string Name { get; set; }
         private Color _color = DefaultColor;
 
         public Color Color
