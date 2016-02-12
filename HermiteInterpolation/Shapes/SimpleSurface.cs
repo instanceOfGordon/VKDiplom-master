@@ -1,16 +1,10 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows.Graphics;
 using HermiteInterpolation.Primitives;
-using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
-
-#endregion
 
 namespace HermiteInterpolation.Shapes
 {
@@ -20,26 +14,44 @@ namespace HermiteInterpolation.Shapes
         private readonly VertexPositionNormalColor[] _vertices;
         private readonly int _xDimension;
         private readonly int _yDimension;
+        private Color _color = Properties.Constants.DefaultColor;
+        private bool _disposed;
         private DrawStyle _drawStyle;
         private IndexBuffer _indexBuffer;
         private short[] _indices;
         private float? _maxHeight;
         private float? _minHeight;
         private RasterizerState _rasterizerState;
-        private bool _disposed;
 
         public SimpleSurface(VertexPositionNormalColor[] vertices, int xDimension, int yDimension)
         {
-           
             _xDimension = xDimension;
             _yDimension = yDimension;
             _vertices = vertices;
-           
+
             if (GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware) return;
             _vertexBuffer = new VertexBuffer(GraphicsDeviceManager.Current.GraphicsDevice,
-            typeof (VertexPositionNormalColor), vertices.Length, BufferUsage.WriteOnly);
+                typeof (VertexPositionNormalColor), vertices.Length, BufferUsage.WriteOnly);
             _vertexBuffer.SetData(_vertices);
             DrawStyle = DrawStyle.Surface;
+        }
+
+        public bool IsHeightColored { get; private set; }
+
+        public Color Color
+        {
+            get { return _color; }
+            set
+            {
+                _color = value;
+                ColoredSimple(value);
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public DrawStyle DrawStyle
@@ -66,12 +78,13 @@ namespace HermiteInterpolation.Shapes
                             FillMode = FillMode.Solid,
                             CullMode = CullMode.None
                         };
-                        break;                 
+                        break;
                 }
                 InitializeIndices();
                 CalculateLightingNormals();
             }
-        }        
+        }
+
         public float MinHeight
         {
             get
@@ -92,12 +105,14 @@ namespace HermiteInterpolation.Shapes
 
         public void ColoredSimple(Color color)
         {
+            IsHeightColored = false;
             for (var i = 0; i < _vertices.Count(); i++)
             {
                 _vertices[i].Color = color;
             }
             _vertexBuffer?.SetData(_vertices);
         }
+
         public void ColoredHeight()
         {
             ColoredHeight(0f, 300f);
@@ -105,6 +120,7 @@ namespace HermiteInterpolation.Shapes
 
         public void ColoredHeight(float fromHue, float toHue)
         {
+            IsHeightColored = false;
             var minZ = MinHeight;
             var maxZ = MaxHeight;
 
@@ -146,8 +162,6 @@ namespace HermiteInterpolation.Shapes
             }
         }
 
-       
-
         public void CalculateLightingNormals()
         {
             switch (_drawStyle)
@@ -156,7 +170,7 @@ namespace HermiteInterpolation.Shapes
                     // TODO: Not supported yet
                     break;
                 case DrawStyle.Surface:
-                    VertexNormals.CalculateTriangleNormals(_vertices,_indices);
+                    VertexNormals.CalculateTriangleNormals(_vertices, _indices);
                     break;
                 case DrawStyle.Contour:
                     // TODO: Not supported yet
@@ -224,7 +238,7 @@ namespace HermiteInterpolation.Shapes
             switch (_drawStyle)
             {
                 case DrawStyle.Wireframe:
-                    indices = indexer.SquareIndices(_xDimension,_yDimension);
+                    indices = indexer.SquareIndices(_xDimension, _yDimension);
                     break;
                 case DrawStyle.Surface:
                     indices = indexer.TriangleIndices(_xDimension, _yDimension);
@@ -242,12 +256,6 @@ namespace HermiteInterpolation.Shapes
                     break;
             }
             InitIndexBuffer(indices);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)

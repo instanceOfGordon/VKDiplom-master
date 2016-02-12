@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using HermiteInterpolation.Utils;
 using Microsoft.Xna.Framework;
@@ -7,11 +8,10 @@ namespace HermiteInterpolation.Shapes
 {
     public abstract class CompositeSurface : ISurface
     {
-        protected static readonly Color DefaultColor = Color.FromNonPremultiplied(128, 128, 128, 255);
-        protected static readonly Vector3 DefaultNormal = Vector3.Zero;
-
         public string Name { get; set; }
-        private Color _color = DefaultColor;
+        private Color _color = Properties.Constants.DefaultColor;
+
+        public bool IsHeightColored { get; private set; } = false;
 
         public Color Color
         {
@@ -19,16 +19,12 @@ namespace HermiteInterpolation.Shapes
             set
             {
                 _color = value;
-                ColoredByShades(value);
+                ColoredSimple(value);
             }
         }
         protected IEnumerable<ISurface> Segments { get; set; }
         private float? _minHeight;
         private float? _maxHeight;
-
-      
-
-        
 
         public void Draw()
         {
@@ -59,6 +55,7 @@ namespace HermiteInterpolation.Shapes
         }
         public void ColoredSimple(Color color)
         {
+            IsHeightColored = false;
             _color = color;
             foreach (var segment in Segments)
             {
@@ -68,6 +65,8 @@ namespace HermiteInterpolation.Shapes
 
         public void ColoredHeight()
         {
+            IsHeightColored = true;
+            _color = Color.FromNonPremultiplied(0, 0, 0, 0);
             var minZ = MinHeight;
             var maxZ = MaxHeight;
 
@@ -81,10 +80,10 @@ namespace HermiteInterpolation.Shapes
             }
         }
 
-        
-
         public void ColoredHeight(float fromHue, float toHue)
         {
+            IsHeightColored = true;
+            _color = Color.FromNonPremultiplied(0, 0, 0, 0);
             var minZ = MinHeight;
             var maxZ = MaxHeight;
 
@@ -98,32 +97,40 @@ namespace HermiteInterpolation.Shapes
             }
         }
 
-        public virtual void ColoredBySegment(ColorUtils.SeedColor seedFunction, params object[] parameters)
+        public virtual void ColoredBySegment(ColorUtils.ColorSeedFunction colorSeedFunction, params object[] parameters)
         {
+            IsHeightColored = false;
             foreach (var segment in Segments)
             {
-                segment.ColoredSimple(seedFunction(parameters));
+                segment.ColoredSimple(colorSeedFunction(parameters));
             }
         }
 
         public void ColoredBySegment()
         {
+            IsHeightColored = false;
             ColoredBySegment(x => ColorUtils.Random());         
         }
 
         public void ColoredByShades(Color baseColor)
         {
+            IsHeightColored = false;
+            _color = baseColor;
             ColoredBySegment(color => ColorUtils.RandomShade((Color)color[0]), baseColor);
         }
 
         public void ColoredByShades(float baseHue)
         {
+            IsHeightColored = false;
+            _color = ColorUtils.RandomShade(baseHue);
             ColoredBySegment(hue => ColorUtils.RandomShade((float)hue[0]), baseHue);
         }
 
         public void ColoredSimple(int r, int g, int b, int a)
         {
-            ColoredSimple(Color.FromNonPremultiplied(r, g, b, a));
+            IsHeightColored = false;
+            _color = Color.FromNonPremultiplied(r, g, b, a);
+            ColoredSimple(_color);
         }
 
     }

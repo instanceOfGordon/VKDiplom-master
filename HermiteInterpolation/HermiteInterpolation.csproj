@@ -94,7 +94,7 @@
     <Reference Include="System.Windows.Xna" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
+    <Compile Include="Properties.cs" />
     <Compile Include="Numerics\MathExpression.cs" />
     <Compile Include="Numerics\SymbolicMathExpression.cs" />
     <Compile Include="Primitives\VertexNormals.cs" />

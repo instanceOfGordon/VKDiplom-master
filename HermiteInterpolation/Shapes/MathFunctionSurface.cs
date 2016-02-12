@@ -5,6 +5,7 @@ using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Primitives;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using Microsoft.Xna.Framework;
+using static HermiteInterpolation.Properties.Constants;
 
 namespace HermiteInterpolation.Shapes
 {
@@ -25,7 +26,6 @@ namespace HermiteInterpolation.Shapes
 
         public MathFunctionSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
             MathFunction function)
-
         {
             UDimension = uDimension;
             VDimension = vDimension;
@@ -48,7 +48,7 @@ namespace HermiteInterpolation.Shapes
         private ISurface CreateSegment(int uIdx, int vIdx, 
             MathFunction function)
         {
-            var meshDensity = Constants.MeshDensity;
+            var meshDensity = Properties.MeshDensity;
             var uSize = Math.Abs(UDimension.Max - UDimension.Min)/(UDimension.KnotCount - 1);
             var vSize = Math.Abs(VDimension.Max - VDimension.Min)/(VDimension.KnotCount - 1);
 
