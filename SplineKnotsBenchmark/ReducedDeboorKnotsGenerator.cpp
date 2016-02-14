@@ -272,15 +272,22 @@ void splineknots::ReducedDeBoorKnotsGenerator::FillYXDerivations(KnotMatrix& val
 
 	auto three_div_hy = 0.75 / hy;
 
-	// Rest 2
-	utils::For(2, nrows - 1,
+	// Rests 2,3
+	for (size_t j = 2; j < ncols - 2; j += 2)
+	{
+		values(1, j).SetDxy(
+			0.25*(three_div_hy * (values(1, j + 1).Dx() - values(1, j - 1).Dx())
+				- values(1, j + 1).Dxy() - values(1, j - 1).Dxy())
+			);
+	}
+	utils::For(2, nrows - 2,
 	           [&](int i)
 	           {				  
 				   for (size_t j = 2; j < ncols - 2; j += 2)
 				   {
-					   values(i-1, j).SetDxy(
-						   0.25*(three_div_hy * (values(i-1, j + 1).Dx() - values(i-1, j - 1).Dx())
-						   - values(i-1, j + 1).Dxy() - values(i-1, j - 1).Dxy())
+					   values(i+1, j).SetDxy(
+						   0.25*(three_div_hy * (values(i+1, j + 1).Dx() - values(i+1, j - 1).Dx())
+						   - values(i+1, j + 1).Dxy() - values(i+1, j - 1).Dxy())
 					   );
 				   }
 		           for (size_t j = 1; j < ncols - 2; j += 2)

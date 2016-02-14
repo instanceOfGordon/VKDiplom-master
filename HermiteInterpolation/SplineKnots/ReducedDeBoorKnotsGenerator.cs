@@ -3,7 +3,6 @@ using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes.SplineInterpolation;
 using HermiteInterpolation.Utils;
-using MathNet.Numerics.LinearRegression;
 
 namespace HermiteInterpolation.SplineKnots
 {
@@ -61,21 +60,21 @@ namespace HermiteInterpolation.SplineKnots
             for (var j = 0; j < values.Columns; j++)
             {
                 FillXDerivations(j, values);
-                //for (var i = 1; i < values.Rows - 1; i += 2)
-                //{
-                //    values[i, j].Dx = threeDiv4H * (values[i + 1, j].Z - values[i - 1, j].Z)
-                //                      - 0.25 * (values[i + 1, j].Dx + values[i - 1, j].Dx);
-                //}
-            }
-
-            for (var i = 1; i < values.Rows - 1; i += 2)
-            {
-                for (var j = 0; j < values.Columns; j++)
+                for (var i = 1; i < values.Rows - 1; i += 2)
                 {
                     values[i, j].Dx = threeDiv4H * (values[i + 1, j].Z - values[i - 1, j].Z)
                                       - 0.25 * (values[i + 1, j].Dx + values[i - 1, j].Dx);
                 }
             }
+
+            //for (var i = 1; i < values.Rows - 1; i += 2)
+            //{
+            //    for (var j = 0; j < values.Columns; j++)
+            //    {
+            //        values[i, j].Dx = threeDiv4H * (values[i + 1, j].Z - values[i - 1, j].Z)
+            //                          - 0.25 * (values[i + 1, j].Dx + values[i - 1, j].Dx);
+            //    }
+            //}
         }
 
         protected override void FillYDerivations(KnotMatrix values)
@@ -139,23 +138,43 @@ namespace HermiteInterpolation.SplineKnots
                 }
             }
 
-            for (var i = 1; i < values.Rows - 1; i += 2)
+            for (var j = 2; j < values.Columns - 2; j += 2)
             {
-                for (var j = 2; j < values.Columns - 2; j += 2)
-                {
-                    values[i, j].Dxy = 0.75 * oneDivHy * (values[i, j + 1].Dx - values[i, j - 1].Dx)
-                                       - 0.25 * (values[i, j + 1].Dxy - values[i, j - 1].Dxy);
-                }
+                values[1, j].Dxy = 0.75 * oneDivHy * (values[1, j + 1].Dx - values[1, j - 1].Dx)
+                    - 0.25 * (values[1, j + 1].Dxy - values[1, j - 1].Dxy);
             }
 
             for (var i = 2; i < values.Rows - 2; i += 2)
             {
+                for (var j = 2; j < values.Columns - 2; j += 2)
+                {
+                    values[i + 1, j].Dxy = 0.75 * oneDivHy * (values[i + 1, j + 1].Dx - values[i + 1, j - 1].Dx)
+                        - 0.25 * (values[i + 1, j + 1].Dxy - values[i + 1, j - 1].Dxy);
+                }
                 for (var j = 1; j < values.Columns - 2; j += 2)
                 {
                     values[i, j].Dxy = 0.75 * oneDivHy * (values[i, j + 1].Dx - values[i, j - 1].Dx)
-                                       - 0.25 * (values[i, j + 1].Dxy - values[i, j - 1].Dxy);
+                        - 0.25 * (values[i, j + 1].Dxy - values[i, j - 1].Dxy);
                 }
             }
+
+            //for (var i = 1; i < values.Rows - 1; i += 2)
+            //{
+            //    for (var j = 2; j < values.Columns - 2; j += 2)
+            //    {
+            //        values[i, j].Dxy = 0.75 * oneDivHy * (values[i, j + 1].Dx - values[i, j - 1].Dx)
+            //                           - 0.25 * (values[i, j + 1].Dxy - values[i, j - 1].Dxy);
+            //    }
+            //}
+
+            //for (var i = 2; i < values.Rows - 2; i += 2)
+            //{
+            //    for (var j = 1; j < values.Columns - 2; j += 2)
+            //    {
+            //        values[i, j].Dxy = 0.75 * oneDivHy * (values[i, j + 1].Dx - values[i, j - 1].Dx)
+            //                           - 0.25 * (values[i, j + 1].Dxy - values[i, j - 1].Dxy);
+            //    }
+            //}
         }
 
         protected override void FillXYDerivations(KnotMatrix values)
