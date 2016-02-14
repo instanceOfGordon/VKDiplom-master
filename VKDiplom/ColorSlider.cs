@@ -13,10 +13,15 @@ namespace VKDiplom
             Minimum = 0;
             Maximum = 359;
             Value = 179;
-            var colorXna = ColorUtils.FromHsv((float)Value, 1, 1, 1);
+            UpdateBackgroundColor();
+            ValueChanged += OnValueChanged;
+        }
+
+        private void UpdateBackgroundColor()
+        {
+            var colorXna = ColorUtils.FromHsv((float) Value, 1, 1, 1);
             var color = new SolidColorBrush(System.Windows.Media.Color.FromArgb(colorXna.A, colorXna.R, colorXna.G, colorXna.B));
             Background = color;
-            ValueChanged += OnValueChanged;
         }
 
         private void OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> args)
@@ -27,6 +32,23 @@ namespace VKDiplom
             var colorXna = ColorUtils.FromHsv((float)colorSlider.Value, 1, 1, 1);
             var color = new SolidColorBrush(System.Windows.Media.Color.FromArgb(colorXna.A, colorXna.R, colorXna.G, colorXna.B));
             Background = color;
+        }
+
+        public new bool IsEnabled
+        {
+            get { return base.IsEnabled; }
+            set
+            {
+                base.IsEnabled = value;
+                if (value)
+                {
+                    UpdateBackgroundColor();
+                }
+                else
+                {
+                    Background = new SolidColorBrush(Colors.Transparent);
+                }
+            }
         }
     }
 }

@@ -28,17 +28,11 @@ namespace VKDiplom
         private static readonly Color DefaultColor = Color.FromNonPremultiplied(128, 128, 128, 208);
         private static readonly SolidColorBrush TransparentBrush = new SolidColorBrush(Colors.Transparent);
         private static readonly SolidColorBrush PurpleBrush = new SolidColorBrush(Colors.Purple);
-        //GraphicsDevice _graphicsDevice;
-        //private SceneTime _sceneTime;
         private readonly RotateCamera _camera = new RotateCamera();
         private readonly Color _color = DefaultColor;
         private readonly ColorWheel _colorWheel = new ColorWheel();
         private readonly SolidColorBrush _disabledColorBrush = new SolidColorBrush(Colors.DarkGray);
-        //private readonly SolidColorBrush _disabledColorBrush = new SolidColorBrush(Colors.DarkGray);
         private readonly DrawStyle _drawStyle = DrawStyle.Surface;
-        
-        //private readonly InterpolativeMathFunction _aproximationFunction = new InterpolativeMathFunction();
-
         private readonly TextureStyle _textureStyle = TextureStyle.HeightColored;
         private bool _isLeftMouseButtonDown;
         // Scenes
@@ -75,8 +69,7 @@ namespace VKDiplom
         {
             var checkBox = sender as CheckBox;
             if (checkBox ==null ||ColorSlider == null) return;
-            if (checkBox.IsChecked.HasValue) ColorSlider.IsEnabled = false;
-           // ShapeInfoTextBox.Text = (checkBox.IsChecked != null && checkBox.IsChecked.Value).ToString();
+            if (checkBox.IsChecked.HasValue) ColorSlider.IsEnabled = false;         
         }
 
 
@@ -84,7 +77,7 @@ namespace VKDiplom
         {
             var checkBox = sender as CheckBox;
             if (checkBox == null || ColorSlider == null) return;
-            if (checkBox.IsChecked.HasValue) ColorSlider.IsEnabled = true;
+            if (checkBox.IsChecked.HasValue) ColorSlider.IsEnabled = true;       
         }
 
         private void FocusDrawingSurface_OnClick(object sender, MouseEventArgs e)

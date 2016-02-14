@@ -29,6 +29,10 @@
         <Style x:Key="TopGridBackground" TargetType="Grid">
             <Setter Property="Background" Value="#301848"/>
         </Style>
+        <Style x:Key="DrawingSurfaceBorder" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#402060"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
         <Style x:Key="GridBackground" TargetType="Grid">
             <Setter Property="Background" Value="#402060"/>
         </Style>

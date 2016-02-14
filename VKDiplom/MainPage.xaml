@@ -33,10 +33,10 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Name="OpenButton" Content="Open" Style="{StaticResource TopStackPanelButton}"
+            <!--<Button Grid.Column="0" Name="OpenButton" Content="Open" Style="{StaticResource TopStackPanelButton}"
                     Click="LoadFromFile_OnClick" />
             <Button Grid.Column="1" Name="SaveButton" Content="Save" Style="{StaticResource TopStackPanelButton}"
-                    Click="SaveToFile_OnClick" />
+                    Click="SaveToFile_OnClick" />-->
             <Button Grid.Column="2" Name="SettingsButton" Content="Settings"
                     Style="{StaticResource TopStackPanelButton}"
                     Click="SettingsButton_OnCLick" />
@@ -44,11 +44,11 @@
             <Button Grid.Column="3" Name="AboutButton" Content="Help" Style="{StaticResource TopStackPanelButton}"
                     Click="HelpButton_OnCLick" />
 
-            <vkDiplom:SplineComboBox x:Name="ShapesComboBox" Grid.Column="4" Margin="4" Style="{StaticResource ComboBox}"
-                      SelectionChanged="SplineComboBox_OnSelectedItem" Background="#FF3F003F" />
-            <Button Grid.Column="5" Style="{StaticResource CommonButton}" Margin="5" FontSize="11" Content="Delete" Click="DeleteShapeButton_OnClick">
-                
-            </Button>
+            <vkDiplom:SplineComboBox x:Name="ShapesComboBox" Grid.Column="4" Margin="4"
+                                     Style="{StaticResource ComboBox}"
+                                     SelectionChanged="SplineComboBox_OnSelectedItem" Background="#FF3F003F" />
+            <Button Grid.Column="5" Style="{StaticResource CommonButton}" Margin="4" FontSize="10" Content="Delete"
+                    Click="DeleteShapeButton_OnClick" />
             <Border Grid.Column="6" Margin="10,0,0,0" Name="FxBackground" BorderBrush="Black" BorderThickness="0"
                     Height="auto" Width="auto" Background="Purple" HorizontalAlignment="Right">
                 <Image Source="Resources/Images/fx.png" Name="FDxDyIcon"
@@ -72,70 +72,64 @@
                 <ColumnDefinition MinWidth="500" Width="2*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <!--<sdk:Label Grid.Column="0" Height="23" Grid.ColumnSpan="2" VerticalAlignment="Top"
-                       HorizontalAlignment="Left" Margin="10" Content="MathFunction"
-                       x:Name="MainDrawingSurfaceLabel" />-->
-            <DrawingSurface Grid.Column="0" x:Name="FunctionDrawingSurface"
+            <Border Grid.Row="0" Style="{StaticResource DrawingSurfaceBorder}">
+                <DrawingSurface Grid.Column="0" x:Name="FunctionDrawingSurface"
                             Draw="FunctionDrawingSurface_OnDraw"
                             SizeChanged="FunctionDrawingSurface_OnSizeChanged"
                             MouseWheel="DrawingSurface_OnMouseWheel"
-                           
-                            
+
+
                             Loaded="FunctionDrawingSurface_OnLoaded"
                             MinWidth="500" MinHeight="300" />
-          
-                <Image Name="HorizontalRotatorImage" Grid.Column="0" Opacity="0.6" Source="Resources/Images/arrvhor.png" 
-                       Height="20" Width="Auto" Stretch="Fill" VerticalAlignment="Bottom" Margin="120,10,120,10"
-                       MouseEnter="RotatorImage_OnMouseEnter"
-                       MouseLeave="RotatorImage_OnMouseLeave"
-                       MouseLeftButtonDown="RotatorImage_OnLeftMouseButtonDown"
-                       MouseMove="HorizontalRotatorImage_OnMouseMove"
-                       MouseLeftButtonUp="RotatorImage_OnLeftMouseButtonUp"
-                       />
-            <Image Name="VerticalRotatorImage" Grid.Column="0" Opacity="0.6" Source="Resources/Images/arrver.png" 
-                       Height="Auto" Width="20" Stretch="Fill" HorizontalAlignment="Right" Margin="10,80,10,80"
-                       MouseEnter="RotatorImage_OnMouseEnter"
-                       MouseLeave="RotatorImage_OnMouseLeave"
-                       MouseLeftButtonDown="RotatorImage_OnLeftMouseButtonDown"
-                       MouseMove="VerticalRotatorImage_OnMouseMove"
-                       MouseLeftButtonUp="RotatorImage_OnLeftMouseButtonUp"
-                       />
-           
+                </Border>
+                    <Image Name="HorizontalRotatorImage" Grid.Column="0" Opacity="0.6" Source="Resources/Images/arrvhor.png"
+                   Height="30" Width="Auto" MaxWidth="600" Stretch="Fill" VerticalAlignment="Bottom" Margin="100,10,100,10"
+                   MouseEnter="RotatorImage_OnMouseEnter"
+                   MouseLeave="RotatorImage_OnMouseLeave"
+                   MouseLeftButtonDown="RotatorImage_OnLeftMouseButtonDown"
+                   MouseMove="HorizontalRotatorImage_OnMouseMove"
+                   MouseLeftButtonUp="RotatorImage_OnLeftMouseButtonUp" />
+            <Image Name="VerticalRotatorImage" Grid.Column="0" Opacity="0.6" Source="Resources/Images/arrver.png"
+                   Height="Auto" MaxHeight="400" Width="30" Stretch="Fill" HorizontalAlignment="Right" Margin="10,60,10,60"
+                   MouseEnter="RotatorImage_OnMouseEnter"
+                   MouseLeave="RotatorImage_OnMouseLeave"
+                   MouseLeftButtonDown="RotatorImage_OnLeftMouseButtonDown"
+                   MouseMove="VerticalRotatorImage_OnMouseMove"
+                   MouseLeftButtonUp="RotatorImage_OnLeftMouseButtonUp" />
+
             <Line Grid.Column="0" VerticalAlignment="Center" Fill="LightGray" Stroke="LightGray"
                   HorizontalAlignment="Left" X1="0" X2="20" Margin="9" StrokeThickness="1" Y1="0" Y2="0" />
             <Slider MaxHeight="300" Grid.Column="0" Name="ZScaleSlider" Minimum="0" Maximum="2" Value="1"
                     ValueChanged="ScaleSlider_OnValueChanged" Orientation="Vertical" HorizontalAlignment="Left"
                     Margin="10,30,0,30" />
             <CheckBox Grid.Column="0" Name="AutoScaleCheckBox"
-                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="Auto Scale" Foreground="Gray"
-                    Margin="10,30,0,5" Checked="AutoScaleCheckBox_OnChecked" Unchecked="AutoScaleCheckBox_OnUnchecked"/>
+                      HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="Auto Scale" Foreground="Gray"
+                      Margin="10,30,0,5" Checked="AutoScaleCheckBox_OnChecked"
+                      Unchecked="AutoScaleCheckBox_OnUnchecked" />
             <Grid Grid.Column="1" MinWidth="300">
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight="150" />
                     <RowDefinition MinHeight="150" />
                 </Grid.RowDefinitions>
-                <!--<sdk:Label Grid.Row="0" Height="23" Content="1st derivation"
-                           x:Name="SecondDrawingSurfaceLabel"
-                           VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" />-->
-                <DrawingSurface Grid.Row="0" x:Name="FirstDerivationDrawingSurface"
+                <Border Grid.Row="0" Style="{StaticResource DrawingSurfaceBorder}">
+                    <DrawingSurface Grid.Row="0" x:Name="FirstDerivationDrawingSurface"
                                 Draw="FirstDerivationDrawingSurface_OnDraw"
                                 SizeChanged="FirstDerivationDrawingSurface_OnSizeChanged"
                                 MouseWheel="DrawingSurface_OnMouseWheel"
-                              
-                                Loaded="FirstDerivationDrawingSurface_OnLoaded"
-                                MinWidth="300" MinHeight="150" />
 
-                <!--<sdk:Label Grid.Row="1" Height="23" Content="2nd derivation"
-                           x:Name="ThirdDrawingSurfaceLabel"
-                           VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" />-->
+                                Loaded="FirstDerivationDrawingSurface_OnLoaded"
+                                MinWidth="300" MinHeight="150"/>
+                </Border>
+                <Border Grid.Row="1" Style="{StaticResource DrawingSurfaceBorder}">
                 <DrawingSurface Grid.Row="1" x:Name="SecondDerivationDrawingSurface"
                                 Draw="SecondDerivationDrawingSurface_OnDraw"
                                 SizeChanged="SecondDerivationDrawingSurface_OnSizeChanged"
                                 MouseWheel="DrawingSurface_OnMouseWheel"
-                              
+
 
                                 Loaded="SecondDerivationDrawingSurface_OnLoaded"
                                 MinWidth="300" MinHeight="150" />
+                </Border>
                 <sdk:Label Grid.Column="0" Grid.Row="1" Name="CalcTimeLabel" Content="Spline calculated in: ms"
                            Foreground="Gray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"
                            Width="auto" />
@@ -144,27 +138,21 @@
         <Grid Style="{StaticResource GridBackground}" Grid.Row="2" Grid.Column="0" Height="auto">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
-               
-                <RowDefinition Height="auto" />
 
             </Grid.RowDefinitions>
-            <!--<sdk:TabControl Grid.Row="0" Height="150" Margin="10" x:Name="TabControl"
-                            Style="{StaticResource TabControlStyle}">
-                <sdk:TabItem Header="Hermite spline" Style="{StaticResource TabItemStyle}">-->
+         
             <Grid Name="SplinesInputGrid" Style="{StaticResource TabItemGridBackground}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="150" MinWidth="50" MaxWidth="200" />
                 </Grid.ColumnDefinitions>
-                
-                <TextBox Name="ShapeInfoTextBox" Grid.Column="1" Grid.Row="0" Margin="0,10,10,5" Background="#29FFFFFF" Foreground="AntiqueWhite"/>
-                
-               
+
+
                 <Grid x:Name="SplineGenGrid" Grid.Column="0" Row="0" Style="{StaticResource TabItemGridBackground}">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="auto" />                    
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="1" Grid.Column="0">
                         <Grid.ColumnDefinitions>
@@ -172,9 +160,9 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <sdk:Label Grid.Column="0" Content="Expression: " Padding="10"
-                           Style="{StaticResource LabelForeground}" />
-                        <TextBox  Grid.Column="1" x:Name="MathExpressionTextBox" Height="25" Margin="5,5,10,5"
-                         Text="sin(sqrt(x^2+y^2))" />
+                                   Style="{StaticResource LabelForeground}" />
+                        <TextBox Grid.Column="1" x:Name="MathExpressionTextBox" Height="25" Margin="0,5,10,10"
+                                 Text="sin(sqrt(x^2+y^2))" />
                     </Grid>
                     <Grid Grid.Row="0" Margin="0,0,0,5">
                         <Grid.RowDefinitions>
@@ -190,10 +178,10 @@
                             <ColumnDefinition Width="40" />
                             <ColumnDefinition Width="105" />
                             <ColumnDefinition Width="105" />
+                            <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
-
                         </Grid.ColumnDefinitions>
-                        
+
                         <sdk:Label Grid.Row="0" Grid.Column="0" Content="U min: " Margin="10,10,10,0"
                                    Style="{StaticResource LabelForeground}" />
                         <TextBox Grid.Row="0" Grid.Column="1" x:Name="HermiteUMinTextBox"
@@ -224,66 +212,59 @@
                                    HorizontalAlignment="Right"
                                    Style="{StaticResource LabelForeground}" Width="auto" />
                         <vkDiplom:SplineComboBox x:Name="InterpolationTypeComboBox"
-                                  SelectionChanged="InterpolationTypeComboBox_OnSelectionChanged" Grid.Row="0"
-                                  Grid.Column="7" Margin="5,10,0,0"
-                                  HorizontalAlignment="Left" Width="100"
-                                  SelectedIndex="0" Style="{StaticResource ComboBox}" />
+                                                 SelectionChanged="InterpolationTypeComboBox_OnSelectionChanged"
+                                                 Grid.Row="0"
+                                                 Grid.Column="7" Margin="5,10,0,0"
+                                                 HorizontalAlignment="Left" Width="100"
+                                                 SelectedIndex="0" Style="{StaticResource ComboBox}" />
                         <sdk:Label Content="Knots generator: " Grid.Row="1" Grid.Column="6" Margin="0,5,0,0"
                                    HorizontalAlignment="Right"
                                    Style="{StaticResource LabelForeground}" Width="auto" />
-                        <vkDiplom:SplineComboBox x:Name="KnotsGeneratorComboBox" Margin="5,5,0,0" Grid.Row="1" Grid.Column="7"
-                                  HorizontalAlignment="Left" Width="100"
-                                  SelectedIndex="0" Style="{StaticResource ComboBox}" />
-                        <!--<CheckBox Grid.Column="8" Grid.Row="1" Content="Difference" Style="{StaticResource CheckBox}" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center"></CheckBox>-->
-                        <Button Name="SplineSubtractionButton" Grid.Column="8" Grid.Row="1" Style="{StaticResource CommonButton}" Content="Subtract" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="60" Height="23" Click="SplineSubtractionButton_OnClick"></Button>
-                        <!-- COLOR PICKER -->
+                        <vkDiplom:SplineComboBox x:Name="KnotsGeneratorComboBox" Margin="5,5,0,0" Grid.Row="1"
+                                                 Grid.Column="7"
+                                                 HorizontalAlignment="Left" Width="100"
+                                                 SelectedIndex="0" Style="{StaticResource ComboBox}" />
+                        <Button Name="SplineSubtractionButton" Grid.Column="8" Grid.Row="1"
+                                Style="{StaticResource CommonButton}" Content="Subtract" Margin="5,5,5,0"
+                                HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="60" Height="23"
+                                Click="SplineSubtractionButton_OnClick" />
 
-
+                        <Grid Grid.Column="9" Grid.Row="1" Margin="0,0,10,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="90" />
+                            </Grid.ColumnDefinitions>
+                            <vkDiplom:ColorSlider IsEnabled="False" x:Name="ColorSlider"
+                                                  Grid.Column="0" Grid.Row="0" Margin="5,5,0,0" />
+                            <CheckBox x:Name="ColorCheckBox" Grid.Row="0" Grid.Column="1" Margin="2,5,10,0"
+                                      HorizontalAlignment="Left" VerticalAlignment="Center" Content="Auto color"
+                                      IsChecked="True"
+                                      Checked="ColorCheckBox_OnChecked" Unchecked="ColorCheckBox_OnUnchecked"
+                                      Style="{StaticResource CheckBox}"
+                                      />
+                        </Grid>
                     </Grid>
 
-
-                    <!--<StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <sdk:Label Content="Splines: " Padding="10"
-                           Style="{StaticResource LabelForeground}" />
-                </StackPanel>-->
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="1" Style="{StaticResource GridBackground}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="2*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Grid.Row="1" x:Name="DrawButton" Content="Draw" Click="DrawButton_OnClick"
+                            Margin="10,5,10,10"
+                            Style="{StaticResource CommonButton}" />
+                    <Button Grid.Column="0" Grid.Row="0" x:Name="ClearButton" Content="Clear"
+                            Click="ClearButton_OnClick"
+                            Margin="10,10,10,5"
+                            Style="{StaticResource CommonButton}" />
 
                 </Grid>
             </Grid>
-            <!--</sdk:TabItem>
-                <sdk:TabItem Header="Settings" Style="{StaticResource TabItemStyle}">
-                    <Grid Style="{StaticResource TabItemGridBackground}" />
-                </sdk:TabItem>
-            </sdk:TabControl>-->
 
-            
-            <Grid Grid.Row="1" Style="{StaticResource GridBackground}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="auto" />
-
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="100" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="4" x:Name="DrawButton" Content="Draw" Click="DrawButton_OnClick"
-                        Margin="10"
-                        Style="{StaticResource CommonButton}" />
-                <Button Grid.Column="3" x:Name="ClearButton" Content="Clear" Click="ClearButton_OnClick"
-                        Margin="10"
-                        Style="{StaticResource CommonButton}" />
-
-                <!--<StackPanel x:Name="ColorStackPanel" Background="DarkGray"
-                            Margin="10" Orientation="Horizontal" HorizontalAlignment="Right" Width="100"
-                            Grid.ColumnSpan="2"
-                            Grid.Column="0" />-->
-                <vkDiplom:ColorSlider IsEnabled="False" x:Name="ColorSlider"
-                       Grid.ColumnSpan="2" Grid.Column="0" Margin="10" />
-                <CheckBox x:Name="ColorCheckBox" Grid.Row="0" Grid.Column="1" Margin="10"
-                          HorizontalAlignment="Left" VerticalAlignment="Center" Content="Auto color" IsChecked="True"
-                          Checked="ColorCheckBox_OnChecked" Unchecked="ColorCheckBox_OnUnchecked" Style="{StaticResource CheckBox}"
-                          Width="77" Grid.ColumnSpan="2" />
-                <!--<TextBox Grid.Row="0" Grid.Column="2" Margin="10" HorizontalAlignment="Center" Width="150" Name="DebugBox"></TextBox>-->
-            </Grid>
 
         </Grid>
 

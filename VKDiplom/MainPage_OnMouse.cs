@@ -52,7 +52,7 @@ namespace VKDiplom
             if (!_isLeftMouseButtonDown) return;
             var currentPosition = e.GetPosition(null);
             var rotation = 0.005f * (float)(_previousMousePosition.X - currentPosition.X);
-            _camera.HorizontalAngle += rotation;
+            _camera.HorizontalAngle -= rotation;
             _previousMousePosition = e.GetPosition(null);
 
         }

@@ -112,7 +112,11 @@ namespace VKDiplom
 
             foreach (var drawable in _functionScene)
             {
-                
+                var bicSpline = drawable as BicubicHermiteSpline;
+                if (bicSpline != null)
+                {
+                    
+                }
             }
         }
 
