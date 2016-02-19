@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VKDiplom", "VKDiplom\VKDiplom.csproj", "{C480742E-7EE3-4F31-A11B-BEC1DF0D52E0}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{E365F054-83D6-4BAB-9FF7-B0C5DD33A3FB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SplineKnotsBenchmark", "SplineKnotsBenchmark\SplineKnotsBenchmark.vcxproj", "{930DA775-96D5-4368-B593-743D0788BC3A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SplineKnotsBenchmark2", "SplineKnotsBenchmark2\SplineKnotsBenchmark2.vcxproj", "{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -251,6 +253,40 @@ Global
 		{930DA775-96D5-4368-B593-743D0788BC3A}.Release|x64.Build.0 = Release|x64
 		{930DA775-96D5-4368-B593-743D0788BC3A}.Release|x86.ActiveCfg = Release|Win32
 		{930DA775-96D5-4368-B593-743D0788BC3A}.Release|x86.Build.0 = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_ICL|Any CPU.ActiveCfg = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_ICL|Any CPU.Build.0 = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_ICL|x64.ActiveCfg = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_ICL|x64.Build.0 = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_ICL|x86.ActiveCfg = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_ICL|x86.Build.0 = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_MSVC|Any CPU.ActiveCfg = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_MSVC|Any CPU.Build.0 = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_MSVC|x64.ActiveCfg = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_MSVC|x64.Build.0 = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_MSVC|x86.ActiveCfg = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchAvx_MSVC|x86.Build.0 = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_ICL|Any CPU.ActiveCfg = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_ICL|Any CPU.Build.0 = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_ICL|x64.ActiveCfg = Bench_SSE_ICL|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_ICL|x64.Build.0 = Bench_SSE_ICL|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_ICL|x86.ActiveCfg = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_ICL|x86.Build.0 = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_MSVC|Any CPU.ActiveCfg = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_MSVC|Any CPU.Build.0 = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_MSVC|x64.ActiveCfg = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_MSVC|x64.Build.0 = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_MSVC|x86.ActiveCfg = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.BenchSSE_MSVC|x86.Build.0 = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Debug|x64.ActiveCfg = Debug|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Debug|x64.Build.0 = Debug|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Debug|x86.ActiveCfg = Debug|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Debug|x86.Build.0 = Debug|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Release|Any CPU.ActiveCfg = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Release|x64.ActiveCfg = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Release|x64.Build.0 = Release|x64
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Release|x86.ActiveCfg = Release|Win32
+		{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

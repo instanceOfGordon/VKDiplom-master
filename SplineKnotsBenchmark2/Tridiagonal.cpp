@@ -1,24 +1,19 @@
 #include "stdafx.h"
 #include "Tridiagonal.h"
 #include "utils.h"
-#include "ReducedDeboorTridiagonal.h"
 #include <algorithm>
 
-splineknots::Tridiagonal* splineknots::Tridiagonal::Clone() const
-{
-	return new Tridiagonal(*this);
-}
+
 
 splineknots::Tridiagonal::Tridiagonal(double lower_value, double main_value, double upper_value)
-	:lu_buffer_(),
+	:lu_buffer_(), 
 	right_side_buffer_(),
-	lower_diagonal_value(lower_value),
-	main_diagonal_value(main_value),
-	upper_diagonal_value(upper_value)
+	 lower_diagonal_value(lower_value),
+	 main_diagonal_value(main_value),
+	 upper_diagonal_value(upper_value)
 
 {
 }
-
 
 void splineknots::Tridiagonal::ResizeBuffers(size_t newsize, bool shrinking_allowed)
 {
@@ -50,8 +45,9 @@ void splineknots::Tridiagonal::ResizeRightSide(size_t newsize, bool shrinking_al
 	{
 		right_side_buffer_.resize(newsize);
 	}
-
+	
 }
+
 
 double* splineknots::Tridiagonal::ResetBufferAndGet()
 {

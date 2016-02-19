@@ -6,9 +6,11 @@
 #pragma once
 
 #include "targetver.h"
+#include <memory>
 #include <stdio.h>
 #include <tchar.h>
-#include <memory>
+
+
 
 
 // TODO: reference additional headers your program requires here

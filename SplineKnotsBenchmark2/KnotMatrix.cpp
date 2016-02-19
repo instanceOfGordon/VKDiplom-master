@@ -3,6 +3,9 @@
 #include "utils.h"
 #include <iostream>
 
+//#include "utils_template.cpp"
+
+
 splineknots::KnotMatrix::~KnotMatrix() noexcept
 {
 	for (size_t i = 0; i < rows_count_; i++)
@@ -63,8 +66,8 @@ void splineknots::KnotMatrix::Print()
 
 splineknots::KnotMatrix::KnotMatrix()
 	:rows_count_(0),
-	columns_count_(0),
-	matrix_(nullptr)
+	 columns_count_(0),
+	 matrix_(nullptr)
 {
 }
 
@@ -83,7 +86,7 @@ bool splineknots::KnotMatrix::IsNull()
 
 splineknots::KnotMatrix::KnotMatrix(size_t rows, size_t columns)
 	: rows_count_(rows),
-	columns_count_(columns)
+	  columns_count_(columns)
 {
 	matrix_ = new splineknots::Knot*[rows];
 	for (size_t i = 0; i < rows; i++)
@@ -94,7 +97,7 @@ splineknots::KnotMatrix::KnotMatrix(size_t rows, size_t columns)
 
 splineknots::KnotMatrix::KnotMatrix(const KnotMatrix& other)
 	: rows_count_(other.rows_count_),
-	columns_count_(other.columns_count_)
+	  columns_count_(other.columns_count_)
 {
 	matrix_ = new Knot*[rows_count_];
 	for (size_t i = 0; i < other.RowsCount(); i++)
@@ -106,7 +109,7 @@ splineknots::KnotMatrix::KnotMatrix(const KnotMatrix& other)
 
 splineknots::KnotMatrix::KnotMatrix(KnotMatrix&& other)
 	: rows_count_(other.rows_count_),
-	columns_count_(other.columns_count_)
+	  columns_count_(other.columns_count_)
 {
 	matrix_ = other.matrix_;
 	other.matrix_ = nullptr;

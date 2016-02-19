@@ -6,7 +6,7 @@ using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.SplineKnots
 {
-    public class DeBoorKnotsGenerator : KnotsGenerator//,IDeBoor
+    public class DeBoorKnotsGenerator : KnotsGenerator
     {
         protected virtual double[] MainDiagonal(int unknownsCount)
         {
@@ -128,7 +128,8 @@ namespace HermiteInterpolation.SplineKnots
             }
         }
 
-        protected virtual void FillXDerivations(int columnIndex, KnotMatrix values)
+        protected virtual void FillXDerivations(int columnIndex, KnotMatrix values, 
+            double[] lowerDiagonal = null, double[] mainDiagonal = null, double[] upperDiagonal = null)
         {
             var unknownsCount = values.Rows - 2;
             if (unknownsCount == 0) return;
@@ -138,12 +139,13 @@ namespace HermiteInterpolation.SplineKnots
             var dlast = values[values.Rows - 1,columnIndex].Dx;
             var dfirst = values[0,columnIndex].Dx;
 
-            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
+            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset,lowerDiagonal,mainDiagonal,upperDiagonal);
         }
 
 
 
-        protected virtual void FillYDerivations(int rowIndex, KnotMatrix values)
+        protected virtual void FillYDerivations(int rowIndex, KnotMatrix values,
+            double[] lowerDiagonal = null, double[] mainDiagonal = null, double[] upperDiagonal = null)
         {
             var unknownsCount = values.Columns - 2;
             if (unknownsCount == 0) return;
@@ -153,10 +155,11 @@ namespace HermiteInterpolation.SplineKnots
             var dfirst = values[rowIndex,0].Dy;
             var dlast = values[rowIndex,values.Columns - 1].Dy;
 
-            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
+            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset, lowerDiagonal, mainDiagonal, upperDiagonal);
         }
 
-        protected virtual void FillXYDerivations(int columnIndex, KnotMatrix values)
+        protected virtual void FillXYDerivations(int columnIndex, KnotMatrix values,
+            double[] lowerDiagonal = null, double[] mainDiagonal = null, double[] upperDiagonal = null)
         {
             var unknownsCount = values.Rows - 2;
             if (unknownsCount == 0) return;
@@ -166,10 +169,11 @@ namespace HermiteInterpolation.SplineKnots
             var dlast = values[values.Rows - 1,columnIndex].Dxy;
             var dfirst = values[0,columnIndex].Dxy;
 
-            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
+            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset, lowerDiagonal, mainDiagonal, upperDiagonal);
         }
 
-        protected virtual void FillYXDerivations(int rowIndex, KnotMatrix values)
+        protected virtual void FillYXDerivations(int rowIndex, KnotMatrix values,
+            double[] lowerDiagonal = null, double[] mainDiagonal = null, double[] upperDiagonal = null)
         {
             var unknownsCount = values.Columns - 2;
             if (unknownsCount == 0) return;
@@ -179,15 +183,19 @@ namespace HermiteInterpolation.SplineKnots
             var dfirst = values[rowIndex,0].Dxy;
             var dlast = values[rowIndex,values.Columns - 1].Dxy;
 
-            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset);
+            SolveTridiagonal(rget, h, dfirst, dlast, unknownsCount, dset, lowerDiagonal, mainDiagonal, upperDiagonal);
         }
 
         protected virtual void SolveTridiagonal(Func<int, double> rightSideValuesSelector, double h, double dfirst, double dlast,
-            int unknownsCount, Action<int, double> unknownsSetter)
+            int unknownsCount, Action<int, double> unknownsSetter,
+            double[] lowerDiagonal = null, double[] mainDiagonal = null, double[] upperDiagonal = null)
         {
+            lowerDiagonal = lowerDiagonal ?? LowerDiagonal(unknownsCount);
+            mainDiagonal = mainDiagonal ?? MainDiagonal(unknownsCount);
+            upperDiagonal = upperDiagonal ?? UpperDiagonal(unknownsCount);
             var result = RightSide(rightSideValuesSelector, h, dfirst, dlast, unknownsCount);
-            LinearSystems.SolveTridiagonalSystem(LowerDiagonal(unknownsCount), MainDiagonal(unknownsCount),
-                UpperDiagonal(unknownsCount), result);
+            LinearSystems.SolveTridiagonalSystem(lowerDiagonal, mainDiagonal,
+                upperDiagonal, result);
 
             for (var i = 0; i < result.Length; i++)
             {

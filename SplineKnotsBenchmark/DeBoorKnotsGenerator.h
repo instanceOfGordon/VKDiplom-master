@@ -3,8 +3,8 @@
 #include "SurfaceDimension.h"
 #include <functional>
 #include <vector>
+#include <omp.h>
 #include "Tridiagonal.h"
-
 
 namespace splineknots
 {
@@ -17,8 +17,8 @@ namespace splineknots
 		Tridiagonals tridagonals_;
 		bool is_parallel_;
 	public:
-		DeBoorKnotsGenerator(MathFunction math_function);
-		DeBoorKnotsGenerator(InterpolativeMathFunction math_function);
+		DeBoorKnotsGenerator(MathFunction math_function, const size_t u_count=0, const size_t v_count=0);
+		DeBoorKnotsGenerator(InterpolativeMathFunction math_function,const size_t u_count=0, const size_t v_count=0);
 		~DeBoorKnotsGenerator() override;
 		DeBoorKnotsGenerator(const DeBoorKnotsGenerator& other);
 		DeBoorKnotsGenerator(DeBoorKnotsGenerator&& other);
@@ -27,6 +27,7 @@ namespace splineknots
 		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension) override;
 		void InParallel(bool value);
 		bool IsParallel();
+		
 	protected:
 		struct Precalculated
 		{
@@ -41,20 +42,25 @@ namespace splineknots
 		DeBoorKnotsGenerator(const InterpolativeMathFunction math_function, std::unique_ptr<Tridiagonal> tridiagonal);
 		Tridiagonals& Tridagonals();
 		Tridiagonal& Tridiagonal(const int index = 0);
+
 		virtual void RightSide(const RightSideSelector& right_side_variables, const Precalculated& precalculated, const double dfirst, const double dlast,
-		                       const int unknowns_count, double* const rightside_buffer);
+		               const int unknowns_count, double* const rightside_buffer);
+
 		virtual void Precalculate(const SurfaceDimension& udimension, const SurfaceDimension& vdimension);
 		void InitializeKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, KnotMatrix& values);
 		virtual void FillXDerivations(KnotMatrix& values);
 		virtual void FillXYDerivations(KnotMatrix& values);
 		virtual void FillYDerivations(KnotMatrix& values);
 		virtual void FillYXDerivations(KnotMatrix& values);
-		virtual void FillXDerivations(const int column_index, KnotMatrix& values);
-		virtual void FillXYDerivations(const int column_index, KnotMatrix& values);
-		virtual void FillYDerivations(const int row_index, KnotMatrix& values);
-		virtual void FillYXDerivations(const int row_index, KnotMatrix& values);
+		virtual void FillXDerivations(const int column_index, KnotMatrix& values, double* rightside_buffer = nullptr);
+		virtual void FillXYDerivations(const int column_index, KnotMatrix& values, double* rightside_buffer = nullptr);
+		virtual void FillYDerivations(const int row_index, KnotMatrix& values, double* rightside_buffer = nullptr);
+		virtual void FillYXDerivations(const int row_index, KnotMatrix& values, double* rightside_buffer = nullptr);
+
+
 		virtual void SolveTridiagonal(const RightSideSelector& selector, const Precalculated& precalculated, const double dfirst, const double dlast,
-		                              const int unknowns_count, UnknownsSetter& unknowns_setter);
+		                              const int unknowns_count, UnknownsSetter& unknowns_setter, double* rightside_buffer = nullptr);
+
 	private:
 		std::unique_ptr<Precalculated> precalculated_hx_;
 		std::unique_ptr<Precalculated> precalculated_hy_;
@@ -64,4 +70,6 @@ namespace splineknots
 		void SetPrecalculatedHX(std::unique_ptr<Precalculated> precalculated);
 		void SetPrecalculatedHY(std::unique_ptr<Precalculated> precalculated);
 	};
+
+	
 }

@@ -11,6 +11,7 @@
 #include "ComparisonBenchmarkResult.h"
 #include <numeric>
 #include <time.h>  
+#include "StopWatch.h"
 
 void LUComparison()
 {
@@ -63,25 +64,24 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 	reduced_times.reserve(num_iterations);
 	calculated_results.reserve(num_iterations * 2 * num_repetitions);
 
-	unsigned int start;// = clock();
-	unsigned int finish;
+	StopWatch sw;
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
-		start = clock();
+		sw.Start();
 		auto result = reduced.GenerateKnots(udimension);
-		finish = clock();
+		sw.Stop();
 		calculated_results.push_back(result[0]);
-		reduced_times.push_back(finish - start);
+		reduced_times.push_back(sw.EllapsedTime());
 	}
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
-		start = clock();
+		sw.Start();
 		auto result = full.GenerateKnots(udimension);
-		finish = clock();
+		sw.Stop();
 		calculated_results.push_back(result[0]);
-		full_times.push_back(finish - start);
+		full_times.push_back(sw.EllapsedTime());
 	}
 
 	auto full_time = std::accumulate(full_times.begin(), full_times.end(), 0)
@@ -107,34 +107,32 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 	splineknots::SurfaceDimension vdimension(udimension);
 
 	std::vector<double> calculated_results;
-	std::vector<unsigned int> full_times;
+	std::vector<double> full_times;
 	full_times.reserve(num_iterations);
-	std::vector<unsigned int> reduced_times;
+	std::vector<double> reduced_times;
 	reduced_times.reserve(num_iterations);
 	calculated_results.reserve(num_iterations * 2);
 
-	unsigned int start;
-	unsigned int finish;
-
+	StopWatch sw;
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
-		start = clock();
+		sw.Start();
 		auto result = reduced.GenerateKnots(udimension, vdimension);
-		finish = clock();
+		sw.Stop();
 		//result.Print();
 		calculated_results.push_back(result(1, 1).Dxy());
-		reduced_times.push_back(finish - start);
+		reduced_times.push_back(sw.EllapsedTime());
 	}
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
-		start = clock();
+		sw.Start();
 		auto result = full.GenerateKnots(udimension, vdimension);
-		finish = clock();
+		sw.Stop();
 		//result.Print();
 		calculated_results.push_back(result(1, 1).Dxy());
-		full_times.push_back(finish - start);
+		full_times.push_back(sw.EllapsedTime());
 	}
 
 	/*auto full_time = *std::min_element(std::begin(full_times), std::end(full_times));
@@ -143,7 +141,8 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		/ static_cast<double>(num_iterations);
 	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
 		/ static_cast<double>(num_iterations);
-	std::cout << "Ignore " << calculated_results[0] << std::endl;
+	auto idx = rand() % static_cast<int>(calculated_results.size());
+	std::cout << "Ignore " << static_cast<int>(calculated_results[idx]) << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
 
