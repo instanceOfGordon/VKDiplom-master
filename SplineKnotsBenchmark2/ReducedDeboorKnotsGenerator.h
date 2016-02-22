@@ -19,7 +19,6 @@ namespace splineknots
 		ReducedDeBoorKnotsGenerator(ReducedDeBoorKnotsGenerator&& other);
 		ReducedDeBoorKnotsGenerator& operator=(const ReducedDeBoorKnotsGenerator& other);
 		ReducedDeBoorKnotsGenerator& operator=(ReducedDeBoorKnotsGenerator&& other);
-
 		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, double* calculation_time = nullptr);
 		void InParallel(bool in_parallel);	
 	protected:
@@ -47,9 +46,11 @@ namespace splineknots
 
 			PrecalculatedReducedCross(const PrecalculatedReduced& precalculated_hx, const PrecalculatedReduced& precalculated_hy);
 		};
+
 		void InitializeKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, KnotMatrix& values);
 		void Precalculate(const SurfaceDimension& udimension, const SurfaceDimension& vdimension);
 		void InitializeBuffers(size_t u_count, size_t v_count);
+
 		template<typename RightSideSelector>
 		void RightSide(const RightSideSelector& right_side_variables, const PrecalculatedReduced& precalculated, const double dfirst, const double dlast,
 			const int unknowns_count, double* const rightside_buffer)
@@ -84,6 +85,7 @@ namespace splineknots
 				rightside_buffer[i] *= 0.5;
 			}
 		}
+
 		void RightSideCross(const KnotMatrix& knots, const int i, const double dfirst, const double dlast,
 			const int unknowns_count, double* rightside_buffer);
 		void FillXDerivations(KnotMatrix& values);
@@ -94,6 +96,7 @@ namespace splineknots
 		void FillXYDerivations(const int column_index, KnotMatrix& values);
 		void FillYDerivations(const int row_index, KnotMatrix& values);
 		void FillYXDerivations(const int row_index, KnotMatrix& values);
+
 		template<typename RightSideSelector, typename UnknownsSetter>
 		void SolveTridiagonal(const RightSideSelector& selector, const PrecalculatedReduced& precalculated, const double dfirst, const double dlast,
 			const int unknowns_count, UnknownsSetter& unknowns_setter)
@@ -107,6 +110,7 @@ namespace splineknots
 				unknowns_setter(2 * (k + 1), results_buffer[k]);
 			}
 		}
+
 	private:
 		std::unique_ptr<PrecalculatedReducedCross> precalculated_reduced_cross_;
 		std::unique_ptr<PrecalculatedReduced> precalculated_hx_;

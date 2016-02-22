@@ -8,7 +8,7 @@ namespace splineknots
 	class CurveDeboorKnotsGenerator final
 	{
 		InterpolativeMathFunction function_;
-		virtual KnotVector RightSide(const KnotVector& function_values, double h, double dfirst, double dlast);
+		KnotVector RightSide(const KnotVector& function_values, double h, double dfirst, double dlast);
 		void InitializeKnots(const SurfaceDimension& dimension, KnotVector& knots);
 	public:
 		CurveDeboorKnotsGenerator(const MathFunction function);

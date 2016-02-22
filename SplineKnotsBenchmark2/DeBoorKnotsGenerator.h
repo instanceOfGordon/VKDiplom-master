@@ -9,24 +9,6 @@
 
 namespace splineknots
 {
-	/*template<typename Selector>
-	class RightSideSelector
-	{
-		Selector selector_;
-		RightSideSelector(Selector selector) :selector_(selector){}
-		double operator()(int index) {
-			return selector_(index);
-		}
-	};
-	template<typename Setter>
-	class UnknownsSetter
-	{
-		Setter selector_;
-		UnknownsSetter(Setter setter) :selector_(setter) {}
-		double operator()(int index) {
-			return selector_(index);
-		}
-	};*/
 	typedef std::vector<std::unique_ptr<Tridiagonal>> Tridiagonals;
 
 	class DeBoorKnotsGenerator final
@@ -54,13 +36,12 @@ namespace splineknots
 		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, double* calculation_time = nullptr);
 		void InParallel(bool value);
 		bool IsParallel();
-	
-
 		void InitializeBuffers(const size_t u_count, const size_t v_count);
 		DeBoorKnotsGenerator(const MathFunction math_function, std::unique_ptr<Tridiagonal> tridiagonal);
 		DeBoorKnotsGenerator(const InterpolativeMathFunction math_function, std::unique_ptr<Tridiagonal> tridiagonal);
 		Tridiagonals& Tridagonals();
 		Tridiagonal& Tridiagonal(const int index = 0);
+
 		template<typename RightSideSelector>
 		void RightSide(const RightSideSelector& right_side_variables, const Precalculated& precalculated, const double dfirst, const double dlast,
 		               const int unknowns_count, double* const rightside_buffer)
@@ -73,6 +54,7 @@ namespace splineknots
 				rightside_buffer[i] = h3 * (right_side_variables(i + 2) - right_side_variables(i));
 			}
 		}
+
 		void Precalculate(const SurfaceDimension& udimension, const SurfaceDimension& vdimension);
 		void InitializeKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, KnotMatrix& values);
 		void FillXDerivations(KnotMatrix& values);
@@ -83,6 +65,7 @@ namespace splineknots
 		void FillXYDerivations(const int column_index, KnotMatrix& values);
 		void FillYDerivations(const int row_index, KnotMatrix& values);
 		void FillYXDerivations(const int row_index, KnotMatrix& values);
+		
 		template<typename RightSideSelector, typename UnknownsSetter>
 		void SolveTridiagonal(const RightSideSelector& selector, const Precalculated& precalculated, const double dfirst, const double dlast,
 		                      const int unknowns_count, UnknownsSetter& unknowns_setter)
@@ -97,6 +80,7 @@ namespace splineknots
 				unknowns_setter(k + 1, rightside[k]);
 			}
 		}
+
 	private:
 		std::unique_ptr<Precalculated> precalculated_hx_;
 		std::unique_ptr<Precalculated> precalculated_hy_;
