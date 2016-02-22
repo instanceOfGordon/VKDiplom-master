@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using HermiteInterpolation;
 using HermiteInterpolation.Numerics.MathFunctions;
 using HermiteInterpolation.Shapes;
@@ -14,6 +15,7 @@ using Microsoft.Xna.Framework;
 using VKDiplom.Engine;
 using VKDiplom.Engine.Utils;
 using static VKDiplom.Constants;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace VKDiplom
 {
@@ -106,14 +108,17 @@ namespace VKDiplom
                 color = ColorUtils.RandomShade((float)ColorSlider.Value);
             else
                 color = _colorWheel.Next;
+             //ShapesComboBox.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, color.R, color.G, color.B));
             shape.ColoredByShades(color);
             shape.DrawStyle = DrawStyle.Surface;
             shape.Name = MathExpressionTextBox.Text;
-
+            var currentSelectedIndex = ShapesComboBox.SelectedIndex;
             _functionScene.Add(shape,false);
-
+            ShapesComboBoxItems.Add(new ShapeComboBoxItem(shape.Name,color));
             ShapesComboBox.ItemsSource = null;
-            ShapesComboBox.ItemsSource = _functionScene;
+            ShapesComboBox.ItemsSource = ShapesComboBoxItems;
+            ShapesComboBox.SelectedIndex = currentSelectedIndex;
+            ShapesComboBox_OnSelectedItem(ShapesComboBox,null);
 
             fdshape.ColoredByShades(color);
             fdshape.DrawStyle = DrawStyle.Surface;

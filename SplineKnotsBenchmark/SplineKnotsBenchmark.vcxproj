@@ -17,6 +17,14 @@
       <Configuration>BenchAvx_MSVC_</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="BenchSSE_ICL_PG|Win32">
+      <Configuration>BenchSSE_ICL_PG</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="BenchSSE_ICL_PG|x64">
+      <Configuration>BenchSSE_ICL_PG</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="BenchSSE_ICL|Win32">
       <Configuration>BenchSSE_ICL</Configuration>
       <Platform>Win32</Platform>
@@ -72,6 +80,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
@@ -134,6 +149,15 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Intel C++ Compiler 16.0</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <InterproceduralOptimization>true</InterproceduralOptimization>
+    <UseIntelMKL>No</UseIntelMKL>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>Intel C++ Compiler 16.0</PlatformToolset>
@@ -207,6 +231,9 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_MSVC|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -233,6 +260,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_MSVC|x64'" Label="PropertySheets">
@@ -264,6 +294,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_MSVC|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
@@ -286,6 +319,9 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_MSVC|x64'">
@@ -327,6 +363,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
@@ -524,11 +582,54 @@
       <InterproceduralOptimization>MultiFile</InterproceduralOptimization>
       <Parallelization>false</Parallelization>
       <OptimizationDiagnosticLevel>Disable</OptimizationDiagnosticLevel>
-      <EnableGapAnalysis>Disable</EnableGapAnalysis>
+      <EnableGapAnalysis>Maximum</EnableGapAnalysis>
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
       <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
       <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
       <FloatingPointModel>Fast2</FloatingPointModel>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeedHighLevel</Optimization>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OpenMPSupport>true</OpenMPSupport>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <OptimizeForWindowsApplication>true</OptimizeForWindowsApplication>
+      <EnableMatrixMultiplyLibraryCall>Yes</EnableMatrixMultiplyLibraryCall>
+      <UseIntelOptimizedHeaders>true</UseIntelOptimizedHeaders>
+      <GenerateAlternateCodePaths>SSE41</GenerateAlternateCodePaths>
+      <OpenMP>GenerateParallelCode</OpenMP>
+      <Cpp0xSupport>true</Cpp0xSupport>
+      <UseProcessorExtensions>HOST</UseProcessorExtensions>
+      <InterproceduralOptimization>MultiFile</InterproceduralOptimization>
+      <Parallelization>True</Parallelization>
+      <OptimizationDiagnosticLevel>Disable</OptimizationDiagnosticLevel>
+      <EnableGapAnalysis>Disable</EnableGapAnalysis>
+      <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
+      <EmitDiagnosticsToFile>false</EmitDiagnosticsToFile>
+      <EmitOptimizationDiagnosticsToFile>false</EmitOptimizationDiagnosticsToFile>
+      <FloatingPointModel>Fast</FloatingPointModel>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <AssemblerOutput>NoListing</AssemblerOutput>
     </ClCompile>
@@ -888,6 +989,7 @@
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchSSE_MSVC|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchAvx_MSVC_|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchAVX_MSVC|Win32'">Create</PrecompiledHeader>
@@ -896,6 +998,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchAVX_ICL|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchSSE_ICL_PG|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchSSE_MSVC|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchAvx_MSVC_|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='BenchAVX_MSVC|x64'">Create</PrecompiledHeader>

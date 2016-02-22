@@ -49,6 +49,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BenchAvx_MSVC|AnyCPU'">
     <OutputPath>bin\BenchAvx_MSVC\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BenchSSE_ICL_PG|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\BenchSSE_ICL_PG\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>

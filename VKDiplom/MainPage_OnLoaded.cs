@@ -8,6 +8,8 @@ using System.Windows;
 using System.Windows.Browser;
 using System.Windows.Controls;
 using System.Windows.Graphics;
+using System.Windows.Input;
+using System.Windows.Media;
 using HermiteInterpolation;
 using HermiteInterpolation.Numerics;
 using HermiteInterpolation.Numerics.MathFunctions;
@@ -184,8 +186,9 @@ namespace VKDiplom
             KnotsGeneratorComboBox.SelectedValuePath = "Value";
             KnotsGeneratorComboBox.SelectedIndex = 0;
 
-            ShapesComboBox.ItemsSource = _functionScene;
-            ShapesComboBox.DisplayMemberPath = "Name";
+            //ShapesComboBox.ItemsSource = _functionScene;
+            //ShapesComboBox.DisplayMemberPath = "Name";
+            
             //var item = new ComboBoxItem();
             //item.Content = "Name";
             //item.Foreground = 
@@ -193,9 +196,7 @@ namespace VKDiplom
 
         }
 
-        //private void Select
-
-        private void SplineComboBox_OnSelectedItem(object sender, SelectionChangedEventArgs e)
+        private void ShapesComboBox_OnSelectedItem(object sender, SelectionChangedEventArgs e)
         {
 
             var splineSelector = sender as ComboBox;
@@ -207,6 +208,8 @@ namespace VKDiplom
             var selectedSpline = _functionScene[splineSelector.SelectedIndex] as Spline;
             if (selectedSpline != null)
             {
+                
+                //splineSelector.Foreground = new SolidColorBrush(Color.FromArgb(255, selectedSpline.Color.R, selectedSpline.Color.G, selectedSpline.Color.B));
                 var culture = CultureInfo.CurrentCulture;
                 HermiteUMinTextBox.Text = selectedSpline.UDimension.Min.ToString(culture);
                 HermiteVMinTextBox.Text = selectedSpline.VDimension.Min.ToString(culture);

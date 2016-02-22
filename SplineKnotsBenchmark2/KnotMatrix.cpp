@@ -10,10 +10,25 @@ splineknots::KnotMatrix::~KnotMatrix() noexcept
 {
 	for (size_t i = 0; i < rows_count_; i++)
 	{
-		delete[] matrix_[i];
+		delete[] x_[i];
+		delete[] y_[i];
+		delete[] z_[i];
+		delete[] dx_[i];
+		delete[] dy_[i];
+		delete[] dxy_[i];
 	}
-	delete[] matrix_;
-	matrix_ = nullptr;
+	delete[] x_;
+	delete[] y_;
+	delete[] z_;
+	delete[] dx_;
+	delete[] dy_;
+	delete[] dxy_;
+	x_ = nullptr;
+	y_ = nullptr;
+	z_ = nullptr;
+	dx_ = nullptr;
+	dy_ = nullptr;
+	dxy_ = nullptr;
 }
 
 size_t splineknots::KnotMatrix::RowsCount() const
@@ -26,22 +41,6 @@ size_t splineknots::KnotMatrix::ColumnsCount() const
 	return columns_count_;
 }
 
-
-splineknots::Knot& splineknots::KnotMatrix::operator()(int i, int j)
-{
-	return matrix_[i][j];
-}
-
-const splineknots::Knot& splineknots::KnotMatrix::operator()(int i, int j) const
-{
-	return matrix_[i][j];
-}
-
-splineknots::Knot*& splineknots::KnotMatrix::operator[](size_t k) const
-{
-	return matrix_[k];
-}
-
 void splineknots::KnotMatrix::Print()
 {
 	using namespace std;
@@ -52,12 +51,12 @@ void splineknots::KnotMatrix::Print()
 		for (size_t j = 0; j < columns_count_; j++)
 		{
 			cout << j << ":\n"
-				<< "x: " << matrix_[i][j].X() << '\n'
-				<< "y: " << matrix_[i][j].Y() << '\n'
-				<< "z: " << matrix_[i][j].Z() << '\n'
-				<< "dx: " << matrix_[i][j].Dx() << '\n'
-				<< "dy: " << matrix_[i][j].Dy() << '\n'
-				<< "dxy: " << matrix_[i][j].Dxy() << '\n';
+				<< "x: " << x_[i][j] << '\n'
+				<< "y: " << y_[i][j] << '\n'
+				<< "z: " << z_[i][j] << '\n'
+				<< "dx: " << dx_[i][j] << '\n'
+				<< "dy: " << dy_[i][j] << '\n'
+				<< "dxy: " << dxy_[i][j] << '\n';
 		}
 		cout << endl;
 	}
@@ -67,7 +66,8 @@ void splineknots::KnotMatrix::Print()
 splineknots::KnotMatrix::KnotMatrix()
 	:rows_count_(0),
 	 columns_count_(0),
-	 matrix_(nullptr)
+	 x_(nullptr), y_(nullptr), z_(nullptr),
+	 dx_(nullptr), dy_(nullptr), dxy_(nullptr)
 {
 }
 
@@ -79,7 +79,7 @@ splineknots::KnotMatrix splineknots::KnotMatrix::NullMatrix()
 
 bool splineknots::KnotMatrix::IsNull()
 {
-	if (matrix_ || rows_count_ < 1 || columns_count_ < 1)
+	if (!x_ || !y_ || !z_ || !dx_ || !dy_ || !dxy_ || rows_count_ < 1 || columns_count_ < 1)
 		return true;
 	return false;
 }
@@ -88,10 +88,20 @@ splineknots::KnotMatrix::KnotMatrix(size_t rows, size_t columns)
 	: rows_count_(rows),
 	  columns_count_(columns)
 {
-	matrix_ = new splineknots::Knot*[rows];
+	x_ = new double*[rows];
+	y_ = new double*[rows];
+	z_ = new double*[rows];
+	dx_ = new double*[rows];
+	dy_ = new double*[rows];
+	dxy_ = new double*[rows];
 	for (size_t i = 0; i < rows; i++)
 	{
-		matrix_[i] = new splineknots::Knot[columns];
+		x_[i] = new double[columns];
+		y_[i] = new double[columns];
+		z_[i] = new double[columns];
+		dx_[i] = new double[columns];
+		dy_[i] = new double[columns];
+		dxy_[i] = new double[columns];
 	}
 }
 
@@ -99,11 +109,26 @@ splineknots::KnotMatrix::KnotMatrix(const KnotMatrix& other)
 	: rows_count_(other.rows_count_),
 	  columns_count_(other.columns_count_)
 {
-	matrix_ = new Knot*[rows_count_];
+	x_ = new double*[rows_count_];
+	y_ = new double*[rows_count_];
+	z_ = new double*[rows_count_];
+	dx_ = new double*[rows_count_];
+	dy_ = new double*[rows_count_];
+	dxy_ = new double*[rows_count_];
 	for (size_t i = 0; i < other.RowsCount(); i++)
 	{
-		matrix_[i] = new Knot[columns_count_];
-		memcpy(matrix_[i], other.matrix_[i], columns_count_);
+		x_[i] = new double[columns_count_];
+		y_[i] = new double[columns_count_];
+		z_[i] = new double[columns_count_];
+		dx_[i] = new double[columns_count_];
+		dy_[i] = new double[columns_count_];
+		dxy_[i] = new double[columns_count_];
+		memcpy(x_[i], other.x_[i], columns_count_);
+		memcpy(y_[i], other.y_[i], columns_count_);
+		memcpy(z_[i], other.z_[i], columns_count_);
+		memcpy(dx_[i], other.dx_[i], columns_count_);
+		memcpy(dy_[i], other.dy_[i], columns_count_);
+		memcpy(dxy_[i], other.dxy_[i], columns_count_);
 	}
 }
 
@@ -111,8 +136,18 @@ splineknots::KnotMatrix::KnotMatrix(KnotMatrix&& other)
 	: rows_count_(other.rows_count_),
 	  columns_count_(other.columns_count_)
 {
-	matrix_ = other.matrix_;
-	other.matrix_ = nullptr;
+	x_ = other.x_;
+	other.x_ = nullptr;
+	y_ = other.y_;
+	other.y_ = nullptr;
+	z_ = other.z_;
+	other.z_ = nullptr;
+	dx_ = other.dx_;
+	other.dx_ = nullptr;
+	dy_ = other.dy_;
+	other.dy_ = nullptr;
+	dxy_ = other.dxy_;
+	other.dxy_ = nullptr;
 	other.rows_count_ = 0;
 	other.columns_count_ = 0;
 }
@@ -121,13 +156,28 @@ splineknots::KnotMatrix& splineknots::KnotMatrix::operator=(const KnotMatrix& ot
 {
 	if (&other != this)
 	{
-		utils::DeleteJaggedArray(matrix_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(x_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(y_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(z_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(dx_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(dy_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(dxy_, rows_count_, columns_count_);
 		rows_count_ = other.rows_count_;
 		columns_count_ = other.columns_count_;
-		matrix_ = utils::CreateJaggedArray<Knot>(rows_count_, columns_count_);
+		x_ = utils::CreateJaggedArray<double>(rows_count_, columns_count_);
+		y_ = utils::CreateJaggedArray<double>(rows_count_, columns_count_);
+		z_ = utils::CreateJaggedArray<double>(rows_count_, columns_count_);
+		dx_ = utils::CreateJaggedArray<double>(rows_count_, columns_count_);
+		dy_ = utils::CreateJaggedArray<double>(rows_count_, columns_count_);
+		dxy_ = utils::CreateJaggedArray<double>(rows_count_, columns_count_);
 		for (size_t i = 0; i < rows_count_; i++)
 		{
-			memcpy(matrix_[i], other.matrix_[i], columns_count_);
+			memcpy(x_[i], other.x_[i], columns_count_);
+			memcpy(y_[i], other.y_[i], columns_count_);
+			memcpy(z_[i], other.z_[i], columns_count_);
+			memcpy(dx_[i], other.dx_[i], columns_count_);
+			memcpy(dy_[i], other.dy_[i], columns_count_);
+			memcpy(dxy_[i], other.dxy_[i], columns_count_);
 		}
 	}
 	return *this;
@@ -137,11 +187,26 @@ splineknots::KnotMatrix& splineknots::KnotMatrix::operator=(KnotMatrix&& other)
 {
 	if (&other != this)
 	{
-		utils::DeleteJaggedArray(matrix_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(x_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(y_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(z_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(dx_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(dy_, rows_count_, columns_count_);
+		utils::DeleteJaggedArray(dxy_, rows_count_, columns_count_);
 		rows_count_ = other.rows_count_;
 		columns_count_ = other.columns_count_;
-		matrix_ = other.matrix_;
-		other.matrix_ = nullptr;
+		x_ = other.x_;
+		other.x_ = nullptr;
+		y_ = other.y_;
+		other.y_ = nullptr;
+		z_ = other.z_;
+		other.z_ = nullptr;
+		dx_ = other.dx_;
+		other.dx_ = nullptr;
+		dy_ = other.dy_;
+		other.dy_ = nullptr;
+		dxy_ = other.dxy_;
+		other.dxy_ = nullptr;
 		other.rows_count_ = 0;
 		other.columns_count_ = 0;
 	}

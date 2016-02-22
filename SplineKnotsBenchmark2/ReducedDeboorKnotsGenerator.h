@@ -20,7 +20,7 @@ namespace splineknots
 		ReducedDeBoorKnotsGenerator& operator=(const ReducedDeBoorKnotsGenerator& other);
 		ReducedDeBoorKnotsGenerator& operator=(ReducedDeBoorKnotsGenerator&& other);
 
-		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension);
+		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, double* calculation_time = nullptr);
 		void InParallel(bool in_parallel);	
 	protected:
 

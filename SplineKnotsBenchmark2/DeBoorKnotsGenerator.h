@@ -51,7 +51,7 @@ namespace splineknots
 		DeBoorKnotsGenerator(DeBoorKnotsGenerator&& other);
 		DeBoorKnotsGenerator& operator=(const DeBoorKnotsGenerator& other);
 		DeBoorKnotsGenerator& operator=(DeBoorKnotsGenerator&& other);
-		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension);
+		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension& vdimension, double* calculation_time = nullptr);
 		void InParallel(bool value);
 		bool IsParallel();
 	

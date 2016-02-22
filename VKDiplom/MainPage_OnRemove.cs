@@ -10,7 +10,9 @@ namespace VKDiplom
             _colorWheel.Reset();
             ShapesComboBox.SelectedIndex = -1;
             ScenesAction(scene=> scene.Clear());
-            ShapesComboBox.ItemsSource = _functionScene;
+            ShapesComboBoxItems.Clear();
+            ShapesComboBox.ItemsSource = null;
+            ShapesComboBox.ItemsSource = ShapesComboBoxItems;
             
         }
 
@@ -26,8 +28,9 @@ namespace VKDiplom
             else
                 ShapesComboBox.SelectedIndex = selIdx-1;
             ScenesAction(scene=>scene.RemoveAt(selIdx));
-            ShapesComboBox.ItemsSource = null;        
-            ShapesComboBox.ItemsSource = _functionScene;
+            ShapesComboBoxItems.RemoveAt(selIdx);
+            ShapesComboBox.ItemsSource = null;
+            ShapesComboBox.ItemsSource = ShapesComboBoxItems;
             AutoScale();
         }
     }

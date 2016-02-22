@@ -15,7 +15,7 @@
     <Grid x:Name="LayoutRoot" Background="White">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" MaxHeight="150" />
+            <RowDefinition Height="32" />
             <RowDefinition MinHeight="300" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
@@ -45,8 +45,15 @@
                     Click="HelpButton_OnCLick" />
 
             <vkDiplom:SplineComboBox x:Name="ShapesComboBox" Grid.Column="4" Margin="4"
-                                     Style="{StaticResource ComboBox}"
-                                     SelectionChanged="SplineComboBox_OnSelectedItem" Background="#FF3F003F" />
+                                     Style="{StaticResource ShapesComboBox}"
+                                     ItemsSource="{Binding Path=ShapeComboBoxItems}"
+                                     SelectionChanged="ShapesComboBox_OnSelectedItem" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="vkDiplom:ShapeComboBoxItem">
+                        <ComboBoxItem Content="{Binding Path=Content}" Foreground="{Binding Path=Color}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </vkDiplom:SplineComboBox>
             <Button Grid.Column="5" Style="{StaticResource CommonButton}" Margin="4" FontSize="10" Content="Delete"
                     Click="DeleteShapeButton_OnClick" />
             <Border Grid.Column="6" Margin="10,0,0,0" Name="FxBackground" BorderBrush="Black" BorderThickness="0"

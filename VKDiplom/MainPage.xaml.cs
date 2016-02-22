@@ -44,10 +44,12 @@ namespace VKDiplom
         private Point _previousMousePosition;
         private Scene _secondDerScene;
         private readonly bool _isSoftwareRendered = false;
+        public List<ShapeComboBoxItem> ShapesComboBoxItems { get; } 
         //private readonly double _scaleTresholdToDefault;
 
         public MainPage()
         {
+            ShapesComboBoxItems = new List<ShapeComboBoxItem>();
             _isSoftwareRendered = GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware;
               
             if (_isSoftwareRendered)
@@ -195,5 +197,7 @@ namespace VKDiplom
             //var selValue = (KeyValuePair<string, SplineFactory>) iBox.;//Dictionary<>
             KnotsGeneratorComboBox.IsEnabled = iBox.SelectedIndex != 0;
         }
+
+      
     }
 }

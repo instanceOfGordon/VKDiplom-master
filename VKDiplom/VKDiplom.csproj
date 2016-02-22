@@ -85,6 +85,17 @@
     <NoConfig>true</NoConfig>
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BenchSSE_ICL_PG|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\BenchSSE_ICL_PG\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoConfig>true</NoConfig>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework" />
     <Reference Include="Microsoft.Xna.Framework.Graphics" />
@@ -129,11 +140,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsWindow.cs" />
     <Compile Include="Engine\Utils\GraphicsInitializationUtils.cs" />
+    <Compile Include="ShapeComboBoxItem.cs" />
     <Compile Include="SplineComboBox.cs" />
     <Compile Include="Utilities\ColorWheel.cs" />
     <Compile Include="Utilities\Keyboard.cs" />
     <Compile Include="Utilities\ParseUtils.cs" />
     <Compile Include="Utilities\VectorUtils.cs" />
+    <Compile Include="ColorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

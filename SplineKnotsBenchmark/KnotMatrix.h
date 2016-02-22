@@ -3,8 +3,10 @@
 
 namespace splineknots
 {
+	class Row;
 	class KnotMatrix
 	{
+		
 		size_t rows_count_;
 		size_t columns_count_;
 		Knot** matrix_;
