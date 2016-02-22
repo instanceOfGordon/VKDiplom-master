@@ -287,6 +287,10 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <OpenMP>GenerateParallelCode</OpenMP>
+      <Cpp0xSupport>true</Cpp0xSupport>
+      <UseMSVC>true</UseMSVC>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -371,20 +375,19 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <Optimization>MaxSpeedHighLevel</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OptimizeForWindowsApplication>true</OptimizeForWindowsApplication>
-      <EnableMatrixMultiplyLibraryCall>Yes</EnableMatrixMultiplyLibraryCall>
+      <EnableMatrixMultiplyLibraryCall>No</EnableMatrixMultiplyLibraryCall>
       <UseIntelOptimizedHeaders>true</UseIntelOptimizedHeaders>
       <StringPooling>true</StringPooling>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <GenerateAlternateCodePaths>AVXI</GenerateAlternateCodePaths>
+      <GenerateAlternateCodePaths>SSSE3</GenerateAlternateCodePaths>
       <OffloadOpenMP>Default</OffloadOpenMP>
       <OffloadOpenMPTarget>Default</OffloadOpenMPTarget>
       <OpenMP>GenerateParallelCode</OpenMP>
@@ -395,7 +398,9 @@
       <Parallelization>false</Parallelization>
       <EnableGapAnalysis>Maximum</EnableGapAnalysis>
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
-      <UseProcessorExtensions>AVXI</UseProcessorExtensions>
+      <UseProcessorExtensions>None</UseProcessorExtensions>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

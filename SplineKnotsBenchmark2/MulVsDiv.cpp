@@ -26,7 +26,7 @@ void MulVsDiv::Loop()
 	StopWatch sw;
 
 	const int length = 256;
-	const int loops = 1e7;
+	const int loops = 1e6;
 	std::cout << "Simple loop:\n---" << std::endl;
 	double a[length], b[length], c[length];
 	auto ignoreit = 0.0;
@@ -159,8 +159,8 @@ div:
 
 void MulVsDiv::DynamicArrayLoop()
 {
-	const int length = 256;
-	const int loops = 1e6;
+	const int length = 1024;
+	const int loops = 1e5*2;
 	std::cout << "Dynamic array loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
@@ -364,7 +364,7 @@ void MulVsDiv::CsabaDynamicArrayLoop()
 
 void MulVsDiv::DependendDynamicArrayLoop()
 {
-	const int length = 256;
+	const int length = 512;
 	const int loops = 1e6;
 	std::cout << "Dependend Dynamic loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length);
@@ -381,10 +381,11 @@ void MulVsDiv::DependendDynamicArrayLoop()
 	for (size_t i = 0; i < length; i++)
 	{
 		av[i] = 8 * (static_cast<double>(rand()) / (RAND_MAX)) + 1;
-		//bv[i] = DBL_MIN;
+		bv[i] = DBL_MIN;
 	}
 
 	//Division
+	
 	for (size_t i = 0; i < loops; i++)
 	{
 		auto start = clock();
@@ -393,13 +394,15 @@ void MulVsDiv::DependendDynamicArrayLoop()
 			b[j] = a[j + 1] / a[j];
 		}
 		auto finish = clock();
-		div_times.push_back(finish-start);
+		div_times.push_back(finish - start);
+		
 		ignoreit[0] += std::accumulate(bv.begin(), bv.end(), 0);
 	}
-	auto div_time = std::accumulate(div_times.begin(), div_times.end(), 0)
-		/ loops;
+	
+	auto div_time = static_cast<double>(std::accumulate(div_times.begin(), div_times.end(), 0));
 	std::cout << "Division:\t\t" << div_time << std::endl;
 	//Multiplication
+	
 	for (size_t i = 0; i < loops; i++)
 	{
 		auto start = clock();
@@ -411,10 +414,11 @@ void MulVsDiv::DependendDynamicArrayLoop()
 		mul_times.push_back(finish - start);
 		ignoreit[1] += std::accumulate(bv.begin(),bv.end(), 0);
 	}
-	auto mul_time = std::accumulate(mul_times.begin(), mul_times.end(), 0)
-		/ loops;
+	
+	auto mul_time = static_cast<double>(std::accumulate(mul_times.begin(), mul_times.end(), 0));
 	std::cout << "Multiplication:\t\t" << mul_time << std::endl;
 	//Addition
+	
 	for (size_t i = 0; i < loops; i++)
 	{
 		auto start = clock();
@@ -426,8 +430,8 @@ void MulVsDiv::DependendDynamicArrayLoop()
 		add_times.push_back(finish - start);
 		ignoreit[2] += std::accumulate(bv.begin(), bv.end(), 0);
 	}
-	auto add_time = std::accumulate(add_times.begin(), add_times.end(), 0)
-		/ loops;
+	
+	auto add_time = static_cast<double>(std::accumulate(add_times.begin(), add_times.end(), 0));
 	std::cout << "Addition:\t\t" << add_time << std::endl;
 
 	std::cout << "Addition faster than multiplication:\t" << static_cast<double>(mul_time) / static_cast<double>(add_time) << std::endl;
@@ -440,7 +444,7 @@ void MulVsDiv::BenchAll()
 {
 	Loop();
 	//LoopVectorized();
-	//DynamicArrayLoop();
+	DynamicArrayLoop();
 	//DynamicArrayLoopVectorized();
 	//DependendDynamicArrayLoop();
 	//CsabaDynamicArrayLoop();
