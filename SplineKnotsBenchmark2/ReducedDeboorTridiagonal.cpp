@@ -1,6 +1,4 @@
 #include "stdafx.h"
-
-
 #include <algorithm>
 #include "SplineKnots.h"
 #include "ReducedDeboorTridiagonal.h"
@@ -18,15 +16,28 @@ void splineknots::ReducedDeboorTridiagonal::Solve(size_t num_unknowns)
 		ResizeBuffers(resize);
 	double last_maindiag_value = even ? -15 : -14;
 	auto buffer = Buffer();
-	utils::SolveDeboorTridiagonalSystemBuffered(LowerDiagonalValue(), MainDiagonalValue(), UpperDiagonalValue(), rightside, num_equations, buffer, last_maindiag_value);
+	if (tridiagonal_.IsBuffered())
+	{
+		utils::SolveDeboorTridiagonalSystemBuffered(LowerDiagonalValue(),
+			MainDiagonalValue(), UpperDiagonalValue(), rightside, 
+			num_equations,
+			buffer, last_maindiag_value);
+	}
+	else
+	{
+		auto result = utils::SolveCsabaDeboorTridiagonalSystem(4, rightside,
+			num_unknowns);
+		memcpy(rightside, &result.front(), num_unknowns);
+	}
 }
 
-splineknots::ReducedDeboorTridiagonal::ReducedDeboorTridiagonal()
-	:tridiagonal_(1,-14,1)
+splineknots::ReducedDeboorTridiagonal::ReducedDeboorTridiagonal(bool buffered)
+	:tridiagonal_(1,-14,1,buffered)
 {
 }
 
-void splineknots::ReducedDeboorTridiagonal::ResizeBuffers(size_t newsize, bool shrinking_allowed)
+void splineknots::ReducedDeboorTridiagonal::ResizeBuffers(size_t newsize, 
+	bool shrinking_allowed)
 {
 	tridiagonal_.ResizeBuffers(newsize, shrinking_allowed);
 }
@@ -41,12 +52,14 @@ size_t splineknots::ReducedDeboorTridiagonal::RightSideBufferSize() const
 	return tridiagonal_.RightSideBufferSize();
 }
 
-void splineknots::ReducedDeboorTridiagonal::ResizeBuffer(size_t newsize, bool shrinking_allowed)
+void splineknots::ReducedDeboorTridiagonal::ResizeBuffer(size_t newsize, 
+	bool shrinking_allowed)
 {
 	tridiagonal_.ResizeBuffer(newsize, shrinking_allowed);
 }
 
-void splineknots::ReducedDeboorTridiagonal::ResizeRightSide(size_t newsize, bool shrinking_allowed)
+void splineknots::ReducedDeboorTridiagonal::ResizeRightSide(size_t newsize, 
+	bool shrinking_allowed)
 {
 	tridiagonal_.ResizeRightSide(newsize, shrinking_allowed);
 }

@@ -77,7 +77,7 @@ void splineknots::Tridiagonal::Solve(size_t num_unknowns)
 	if (resize > minsize)
 		ResizeBuffers(resize);
 	auto buffer = Buffer();
-	utils::SolveDeboorTridiagonalSystemBuffered(lower_diagonal_value, main_diagonal_value, upper_diagonal_value, &right_side_buffer_.front(), right_side_buffer_.size(), buffer);
+	utils::SolveDeboorTridiagonalSystemBuffered(lower_diagonal_value, main_diagonal_value, upper_diagonal_value, &right_side_buffer_.front(), num_unknowns, buffer);
 }
 
 double* splineknots::Tridiagonal::RightSideBuffer()

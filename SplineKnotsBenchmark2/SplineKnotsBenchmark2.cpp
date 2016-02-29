@@ -26,13 +26,16 @@ void LUComparison()
 	/*auto dfirst = cos(0);
 	auto dlast = cos(num_equations - 1);*/
 	auto right_side_vk = right_side_cs;
-	auto result_cs = SolveCsabaTridiagonalSystem(4, &right_side_cs.front(), num_equations);
+	auto result_cs = SolveCsabaDeboorTridiagonalSystem(4, 
+		&right_side_cs.front(), num_equations);
 	vector<double> buffer(num_equations);
-	SolveDeboorTridiagonalSystemBuffered(1, 4, 1, &right_side_vk.front(), num_equations, &buffer.front());
+	SolveDeboorTridiagonalSystemBuffered(1, 4, 1, &right_side_vk.front(), 
+		num_equations, &buffer.front());
 	auto result_vk(move(right_side_vk));
 	for (size_t i = 0; i < num_equations; i++)
 	{
-		cout << "Csaba LU: " << result_cs[i] << "; Vilo LU: " << result_vk[i] << endl;
+		cout << "Csaba LU: " << result_cs[i] << "; Vilo LU: " << result_vk[i] 
+			<< endl;
 	}
 	cout << endl;
 }
@@ -44,7 +47,8 @@ void MulDivBenchmark()
 }
 
 
-ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
+ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots, 
+	bool buffered = true)
 {
 	const int num_repetitions = 100;
 	splineknots::MathFunction function = [](double x, double y)
@@ -52,8 +56,8 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 		return sin(sqrt(x * x));
 	};
 
-	splineknots::CurveDeboorKnotsGenerator full(function);
-	splineknots::ReducedCurveDeboorKnotsGenerator reduced(function);
+	splineknots::CurveDeboorKnotsGenerator full(function, buffered);
+	splineknots::ReducedCurveDeboorKnotsGenerator reduced(function, buffered);
 
 	splineknots::SurfaceDimension udimension(-2, 2, num_knots);
 
@@ -82,21 +86,23 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots)
 
 	auto full_time = std::accumulate(full_times.begin(), full_times.end(), 0)
 		/ num_iterations;
-	auto reduced_time = std::accumulate(reduced_times.begin(), reduced_times.end(), 0)
+	auto reduced_time = std::accumulate(reduced_times.begin(), 
+		reduced_times.end(), 0)
 		/ num_iterations;
 	std::cout << "Ignore " << calculated_results[0] << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
 
-ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bool in_parallel = false)
+ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots,
+	bool in_parallel = false, bool buffered = true)
 {
 	splineknots::MathFunction function = [](double x, double y)
 	{
 		return sin(sqrt(x * x + y * y));
 	};
 
-	splineknots::DeBoorKnotsGenerator full(function);
-	splineknots::ReducedDeBoorKnotsGenerator reduced(function);
+	splineknots::DeBoorKnotsGenerator full(function, buffered);
+	splineknots::ReducedDeBoorKnotsGenerator reduced(function, buffered);
 	full.InParallel(in_parallel);
 	reduced.InParallel(in_parallel);
 	const splineknots::SurfaceDimension udimension(-3, 3, num_knots);
@@ -127,11 +133,11 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots, bo
 		full_times.push_back(time);
 	}
 
-	/*auto full_time = *std::min_element(std::begin(full_times), std::end(full_times));
-	auto reduced_time = *std::min_element(std::begin(reduced_times), std::end(reduced_times));*/
-	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
+	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), 
+		full_times.end(), 0))
 		/ static_cast<double>(num_iterations);
-	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(), reduced_times.end(), 0))
+	auto reduced_time = static_cast<double>(std::accumulate(
+		reduced_times.begin(), reduced_times.end(), 0))
 		/ static_cast<double>(num_iterations);
 	std::cout << "Ignore " << calculated_results[0] << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
@@ -146,9 +152,8 @@ void PrintDeboorResult(ComparisonBenchmarkResult& result)
 
 int main()
 {
-	bool repeat = true;
-
-	while (repeat)
+	bool knots_computation_is_buffered = true;
+	while (true)
 	{
 		std::cout << clock();
 		// Console clear ...
@@ -160,7 +165,9 @@ int main()
 		std::cout << "2: Spline curve benchmark." << std::endl;
 		std::cout << "3: Spline surface benchmark." << std::endl;
 		std::cout << "4: Spline surface benchmark (in parallel)." << std::endl;
-		std::cout << "5: Compare Csaba T. vs. Vilo K. LU decomposition." << std::endl;
+		std::cout << "5: Compare Csaba T. vs. Vilo K. LU decomposition." << 
+			std::endl;
+		std::cout << "B: Disable/enable buffering in benchmarks." << std::endl;
 		std::cout << "Q: End program" << std::endl;
 		char input;
 		std::cin >> input;
@@ -170,24 +177,23 @@ int main()
 		ComparisonBenchmarkResult result(1, 1);
 		switch (input)
 		{
-		case '1':
-			std::cout << std::endl << "---------------" << std::endl;
-			std::cout << "Multiplication vs division benchmark" << std::endl << std::endl;
+		case '1':		
+			std::cout << "Multiplication vs division benchmark" << std::endl <<
+				std::endl;
 			MulDivBenchmark();
 			break;
-		case '2':
-			std::cout << std::endl << "---------------" << std::endl;
+		case '2':			
 			std::cout << "Spline curve benchmark" << std::endl << std::endl;
 			std::cout << "Enter number of iterations: " << std::endl;
 			std::cin >> num_iterations;
 			std::cout << "Enter number of knots: " << std::endl;
 			std::cin >> num_knots;
 			std::cin.get();
-			result = CurveBenchmark(num_iterations, num_knots);
+			result = CurveBenchmark(num_iterations, num_knots, 
+				knots_computation_is_buffered);
 			PrintDeboorResult(result);
 			break;
 		case '3':
-
 			std::cout << "Spline surface benchmark" << std::endl << std::endl;
 			std::cout << "Enter number of iterations: " << std::endl;
 			std::cin >> num_iterations;
@@ -195,17 +201,19 @@ int main()
 			std::cin >> num_knots;
 			std::cin.get();
 
-			result = SurfaceBenchmark(num_iterations, num_knots);
+			result = SurfaceBenchmark(num_iterations, num_knots, 
+				false,knots_computation_is_buffered);
 			PrintDeboorResult(result);
 			break;
 		case '4':
-			std::cout << "Parallel spline surface benchmark" << std::endl << std::endl;
+			std::cout << "Parallel spline surface benchmark" << std::endl << 
+				std::endl;
 			std::cout << "Enter number of iterations: " << std::endl;
 			std::cin >> num_iterations;
 			std::cout << "Enter number of knots: " << std::endl;
 			std::cin >> num_knots;
 			std::cin.get();
-			result = SurfaceBenchmark(num_iterations, num_knots, true);
+			result = SurfaceBenchmark(num_iterations, num_knots, true, knots_computation_is_buffered);
 			PrintDeboorResult(result);
 			break;
 		case '5':
@@ -213,16 +221,26 @@ int main()
 			break;
 		case 'q':
 		case 'Q':
-			repeat = false;
+			return 0;
+		case 'b':
+		case 'B':
+			knots_computation_is_buffered = !knots_computation_is_buffered;
+			if(knots_computation_is_buffered)
+			{
+				std::cout << "Buffering is enabled." << std::endl;
+			}
+			else
+			{
+				std::cout << "Buffering is disabled." << std::endl;
+			}
 			break;
 		}
 
 		std::cout << "===================" << std::endl;
-		std::cout << "any key: Restart program." << std::endl;
-		std::cout << "Q: End program" << std::endl;
-		std::cin >> input;
-		if (input == 'Q' || input == 'q')
-			repeat = false;
+		/*std::cout << "any key: Restart program." << std::endl;
+		std::cout << "Q: End program" << std::endl;*/
+		
+		system("pause");
 	}
 	return 0;
 }

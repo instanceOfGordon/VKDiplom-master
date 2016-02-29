@@ -12,7 +12,7 @@ namespace splineknots
 		Tridiagonal tridiagonal_;
 	public:
 
-		ReducedDeboorTridiagonal();
+		ReducedDeboorTridiagonal(bool buffered = true);
 
 		void ResizeBuffers(size_t newsize, bool shrinking_allowed = false);
 

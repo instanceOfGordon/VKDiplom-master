@@ -8,7 +8,7 @@ namespace utils
 {
 	unsigned int num_threads = std::thread::hardware_concurrency();
 
-	std::vector<double> SolveCsabaTridiagonalSystem(double main_diagonal_value, double* right_side, unsigned int num_equations)
+	std::vector<double> SolveCsabaDeboorTridiagonalSystem(double main_diagonal_value, double* right_side, unsigned int num_equations)
 	{
 		std::vector<double> L(num_equations);
 		std::vector<double> U(num_equations);

@@ -24,17 +24,20 @@ splineknots::InterpolativeMathFunction::InterpolativeMathFunction(const MathFunc
 		};
 }
 
-const splineknots::MathFunction& splineknots::InterpolativeMathFunction::Z() const
+const splineknots::MathFunction& splineknots::InterpolativeMathFunction::Z() 
+const
 {
 	return z_;
 }
 
-const splineknots::MathFunction& splineknots::InterpolativeMathFunction::Dx() const
+const splineknots::MathFunction& splineknots::InterpolativeMathFunction::Dx() 
+const
 {
 	return dx_;
 }
 
-const splineknots::MathFunction& splineknots::InterpolativeMathFunction::Dy() const
+const splineknots::MathFunction& splineknots::InterpolativeMathFunction::Dy() 
+const
 {
 	return dy_;
 }

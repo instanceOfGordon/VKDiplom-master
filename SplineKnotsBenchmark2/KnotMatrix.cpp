@@ -152,7 +152,8 @@ splineknots::KnotMatrix::KnotMatrix(KnotMatrix&& other)
 	other.columns_count_ = 0;
 }
 
-splineknots::KnotMatrix& splineknots::KnotMatrix::operator=(const KnotMatrix& other)
+splineknots::KnotMatrix& splineknots::KnotMatrix::operator=(const KnotMatrix& 
+	other)
 {
 	if (&other != this)
 	{

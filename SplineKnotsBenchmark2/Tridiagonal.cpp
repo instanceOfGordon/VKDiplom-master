@@ -4,25 +4,31 @@
 #include <algorithm>
 
 
-
-splineknots::Tridiagonal::Tridiagonal(double lower_value, double main_value, double upper_value)
-	:lu_buffer_(), 
-	right_side_buffer_(),
+splineknots::Tridiagonal::Tridiagonal(double lower_value, double main_value, 
+	double upper_value, 
+	bool buffered)
+	:lu_buffer_(),
+	 right_side_buffer_(),
 	 lower_diagonal_value(lower_value),
 	 main_diagonal_value(main_value),
-	 upper_diagonal_value(upper_value)
+	 upper_diagonal_value(upper_value),
+	 buffered_(buffered)
 
 {
 }
 
-void splineknots::Tridiagonal::ResizeBuffers(size_t newsize, bool shrinking_allowed)
+void splineknots::Tridiagonal::ResizeBuffers(size_t newsize, bool 
+	shrinking_allowed)
 {
-	ResizeBuffer(newsize, shrinking_allowed);
+	if (buffered_)
+		ResizeBuffer(newsize, shrinking_allowed);
 	ResizeRightSide(newsize, shrinking_allowed);
 }
 
-void splineknots::Tridiagonal::ResizeBuffer(size_t newsize, bool shrinking_allowed)
+void splineknots::Tridiagonal::ResizeBuffer(size_t newsize, 
+	bool shrinking_allowed)
 {
+	if (!buffered_) return;
 	auto oldsize = lu_buffer_.size();
 	if (newsize > oldsize)
 	{
@@ -38,19 +44,20 @@ void splineknots::Tridiagonal::ResizeBuffer(size_t newsize, bool shrinking_allow
 	}
 }
 
-void splineknots::Tridiagonal::ResizeRightSide(size_t newsize, bool shrinking_allowed)
+void splineknots::Tridiagonal::ResizeRightSide(size_t newsize, bool 
+	shrinking_allowed)
 {
 	auto oldsize = right_side_buffer_.size();
 	if (newsize > oldsize || shrinking_allowed)
 	{
 		right_side_buffer_.resize(newsize);
 	}
-	
 }
 
 
 double* splineknots::Tridiagonal::ResetBufferAndGet()
 {
+	if (!buffered_) return nullptr;
 	auto& buffer = lu_buffer_;
 	std::fill(buffer.begin(), buffer.end(), upper_diagonal_value);
 	return &buffer.front();
@@ -58,6 +65,7 @@ double* splineknots::Tridiagonal::ResetBufferAndGet()
 
 double* splineknots::Tridiagonal::Buffer()
 {
+	if (!buffered_) return nullptr;
 	return &lu_buffer_.front();
 }
 
@@ -73,7 +81,19 @@ void splineknots::Tridiagonal::Solve(size_t num_unknowns)
 	if (resize > minsize)
 		ResizeBuffers(resize);
 	auto buffer = Buffer();
-	utils::SolveDeboorTridiagonalSystemBuffered(lower_diagonal_value, main_diagonal_value, upper_diagonal_value, &right_side_buffer_.front(), right_side_buffer_.size(), buffer);
+	if (buffered_)
+	{
+		utils::SolveDeboorTridiagonalSystemBuffered(
+			lower_diagonal_value, main_diagonal_value, upper_diagonal_value,
+			&right_side_buffer_.front(), num_unknowns, buffer);
+	}
+	else
+	{
+		auto result = utils::SolveCsabaDeboorTridiagonalSystem(4, 
+			&right_side_buffer_.front(), num_unknowns);
+		right_side_buffer_ = std::move(result);
+
+	}
 }
 
 double* splineknots::Tridiagonal::RightSideBuffer()
@@ -99,4 +119,9 @@ const double& splineknots::Tridiagonal::MainDiagonalValue() const
 const double& splineknots::Tridiagonal::UpperDiagonalValue() const
 {
 	return upper_diagonal_value;
+}
+
+bool splineknots::Tridiagonal::IsBuffered() const
+{
+	return buffered_;
 }

@@ -26,7 +26,7 @@ void LUComparison()
 	/*auto dfirst = cos(0);
 	auto dlast = cos(num_equations - 1);*/
 	auto right_side_vk = right_side_cs;
-	auto result_cs = SolveCsabaTridiagonalSystem(4, &right_side_cs.front(), num_equations);
+	auto result_cs = SolveCsabaDeboorTridiagonalSystem(4, &right_side_cs.front(), num_equations);
 	vector<double> buffer(num_equations);
 	SolveDeboorTridiagonalSystemBuffered(1, 4, 1, &right_side_vk.front(), num_equations, &buffer.front());
 	auto result_vk(move(right_side_vk));

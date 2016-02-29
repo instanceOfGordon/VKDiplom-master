@@ -2,10 +2,11 @@
 #include "ComparisonBenchmarkResult.h"
 
 
-ComparisonBenchmarkResult::ComparisonBenchmarkResult(unsigned long long first_alg_time, unsigned long long second_alg_time)
-	:first_alg_(first_alg_time),
-	 second_alg_(second_alg_time),
-	 ratio_(static_cast<double>(first_alg_time) / static_cast<double>(second_alg_time))
+ComparisonBenchmarkResult::ComparisonBenchmarkResult(unsigned long long 
+	first_alg_time, unsigned long long second_alg_time)
+	:first_alg_(first_alg_time), second_alg_(second_alg_time), ratio_(
+		static_cast<double>(first_alg_time) / static_cast<double>(
+		 second_alg_time))
 {
 }
 
