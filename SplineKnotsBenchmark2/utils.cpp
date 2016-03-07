@@ -3,7 +3,6 @@
 #include <omp.h>
 #include <vector>
 
-
 namespace utils
 {
 	unsigned int num_threads = std::thread::hardware_concurrency();

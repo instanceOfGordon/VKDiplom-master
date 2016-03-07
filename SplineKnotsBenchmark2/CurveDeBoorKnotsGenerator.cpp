@@ -70,6 +70,7 @@ GenerateKnots(const SurfaceDimension& dimension, double* calculation_time)
 	result[result.size() - 1] = dlast;
 	memcpy(&result.front() + 1, &rhs.front(), rhs.size());
 	sw.Stop();
+	
 	if (calculation_time != nullptr)
 	{
 		*calculation_time = sw.EllapsedTime();

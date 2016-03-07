@@ -253,6 +253,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Strict</FloatingPointModel>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -327,6 +330,7 @@
       <Parallelization>false</Parallelization>
       <EnableGapAnalysis>Disable</EnableGapAnalysis>
       <EmitGAPDiagnosticsToFile>false</EmitGAPDiagnosticsToFile>
+      <LoopUnrolling>0</LoopUnrolling>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -351,7 +355,7 @@
       <StringPooling>true</StringPooling>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Fast2</FloatingPointModel>
+      <FloatingPointModel>Strict</FloatingPointModel>
       <GenerateAlternateCodePaths>None</GenerateAlternateCodePaths>
       <OffloadOpenMP>Default</OffloadOpenMP>
       <OffloadOpenMPTarget>Default</OffloadOpenMPTarget>

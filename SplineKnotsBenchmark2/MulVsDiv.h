@@ -8,12 +8,15 @@ class MulVsDiv
 	void ResetList(const int length, std::forward_list<double>& list, double& ignoreit);
 public:
 	void Loop();
+	void ArrayAndNumberLoop();
 	void LoopVectorized();
 	void DynamicArrayLoop();
 	void DynamicArrayLoopVectorized();
 	void DynamicListLoop();
+	void DynamicArrayAndNumberLoop();
 	void CsabaDynamicArrayLoop();
 	void DependendDynamicArrayLoop();
+	void MemCpy();
 	void BenchAll();
 	MulVsDiv();
 	~MulVsDiv();

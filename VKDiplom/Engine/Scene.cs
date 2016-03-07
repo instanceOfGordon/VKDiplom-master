@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Controls;
 using System.Windows.Graphics;
 using System.Windows.Media;
 using HermiteInterpolation.Shapes;
@@ -304,17 +305,17 @@ namespace VKDiplom.Engine
 
             for (var i = 0; i < effectTechniquePasses.Count; i++)
             {        
-                //graphicsDevice.
-                graphicsDevice.RasterizerState = RasterizerState.CullNone;
+                graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
                 //graphicsDevice.BlendFactor
                 graphicsDevice.BlendState = BlendState.Opaque;
                 _effect.Alpha = 1f;
 
                 effectTechniquePasses[i].Apply();
                 _axes.Draw();
-
+                var eff = new AlphaTestEffect(graphicsDevice);
+              
                 if (_shapes.Count == 0) continue;
-                graphicsDevice.RasterizerState = RasterizerState.CullNone;
+                graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
                 graphicsDevice.BlendState = BlendState.AlphaBlend;
 
                 _effect.Alpha = 0.95f;
