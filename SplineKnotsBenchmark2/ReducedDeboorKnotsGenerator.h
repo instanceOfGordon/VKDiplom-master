@@ -19,11 +19,12 @@ namespace splineknots
 		ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function, 
 			bool buffered = true);
 		ReducedDeBoorKnotsGenerator(const ReducedDeBoorKnotsGenerator& other);
-		ReducedDeBoorKnotsGenerator(ReducedDeBoorKnotsGenerator&& other);
+		ReducedDeBoorKnotsGenerator(ReducedDeBoorKnotsGenerator&& other) 
+			noexcept;
 		ReducedDeBoorKnotsGenerator& operator=(
 			const ReducedDeBoorKnotsGenerator& other);
 		ReducedDeBoorKnotsGenerator& operator=(
-			ReducedDeBoorKnotsGenerator&& other);
+			ReducedDeBoorKnotsGenerator&& other) noexcept;
 		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, 
 			const SurfaceDimension& vdimension, 
 			double* calculation_time = nullptr);

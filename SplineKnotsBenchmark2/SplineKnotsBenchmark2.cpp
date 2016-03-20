@@ -118,19 +118,19 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots,
 	for (size_t i = 0; i < num_iterations; i++)
 	{
 		double time = 0;
-		auto result = reduced.GenerateKnots(udimension, vdimension,&time);
+		auto result = full.GenerateKnots(udimension, vdimension, &time);
 		//result.Print();
 		calculated_results.push_back(result.Dxy(1, 1));
-		reduced_times.push_back(time);
+		full_times.push_back(time);
 	}
 
 	for (size_t i = 0; i < num_iterations; i++)
 	{
 		double time = 0;
-		auto result = full.GenerateKnots(udimension, vdimension,&time);
+		auto result = reduced.GenerateKnots(udimension, vdimension,&time);
 		//result.Print();
 		calculated_results.push_back(result.Dxy(1, 1));
-		full_times.push_back(time);
+		reduced_times.push_back(time);
 	}
 
 	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), 

@@ -8,7 +8,7 @@ namespace utils
 	unsigned int num_threads = std::thread::hardware_concurrency();
 
 	std::vector<double> SolveCsabaDeboorTridiagonalSystem(
-		double main_diagonal_value, double* right_side, unsigned int 
+		double main_diagonal_value, double right_side[], unsigned int 
 		num_equations, double last_main_diagonal_value)
 	{
 		if (last_main_diagonal_value == DBL_MIN)
@@ -39,8 +39,8 @@ namespace utils
 		return D;
 	}
 
-	void SolveTridiagonalSystem(double* lower_diagonal, double* main_diagonal, 
-		double* upper_diagonal, double* right_side, size_t num_equations)
+	void SolveTridiagonalSystem(double lower_diagonal[], double main_diagonal[], 
+		double upper_diagonal[], double right_side[], size_t num_equations)
 	{
 		auto buffer = new double[num_equations];
 		SolveTridiagonalSystemBuffered(lower_diagonal, main_diagonal, 
@@ -48,8 +48,8 @@ namespace utils
 		delete[] buffer;
 	}
 
-	void SolveTridiagonalSystemBuffered(double* lower_diagonal, double* 
-		main_diagonal, double* upper_diagonal, double* right_side, size_t num_equations, double* buffer)
+	void SolveTridiagonalSystemBuffered(double lower_diagonal[], double 
+		main_diagonal[], double upper_diagonal[], double right_side[], size_t num_equations, double buffer[])
 	{
 		//std::copy(upper_diagonal, upper_diagonal + num_equations, buffer);
 		memcpy(buffer, upper_diagonal, num_equations);
@@ -70,7 +70,7 @@ namespace utils
 	}
 
 	void SolveDeboorTridiagonalSystem(double lower_diagonal_value, double 
-		main_diagonal_value, double upper_diagonal_value, double* right_side, 
+		main_diagonal_value, double upper_diagonal_value, double right_side[], 
 		size_t num_equations, double last_main_diagonal_value)
 	{
 		auto buffer = new double[num_equations];
@@ -81,8 +81,8 @@ namespace utils
 	}
 
 	void SolveDeboorTridiagonalSystemBuffered(double lower_diagonal_value, 
-		double main_diagonal_value, double upper_diagonal_value, double* 
-		right_side, size_t num_equations, double* buffer, double 
+		double main_diagonal_value, double upper_diagonal_value, double 
+		right_side[], size_t num_equations, double buffer[], double 
 		last_main_diagonal_value)
 	{
 		if (last_main_diagonal_value == DBL_TRUE_MIN)

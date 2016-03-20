@@ -27,7 +27,7 @@ namespace utils
 	}
 
 	template <typename T>
-	T* InitArray(size_t length, T* arrayToInit, T value)
+	T* InitArray(size_t length, T arrayToInit[], T value)
 	{
 		for (size_t i = 0; i < length; i++)
 		{
@@ -37,7 +37,7 @@ namespace utils
 	}
 
 	template <typename T>
-	void DeleteJaggedArray(T**& jaggedArray, size_t rows, size_t columns)
+	void DeleteJaggedArray(T** jaggedArray, size_t rows, size_t columns)
 	{
 		for (size_t i = 0; i < rows; i++)
 		{
@@ -61,7 +61,7 @@ namespace utils
 	}
 
 	template <typename T>
-	double Average(T* arr, size_t arr_size)
+	double Average(T arr[], size_t arr_size)
 	{
 		T sum = 0;
 		for (size_t i = 0; i < arr_size; i++)

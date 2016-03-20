@@ -31,9 +31,9 @@ namespace splineknots
 			bool buffered = true);
 		~DeBoorKnotsGenerator() = default;
 		DeBoorKnotsGenerator(const DeBoorKnotsGenerator& other);
-		DeBoorKnotsGenerator(DeBoorKnotsGenerator&& other);
+		DeBoorKnotsGenerator(DeBoorKnotsGenerator&& other) noexcept;
 		DeBoorKnotsGenerator& operator=(const DeBoorKnotsGenerator& other);
-		DeBoorKnotsGenerator& operator=(DeBoorKnotsGenerator&& other);
+		DeBoorKnotsGenerator& operator=(DeBoorKnotsGenerator&& other) noexcept;
 		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, 
 			const SurfaceDimension& vdimension, 
 			double* calculation_time = nullptr);

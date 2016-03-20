@@ -18,9 +18,9 @@ namespace splineknots
 		bool IsNull();
 		KnotMatrix(size_t rows_, size_t columns_);
 		KnotMatrix(const KnotMatrix& other);
-		KnotMatrix(KnotMatrix&& other);
+		KnotMatrix(KnotMatrix&& other) noexcept;
 		KnotMatrix& operator =(const KnotMatrix& other);
-		KnotMatrix& operator =(KnotMatrix&& other);
+		KnotMatrix& operator =(KnotMatrix&& other) noexcept;
 		~KnotMatrix() noexcept;
 		size_t RowsCount() const;
 		size_t ColumnsCount() const;

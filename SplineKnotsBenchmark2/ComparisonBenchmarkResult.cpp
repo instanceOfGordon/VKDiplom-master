@@ -10,10 +10,6 @@ ComparisonBenchmarkResult::ComparisonBenchmarkResult(unsigned long long
 {
 }
 
-ComparisonBenchmarkResult::~ComparisonBenchmarkResult()
-{
-}
-
 unsigned long long ComparisonBenchmarkResult::FirstAlg() const
 {
 	return first_alg_;
