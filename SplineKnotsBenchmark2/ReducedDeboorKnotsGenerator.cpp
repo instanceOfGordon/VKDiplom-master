@@ -451,7 +451,7 @@ GenerateKnots(const SurfaceDimension& udimension, const SurfaceDimension&
 			vdimension.knot_count);
 		return deboor_.GenerateKnots(udimension, vdimension);
 	}
-	KnotMatrix values(udimension.knot_count, vdimension.knot_count);
+	KnotMatrix values(udimension, vdimension);
 	InitializeBuffers(udimension.knot_count, vdimension.knot_count);
 	
 	InitializeKnots(udimension, vdimension, values);

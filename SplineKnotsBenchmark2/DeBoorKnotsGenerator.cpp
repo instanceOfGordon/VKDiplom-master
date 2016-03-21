@@ -116,7 +116,7 @@ namespace splineknots
 		{
 			return KnotMatrix::NullMatrix();
 		}
-		KnotMatrix values(udimension.knot_count, vdimension.knot_count);
+		KnotMatrix values(udimension, vdimension);
 		InitializeBuffers(udimension.knot_count, vdimension.knot_count);
 
 		InitializeKnots(udimension, vdimension, values);
@@ -157,8 +157,6 @@ namespace splineknots
 			{
 				auto z = f.Z()(u, v);
 				//Function.Z(u,v); //Z(u, v);
-				values.SetX(i, j, u);
-				values.SetY(i, j, v);
 				values.SetZ(i, j, z);
 			}
 		}

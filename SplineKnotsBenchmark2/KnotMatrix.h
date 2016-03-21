@@ -1,13 +1,14 @@
 #pragma once
+#include "SurfaceDimension.h"
 
 namespace splineknots
 {
+	
+
 	class KnotMatrix
 	{
-		size_t rows_count_;
-		size_t columns_count_;
-		double** x_;
-		double** y_;
+		SurfaceDimension xdim_;
+		SurfaceDimension ydim_;
 		double** z_;
 		double** dx_;
 		double** dy_;
@@ -16,59 +17,73 @@ namespace splineknots
 	public:
 		static KnotMatrix NullMatrix();
 		bool IsNull();
-		KnotMatrix(size_t rows_, size_t columns_);
+		KnotMatrix(SurfaceDimension rowdimension, SurfaceDimension columndimension);
 		KnotMatrix(const KnotMatrix& other);
 		KnotMatrix(KnotMatrix&& other) noexcept;
 		KnotMatrix& operator =(const KnotMatrix& other);
 		KnotMatrix& operator =(KnotMatrix&& other) noexcept;
 		~KnotMatrix() noexcept;
-		size_t RowsCount() const;
-		size_t ColumnsCount() const;
-		double X(size_t i, size_t j) const
+
+		size_t RowsCount() const
 		{
-			return x_[i][j];
+			return xdim_.knot_count;
 		}
-		double Y(size_t i, size_t j) const
+
+		size_t ColumnsCount() const
 		{
-			return y_[i][j];
+			return ydim_.knot_count;
 		}
-		double Z(size_t i, size_t j) const
+
+		double X(const size_t i,const size_t j) const
+		{
+			return j*abs(xdim_.max - xdim_.min) / xdim_.knot_count;
+		}
+
+		double Y(const size_t i, const size_t j) const
+		{
+			return i*abs(ydim_.max - ydim_.min) / ydim_.knot_count;
+		}
+
+		const SurfaceDimension& XDimensionParameters() const
+		{
+			return xdim_;
+		}
+
+		const SurfaceDimension& YDimensionParameters() const
+		{
+			return ydim_;
+		}
+
+		double Z(const size_t i, const size_t j) const
 		{
 			return z_[i][j];
 		}
-		double Dx(size_t i, size_t j) const
+		double Dx(const size_t i, const size_t j) const
 		{
-			return dx_[i][j];
+			return dx_[j][i];
 		}
-		double Dy(size_t i, size_t j) const
+		double Dy(const size_t i, const size_t j) const
 		{
 			return dy_[i][j];
 		}
-		double Dxy(size_t i, size_t j) const
+		double Dxy(const size_t i, const size_t j) const
 		{
 			return dxy_[i][j];
 		}
-		void SetX(size_t i, size_t j, const double value)
-		{
-			x_[i][j] = value;
-		}
-		void SetY(size_t i, size_t j, const double value)
-		{
-			y_[i][j] = value;
-		}
-		void SetZ(size_t i, size_t j, const double value)
+	
+		void SetZ(const size_t i, const size_t j, const double value)
 		{
 			z_[i][j] = value;
 		}
-		void SetDx(size_t i, size_t j, const double value)
+		void SetDx(const size_t i, const size_t j, const double value)
 		{
-			dx_[i][j] = value;
+			dx_[j][i] = value;
 		}
-		void SetDy(size_t i, size_t j, const double value)
+		void SetDy(const size_t i, const size_t j, const double value)
 		{
 			dy_[i][j] = value;
 		}
-		void SetDxy(size_t i, size_t j, const double value)
+		void SetDxy(const size_t i, const size_t j, const double value)
 		{
 			dxy_[i][j] = value;
 		}
