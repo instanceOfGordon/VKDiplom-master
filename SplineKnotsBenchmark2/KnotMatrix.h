@@ -34,6 +34,27 @@ namespace splineknots
 			return ydim_.knot_count;
 		}
 
+
+		double** Z() const
+		{
+			return z_;
+		}
+
+		double** Dx() const
+		{
+			return dx_;
+		}
+
+		double** Dy() const
+		{
+			return dy_;
+		}
+
+		double** Dxy() const
+		{
+			return dxy_;
+		}
+
 		double X(const size_t i,const size_t j) const
 		{
 			return j*abs(xdim_.max - xdim_.min) / xdim_.knot_count;

@@ -60,12 +60,12 @@ double* splineknots::Tridiagonal::ResetBufferAndGet()
 	return &buffer.front();
 }
 
-double* splineknots::Tridiagonal::Buffer()
+double* splineknots::Tridiagonal::ResultArray()
 {
 	return &lu_buffer_.front();
 }
 
-size_t splineknots::Tridiagonal::BufferSize() const
+size_t splineknots::Tridiagonal::ResultArraySize() const
 {
 	return lu_buffer_.size();
 }
@@ -73,10 +73,10 @@ size_t splineknots::Tridiagonal::BufferSize() const
 void splineknots::Tridiagonal::Solve(size_t num_unknowns)
 {
 	auto resize = std::max(num_unknowns, right_side_buffer_.size());
-	auto minsize = std::min(BufferSize(), RightSideBufferSize());
+	auto minsize = std::min(ResultArraySize(), RightSideBufferSize());
 	if (resize > minsize)
 		ResizeBuffers(resize);
-	auto buffer = Buffer();
+	auto buffer = ResultArray();
 	utils::SolveDeboorTridiagonalSystemBuffered(lower_diagonal_value, main_diagonal_value, upper_diagonal_value, &right_side_buffer_.front(), num_unknowns, buffer);
 }
 

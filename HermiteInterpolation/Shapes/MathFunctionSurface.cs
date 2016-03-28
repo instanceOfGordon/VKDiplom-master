@@ -9,24 +9,43 @@ using static HermiteInterpolation.Properties.Constants;
 
 namespace HermiteInterpolation.Shapes
 {
-    public sealed class MathFunctionSurface : CompositeSurface
+    public sealed class MathFunctionSurface : MathSurface
     {
-        public SurfaceDimension UDimension { get; }
-        public SurfaceDimension VDimension { get;  }
-
+    
         public MathFunctionSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
-            MathExpression mathExpression)
+            MathExpression mathExpression, Derivation derivation = Derivation.Zero)
             : this(
-                uDimension, vDimension, mathExpression.Interpret()
+                uDimension, vDimension, mathExpression.Interpret(),derivation
                 )
         {
-           
             Name = mathExpression.Expression;
         }
 
         public MathFunctionSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
-            MathFunction function)
+            MathFunction function, Derivation derivation = Derivation.Zero)
         {
+            Derivation = derivation;
+            if (derivation != Derivation.Zero)
+            {
+                var interpolativeFunction = new InterpolativeMathFunction(function);
+                switch (Derivation)
+                {
+                    case Derivation.X:
+                        function = interpolativeFunction.Dx;
+                        break;
+                    case Derivation.Y:
+                        function = interpolativeFunction.Dy;
+                        break;
+                    case Derivation.XY:
+                        function = interpolativeFunction.Dxy;
+                        break;
+                    case Derivation.SecondXY:
+
+                        function = new InterpolativeMathFunction(interpolativeFunction.Dxy).Dxy;
+                        break;
+                }
+            }
+
             UDimension = uDimension;
             VDimension = vDimension;
             var uCount_min_1 = uDimension.KnotCount - 1; //surface.UKnotsCount-1;
@@ -42,12 +61,13 @@ namespace HermiteInterpolation.Shapes
                     segments.Add(segment);
                 }
             }
-            Segments = segments;         
+            Segments = segments;
         }
 
-        private ISurface CreateSegment(int uIdx, int vIdx, 
+        private ISurface CreateSegment(int uIdx, int vIdx,
             MathFunction function)
         {
+           
             var meshDensity = Properties.MeshDensity;
             var uSize = Math.Abs(UDimension.Max - UDimension.Min)/(UDimension.KnotCount - 1);
             var vSize = Math.Abs(VDimension.Max - VDimension.Min)/(VDimension.KnotCount - 1);
@@ -72,6 +92,7 @@ namespace HermiteInterpolation.Shapes
                 for (var j = 0; j < yCount; j++, y += meshDensity)
                 {
                     y = y < v1 ? y : (float) v1;
+
                     var z = (float) function.SafeCall(x, y);
                     segmentMeshVertices[k++] = new VertexPositionNormalColor(new Vector3(x, y, z), DefaultNormal,
                         DefaultColor);

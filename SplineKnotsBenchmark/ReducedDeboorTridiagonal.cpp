@@ -19,10 +19,10 @@ void splineknots::ReducedDeBoorTridiagonal::Solve(size_t num_unknowns)
 	auto num_equations = even ? num_unknowns / 2 - 1 : num_unknowns / 2;
 	auto rightside = RightSideBuffer();
 	auto resize = std::max(num_equations, RightSideBufferSize());
-	auto minsize = std::min(BufferSize(), RightSideBufferSize());
+	auto minsize = std::min(ResultArraySize(), RightSideBufferSize());
 	if (resize > minsize)
 		ResizeBuffers(resize);
 	double last_maindiag_value = even ? -15 : -14;
-	auto buffer = Buffer();
+	auto buffer = ResultArray();
 	utils::SolveDeboorTridiagonalSystemBuffered(LowerDiagonalValue(), MainDiagonalValue(), UpperDiagonalValue(), rightside, num_equations, buffer, last_maindiag_value);
 }

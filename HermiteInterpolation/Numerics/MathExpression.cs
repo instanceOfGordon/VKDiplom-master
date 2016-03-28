@@ -25,7 +25,8 @@ namespace HermiteInterpolation.Numerics
           
         public static MathExpression CreateDefault(string expression, params string[] variables)
         {
-            return new SymbolicMathExpression(expression, variables);
+            //return new SymbolicMathExpression(expression, variables);
+            return new CalculationMathExpression(expression, variables);
         }
 
 

@@ -17,6 +17,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SplineKnotsBenchmark", "Spl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SplineKnotsBenchmark2", "SplineKnotsBenchmark2\SplineKnotsBenchmark2.vcxproj", "{0F747367-B5FB-4D39-AA3A-2CEC1C7FBCD4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{91E321D8-3F98-40F6-B4B6-C15457FEFA4A}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\CalculationEngine.dll = Libraries\CalculationEngine.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Bench_x86_ICL|Any CPU = Bench_x86_ICL|Any CPU

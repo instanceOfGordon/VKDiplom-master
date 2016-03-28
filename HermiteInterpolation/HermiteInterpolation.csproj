@@ -85,6 +85,9 @@
     <NoConfig>true</NoConfig>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CalculationEngine">
+      <HintPath>..\Libraries\CalculationEngine.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MathNet.Numerics.3.5.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\MathNet.Numerics.dll</HintPath>
@@ -105,6 +108,7 @@
     <Reference Include="System.Windows.Xna" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Numerics\CalculationMathExpression.cs" />
     <Compile Include="Properties.cs" />
     <Compile Include="Numerics\MathExpression.cs" />
     <Compile Include="Numerics\SymbolicMathExpression.cs" />
@@ -112,6 +116,7 @@
     <Compile Include="Primitives\VertexPositionNormalColor.cs" />
     <Compile Include="Shapes\CompositeSurface.cs" />
     <Compile Include="Shapes\MathFunctionSurface.cs" />
+    <Compile Include="Shapes\MathSurface.cs" />
     <Compile Include="Shapes\VertexIndexer.cs" />
     <Compile Include="Shapes\SplineInterpolation\SurfaceDimension.cs" />
     <Compile Include="Shapes\SplineInterpolation\Spline.cs" />
@@ -142,6 +147,7 @@
     <Compile Include="SplineKnots\DirectKnotsGenerator.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\CoordinateSystems.cs" />
+    <Compile Include="Utils\IEnumerableExtensions.cs" />
     <Compile Include="Utils\MyArrays.cs" />
   </ItemGroup>
   <ItemGroup>

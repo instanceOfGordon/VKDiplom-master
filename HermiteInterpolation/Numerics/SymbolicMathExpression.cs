@@ -37,7 +37,6 @@ namespace HermiteInterpolation.Numerics
         public override MathFunction InterpretMathDifferentiation(params string[] respectToVariables)
         {
             var diff = Differentiate(respectToVariables);
-
             return Interpret(diff);
         }
     }

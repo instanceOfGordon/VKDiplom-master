@@ -18,10 +18,10 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
         {
             switch (Derivation)
             {
-                case Derivation.First:
+                case Derivation.XY:
                     return FirstDerivationVector(t, t0, t1);
 
-                case Derivation.Second:
+                case Derivation.SecondXY:
                     return SecondDerivationVector(t, t0, t1);
 
                 default:

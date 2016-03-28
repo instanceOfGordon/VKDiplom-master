@@ -3,7 +3,9 @@
     public enum Derivation
     {
         Zero,
-        First,
-        Second
+        X,
+        Y,
+        XY,
+        SecondXY
     }
 }

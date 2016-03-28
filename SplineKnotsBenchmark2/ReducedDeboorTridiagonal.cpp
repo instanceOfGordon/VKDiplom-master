@@ -18,10 +18,8 @@ void splineknots::ReducedDeboorTridiagonal::Solve(size_t num_unknowns)
 	auto buffer = Buffer();
 	if (tridiagonal_.IsBuffered())
 	{
-		utils::SolveDeboorTridiagonalSystemBuffered(LowerDiagonalValue(),
-			MainDiagonalValue(), UpperDiagonalValue(), rightside, 
-			num_equations,
-			buffer, last_maindiag_value);
+		utils::SolveDeboorTridiagonalSystemBuffered(MainDiagonalValue(), 
+			rightside, num_equations, buffer, last_maindiag_value);
 	}
 	else
 	{
@@ -32,11 +30,11 @@ void splineknots::ReducedDeboorTridiagonal::Solve(size_t num_unknowns)
 }
 
 splineknots::ReducedDeboorTridiagonal::ReducedDeboorTridiagonal(bool buffered)
-	:tridiagonal_(1,-14,1,buffered)
+	:tridiagonal_(-14, buffered)
 {
 }
 
-void splineknots::ReducedDeboorTridiagonal::ResizeBuffers(size_t newsize, 
+void splineknots::ReducedDeboorTridiagonal::ResizeBuffers(size_t newsize,
 	bool shrinking_allowed)
 {
 	tridiagonal_.ResizeBuffers(newsize, shrinking_allowed);
@@ -52,13 +50,13 @@ size_t splineknots::ReducedDeboorTridiagonal::RightSideBufferSize() const
 	return tridiagonal_.RightSideBufferSize();
 }
 
-void splineknots::ReducedDeboorTridiagonal::ResizeBuffer(size_t newsize, 
+void splineknots::ReducedDeboorTridiagonal::ResizeBuffer(size_t newsize,
 	bool shrinking_allowed)
 {
 	tridiagonal_.ResizeBuffer(newsize, shrinking_allowed);
 }
 
-void splineknots::ReducedDeboorTridiagonal::ResizeRightSide(size_t newsize, 
+void splineknots::ReducedDeboorTridiagonal::ResizeRightSide(size_t newsize,
 	bool shrinking_allowed)
 {
 	tridiagonal_.ResizeRightSide(newsize, shrinking_allowed);
@@ -79,17 +77,7 @@ size_t splineknots::ReducedDeboorTridiagonal::BufferSize() const
 	return tridiagonal_.BufferSize();
 }
 
-const double& splineknots::ReducedDeboorTridiagonal::LowerDiagonalValue() const
-{
-	return tridiagonal_.LowerDiagonalValue();
-}
-
 const double& splineknots::ReducedDeboorTridiagonal::MainDiagonalValue() const
 {
 	return tridiagonal_.MainDiagonalValue();
-}
-
-const double& splineknots::ReducedDeboorTridiagonal::UpperDiagonalValue() const
-{
-	return tridiagonal_.UpperDiagonalValue();
 }

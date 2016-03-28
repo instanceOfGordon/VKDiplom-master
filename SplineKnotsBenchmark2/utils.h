@@ -35,6 +35,12 @@ namespace utils
 		double main_diagonal_value, double upper_diagonal_value, 
 		double right_side[], size_t num_equations, double buffer[], 
 		double last_main_diagonal_value = DBL_TRUE_MIN);
+	void SolveDeboorTridiagonalSystem(double main_diagonal_value,
+		double right_side[], size_t num_equations,
+		double last_main_diagonal_value = DBL_TRUE_MIN);
+	void SolveDeboorTridiagonalSystemBuffered(double main_diagonal_value,
+		double right_side[], size_t num_equations, double buffer[], double
+		last_main_diagonal_value = DBL_TRUE_MIN);
 	template <typename T>
 	double Average(T arr[], size_t arr_size);
 };

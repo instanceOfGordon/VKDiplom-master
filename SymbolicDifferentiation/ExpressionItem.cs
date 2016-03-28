@@ -156,12 +156,14 @@ namespace SymbolicDifferentiation
 
         public int GetCalculation(bool bValue = false)
         {
-           
+
             if (MStrInput.IsNumeric())
             {
-                MNOutput = double.Parse(MStrInput);
+                //MNOutput = double.Parse(MStrInput);
+                MNOutput = MStrInput.ToDouble();
                 return 0;
             };
+
 
             var nIndex = MStrInput.First('(');
             string str = null;

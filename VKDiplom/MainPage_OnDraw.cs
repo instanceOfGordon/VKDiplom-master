@@ -94,8 +94,8 @@ namespace VKDiplom
             }
      
             var shape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction));
-            var fdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.First);
-            var sdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.Second);
+            var fdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.XY);
+            var sdshape = createSpline(uDim, vDim, createKnotsGenerator(mathFunction), Derivation.SecondXY);
 
             if (_splineSubtractionClicked)
             {

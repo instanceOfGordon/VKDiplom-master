@@ -8,13 +8,8 @@ using HermiteInterpolation.Utils;
 
 namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
-    public abstract class Spline : CompositeSurface
+    public abstract class Spline : MathSurface
     {
-
-        public SurfaceDimension UDimension { get;  }
-        public SurfaceDimension VDimension { get; }
-        public Derivation Derivation { get; }
-
         protected Spline(SurfaceDimension uDimension, SurfaceDimension vDimension,
            MathExpression mathExpression, Derivation derivation = Derivation.Zero)
             :this(uDimension,vDimension,InterpolativeMathFunction.FromExpression(mathExpression),derivation)

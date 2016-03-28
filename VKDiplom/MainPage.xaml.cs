@@ -111,14 +111,14 @@ namespace VKDiplom
 
             switch (_focusedDrawingSurface)
             {
-                case Derivation.First: // DxFDy
+                case Derivation.XY: // DxFDy
                     FunctionDrawingSurface.Draw -= FirstDerivationDrawingSurface_OnDraw;
                     FirstDerivationDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
 
                     FunctionDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
                     FirstDerivationDrawingSurface.Draw += FirstDerivationDrawingSurface_OnDraw;
                     break;
-                case Derivation.Second: // DyDxF
+                case Derivation.SecondXY: // DyDxF
                     FunctionDrawingSurface.Draw -= SecondDerivationDrawingSurface_OnDraw;
                     SecondDerivationDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
 
@@ -146,7 +146,7 @@ namespace VKDiplom
                     FunctionDrawingSurface.Draw += FirstDerivationDrawingSurface_OnDraw;
                     FirstDerivationDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
                     break;
-                case Derivation.Second: //DyDxF
+                case Derivation.SecondXY: //DyDxF
                     FunctionDrawingSurface.Draw -= SecondDerivationDrawingSurface_OnDraw;
                     FirstDerivationDrawingSurface.Draw -= FirstDerivationDrawingSurface_OnDraw;
                     SecondDerivationDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
@@ -157,7 +157,7 @@ namespace VKDiplom
                     break;
             }
 
-            _focusedDrawingSurface = Derivation.First;
+            _focusedDrawingSurface = Derivation.XY;
         }
 
         // DyDxF
@@ -176,7 +176,7 @@ namespace VKDiplom
                     FunctionDrawingSurface.Draw += SecondDerivationDrawingSurface_OnDraw; 
                     SecondDerivationDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
                     break;
-                case Derivation.First: // DxFDy
+                case Derivation.XY: // DxFDy
                     FunctionDrawingSurface.Draw -= FirstDerivationDrawingSurface_OnDraw;
                     FirstDerivationDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
                     SecondDerivationDrawingSurface.Draw -= SecondDerivationDrawingSurface_OnDraw;
@@ -187,7 +187,7 @@ namespace VKDiplom
                     break;
             }
 
-            _focusedDrawingSurface = Derivation.Second;
+            _focusedDrawingSurface = Derivation.SecondXY;
         }
 
         private void InterpolationTypeComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -31,8 +31,8 @@ namespace splineknots
 		void ResizeRightSide(size_t newsize, bool shrinking_allowed = false);
 	protected:
 		double* ResetBufferAndGet();
-		double* Buffer();
-		size_t BufferSize() const;
+		double* ResultArray();
+		size_t ResultArraySize() const;
 		const double& LowerDiagonalValue() const;
 		const double& MainDiagonalValue() const;
 		const double& UpperDiagonalValue() const;

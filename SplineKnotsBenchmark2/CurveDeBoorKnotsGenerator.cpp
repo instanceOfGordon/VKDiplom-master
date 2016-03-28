@@ -57,7 +57,7 @@ GenerateKnots(const SurfaceDimension& dimension, double* calculation_time)
 		/ (dimension.knot_count - 1), dfirst, dlast);
 	if (is_buffered_) 
 	{
-		utils::SolveDeboorTridiagonalSystem(1, 4, 1, &rhs.front(), rhs.size());
+		utils::SolveDeboorTridiagonalSystem(4, &rhs.front(), rhs.size());
 	}
 	else
 	{

@@ -70,7 +70,7 @@ namespace VKDiplom
                 drawer.Draw += (s, darg) => { };
             }
             LoadScene(sender as DrawingSurface, out _firstDerScene);
-            //MexicanHatDemo(_firstDerScene, Derivation.First);
+            //MexicanHatDemo(_firstDerScene, Derivation.XY);
         }
 
         private void SecondDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)
@@ -82,7 +82,7 @@ namespace VKDiplom
                 drawer.Draw += (s, darg) => { };
             }
             LoadScene(sender as DrawingSurface, out _secondDerScene);
-            //MexicanHatDemo(_secondDerScene, Derivation.Second);
+            //MexicanHatDemo(_secondDerScene, Derivation.SecondXY);
         }
 
 
@@ -147,7 +147,7 @@ namespace VKDiplom
                     "Direct function",
                     (uDimension, vDimension, knotsGenerator, derivation) =>
                         new MathFunctionSurface(uDimension, vDimension,
-                            MathExpression.CreateDefault(MathExpressionTextBox.Text, "x", "y"))
+                            MathExpression.CreateDefault(MathExpressionTextBox.Text, "x", "y"),derivation)
                 },
                 {
                     "Bicubic",

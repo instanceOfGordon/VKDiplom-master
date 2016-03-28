@@ -114,6 +114,14 @@ namespace SymbolicDifferentiation
             return true;
         }
 
+        public static double ToDouble(this string lpcs)
+        {
+            if (!lpcs.IsNumeric())
+                throw new InvalidCastException("Cannot parse string: " + lpcs + " to double.");
+            if (lpcs[lpcs.Length - 1] == 'e') lpcs = lpcs.Substring(0, lpcs.Length - 2);
+            return double.Parse(lpcs);
+        }
+
         public static int GetClose(this string p, int i)
         {
             // initialize parenthesis count to one
