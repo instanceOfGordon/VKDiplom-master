@@ -298,15 +298,15 @@ void MulVsDiv::DynamicArrayLoop()
 	const int loops = 1e6/2;
 	std::cout << "Dynamic array loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
-	std::vector<double> dv(length), ev(length), fv(length), gv(length);
+	//std::vector<double> dv(length), ev(length), fv(length), gv(length);
 	//std::vector<double> d1v(length), e1v(length), f1v(length), g1v(length), xv(length);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
-	double *d = &dv.front(), *e = &ev.front(), *f = &fv.front(), *g = &gv.front();
+	//double *d = &dv.front(), *e = &ev.front(), *f = &fv.front(), *g = &gv.front();
 	//double *d1 = &d1v.front(), *e1 = &e1v.front(), *f1 = &f1v.front(), *g1 = &g1v.front(),*x=&xv.front();
 	auto ignoreit = 0.0;
 
 	ResetArrays(length, a, b, ignoreit);
-	ResetArrays(length, d, e, ignoreit);
+	//ResetArrays(length, d, e, ignoreit);
 	//ResetArrays(length, f, g, ignoreit);
 	//ResetArrays(length, g, x, ignoreit);
 
@@ -325,7 +325,7 @@ void MulVsDiv::DynamicArrayLoop()
 #pragma loop( no_vector )
 		for (int i = 0; i < length; ++i)
 		{
-			c[i] = (a[i] + b[i])*d[i]+(b[i]+d[i])*a[i];// +d[i] + e[i] + f[i] + g[i] + d1[i] + e1[i] + f1[i] + g1[i] + x[i];
+			c[i] = a[i] + b[i];// *d[i] + (b[i] + d[i])*a[i];// +d[i] + e[i] + f[i] + g[i] + d1[i] + e1[i] + f1[i] + g1[i] + x[i];
 		}
 	}
 	sw.Stop();
@@ -847,7 +847,50 @@ void MulVsDiv::DependendDynamicArrayLoop()
 
 void MulVsDiv::MemCpy()
 {
-	
+#pragma optimize("", off)
+	StopWatch sw;
+	const int length = 512;
+	const int loops = 1e6 / 2;
+	std::cout << "Memory copy loop:\n---" << std::endl;
+	std::vector<double> av(length), bv(length), cv(length*2);
+	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
+	auto ignoreit = 0.0;
+
+	ResetArrays(length, a, b, ignoreit);
+
+	ignoreit /= a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
+	sw.Start();
+//#pragma optimize("", off)
+	for (size_t l = 0; l < loops; l++)
+	{
+		memcpy(a, b, length);
+	}
+//#pragma optimize("", on)
+	sw.Stop();
+	auto con_time = sw.EllapsedTime();
+	std::cout << "Continuous: " << con_time << std::endl;
+	ignoreit /= a[(rand() % (int)(length))]+b[(rand() % (int)(length))];
+	ResetArrays(length, a, b, ignoreit);
+	ignoreit /= a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
+
+	sw.Start();
+	for (size_t l = 0; l < loops; l++)
+	{
+//#pragma optimize("", off)
+		for (int i = 0,k=0; i < length; ++i,k+=2)
+		{
+			c[k] = a[i];
+		}
+//#pragma optimize("", on)
+	}
+	sw.Stop();
+	ignoreit /= a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
+	auto uncon_time = sw.EllapsedTime();
+	std::cout << "Uncontinuous: " << uncon_time << std::endl;
+
+
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
+#pragma optimize("", on)
 }
 
 void MulVsDiv::BenchAll()

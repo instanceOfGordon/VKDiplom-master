@@ -65,7 +65,7 @@ GenerateKnots(const splineknots::SurfaceDimension& dimension,
 	auto rhs = RightSide(knots, h, dfirst, dlast);
 	if (is_buffered_)
 	{
-		utils::SolveDeboorTridiagonalSystem(1, -14, 1, &rhs.front(), 
+		utils::SolveDeboorTridiagonalSystem(-14, &rhs.front(), 
 			rhs.size(), -15);
 	}
 	else
