@@ -3,8 +3,6 @@
 
 namespace splineknots
 {
-	
-
 	class KnotMatrix
 	{
 		SurfaceDimension xdim_;

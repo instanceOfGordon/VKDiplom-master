@@ -6,29 +6,27 @@
 
 namespace splineknots
 {
-	class ReducedDeboorTridiagonal final
+	class ReducedTridiagonal;
+	typedef std::vector<ReducedTridiagonal> ReducedTridiagonals;
+	class ReducedTridiagonal final
 	{
 		//friend class Tridiagonal;
 		Tridiagonal tridiagonal_;
 	public:
 
-		ReducedDeboorTridiagonal(bool buffered = true);
+		ReducedTridiagonal(bool buffered = true);
 
 		void ResizeBuffers(size_t newsize, bool shrinking_allowed = false);
 
-		void Solve(size_t num_unknowsns);
-		double* RightSideBuffer();
-		size_t RightSideBufferSize() const;
+		KnotVector& Solve(size_t num_unknowsns);
+		KnotVector& RightSideBuffer();
 
 	private:
 		void ResizeBuffer(size_t newsize, bool shrinking_allowed = false);
 		void ResizeRightSide(size_t newsize, bool shrinking_allowed = false);
 	public:
-		double* ResetBufferAndGet();
-		double* Buffer();
-		size_t BufferSize() const;
-		const double& LowerDiagonalValue() const;
+		KnotVector& ResetBufferAndGet();
+		KnotVector& Buffer();
 		const double& MainDiagonalValue() const;
-		const double& UpperDiagonalValue() const;
 	};
 }

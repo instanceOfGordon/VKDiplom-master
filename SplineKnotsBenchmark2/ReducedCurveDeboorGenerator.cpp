@@ -5,26 +5,28 @@
 
 
 splineknots::ReducedCurveDeboorKnotsGenerator::ReducedCurveDeboorKnotsGenerator
-(const splineknots::MathFunction& function, bool buffered)
-	: function_(function), is_buffered_(buffered)
+(const MathFunction& function, bool optimized_tridiagonal)
+	: function_(function), using_optimized_tridiagonal_(optimized_tridiagonal), 
+	tridiagonal_(optimized_tridiagonal)
 {
 }
 
 splineknots::ReducedCurveDeboorKnotsGenerator::ReducedCurveDeboorKnotsGenerator
-(const splineknots::InterpolativeMathFunction& function, bool buffered) 
-	: function_(function), is_buffered_(buffered)
+(const InterpolativeMathFunction& function, bool optimized_tridiagonal) 
+	: function_(function), using_optimized_tridiagonal_(optimized_tridiagonal),
+	tridiagonal_(optimized_tridiagonal)
 {
 }
 
-splineknots::KnotVector splineknots::ReducedCurveDeboorKnotsGenerator::
-RightSide(const splineknots::KnotVector& function_values, double h, 
+void splineknots::ReducedCurveDeboorKnotsGenerator::
+RightSide(const KnotVector& function_values, double h, 
 	double dfirst, double dlast)
 {
 	int n1, n2, N = function_values.size();
 	n1 = (N % 2 == 0) ? (N - 2) / 2 : (N - 3) / 2;
 	n2 = (N % 2 == 0) ? (N - 2) : (N - 3);
 
-	splineknots::KnotVector rhs(n1);
+	auto& rhs = tridiagonal_.RightSideBuffer();
 	double mu1 = 3.0 / h;
 	double mu2 = 4.0 * mu1;
 	int k = -1;
@@ -36,7 +38,6 @@ RightSide(const splineknots::KnotVector& function_values, double h,
 	}
 	rhs[0] -= dfirst;
 	rhs[n1 - 1] -= dlast;
-	return rhs;
 }
 
 void splineknots::ReducedCurveDeboorKnotsGenerator::InitializeKnots(
@@ -49,37 +50,30 @@ void splineknots::ReducedCurveDeboorKnotsGenerator::InitializeKnots(
 		auto y = function_.Z()(x, 0);
 		knots[i] = y;
 	}
+	tridiagonal_.ResizeBuffers(knots.size()/2 - 1);
 }
 
-splineknots::KnotVector splineknots::ReducedCurveDeboorKnotsGenerator::
+KnotVector splineknots::ReducedCurveDeboorKnotsGenerator::
 GenerateKnots(const splineknots::SurfaceDimension& dimension, 
 	double* calculation_time)
 {
 	StopWatch sw;
-	sw.Start();
-	splineknots::KnotVector knots(dimension.knot_count);
+
+	KnotVector knots(dimension.knot_count);
 	InitializeKnots(dimension, knots);
 	auto dfirst = function_.Dx()(dimension.min, 0);
 	auto dlast = function_.Dx()(dimension.max, 0);
 	auto h = abs(dimension.max - dimension.min) / (dimension.knot_count - 1);
-	auto rhs = RightSide(knots, h, dfirst, dlast);
-	if (is_buffered_)
-	{
-		utils::SolveDeboorTridiagonalSystem(-14, &rhs.front(), 
-			rhs.size(), -15);
-	}
-	else
-	{
-		auto res = utils::SolveCsabaDeboorTridiagonalSystem(-14, &rhs.front(),
-			rhs.size(),-15);
-		rhs = std::move(res);
-	}
-	
+	int n1, N = knots.size();
+	n1 = (N % 2 == 0) ? (N - 2) / 2 : (N - 3) / 2;
 	KnotVector result(knots.size());
+	sw.Start();
+	RightSide(knots, h, dfirst, dlast);
+	auto rhs = tridiagonal_.Solve(n1);
 	result[0] = dfirst;
 	result[result.size() - 1] = dlast;
 
-	for (int i = 0; i < rhs.size(); i++)
+	for (int i = 0; i < n1; i++)
 	{
 		result[2 * (i + 1)] = rhs[i];
 	}

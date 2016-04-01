@@ -421,11 +421,12 @@
     <ClInclude Include="CurveDeBoorKnotsGenerator.h" />
     <ClInclude Include="DeBoorKnotsGenerator.h" />
     <ClInclude Include="KnotMatrix.h" />
+    <ClInclude Include="KnotVector.h" />
     <ClInclude Include="MathFunction.h" />
     <ClInclude Include="MulVsDiv.h" />
     <ClInclude Include="ReducedCurveDeboorGenerator.h" />
     <ClInclude Include="ReducedDeboorKnotsGenerator.h" />
-    <ClInclude Include="ReducedDeboorTridiagonal.h" />
+    <ClInclude Include="ReducedTridiagonal.h" />
     <ClInclude Include="SplineKnots.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StopWatch.h" />
@@ -443,7 +444,7 @@
     <ClCompile Include="MulVsDiv.cpp" />
     <ClCompile Include="ReducedCurveDeboorGenerator.cpp" />
     <ClCompile Include="ReducedDeboorKnotsGenerator.cpp" />
-    <ClCompile Include="ReducedDeboorTridiagonal.cpp" />
+    <ClCompile Include="ReducedTridiagonal.cpp" />
     <ClCompile Include="SplineKnotsBenchmark2.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

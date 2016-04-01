@@ -1,12 +1,11 @@
 #pragma once
 
 #include "DeBoorKnotsGenerator.h"
-#include "ReducedDeboorTridiagonal.h"
+#include "ReducedTridiagonal.h"
 
 namespace splineknots
 {
-	typedef std::vector<std::unique_ptr<ReducedDeboorTridiagonal>> 
-		ReducedTridiagonals;
+	
 	class ReducedDeBoorKnotsGenerator final
 	{
 		InterpolativeMathFunction function_;
@@ -18,22 +17,16 @@ namespace splineknots
 			bool buffered = true);
 		ReducedDeBoorKnotsGenerator(InterpolativeMathFunction function, 
 			bool buffered = true);
-		ReducedDeBoorKnotsGenerator(const ReducedDeBoorKnotsGenerator& other);
-		ReducedDeBoorKnotsGenerator(ReducedDeBoorKnotsGenerator&& other) 
-			noexcept;
-		ReducedDeBoorKnotsGenerator& operator=(
-			const ReducedDeBoorKnotsGenerator& other);
-		ReducedDeBoorKnotsGenerator& operator=(
-			ReducedDeBoorKnotsGenerator&& other) noexcept;
 		KnotMatrix GenerateKnots(const SurfaceDimension& udimension, 
 			const SurfaceDimension& vdimension, 
 			double* calculation_time = nullptr);
-		void InParallel(bool in_parallel);	
-	protected:
+		void InParallel(bool in_parallel);
+		ReducedTridiagonals& Tridagonals();
+		ReducedTridiagonal& Tridiagonal();
 
 		struct PrecalculatedReduced final 
-			: public DeBoorKnotsGenerator::Precalculated
 		{
+			DeBoorKnotsGenerator::Precalculated deboor_precalculated_;
 			double six_div_h,
 				twelve_div_h,
 				eighteen_div_h,
@@ -42,7 +35,7 @@ namespace splineknots
 				nine_div_7h,
 				twelve_div_7h;
 
-			explicit PrecalculatedReduced(const double h);
+			PrecalculatedReduced(const double h);
 		};
 
 		struct PrecalculatedReducedCross final
@@ -68,7 +61,7 @@ namespace splineknots
 		void RightSide(const RightSideSelector& right_side_variables, 
 			const PrecalculatedReduced& precalculated, const double dfirst, 
 			const double dlast,
-			const int unknowns_count, double* const rightside_buffer)
+			const int unknowns_count)
 		{
 			auto even = unknowns_count % 2 == 0;
 			auto tau = even ? 0 : 2;
@@ -76,8 +69,9 @@ namespace splineknots
 			auto upsilon = even ? unknowns_count : unknowns_count - 1;
 			auto equations_count = even ? unknowns_count / 2 - 1 
 				: unknowns_count / 2;
-			auto three_div_h = precalculated.three_div_h;
+			auto three_div_h = precalculated.deboor_precalculated_.three_div_h;
 			auto twelve_div_h = three_div_h * 4;
+			auto& rightside_buffer = Tridiagonal().RightSideBuffer();
 			rightside_buffer[0] = three_div_h * (right_side_variables(4) 
 				- right_side_variables(0)) 
 				- twelve_div_h * (right_side_variables(3) 
@@ -112,7 +106,7 @@ namespace splineknots
 
 		void RightSideCross(const KnotMatrix& knots, const int i, 
 			const double dfirst, const double dlast,
-			const int unknowns_count, double* rightside_buffer);
+			const int unknowns_count);
 		void FillXDerivations(KnotMatrix& values);
 		void FillXYDerivations(KnotMatrix& values);
 		void FillYDerivations(KnotMatrix& values);
@@ -128,25 +122,23 @@ namespace splineknots
 			const double dlast, const int unknowns_count, 
 			UnknownsSetter& unknowns_setter)
 		{
-			auto& tridiagonal = *tridagonals_[omp_get_thread_num()].get();
-			auto results_buffer = tridiagonal.RightSideBuffer();
-			RightSide(selector, precalculated, dfirst, dlast, unknowns_count, 
-				results_buffer);
-			tridiagonal.Solve(unknowns_count);
+			auto& tridiagonal = tridagonals_[omp_get_thread_num()];
+			RightSide(selector, precalculated, dfirst, dlast, unknowns_count);
+			auto& result = tridiagonal.Solve(unknowns_count);
 			for (size_t k = 0; k < unknowns_count / 2 - 1; k++)
 			{
-				unknowns_setter(2 * (k + 1), results_buffer[k]);
+				unknowns_setter(2 * (k + 1), result[k]);
 			}
 		}
 
 	private:
-		std::unique_ptr<PrecalculatedReducedCross> 
+		PrecalculatedReducedCross
 			precalculated_reduced_cross_;
-		std::unique_ptr<PrecalculatedReduced> precalculated_hx_;
-		std::unique_ptr<PrecalculatedReduced> precalculated_hy_;
+		PrecalculatedReduced precalculated_hx_;
+		PrecalculatedReduced precalculated_hy_;
 	
 		const PrecalculatedReducedCross& PrecalculatedCross() const;
-		void SetPrecalculatedCross(std::unique_ptr<PrecalculatedReducedCross> 
+		void SetPrecalculatedCross(PrecalculatedReducedCross 
 			precalculated_reduced_cross);
 	};
 }

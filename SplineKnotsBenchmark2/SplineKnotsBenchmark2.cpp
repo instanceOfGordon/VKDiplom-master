@@ -48,7 +48,7 @@ void MulDivBenchmark()
 
 
 ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots, 
-	bool buffered = true)
+	bool optimized_lu = true)
 {
 	const int num_repetitions = 100;
 	splineknots::MathFunction function = [](double x, double y)
@@ -56,8 +56,8 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots,
 		return sin(sqrt(x * x));
 	};
 
-	splineknots::CurveDeboorKnotsGenerator full(function, buffered);
-	splineknots::ReducedCurveDeboorKnotsGenerator reduced(function, buffered);
+	splineknots::CurveDeboorKnotsGenerator full(function, optimized_lu);
+	splineknots::ReducedCurveDeboorKnotsGenerator reduced(function, optimized_lu);
 
 	splineknots::SurfaceDimension udimension(-2, 2, num_knots);
 
@@ -94,15 +94,15 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots,
 }
 
 ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots,
-	bool in_parallel = false, bool buffered = true)
+	bool in_parallel = false, bool optimized_lu = true)
 {
 	splineknots::MathFunction function = [](double x, double y)
 	{
 		return sin(sqrt(x * x + y * y));
 	};
 
-	splineknots::DeBoorKnotsGenerator full(function, buffered);
-	splineknots::ReducedDeBoorKnotsGenerator reduced(function, buffered);
+	splineknots::DeBoorKnotsGenerator full(function, optimized_lu);
+	splineknots::ReducedDeBoorKnotsGenerator reduced(function, optimized_lu);
 	full.InParallel(in_parallel);
 	reduced.InParallel(in_parallel);
 	const splineknots::SurfaceDimension udimension(-3, 3, num_knots);
@@ -152,7 +152,7 @@ void PrintDeboorResult(ComparisonBenchmarkResult& result)
 
 int main()
 {
-	bool knots_computation_is_buffered = true;
+	bool optimized_tridiagonals = true;
 	while (true)
 	{
 		std::cout << clock();
@@ -167,7 +167,7 @@ int main()
 		std::cout << "4: Spline surface benchmark (in parallel)." << std::endl;
 		std::cout << "5: Compare Csaba T. vs. Vilo K. LU decomposition." << 
 			std::endl;
-		std::cout << "B: Disable/enable buffering in benchmarks." << std::endl;
+		std::cout << "B: Disable/enable optimized LU decomposition in benchmarks." << std::endl;
 		std::cout << "Q: End program" << std::endl;
 		char input;
 		std::cin >> input;
@@ -190,7 +190,7 @@ int main()
 			std::cin >> num_knots;
 			std::cin.get();
 			result = CurveBenchmark(num_iterations, num_knots, 
-				knots_computation_is_buffered);
+				optimized_tridiagonals);
 			PrintDeboorResult(result);
 			break;
 		case '3':
@@ -202,7 +202,7 @@ int main()
 			std::cin.get();
 
 			result = SurfaceBenchmark(num_iterations, num_knots, 
-				false,knots_computation_is_buffered);
+				false,optimized_tridiagonals);
 			PrintDeboorResult(result);
 			break;
 		case '4':
@@ -213,7 +213,7 @@ int main()
 			std::cout << "Enter number of knots: " << std::endl;
 			std::cin >> num_knots;
 			std::cin.get();
-			result = SurfaceBenchmark(num_iterations, num_knots, true, knots_computation_is_buffered);
+			result = SurfaceBenchmark(num_iterations, num_knots, true, optimized_tridiagonals);
 			PrintDeboorResult(result);
 			break;
 		case '5':
@@ -224,8 +224,8 @@ int main()
 			return 0;
 		case 'b':
 		case 'B':
-			knots_computation_is_buffered = !knots_computation_is_buffered;
-			if(knots_computation_is_buffered)
+			optimized_tridiagonals = !optimized_tridiagonals;
+			if(optimized_tridiagonals)
 			{
 				std::cout << "Buffering is enabled." << std::endl;
 			}
