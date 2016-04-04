@@ -9,67 +9,83 @@ using static HermiteInterpolation.Properties.Constants;
 
 namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
-    public class BicubicHermiteSpline :Spline
+    public class BicubicHermiteSpline : Spline
     {
-        public BicubicHermiteSpline(SurfaceDimension uDimension, SurfaceDimension vDimension, MathExpression mathExpression, Derivation derivation = Derivation.Zero) : base(uDimension, vDimension, mathExpression, derivation)
+        public BicubicHermiteSpline(SurfaceDimension uDimension,
+            SurfaceDimension vDimension, MathExpression mathExpression,
+            Derivation derivation = Derivation.Zero)
+            : base(uDimension, vDimension, mathExpression, derivation)
         {
         }
 
-        public BicubicHermiteSpline(SurfaceDimension uDimension, SurfaceDimension vDimension, InterpolativeMathFunction interpolativeMathFunction, Derivation derivation = Derivation.Zero) : base(uDimension, vDimension, interpolativeMathFunction, derivation)
+        public BicubicHermiteSpline(SurfaceDimension uDimension,
+            SurfaceDimension vDimension,
+            InterpolativeMathFunction interpolativeMathFunction,
+            Derivation derivation = Derivation.Zero)
+            : base(uDimension, vDimension, interpolativeMathFunction, derivation
+                )
         {
         }
 
-        public BicubicHermiteSpline(SurfaceDimension uDimension, SurfaceDimension vDimension, KnotsGenerator knotsGenerator, Derivation derivation = Derivation.Zero) : base(uDimension, vDimension, knotsGenerator, derivation)
+        public BicubicHermiteSpline(SurfaceDimension uDimension,
+            SurfaceDimension vDimension, KnotsGenerator knotsGenerator,
+            Derivation derivation = Derivation.Zero)
+            : base(uDimension, vDimension, knotsGenerator, derivation)
         {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="uIdx"></param>
         /// <param name="vIdx"></param>
         /// <param name="knots"></param>
         /// <returns></returns>
-        protected override ISurface CreateSegment(int uIdx, int vIdx, KnotMatrix knots)
+        protected override ISurface CreateSegment(int uIdx, int vIdx,
+            KnotMatrix knots)
         {
-            
-            var u0 = knots[uIdx,vIdx].X;
-            var u1 = knots[uIdx+1,vIdx].X;
-            var v0 = knots[uIdx,vIdx].Y;
-            var v1 = knots[uIdx,vIdx+1].Y;
+            var u0 = knots[uIdx, vIdx].X;
+            var u1 = knots[uIdx + 1, vIdx].X;
+            var v0 = knots[uIdx, vIdx].Y;
+            var v1 = knots[uIdx, vIdx + 1].Y;
             var meshDensity = Properties.MeshDensity;
-            var uKnotsDistance = Math.Abs(u1-u0);           
-            var xCount = Math.Ceiling(uKnotsDistance/meshDensity);       
-            var yKnotDistance =  Math.Abs(v1 - v0);
-            var yCount = Math.Ceiling(yKnotDistance / meshDensity);          
-            var verticesCount = (int)((++xCount) * (++yCount));
+            var uKnotsDistance = Math.Abs(u1 - u0);
+            var xCount = Math.Ceiling(uKnotsDistance/meshDensity);
+            var yKnotDistance = Math.Abs(v1 - v0);
+            var yCount = Math.Ceiling(yKnotDistance/meshDensity);
+            var verticesCount = (int) ((++xCount)*(++yCount));
 
-            var segmentMeshVertices = new VertexPositionNormalColor[verticesCount];
-            var basisCalculator = new BicubicBasis(knots,Derivation);
-            
+            var segmentMeshVertices =
+                new VertexPositionNormalColor[verticesCount];
+            var basisCalculator = new BicubicBasis(knots, Derivation);
+
             var phi = basisCalculator.Matrix(uIdx, vIdx);
             var k = 0;
-            var x = (float) u0 ;
+            var x = (float) u0;
             for (var i = 0; i < xCount; i++,x += meshDensity)
             {
-                x = x < u1 ? x : (float)u1;
+                x = x < u1 ? x : (float) u1;
                 var lambda1 = basisCalculator.Vector(x, u0, u1);
-                var basis = phi.LeftMultiply(lambda1);       
+                var basis = phi.LeftMultiply(lambda1);
                 var y = (float) v0;
                 for (var j = 0; j < yCount; j++,y += meshDensity)
                 {
-                    y = y < v1 ? y : (float)v1;
+                    y = y < v1 ? y : (float) v1;
                     var lambda2 = basisCalculator.Vector(y, v0, v1);
                     var zv = basis.PointwiseMultiply(lambda2);
                     var z = (float) zv.Sum();
-                    z = MathHelper.Clamp(z, -Properties.MaxSceneZDifference, Properties.MaxSceneZDifference);   
-                    segmentMeshVertices[k++] = new VertexPositionNormalColor(new Vector3(x, y, z), DefaultNormal,
-                        DefaultColor);                 
-                }               
-            }        
-            return new SimpleSurface(segmentMeshVertices, (int)xCount, (int)yCount);        
+                    z = MathHelper.Clamp(z, -Properties.MaxSceneZDifference,
+                        Properties.MaxSceneZDifference);
+                    segmentMeshVertices[k++] =
+                        new VertexPositionNormalColor(new Vector3(x, y, z),
+                            DefaultNormal,
+                            DefaultColor);
+                }
+            }
+            return new SimpleSurface(segmentMeshVertices, (int) xCount,
+                (int) yCount);
         }
 
-        protected delegate Vector<double> BasisVector(double t, double t0, double t1);
+        protected delegate Vector<double> BasisVector(
+            double t, double t0, double t1);
     }
 }

@@ -66,20 +66,22 @@ namespace splineknots
 		calculation_time)
 	{
 		StopWatch sw;
-		sw.Start();
+		
 		if (udimension.knot_count < 4 || vdimension.knot_count < 4)
 		{
 			return KnotMatrix::NullMatrix();
 		}
-		KnotMatrix values(udimension, vdimension);
+		KnotMatrix values{udimension, vdimension};
 		InitializeBuffers(udimension.knot_count, vdimension.knot_count);
-
 		InitializeKnots(udimension, vdimension, values);
+
+		sw.Start();
 		FillXDerivations(values);
 		FillXYDerivations(values);
 		FillYDerivations(values);
 		FillYXDerivations(values);
 		sw.Stop();
+
 		if (calculation_time != nullptr)
 		{
 			*calculation_time = sw.EllapsedTime();

@@ -11,13 +11,16 @@ namespace splineknots
 
 		void RightSide(const KnotVector& function_values, 
 			double h, double dfirst, double dlast);
+		
 		void InitializeKnots(const SurfaceDimension& dimension,
 			KnotVector& knots);
 	public:
 		KnotVector GenerateKnots(const SurfaceDimension& dimension, 
 			double* calculation_time = nullptr);
+		
 		ReducedCurveDeboorKnotsGenerator(const MathFunction& function, 
 			bool optimized_tridiagonal = true);
+		
 		ReducedCurveDeboorKnotsGenerator
 			(const InterpolativeMathFunction& function, bool optimized_tridiagonal = true);
 	};

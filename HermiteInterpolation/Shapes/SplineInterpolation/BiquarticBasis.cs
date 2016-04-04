@@ -11,7 +11,8 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
         {
         }
 
-        protected override Vector<double> FunctionVector(double t, double t0, double h)
+        protected override Vector<double> FunctionVector(double t, double t0,
+            double h)
         {
             var m = Vector<double>.Build.Random(5, 0);
             var t1 = t0 + h;
@@ -38,7 +39,8 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             return m;
         }
 
-        protected override Vector<double> FirstDerivationVector(double t, double t0, double h)
+        protected override Vector<double> FirstDerivationVector(double t,
+            double t0, double h)
         {
             var m = Vector<double>.Build.Random(5, 0);
             var t1 = t0 + h;
@@ -68,7 +70,8 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             return m;
         }
 
-        protected override Vector<double> SecondDerivationVector(double t, double t0, double h)
+        protected override Vector<double> SecondDerivationVector(double t,
+            double t0, double h)
         {
             var m = Vector<double>.Build.Random(5, 0);
             var t_min_t0 = t - t0;
@@ -93,7 +96,6 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
 
             return m;
         }
-
 
         internal override Matrix<double> Matrix(int uIdx, int vIdx)
         {

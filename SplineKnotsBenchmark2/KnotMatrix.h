@@ -11,15 +11,23 @@ namespace splineknots
 		double** dx_;
 		double** dy_;
 		double** dxy_;
+
 		KnotMatrix();
 	public:
 		static KnotMatrix NullMatrix();
+		
 		bool IsNull();
+		
 		KnotMatrix(SurfaceDimension rowdimension, SurfaceDimension columndimension);
+		
 		KnotMatrix(const KnotMatrix& other);
+		
 		KnotMatrix(KnotMatrix&& other) noexcept;
+		
 		KnotMatrix& operator =(const KnotMatrix& other);
+		
 		KnotMatrix& operator =(KnotMatrix&& other) noexcept;
+		
 		~KnotMatrix() noexcept;
 
 		size_t RowsCount() const

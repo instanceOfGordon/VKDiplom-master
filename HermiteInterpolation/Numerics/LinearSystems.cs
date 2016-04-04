@@ -11,16 +11,21 @@
         /// <param name="upperDiagonal">Upper diagonal. Content of array will be changed.</param>
         /// <param name="rightSide">Right side. Will contains result when completed.</param>
         /// <returns>Result (== rightSide when completed)</returns>
-        internal static double[] SolveTridiagonalSystem(double[] lowerDiagonal, double[] mainDiagonal, double[] upperDiagonal,
-            double[] rightSide)
+        internal static double[] SolveTridiagonalSystem
+            (double[] lowerDiagonal, double[] mainDiagonal,
+                double[] upperDiagonal,
+                double[] rightSide)
         {
             upperDiagonal[0] /= mainDiagonal[0];
             rightSide[0] /= mainDiagonal[0];
             for (var i = 1; i < lowerDiagonal.Length; i++)
             {
-                var m = 1/(mainDiagonal[i] - lowerDiagonal[i]*upperDiagonal[i - 1]);
+                var m = 1
+                        /(mainDiagonal[i]
+                          - lowerDiagonal[i]*upperDiagonal[i - 1]);
                 upperDiagonal[i] *= m;
-                rightSide[i] = (rightSide[i] - lowerDiagonal[i]*rightSide[i - 1])*m;
+                rightSide[i] = (rightSide[i] - lowerDiagonal[i]*rightSide[i - 1])
+                               *m;
             }
 
             for (var i = rightSide.Length - 1; i-- > 0;)

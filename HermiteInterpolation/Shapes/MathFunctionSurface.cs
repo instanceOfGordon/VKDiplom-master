@@ -11,23 +11,26 @@ namespace HermiteInterpolation.Shapes
 {
     public sealed class MathFunctionSurface : MathSurface
     {
-    
-        public MathFunctionSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
-            MathExpression mathExpression, Derivation derivation = Derivation.Zero)
+        public MathFunctionSurface(SurfaceDimension uDimension,
+            SurfaceDimension vDimension,
+            MathExpression mathExpression,
+            Derivation derivation = Derivation.Zero)
             : this(
-                uDimension, vDimension, mathExpression.Interpret(),derivation
+                uDimension, vDimension, mathExpression.Interpret(), derivation
                 )
         {
             Name = mathExpression.Expression;
         }
 
-        public MathFunctionSurface(SurfaceDimension uDimension, SurfaceDimension vDimension,
+        public MathFunctionSurface(SurfaceDimension uDimension,
+            SurfaceDimension vDimension,
             MathFunction function, Derivation derivation = Derivation.Zero)
         {
             Derivation = derivation;
             if (derivation != Derivation.Zero)
             {
-                var interpolativeFunction = new InterpolativeMathFunction(function);
+                var interpolativeFunction =
+                    new InterpolativeMathFunction(function);
                 switch (Derivation)
                 {
                     case Derivation.X:
@@ -41,15 +44,19 @@ namespace HermiteInterpolation.Shapes
                         break;
                     case Derivation.SecondXY:
 
-                        function = new InterpolativeMathFunction(interpolativeFunction.Dxy).Dxy;
+                        function =
+                            new InterpolativeMathFunction(
+                                interpolativeFunction.Dxy).Dxy;
                         break;
                 }
             }
 
             UDimension = uDimension;
             VDimension = vDimension;
-            var uCount_min_1 = uDimension.KnotCount - 1; //surface.UKnotsCount-1;
-            var vCount_min_1 = vDimension.KnotCount - 1; //surface.VKnotsCount-1;
+            var uCount_min_1 = uDimension.KnotCount - 1;
+                //surface.UKnotsCount-1;
+            var vCount_min_1 = vDimension.KnotCount - 1;
+                //surface.VKnotsCount-1;
 
             var segments = new List<ISurface>(uCount_min_1*vCount_min_1);
 
@@ -67,10 +74,11 @@ namespace HermiteInterpolation.Shapes
         private ISurface CreateSegment(int uIdx, int vIdx,
             MathFunction function)
         {
-           
             var meshDensity = Properties.MeshDensity;
-            var uSize = Math.Abs(UDimension.Max - UDimension.Min)/(UDimension.KnotCount - 1);
-            var vSize = Math.Abs(VDimension.Max - VDimension.Min)/(VDimension.KnotCount - 1);
+            var uSize = Math.Abs(UDimension.Max - UDimension.Min)
+                        /(UDimension.KnotCount - 1);
+            var vSize = Math.Abs(VDimension.Max - VDimension.Min)
+                        /(VDimension.KnotCount - 1);
 
             var u0 = UDimension.Min + uSize*uIdx; //afv[uIdx][vIdx].X;
             var u1 = UDimension.Min + uSize*(uIdx + 1);
@@ -82,7 +90,8 @@ namespace HermiteInterpolation.Shapes
             var yKnotDistance = Math.Abs(v1 - v0);
             var yCount = Math.Ceiling(yKnotDistance/meshDensity);
             var verticesCount = (int) ((++xCount)*(++yCount));
-            var segmentMeshVertices = new VertexPositionNormalColor[verticesCount];
+            var segmentMeshVertices =
+                new VertexPositionNormalColor[verticesCount];
             var k = 0;
             var x = (float) u0;
             for (var i = 0; i < xCount; i++, x += meshDensity)
@@ -94,11 +103,14 @@ namespace HermiteInterpolation.Shapes
                     y = y < v1 ? y : (float) v1;
 
                     var z = (float) function.SafeCall(x, y);
-                    segmentMeshVertices[k++] = new VertexPositionNormalColor(new Vector3(x, y, z), DefaultNormal,
-                        DefaultColor);
+                    segmentMeshVertices[k++] =
+                        new VertexPositionNormalColor(new Vector3(x, y, z),
+                            DefaultNormal,
+                            DefaultColor);
                 }
             }
-            return new SimpleSurface(segmentMeshVertices, (int) xCount, (int) yCount);
+            return new SimpleSurface(segmentMeshVertices, (int) xCount,
+                (int) yCount);
         }
     }
 }

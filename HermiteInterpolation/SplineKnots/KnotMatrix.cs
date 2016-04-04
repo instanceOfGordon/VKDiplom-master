@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using HermiteInterpolation.Utils;
 
@@ -22,10 +21,7 @@ namespace HermiteInterpolation.SplineKnots
         public Knot this[int i, int j]
         {
             get { return _matrix[i][j]; }
-            set
-            {
-                _matrix[i][j] = value;
-            }
+            set { _matrix[i][j] = value; }
         }
 
         public IEnumerator<Knot> GetEnumerator()
@@ -44,17 +40,18 @@ namespace HermiteInterpolation.SplineKnots
             return GetEnumerator();
         }
 
-        public static KnotMatrix Operation(KnotMatrix left, KnotMatrix right, KnotOperation operation)
+        public static KnotMatrix Operation(KnotMatrix left, KnotMatrix right,
+            KnotOperation operation)
         {
             var result = new KnotMatrix(left.Rows, left.Columns);
             for (var i = 0; i < result.Rows; i++)
             {
-                
                 for (var j = 0; j < result.Columns; j++)
                 {
-                    result[i, j] = j < right.Columns && i < right.Rows ? operation(left[i, j], right[i, j]) : left[i, j];
+                    result[i, j] = j < right.Columns && i < right.Rows
+                        ? operation(left[i, j], right[i, j])
+                        : left[i, j];
                 }
-              
             }
             return result;
         }
@@ -63,10 +60,10 @@ namespace HermiteInterpolation.SplineKnots
         {
             return Operation(left, right, (l, r) => l - r);
         }
+
         public static KnotMatrix operator +(KnotMatrix left, KnotMatrix right)
         {
             return Operation(left, right, (l, r) => l + r);
         }
-      
     }
 }

@@ -84,11 +84,11 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots,
 		full_times.push_back(time);
 	}
 
-	auto full_time = std::accumulate(full_times.begin(), full_times.end(), 0)
-		/ num_iterations;
-	auto reduced_time = std::accumulate(reduced_times.begin(), 
-		reduced_times.end(), 0)
-		/ num_iterations;
+	auto full_time = std::accumulate(full_times.begin(), full_times.end(), 0);
+		/// num_iterations;
+	auto reduced_time = std::accumulate(reduced_times.begin(),
+		reduced_times.end(), 0);
+		/// num_iterations;
 	std::cout << "Ignore " << calculated_results[0] << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
@@ -165,9 +165,12 @@ int main()
 		std::cout << "2: Spline curve benchmark." << std::endl;
 		std::cout << "3: Spline surface benchmark." << std::endl;
 		std::cout << "4: Spline surface benchmark (in parallel)." << std::endl;
-		std::cout << "5: Compare Csaba T. vs. Vilo K. LU decomposition." << 
-			std::endl;
-		std::cout << "B: Disable/enable optimized LU decomposition in benchmarks." << std::endl;
+		//std::cout << "5: Compare Csaba T. vs. Vilo K. LU decomposition." << 
+			//std::endl;
+		std::cout << "B: Disable/enable optimized LU decomposition in benchmarks." 
+			<< std::endl;
+		//std::cout << "B: Enable/disable Vilo Kacala LU decomposition in benchmarks." 
+		//<< std::endl;
 		std::cout << "Q: End program" << std::endl;
 		char input;
 		std::cin >> input;
@@ -216,9 +219,9 @@ int main()
 			result = SurfaceBenchmark(num_iterations, num_knots, true, optimized_tridiagonals);
 			PrintDeboorResult(result);
 			break;
-		case '5':
+		/*case '5':
 			LUComparison();
-			break;
+			break;*/
 		case 'q':
 		case 'Q':
 			return 0;

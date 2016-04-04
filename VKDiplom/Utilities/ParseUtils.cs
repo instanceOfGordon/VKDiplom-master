@@ -19,15 +19,17 @@ namespace VKDiplom.Utilities
             return sb.ToString();
         }
 
-        public static string CoordinatesToString(double[] x, double[] y, string delimiter)
+        public static string CoordinatesToString(double[] x, double[] y,
+            string delimiter)
         {
             return CoordinatesToString(x, 0, y, delimiter);
         }
 
-        public static string CoordinatesToString(double[] x, int fromX, double[] y, string delimiter)
+        public static string CoordinatesToString(double[] x, int fromX,
+            double[] y, string delimiter)
         {
             var sb = new StringBuilder();
-            for (int i = 0; i < y.Length; i++)
+            for (var i = 0; i < y.Length; i++)
             {
                 sb.Append(y[i]);
                 sb.Append(":");
@@ -41,11 +43,11 @@ namespace VKDiplom.Utilities
         public static double[] StringOfDecimalsToArray(string numbers)
         {
             return
-                numbers.Split(new[] {'\t', '\n', ' ', '\r', ';'}, StringSplitOptions.RemoveEmptyEntries)
+                numbers.Split(new[] {'\t', '\n', ' ', '\r', ';'},
+                    StringSplitOptions.RemoveEmptyEntries)
                     .Select(double.Parse)
                     .ToArray();
         }
-
 
         public static void DoubleAccepted(object sender, KeyEventArgs e)
         {
@@ -55,18 +57,26 @@ namespace VKDiplom.Utilities
 
             e.Handled = !(
                 (!( //No modifier key must be pressed
-                    (System.Windows.Input.Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
-                    || (System.Windows.Input.Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control
-                    || (System.Windows.Input.Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt
+                    (System.Windows.Input.Keyboard.Modifiers
+                     & ModifierKeys.Shift) == ModifierKeys.Shift
+                    || (System.Windows.Input.Keyboard.Modifiers
+                        & ModifierKeys.Control) == ModifierKeys.Control
+                    || (System.Windows.Input.Keyboard.Modifiers
+                        & ModifierKeys.Alt) == ModifierKeys.Alt
                     )
                  && ( //only these keys are supported
-                     (e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
-                     || e.Key == Key.Subtract || e.Key == Key.Add || e.Key == Key.Unknown
-                     || e.Key == Key.Home || e.Key == Key.End || e.Key == Key.Delete
-                     || e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Escape || e.Key == Key.Back
+                     (e.Key >= Key.D0 && e.Key <= Key.D9)
+                     || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+                     || e.Key == Key.Subtract || e.Key == Key.Add
+                     || e.Key == Key.Unknown
+                     || e.Key == Key.Home || e.Key == Key.End
+                     || e.Key == Key.Delete
+                     || e.Key == Key.Tab || e.Key == Key.Enter
+                     || e.Key == Key.Escape || e.Key == Key.Back
                      || (e.Key == Key.Unknown && (
                          e.PlatformKeyCode == keycodeHyphenOnKeyboard
-                         || e.PlatformKeyCode == keycodeDotOnKeyboard || e.PlatformKeyCode == keycodeDotOnNumericKeyPad
+                         || e.PlatformKeyCode == keycodeDotOnKeyboard
+                         || e.PlatformKeyCode == keycodeDotOnNumericKeyPad
                          )
                          )
                      )
@@ -78,15 +88,22 @@ namespace VKDiplom.Utilities
         {
             e.Handled = !(
                 (!( //No modifier key must be pressed
-                    (System.Windows.Input.Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
-                    || (System.Windows.Input.Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control
-                    || (System.Windows.Input.Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt
+                    (System.Windows.Input.Keyboard.Modifiers
+                     & ModifierKeys.Shift) == ModifierKeys.Shift
+                    || (System.Windows.Input.Keyboard.Modifiers
+                        & ModifierKeys.Control) == ModifierKeys.Control
+                    || (System.Windows.Input.Keyboard.Modifiers
+                        & ModifierKeys.Alt) == ModifierKeys.Alt
                     )
                  && ( //only these keys are supported
-                     (e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
-                     || e.Key == Key.Subtract || e.Key == Key.Add || e.Key == Key.Unknown
-                     || e.Key == Key.Home || e.Key == Key.End || e.Key == Key.Delete
-                     || e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Escape || e.Key == Key.Back                     
+                     (e.Key >= Key.D0 && e.Key <= Key.D9)
+                     || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+                     || e.Key == Key.Subtract || e.Key == Key.Add
+                     || e.Key == Key.Unknown
+                     || e.Key == Key.Home || e.Key == Key.End
+                     || e.Key == Key.Delete
+                     || e.Key == Key.Tab || e.Key == Key.Enter
+                     || e.Key == Key.Escape || e.Key == Key.Back
                      )
                     )
                 );

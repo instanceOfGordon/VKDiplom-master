@@ -31,7 +31,7 @@ namespace VKDiplom
             if (_isSoftwareRendered)
             {
                 var drawer = sender as DrawingSurface;
-                drawer.Draw -= FirstDerivationDrawingSurface_OnDraw;
+                drawer.Draw -= FunctionDrawingSurface_OnDraw;
                 drawer.Draw += (s, darg) => { };
             }
             LoadScene(sender as DrawingSurface, out _functionScene);
@@ -42,49 +42,14 @@ namespace VKDiplom
         private void MexicanHatDemo(Scene scene, Derivation derivation)
         {
             if (scene == null) return;
-            //var aproximationFunction = new InterpolativeMathFunction(f, xd, yd, xyd);
-            //var aproximationFunction = new InterpolativeMathFunction(f);
             var mathExpression = MathExpression.CreateDefault("sin(sqrt(x^2+y^2))", "x", "y");
             //var aproximationFunction = InterpolativeMathFunction.FromExpression("x^4+y^4", "x", "y");
-//            var shape = new SegmentSurface(new double[] {-3, -2, -1, 0, 1, 2, 3},
-//                new double[] {-3, -2, -1, 0, 1, 2, 3},
-            //  aproximationFunction, derivation);
-            //var shape = new ClassicHermiteSurface(new double[] { -2, -1, 0, 1 }, new double[] { -2, -1, 0, 1 },
-            // var shape = new HermiteShape(new double[] { -2, -1 }, new double[] { -2, -1 },
             var shape = new BiquarticHermiteSpline(new SurfaceDimension(-3, 3, 7), new SurfaceDimension(-3, 3, 7),
                 //var shape = HermiteSurfaceFactoryHolder.CreateBiquartic(-3, 1, 7, -3, 1, 7,
                 mathExpression, derivation);
-            //shape.ColoredHeight();
-            //shape.ColoredSimple(Color.FromNonPremultiplied(96,72,128,255));
             shape.ColoredByShades(_colorWheel.Next);
-            //shape.DrawStyle = DrawStyle.Wireframe;
             scene.Add(shape);
         }
-
-        private void FirstDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            if (_isSoftwareRendered)
-            {
-                var drawer = sender as DrawingSurface;
-                drawer.Draw -= FirstDerivationDrawingSurface_OnDraw;
-                drawer.Draw += (s, darg) => { };
-            }
-            LoadScene(sender as DrawingSurface, out _firstDerScene);
-            //MexicanHatDemo(_firstDerScene, Derivation.XY);
-        }
-
-        private void SecondDerivationDrawingSurface_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            if (_isSoftwareRendered)
-            {
-                var drawer = sender as DrawingSurface;
-                drawer.Draw -= FirstDerivationDrawingSurface_OnDraw;
-                drawer.Draw += (s, darg) => { };
-            }
-            LoadScene(sender as DrawingSurface, out _secondDerScene);
-            //MexicanHatDemo(_secondDerScene, Derivation.SecondXY);
-        }
-
 
 
         private void LoadScene(DrawingSurface drawingSurface, out Scene scene)

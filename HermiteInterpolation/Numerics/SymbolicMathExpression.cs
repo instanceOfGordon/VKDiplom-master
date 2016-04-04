@@ -4,18 +4,20 @@ using SymbolicDifferentiation;
 namespace HermiteInterpolation.Numerics
 {
     /// <summary>
-    /// Default interpreter of mathematic R->RxR functions.
+    ///     Default interpreter of mathematic R->RxR functions.
     /// </summary>
     public class SymbolicMathExpression : MathExpression
     {
-        public SymbolicMathExpression(string expression, string[] variables) : base(expression, variables)
+        public SymbolicMathExpression(string expression, string[] variables)
+            : base(expression, variables)
         {
         }
 
         protected MathFunction Interpret(string expression) => vals =>
         {
             double result = 0;
-            (new Calculator()).Calculate(expression, vals[0], vals[1], ref result);
+            (new Calculator()).Calculate(expression, vals[0], vals[1],
+                ref result);
             return result;
         };
 
@@ -24,7 +26,8 @@ namespace HermiteInterpolation.Numerics
             var diff = Expression;
             foreach (var respectTo in respectToVariables)
             {
-                diff = (new Differentiator()).Differentiate(diff, respectTo, true);
+                diff = (new Differentiator()).Differentiate(diff, respectTo,
+                    true);
             }
             return diff;
         }
@@ -34,7 +37,8 @@ namespace HermiteInterpolation.Numerics
             return Interpret(Expression);
         }
 
-        public override MathFunction InterpretMathDifferentiation(params string[] respectToVariables)
+        public override MathFunction InterpretMathDifferentiation(
+            params string[] respectToVariables)
         {
             var diff = Differentiate(respectToVariables);
             return Interpret(diff);

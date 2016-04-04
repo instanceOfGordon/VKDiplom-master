@@ -10,8 +10,6 @@ namespace VKDiplom
         public void SetMultiSampleAntialiasing(int samples)
         {
             SetMultiSampleAntialiasing(FunctionDrawingSurface, samples);
-            SetMultiSampleAntialiasing(FirstDerivationDrawingSurface, samples);
-            SetMultiSampleAntialiasing(SecondDerivationDrawingSurface, samples);
         }
 
         private static void SetMultiSampleAntialiasing(DrawingSurface drawingSurface, int samples)
@@ -27,15 +25,11 @@ namespace VKDiplom
         public void SetLighting(Scene.LightingQuality lightingQuality)
         {
             _functionScene.SetLighting(lightingQuality);
-            _firstDerScene.SetLighting(lightingQuality);
-            _secondDerScene.SetLighting(lightingQuality);
         }
 
         public void SetPerPixelLighting(bool value)
         {
             _functionScene.PreferPerPixelLighting = value;
-            _firstDerScene.PreferPerPixelLighting = value;
-            _secondDerScene.PreferPerPixelLighting = value;
         }
     }
 }

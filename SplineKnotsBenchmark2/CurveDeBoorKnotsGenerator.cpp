@@ -54,6 +54,7 @@ GenerateKnots(const SurfaceDimension& dimension, double* calculation_time)
 	auto dfirst = function_.Dx()(dimension.min, 0);
 	auto dlast = function_.Dx()(dimension.max, 0);
 	KnotVector result(knots.size());
+
 	sw.Start();
 	RightSide(knots, abs(dimension.max - dimension.min)
 		/ (dimension.knot_count - 1), dfirst, dlast);
@@ -69,4 +70,9 @@ GenerateKnots(const SurfaceDimension& dimension, double* calculation_time)
 		*calculation_time = sw.EllapsedTime();
 	}
 	return result;
+}
+
+splineknots::Tridiagonal& splineknots::CurveDeboorKnotsGenerator::Tridiagonal()
+{
+	return tridiagonal_;
 }

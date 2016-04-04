@@ -1,5 +1,4 @@
-﻿
-using HermiteInterpolation.Shapes.SplineInterpolation;
+﻿using HermiteInterpolation.Shapes.SplineInterpolation;
 
 namespace HermiteInterpolation.Shapes
 {
@@ -8,6 +7,5 @@ namespace HermiteInterpolation.Shapes
         public SurfaceDimension UDimension { get; protected set; }
         public SurfaceDimension VDimension { get; protected set; }
         public Derivation Derivation { get; protected set; }
-
     }
 }

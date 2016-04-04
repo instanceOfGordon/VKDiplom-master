@@ -2,5 +2,6 @@
 
 namespace HermiteInterpolation.SplineKnots
 {
-    public delegate KnotsGenerator KnotsGeneratorFactory(InterpolativeMathFunction function);
+    public delegate KnotsGenerator KnotsGeneratorFactory(
+        InterpolativeMathFunction function);
 }

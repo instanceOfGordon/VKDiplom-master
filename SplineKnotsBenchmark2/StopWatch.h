@@ -12,14 +12,17 @@ public:
 		// get ticks per second
 		QueryPerformanceFrequency(&frequency_);
 	}
+	
 	void Start()
 	{
 		QueryPerformanceCounter(&t1_);
 	}
+	
 	void Stop()
 	{
 		QueryPerformanceCounter(&t2_);
 	}
+	
 	double EllapsedTime()
 	{
 		return (t2_.QuadPart - t1_.QuadPart) * 1000.0

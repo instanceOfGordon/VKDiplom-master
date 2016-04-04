@@ -26,17 +26,6 @@ namespace VKDiplom
             DrawScene(_functionScene, e);
         }
 
-        private void SecondDerivationDrawingSurface_OnDraw(object sender, DrawEventArgs e)
-        {
-            DrawScene(_firstDerScene, e);
-        }
-
-        private void FirstDerivationDrawingSurface_OnDraw(object sender, DrawEventArgs e)
-        {
-            DrawScene(_secondDerScene, e);
-        }
-
-
         private void DrawScene(Scene scene, DrawEventArgs e)
         {
             if (_isSoftwareRendered) return;
@@ -76,7 +65,6 @@ namespace VKDiplom
 
             SplineFactory createSpline;
             KnotsGeneratorFactory createKnotsGenerator;
-            var startTime = DateTime.Now;
 
             if (_splineSubtractionClicked)
             {
@@ -120,24 +108,11 @@ namespace VKDiplom
             ShapesComboBox.SelectedIndex = currentSelectedIndex;
             ShapesComboBox_OnSelectedItem(ShapesComboBox,null);
 
-            fdshape.ColoredByShades(color);
-            fdshape.DrawStyle = DrawStyle.Surface;
-            _firstDerScene.Add(fdshape,false);
-            sdshape.ColoredByShades(color);
-            sdshape.DrawStyle = DrawStyle.Surface;
-            _secondDerScene.Add(sdshape,false);
-            var endTime = DateTime.Now;
-            SetCalcLabelContent((endTime - startTime).Milliseconds);
             if (ShapesComboBox.SelectedIndex < 0)
                 ShapesComboBox.SelectedIndex = 0;
 
             AutoScale();
 
-        }
-
-        private void SetCalcLabelContent(double time)
-        {
-            CalcTimeLabel.Content = "Function rendered in: " + $"{time:0.00}" + " ms";
         }
 
         private void AutoScale()

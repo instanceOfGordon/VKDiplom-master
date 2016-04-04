@@ -124,7 +124,6 @@
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\RotateCamera.cs" />
     <Compile Include="Engine\Scene.cs" />
-    <Compile Include="Exceptions\DisabledGraphicsDeviceException.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

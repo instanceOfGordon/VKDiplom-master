@@ -22,16 +22,6 @@ namespace VKDiplom
             //    surfacePosittion.Y + 0.5*FunctionDrawingSurface.ActualHeight);
         }
 
-        private void FirstDerivationDrawingSurface_OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            SizeChanged(sender as DrawingSurface, _firstDerScene);
-        }
-
-        private void SecondDerivationDrawingSurface_OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            SizeChanged(sender as DrawingSurface, _secondDerScene);
-        }
-
         private new void SizeChanged(DrawingSurface drawingSurface, Scene scene)
         {
             if (drawingSurface == null || _functionScene == null) return;

@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections;
+﻿using System.Collections;
 
 namespace HermiteInterpolation.Utils
 {
@@ -8,7 +6,7 @@ namespace HermiteInterpolation.Utils
     {
         public static int IndexOf(this IEnumerable enumerable, object someObject)
         {
-            int idx = 0;
+            var idx = 0;
             foreach (var item in enumerable)
             {
                 if (item.Equals(someObject))

@@ -5,12 +5,13 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
 {
     internal class BicubicBasis : Basis
     {
-
-        public BicubicBasis(KnotMatrix knots, Derivation derivation) : base(knots,derivation)
-        {      
+        public BicubicBasis(KnotMatrix knots, Derivation derivation)
+            : base(knots, derivation)
+        {
         }
 
-        protected override Vector<double> FunctionVector(double t, double t0, double t1)
+        protected override Vector<double> FunctionVector(double t, double t0,
+            double t1)
         {
             var m = Vector<double>.Build.Random(4, 0);
             var h = t1 - t0;
@@ -25,8 +26,9 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             m[3] = sqr_t_min_t0*t_min_t1/sqr_h;
             return m;
         }
-        
-        protected override Vector<double> FirstDerivationVector(double t, double t0, double t1)
+
+        protected override Vector<double> FirstDerivationVector(double t,
+            double t0, double t1)
         {
             var m = Vector<double>.Build.Random(4, 0);
             var h = t1 - t0;
@@ -41,7 +43,8 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
             return m;
         }
 
-        protected override Vector<double> SecondDerivationVector(double t, double t0, double t1)
+        protected override Vector<double> SecondDerivationVector(double t,
+            double t0, double t1)
         {
             var m = Vector<double>.Build.Random(4, 0);
             var h = t1 - t0;
@@ -57,10 +60,10 @@ namespace HermiteInterpolation.Shapes.SplineInterpolation
         internal override Matrix<double> Matrix(int uIdx, int vIdx)
         {
             var m = Matrix<double>.Build.Random(4, 4, 0);
-            var k00 = Knots[uIdx,vIdx];
-            var k01 = Knots[uIdx,vIdx + 1];
-            var k10 = Knots[uIdx + 1,vIdx];
-            var k11 = Knots[uIdx + 1,vIdx + 1];
+            var k00 = Knots[uIdx, vIdx];
+            var k01 = Knots[uIdx, vIdx + 1];
+            var k10 = Knots[uIdx + 1, vIdx];
+            var k11 = Knots[uIdx + 1, vIdx + 1];
             m[0, 0] = k00.Z; //SafeCall(f, u0, v0);
             m[0, 1] = k01.Z; //SafeCall(f, u0, v1);
             m[0, 2] = k00.Dy; //SafeCall(dy, u0, v0);

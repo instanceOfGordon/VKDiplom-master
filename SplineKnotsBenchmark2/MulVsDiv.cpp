@@ -896,11 +896,11 @@ void MulVsDiv::MemCpy()
 void MulVsDiv::BenchAll()
 {
 	Loop();
-	ArrayAndNumberLoop();
+	//ArrayAndNumberLoop();
 	//LoopVectorized();
-	DynamicArrayLoop();	
-	DynamicArrayAndNumberLoop();
-	DynamicListLoop();
+	//DynamicArrayLoop();	
+	//DynamicArrayAndNumberLoop();
+	//DynamicListLoop();
 	MemCpy();
 	//DynamicArrayLoopVectorized();
 	//DependendDynamicArrayLoop();

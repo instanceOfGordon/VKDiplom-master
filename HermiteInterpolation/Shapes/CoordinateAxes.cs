@@ -9,15 +9,30 @@ namespace HermiteInterpolation.Shapes
     {
         private const int NumberOfVerts = 22;
         private const int NumberOfVertsArrows = 54;
-
         private VertexBuffer _arrowsVertexBuffer;
         private VertexBuffer _axesVertexBuffer;
         private bool _disposed;
 
         public CoordinateAxes()
         {
-            
             CreateShape();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public void Draw()
+        {
+            var graphicsDevice = GraphicsDeviceManager.Current.GraphicsDevice;
+            graphicsDevice.SetVertexBuffer(_axesVertexBuffer);
+            graphicsDevice.DrawPrimitives(PrimitiveType.LineList, 0,
+                NumberOfVerts/2);
+            graphicsDevice.SetVertexBuffer(_arrowsVertexBuffer);
+            graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0,
+                NumberOfVertsArrows/3);
         }
 
         private void Dispose(bool disposing)
@@ -32,24 +47,9 @@ namespace HermiteInterpolation.Shapes
             _disposed = true;
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         ~CoordinateAxes()
         {
-             Dispose(false);
-        }
-        
-        public void Draw()
-        {
-            var graphicsDevice = GraphicsDeviceManager.Current.GraphicsDevice;
-            graphicsDevice.SetVertexBuffer(_axesVertexBuffer);
-            graphicsDevice.DrawPrimitives(PrimitiveType.LineList, 0, NumberOfVerts/2);
-            graphicsDevice.SetVertexBuffer(_arrowsVertexBuffer);
-            graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, NumberOfVertsArrows/3);
+            Dispose(false);
         }
 
         private void CreateShape()
@@ -67,7 +67,8 @@ namespace HermiteInterpolation.Shapes
             var arrows = new VertexPositionColor[NumberOfVertsArrows];
             //X
             axes[0] = new VertexPositionColor(new Vector3(0, 0, 0), color0);
-            axes[1] = new VertexPositionColor(new Vector3(axisLength, 0, 0), color0);
+            axes[1] = new VertexPositionColor(new Vector3(axisLength, 0, 0),
+                color0);
             const float shift = 0.2f;
             var xx = new Vector3(axisLength, 0, 0);
             var xa = new Vector3(axisLength - shift, -shift, -shift);
@@ -101,7 +102,8 @@ namespace HermiteInterpolation.Shapes
 
             //Y
             axes[2] = new VertexPositionColor(new Vector3(0, 0, 0), color1);
-            axes[3] = new VertexPositionColor(new Vector3(0, axisLength, 0), color1);
+            axes[3] = new VertexPositionColor(new Vector3(0, axisLength, 0),
+                color1);
             var yy = new Vector3(0, axisLength, 0);
             var ya = new Vector3(-shift, axisLength - shift, -shift);
             var yb = new Vector3(shift, axisLength - shift, -shift);
@@ -133,7 +135,8 @@ namespace HermiteInterpolation.Shapes
 
             //Z
             axes[4] = new VertexPositionColor(new Vector3(0, 0, 0), color2);
-            axes[5] = new VertexPositionColor(new Vector3(0, 0, axisLength), color2);
+            axes[5] = new VertexPositionColor(new Vector3(0, 0, axisLength),
+                color2);
 
 
             var zz = new Vector3(0, 0, axisLength);
@@ -166,30 +169,63 @@ namespace HermiteInterpolation.Shapes
             arrows[53] = new VertexPositionColor(zc, color2);
 
             //X oznacenie
-            axes[6] = new VertexPositionColor(new Vector3(axisLength, 0.2f, 0), color0d);
-            axes[7] = new VertexPositionColor(new Vector3(axisLength + 0.2f, 0.5f, 0), color0d);
-            axes[8] = new VertexPositionColor(new Vector3(axisLength + 0.2f, 0.2f, 0), color0d);
-            axes[9] = new VertexPositionColor(new Vector3(axisLength, 0.5f, 0), color0d);
+            axes[6] = new VertexPositionColor(new Vector3(axisLength, 0.2f, 0),
+                color0d);
+            axes[7] =
+                new VertexPositionColor(
+                    new Vector3(axisLength + 0.2f, 0.5f, 0), color0d);
+            axes[8] =
+                new VertexPositionColor(
+                    new Vector3(axisLength + 0.2f, 0.2f, 0), color0d);
+            axes[9] = new VertexPositionColor(new Vector3(axisLength, 0.5f, 0),
+                color0d);
 
             //Y oznacenie
-            axes[10] = new VertexPositionColor(new Vector3(0.2f, axisLength + 0.35f, 0), color1d);
-            axes[11] = new VertexPositionColor(new Vector3(0.3f, axisLength + 0.2f, 0), color1d);
-            axes[12] = new VertexPositionColor(new Vector3(0.3f, axisLength + 0.2f, 0), color1d);
-            axes[13] = new VertexPositionColor(new Vector3(0.4f, axisLength + 0.35f, 0), color1d);
-            axes[14] = new VertexPositionColor(new Vector3(0.3f, axisLength + 0.2f, 0), color1d);
-            axes[15] = new VertexPositionColor(new Vector3(0.3f, axisLength + 0.05f, 0), color1d);
-            axes[16] = new VertexPositionColor(new Vector3(0, 0.1f, axisLength + 0.4f), color2d);
-            axes[17] = new VertexPositionColor(new Vector3(0, 0.4f, axisLength + 0.4f), color2d);
-            axes[18] = new VertexPositionColor(new Vector3(0, 0.4f, axisLength + 0.4f), color2d);
-            axes[19] = new VertexPositionColor(new Vector3(0, 0.1f, axisLength + 0.2f), color2d);
-            axes[20] = new VertexPositionColor(new Vector3(0, 0.1f, axisLength + 0.2f), color2d);
-            axes[21] = new VertexPositionColor(new Vector3(0, 0.4f, axisLength + 0.2f), color2d);
-            if (GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware) return;
+            axes[10] =
+                new VertexPositionColor(
+                    new Vector3(0.2f, axisLength + 0.35f, 0), color1d);
+            axes[11] =
+                new VertexPositionColor(
+                    new Vector3(0.3f, axisLength + 0.2f, 0), color1d);
+            axes[12] =
+                new VertexPositionColor(
+                    new Vector3(0.3f, axisLength + 0.2f, 0), color1d);
+            axes[13] =
+                new VertexPositionColor(
+                    new Vector3(0.4f, axisLength + 0.35f, 0), color1d);
+            axes[14] =
+                new VertexPositionColor(
+                    new Vector3(0.3f, axisLength + 0.2f, 0), color1d);
+            axes[15] =
+                new VertexPositionColor(
+                    new Vector3(0.3f, axisLength + 0.05f, 0), color1d);
+            axes[16] =
+                new VertexPositionColor(
+                    new Vector3(0, 0.1f, axisLength + 0.4f), color2d);
+            axes[17] =
+                new VertexPositionColor(
+                    new Vector3(0, 0.4f, axisLength + 0.4f), color2d);
+            axes[18] =
+                new VertexPositionColor(
+                    new Vector3(0, 0.4f, axisLength + 0.4f), color2d);
+            axes[19] =
+                new VertexPositionColor(
+                    new Vector3(0, 0.1f, axisLength + 0.2f), color2d);
+            axes[20] =
+                new VertexPositionColor(
+                    new Vector3(0, 0.1f, axisLength + 0.2f), color2d);
+            axes[21] =
+                new VertexPositionColor(
+                    new Vector3(0, 0.4f, axisLength + 0.2f), color2d);
+            if (GraphicsDeviceManager.Current.RenderMode != RenderMode.Hardware)
+                return;
 
             var g = GraphicsDeviceManager.Current.GraphicsDevice;
-            _axesVertexBuffer = new VertexBuffer(g, typeof (VertexPositionColor), NumberOfVerts, BufferUsage.WriteOnly);
+            _axesVertexBuffer = new VertexBuffer(g, typeof (VertexPositionColor),
+                NumberOfVerts, BufferUsage.WriteOnly);
             _axesVertexBuffer.SetData(axes);
-            _arrowsVertexBuffer = new VertexBuffer(g, typeof (VertexPositionColor), NumberOfVertsArrows,
+            _arrowsVertexBuffer = new VertexBuffer(g,
+                typeof (VertexPositionColor), NumberOfVertsArrows,
                 BufferUsage.WriteOnly);
             _arrowsVertexBuffer.SetData(arrows);
         }

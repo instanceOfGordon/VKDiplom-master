@@ -36,13 +36,12 @@ namespace VKDiplom
         private readonly TextureStyle _textureStyle = TextureStyle.HeightColored;
         private bool _isLeftMouseButtonDown;
         // Scenes
-        private Scene _firstDerScene;
         private Derivation _focusedDrawingSurface = Derivation.Zero;
         private Scene _functionScene; //= new Scene();
         private Dictionary<string, SplineFactory> _hermiteChoices;
         private Dictionary<string, KnotsGeneratorFactory> _knotsChoices;
         private Point _previousMousePosition;
-        private Scene _secondDerScene;
+
         private readonly bool _isSoftwareRendered = false;
         public List<ShapeComboBoxItem> ShapesComboBoxItems { get; } 
         //private readonly double _scaleTresholdToDefault;
@@ -63,8 +62,7 @@ namespace VKDiplom
         private void ScenesAction(Action<Scene> action)
         {
             action(_functionScene);
-            action(_firstDerScene);
-            action(_secondDerScene);
+
         }
 
         private void ColorCheckBox_OnChecked(object sender, RoutedEventArgs e)
@@ -80,114 +78,6 @@ namespace VKDiplom
             var checkBox = sender as CheckBox;
             if (checkBox == null || ColorSlider == null) return;
             if (checkBox.IsChecked.HasValue) ColorSlider.IsEnabled = true;       
-        }
-
-        private void FocusDrawingSurface_OnClick(object sender, MouseEventArgs e)
-        {
-            var icon = sender as Image;
-            if (icon == null) return;
-            if (icon.Equals(FDxDyIcon))
-            {
-                FocusFunctionDrawingSurface();
-            }
-            else if (icon.Equals(DxFDyIcon))
-            {             
-                FocusFirstDerivationDrawingSurface();
-            }
-            else if (icon.Equals(DyDxFIcon))
-            {
-                FocusSecondDerivation();
-            }
-               
-            // MessageBox.Show("Aleluja");
-        }
-
-        // FDxDy
-        private void FocusFunctionDrawingSurface()
-        {
-            FxBackground.Background = PurpleBrush;
-            DFxBackground.Background = TransparentBrush;
-            DDFxBackground.Background = TransparentBrush;
-
-            switch (_focusedDrawingSurface)
-            {
-                case Derivation.XY: // DxFDy
-                    FunctionDrawingSurface.Draw -= FirstDerivationDrawingSurface_OnDraw;
-                    FirstDerivationDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
-
-                    FunctionDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
-                    FirstDerivationDrawingSurface.Draw += FirstDerivationDrawingSurface_OnDraw;
-                    break;
-                case Derivation.SecondXY: // DyDxF
-                    FunctionDrawingSurface.Draw -= SecondDerivationDrawingSurface_OnDraw;
-                    SecondDerivationDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
-
-                    FunctionDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
-                    SecondDerivationDrawingSurface.Draw += SecondDerivationDrawingSurface_OnDraw;
-                    break;
-            }
-
-            _focusedDrawingSurface = Derivation.Zero;
-        }
-
-        // DxFDy
-        private void FocusFirstDerivationDrawingSurface()
-        {
-            FxBackground.Background = TransparentBrush;
-            DFxBackground.Background = PurpleBrush;
-            DDFxBackground.Background = TransparentBrush;
-
-            switch (_focusedDrawingSurface)
-            {
-                case Derivation.Zero: // FDxDy
-                    FunctionDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
-                    FirstDerivationDrawingSurface.Draw -= FirstDerivationDrawingSurface_OnDraw;
-
-                    FunctionDrawingSurface.Draw += FirstDerivationDrawingSurface_OnDraw;
-                    FirstDerivationDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
-                    break;
-                case Derivation.SecondXY: //DyDxF
-                    FunctionDrawingSurface.Draw -= SecondDerivationDrawingSurface_OnDraw;
-                    FirstDerivationDrawingSurface.Draw -= FirstDerivationDrawingSurface_OnDraw;
-                    SecondDerivationDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
-
-                    FunctionDrawingSurface.Draw += FirstDerivationDrawingSurface_OnDraw;
-                    FirstDerivationDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
-                    SecondDerivationDrawingSurface.Draw += SecondDerivationDrawingSurface_OnDraw;
-                    break;
-            }
-
-            _focusedDrawingSurface = Derivation.XY;
-        }
-
-        // DyDxF
-        private void FocusSecondDerivation()
-        {
-            FxBackground.Background = TransparentBrush;
-            DFxBackground.Background = TransparentBrush;
-            DDFxBackground.Background = PurpleBrush;
-
-            switch (_focusedDrawingSurface)
-            {
-                case Derivation.Zero: // FDxDy
-                    FunctionDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
-                    SecondDerivationDrawingSurface.Draw -= SecondDerivationDrawingSurface_OnDraw;
-
-                    FunctionDrawingSurface.Draw += SecondDerivationDrawingSurface_OnDraw; 
-                    SecondDerivationDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
-                    break;
-                case Derivation.XY: // DxFDy
-                    FunctionDrawingSurface.Draw -= FirstDerivationDrawingSurface_OnDraw;
-                    FirstDerivationDrawingSurface.Draw -= FunctionDrawingSurface_OnDraw;
-                    SecondDerivationDrawingSurface.Draw -= SecondDerivationDrawingSurface_OnDraw;
-
-                    FunctionDrawingSurface.Draw += SecondDerivationDrawingSurface_OnDraw;
-                    FirstDerivationDrawingSurface.Draw += FirstDerivationDrawingSurface_OnDraw;
-                    SecondDerivationDrawingSurface.Draw += FunctionDrawingSurface_OnDraw;
-                    break;
-            }
-
-            _focusedDrawingSurface = Derivation.SecondXY;
         }
 
         private void InterpolationTypeComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
