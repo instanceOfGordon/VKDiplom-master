@@ -84,11 +84,11 @@ ComparisonBenchmarkResult CurveBenchmark(int num_iterations, int num_knots,
 		full_times.push_back(time);
 	}
 
-	auto full_time = std::accumulate(full_times.begin(), full_times.end(), 0);
-		/// num_iterations;
-	auto reduced_time = std::accumulate(reduced_times.begin(),
-		reduced_times.end(), 0);
-		/// num_iterations;
+	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), full_times.end(), 0))
+		/num_iterations;
+	auto reduced_time = static_cast<double>(std::accumulate(reduced_times.begin(),
+		reduced_times.end(), 0))
+		/num_iterations;
 	std::cout << "Ignore " << calculated_results[0] << std::endl;
 	return ComparisonBenchmarkResult(full_time, reduced_time);
 }
@@ -105,6 +105,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots,
 	splineknots::ReducedDeBoorKnotsGenerator reduced(function, optimized_lu);
 	full.InParallel(in_parallel);
 	reduced.InParallel(in_parallel);
+	num_knots = num_knots % 2 == 0 ? num_knots + 1 : num_knots;
 	const splineknots::SurfaceDimension udimension(-3, 3, num_knots);
 	const splineknots::SurfaceDimension vdimension(udimension);
 
@@ -133,7 +134,7 @@ ComparisonBenchmarkResult SurfaceBenchmark(int num_iterations, int num_knots,
 		reduced_times.push_back(time);
 	}
 
-	auto full_time = static_cast<double>(std::accumulate(full_times.begin(), 
+	auto full_time = static_cast<double>(std::accumulate(full_times.begin(),
 		full_times.end(), 0))
 		/ static_cast<double>(num_iterations);
 	auto reduced_time = static_cast<double>(std::accumulate(

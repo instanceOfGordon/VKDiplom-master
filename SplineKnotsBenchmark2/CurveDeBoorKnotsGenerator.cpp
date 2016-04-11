@@ -34,7 +34,7 @@ void splineknots::CurveDeboorKnotsGenerator::
 RightSide(const KnotVector& knots, double h, double dfirst, double dlast)
 {
 	auto& rhs = tridiagonal_.RightSideBuffer();
-		int num_unknowns = knots.size() - 2;
+	int num_unknowns = knots.size() - 2;
 	auto mu1 = 3 / h;
 	for (int i = 0; i < num_unknowns; i++)
 	{

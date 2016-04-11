@@ -10,38 +10,41 @@
 #include "StopWatch.h"
 #include <forward_list>
 
-void MulVsDiv::ResetArrays(const int length, double* a, double* b, double& 
-	ignoreit)
+void 
+MulVsDiv::ResetArrays(const int length, double* a, double* b, double& ignoreit)
 {
 	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
-	for (size_t i = 0; i < length; i++)
+	for(size_t i = 0; i < length; i++)
 	{
 		a[i] = 6 * ((double)rand() / (RAND_MAX)) + 2;
 		b[i] = 2 * ((double)rand() / (RAND_MAX)) + 1;
 	}
 	ignoreit += a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
-	ignoreit = 1/ignoreit;
+	ignoreit = 1 / ignoreit;
 }
 
-void MulVsDiv::ResetMatrix(const int rows, const int columns, double** matrix, double& ignoreit)
+void
+MulVsDiv::ResetMatrix(const int rows, const int columns, double** matrix, 
+	double& ignoreit)
 {
 	ignoreit += matrix[(rand() % (int)(rows))][(rand() % (int)(columns))];
-	
-	for (size_t i = 0; i < rows; i++)
+
+	for(size_t i = 0; i < rows; i++)
 	{
-		for (size_t j = 0; j < columns; j++)
+		for(size_t j = 0; j < columns; j++)
 		{
-			matrix[i][j]= 2 * ((double)rand() / (RAND_MAX)) + 1;
+			matrix[i][j] = 2 * ((double)rand() / (RAND_MAX)) + 1;
 		}
 	}
 	ignoreit += matrix[(rand() % (int)(rows))][(rand() % (int)(columns))];
 	ignoreit = 1 / ignoreit;
 }
 
-void MulVsDiv::ResetList(const int length,std::forward_list<double>& list, double& ignoreit)
+void
+MulVsDiv::ResetList(const int length, std::forward_list<double>& list, double& ignoreit)
 {
 	list.clear();
-	for (size_t i = 0; i < length; i++)
+	for(size_t i = 0; i < length; i++)
 	{
 		list.push_front(6 * ((double)rand() / (RAND_MAX)) + 2);
 	}
@@ -49,12 +52,13 @@ void MulVsDiv::ResetList(const int length,std::forward_list<double>& list, doubl
 	ignoreit = 1 / ignoreit;
 }
 
-void MulVsDiv::Loop()
+void
+MulVsDiv::Loop()
 {
 	StopWatch sw;
 
 	const int length = 512;
-	const int loops = 1e6/2;
+	const int loops = 1e6 / 2;
 	std::cout << "Simple loop:\n---" << std::endl;
 	double a[length], b[length], c[length];
 	//double d[length], e[length], f[length], g[length];
@@ -66,7 +70,7 @@ void MulVsDiv::Loop()
 	ResetArrays(length, f, g, ignoreit);
 	ResetArrays(length, g, x, ignoreit);*/
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 		// MSVC cannot vectorize this loop (message 1300).
 		// However, if this loop will not be nested in, autovectorization will 
@@ -77,7 +81,7 @@ void MulVsDiv::Loop()
 		// this method
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] + b[i];// +d[i] + e[i] +f[i] + g[i] + d1[i] + e1[i] + f1[i] + g1[i] + x[i];
 		}
@@ -89,11 +93,11 @@ void MulVsDiv::Loop()
 	ResetArrays(length, a, b, ignoreit);
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			a[i] = c[i] * b[i];
 		}
@@ -105,11 +109,11 @@ void MulVsDiv::Loop()
 	ResetArrays(length, a, b, ignoreit);
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			b[i] = a[i] / c[i];
 		}
@@ -117,18 +121,18 @@ void MulVsDiv::Loop()
 	sw.Stop();
 	auto div_time = sw.EllapsedTime();
 	ignoreit -= c[(rand() % static_cast<int>(length))];
-	ignoreit += a[(rand() % static_cast<int>(length))] + b[(rand() % 
+	ignoreit += a[(rand() % static_cast<int>(length))] + b[(rand() %
 		static_cast<int>(length))];
 	std::cout << "Division: " << div_time << std::endl;
 	ignoreit -= a[(rand() % static_cast<int>(length))];
 	ResetArrays(length, a, b, ignoreit);
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = 1 / a[i];
 		}
@@ -148,7 +152,8 @@ void MulVsDiv::Loop()
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-void MulVsDiv::ArrayAndNumberLoop()
+void
+MulVsDiv::ArrayAndNumberLoop()
 {
 	StopWatch sw;
 
@@ -159,9 +164,9 @@ void MulVsDiv::ArrayAndNumberLoop()
 	auto ignoreit = 0.0;
 	b = 6 * ((double)rand() / (RAND_MAX)) + 2;
 	ResetArrays(length, a, c, ignoreit);
-	
+
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 		// MSVC cannot vectorize this loop (message 1300).
 		// However, if this loop will not be nested in, autovectorization will 
@@ -172,7 +177,7 @@ void MulVsDiv::ArrayAndNumberLoop()
 		// this method
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] + b;
 		}
@@ -184,11 +189,11 @@ void MulVsDiv::ArrayAndNumberLoop()
 	ResetArrays(length, a, c, ignoreit);
 	b = 6 * ((double)rand() / (RAND_MAX)) + 2;
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			a[i] = c[i] * b;
 		}
@@ -200,11 +205,11 @@ void MulVsDiv::ArrayAndNumberLoop()
 	ResetArrays(length, a, c, ignoreit);
 	b = 6 * ((double)rand() / (RAND_MAX)) + 2;
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] / b;
 		}
@@ -221,19 +226,20 @@ void MulVsDiv::ArrayAndNumberLoop()
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-void MulVsDiv::LoopVectorized()
+void
+MulVsDiv::LoopVectorized()
 {
 	const int length = 256;
 	const int loops = 1e6;
 	std::cout << "Vectorized loop:\n---" << std::endl;
-	double a[length], b[length],c[length];
+	double a[length], b[length], c[length];
 	auto ignoreit = 0.0;
 
 	ResetArrays(length, a, b, ignoreit);
 	int l = 0;
 	auto start = clock();
 add:
-	for (int i = 0; i < length; i++)
+	for(int i = 0; i < length; i++)
 	{
 		b[i] = a[i] + c[i];
 	}
@@ -241,7 +247,7 @@ add:
 	// computation to vectorize) as mentioned on line 23 in function 'Loop'.
 	// However if nested loop is replaced with this nasty workaround SIMD 
 	// vectorization will happen. Same condition apply for mul/div/rcp loops
-	while (l < loops)
+	while(l < loops)
 	{
 		++l;
 		goto add;
@@ -254,11 +260,11 @@ add:
 	l = 0;
 	start = clock();
 mul:
-	for (int i = 0; i < length; ++i)
+	for(int i = 0; i < length; ++i)
 	{
 		c[i] = a[i] * b[i];
 	}
-	while (l < loops)
+	while(l < loops)
 	{
 		++l;
 		goto mul;
@@ -271,11 +277,11 @@ mul:
 	l = 0;
 	start = clock();
 div:
-	for (int i = 0; i < length; ++i)
+	for(int i = 0; i < length; ++i)
 	{
 		a[i] = c[i] / b[i];
 	}
-	while (l < loops)
+	while(l < loops)
 	{
 		++l;
 		goto div;
@@ -291,11 +297,12 @@ div:
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-void MulVsDiv::DynamicArrayLoop()
+void
+MulVsDiv::DynamicArrayLoop()
 {
 	StopWatch sw;
 	const int length = 512;
-	const int loops = 1e6/2;
+	const int loops = 1e6 / 2;
 	std::cout << "Dynamic array loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length), cv(length);
 	//std::vector<double> dv(length), ev(length), fv(length), gv(length);
@@ -311,7 +318,7 @@ void MulVsDiv::DynamicArrayLoop()
 	//ResetArrays(length, g, x, ignoreit);
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 		// MSVC doesn't vectorize nested loops (message 1300 - too little 
 		// computation to vectorize) as mentioned on line 23 in function 'Loop'.
@@ -323,7 +330,7 @@ void MulVsDiv::DynamicArrayLoop()
 		// this method
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] + b[i];// *d[i] + (b[i] + d[i])*a[i];// +d[i] + e[i] + f[i] + g[i] + d1[i] + e1[i] + f1[i] + g1[i] + x[i];
 		}
@@ -336,11 +343,11 @@ void MulVsDiv::DynamicArrayLoop()
 	ignoreit /= c[(rand() % (int)(length))];
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] * b[i];// *d[i] * e[i] * f[i] * g[i] * d1[i] * e1[i] * f1[i] * g1[i] * x[i];
 		}
@@ -352,11 +359,11 @@ void MulVsDiv::DynamicArrayLoop()
 	ResetArrays(length, a, b, ignoreit);
 	ignoreit -= c[(rand() % (int)(length))];
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = b[i] / a[i];// / d[i] / e[i] / f[i] / g[i] / d1[i] / e1[i] / f1[i] / g1[i] / x[i];
 		}
@@ -370,11 +377,11 @@ void MulVsDiv::DynamicArrayLoop()
 	ResetArrays(length, a, b, ignoreit);
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = 1 / a[i];
 		}
@@ -394,11 +401,12 @@ void MulVsDiv::DynamicArrayLoop()
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-void MulVsDiv::DynamicListLoop()
+void
+MulVsDiv::DynamicListLoop()
 {
 	StopWatch sw;
 	const int length = 512;
-	const int loops = 1e6/2;
+	const int loops = 1e6 / 2;
 	std::cout << "Dynamic list loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length);
 	double *a = &av.front(), *b = &bv.front();
@@ -407,10 +415,10 @@ void MulVsDiv::DynamicListLoop()
 
 	ResetArrays(length, a, b, ignoreit);
 	ResetList(length, cl, ignoreit);
-	
-	
+
+
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 		// MSVC doesn't vectorize nested loops (message 1300 - too little 
 		// computation to vectorize) as mentioned on line 23 in function 'Loop'.
@@ -423,7 +431,7 @@ void MulVsDiv::DynamicListLoop()
 #pragma novector
 #pragma loop( no_vector )
 		int i = 0;
-		for (auto& c : cl)
+		for(auto& c : cl)
 		{
 			c = a[i] + b[i];
 			++i;
@@ -439,12 +447,12 @@ void MulVsDiv::DynamicListLoop()
 	ignoreit /= *it;
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
 		int i = 0;
-		for (auto& c : cl)
+		for(auto& c : cl)
 		{
 			c = a[i] * b[i];
 			++i;
@@ -459,12 +467,12 @@ void MulVsDiv::DynamicListLoop()
 	std::advance(it, (rand() % (int)(length)));
 	ignoreit /= *it;
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
 		int i = 0;
-		for (auto& c : cl)
+		for(auto& c : cl)
 		{
 			c = b[i] / a[i];
 			++i;
@@ -483,12 +491,12 @@ void MulVsDiv::DynamicListLoop()
 	std::advance(it, (rand() % (int)(length)));
 	ignoreit /= *it;
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
 		int i = 0;
-		for (auto& c : cl)
+		for(auto& c : cl)
 		{
 			c = 1.0 / a[i];
 			++i;
@@ -510,7 +518,8 @@ void MulVsDiv::DynamicListLoop()
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-void MulVsDiv::DynamicArrayAndNumberLoop()
+void
+MulVsDiv::DynamicArrayAndNumberLoop()
 {
 	StopWatch sw;
 	const int length = 512;
@@ -525,7 +534,7 @@ void MulVsDiv::DynamicArrayAndNumberLoop()
 	ResetArrays(length, a, c, ignoreit);
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 		// MSVC doesn't vectorize nested loops (message 1300 - too little 
 		// computation to vectorize) as mentioned on line 23 in function 'Loop'.
@@ -537,7 +546,7 @@ void MulVsDiv::DynamicArrayAndNumberLoop()
 		// this method
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] + b;// +d[i] + e[i] + f[i] + g[i] + d1[i] + e1[i] + f1[i] + g1[i] + x[i];
 		}
@@ -551,11 +560,11 @@ void MulVsDiv::DynamicArrayAndNumberLoop()
 	ignoreit /= c[(rand() % (int)(length))];
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = a[i] * b;// *d[i] * e[i] * f[i] * g[i] * d1[i] * e1[i] * f1[i] * g1[i] * x[i];
 		}
@@ -567,11 +576,11 @@ void MulVsDiv::DynamicArrayAndNumberLoop()
 	ResetArrays(length, a, c, ignoreit);
 	ignoreit -= c[(rand() % (int)(length))];
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			c[i] = b / a[i];// / d[i] / e[i] / f[i] / g[i] / d1[i] / e1[i] / f1[i] / g1[i] / x[i];
 		}
@@ -585,13 +594,13 @@ void MulVsDiv::DynamicArrayAndNumberLoop()
 	ResetArrays(length, a, c, ignoreit);
 	ignoreit -= c[(rand() % (int)(length))];
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
-			c[i] =  a[i]/b;// / d[i] / e[i] / f[i] / g[i] / d1[i] / e1[i] / f1[i] / g1[i] / x[i];
+			c[i] = a[i] / b;// / d[i] / e[i] / f[i] / g[i] / d1[i] / e1[i] / f1[i] / g1[i] / x[i];
 		}
 	}
 	sw.Stop();
@@ -608,8 +617,8 @@ void MulVsDiv::DynamicArrayAndNumberLoop()
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-
-void MulVsDiv::DynamicArrayLoopVectorized()
+void
+MulVsDiv::DynamicArrayLoopVectorized()
 {
 	const int length = 256;
 	const int loops = 1e6;
@@ -623,7 +632,7 @@ void MulVsDiv::DynamicArrayLoopVectorized()
 	int l = 0;
 	auto start = clock();
 add:
-	for (int i = 0; i < length; i++)
+	for(int i = 0; i < length; i++)
 	{
 		c[i] = a[i] + b[i];
 	}
@@ -631,7 +640,7 @@ add:
 	// computation to vectorize) in function 'DynamicArrayLoop'. However if 
 	// nested loop is replaced with this nasty workaround SIMD vectorization 
 	// will happen. Same condition apply for mul/div/rcp loops
-	while (l < loops)
+	while(l < loops)
 	{
 		++l;
 		goto add;
@@ -644,11 +653,11 @@ add:
 	l = 0;
 	start = clock();
 mul:
-	for (int i = 0; i < length; ++i)
+	for(int i = 0; i < length; ++i)
 	{
 		c[i] = a[i] * b[i];
 	}
-	while (l < loops)
+	while(l < loops)
 	{
 		++l;
 		goto mul;
@@ -661,11 +670,11 @@ mul:
 	l = 0;
 	start = clock();
 div:
-	for (int i = 0; i < length; ++i)
+	for(int i = 0; i < length; ++i)
 	{
 		c[i] = a[i] / b[i];
 	}
-	while (l < loops)
+	while(l < loops)
 	{
 		++l;
 		goto div;
@@ -682,7 +691,8 @@ div:
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-void MulVsDiv::CsabaDynamicArrayLoop()
+void
+MulVsDiv::CsabaDynamicArrayLoop()
 {
 	const int length = 256;//1024 *1024* 8;
 	const int loops = 1e6;//1e3 / 2;
@@ -692,10 +702,10 @@ void MulVsDiv::CsabaDynamicArrayLoop()
 	auto ignoreit = 0.0;
 
 	ResetArrays(length, a, b, ignoreit);
-	auto idx1 = (rand() % static_cast<int>(length)), idx2 = (rand() % 
-		static_cast<int>(length-1));
+	auto idx1 = (rand() % static_cast<int>(length)), idx2 = (rand() %
+		static_cast<int>(length - 1));
 	auto start = clock();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 		// MSVC cannot vectorize this loop (message 1300).
 		// However, if this loop will not be nested in, autovectorization will 
@@ -706,7 +716,7 @@ void MulVsDiv::CsabaDynamicArrayLoop()
 		// this method
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 1; i < length-1; ++i)
+		for(int i = 1; i < length - 1; ++i)
 		{
 			a[i] = b[idx1] + b[idx2];
 		}
@@ -714,145 +724,373 @@ void MulVsDiv::CsabaDynamicArrayLoop()
 	auto add_time = clock() - start;
 	std::cout << "Addition: " << add_time << std::endl;
 
-	ignoreit += a[(rand() % static_cast<int>(length))] + b[(rand() % 
+	ignoreit += a[(rand() % static_cast<int>(length))] + b[(rand() %
 		static_cast<int>(length))];
 
-	idx1 = (rand() % static_cast<int>(length)), idx2 = (rand() % 
+	idx1 = (rand() % static_cast<int>(length)) , idx2 = (rand() %
 		static_cast<int>(length));
 
 	start = clock();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length-1; ++i)
+		for(int i = 0; i < length - 1; ++i)
 		{
-			a[i] =b[idx1] * b[idx2];
+			a[i] = b[idx1] * b[idx2];
 		}
 	}
 	auto mul_time = clock() - start;
 	std::cout << "Multiplication: " << mul_time << std::endl;
 
-	ignoreit += a[(rand() % static_cast<int>(length))] + b[(rand() % 
+	ignoreit += a[(rand() % static_cast<int>(length))] + b[(rand() %
 		static_cast<int>(length))];
-	idx1 = (rand() % static_cast<int>(length)), idx2 = (rand() % 
+	idx1 = (rand() % static_cast<int>(length)) , idx2 = (rand() %
 		static_cast<int>(length));
 	start = clock();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
 #pragma novector
 #pragma loop( no_vector )
-		for (int i = 0; i < length; ++i)
+		for(int i = 0; i < length; ++i)
 		{
 			a[i] = b[idx1] / b[idx2];
 		}
 	}
 	auto div_time = clock() - start;
-	ignoreit += a[(rand() % static_cast<int>(length))] + b[(rand() % 
+	ignoreit += a[(rand() % static_cast<int>(length))] + b[(rand() %
 		static_cast<int>(length))];
 	std::cout << "Division: " << div_time << std::endl;
-	std::cout << "Addition faster than multiplication: " << 
-		static_cast<double>(mul_time) / static_cast<double>(add_time) << 
+	std::cout << "Addition faster than multiplication: " <<
+		static_cast<double>(mul_time) / static_cast<double>(add_time) <<
 		std::endl;
-	std::cout << "Multiplication faster than division: " << 
-		static_cast<double>(div_time) / static_cast<double>(mul_time) << 
+	std::cout << "Multiplication faster than division: " <<
+		static_cast<double>(div_time) / static_cast<double>(mul_time) <<
 		std::endl;
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-void MulVsDiv::DependendDynamicArrayLoop()
+void
+MulVsDiv::BackwardDependendDynamicArrayLoop()
 {
 	const int length = 512;
-	const int loops = 1e6;
-	std::cout << "Dependend dynamic loop:\n---" << std::endl;
+	const int loops = 1e6 / 2;
+	std::cout << "Backward dependend dynamic loop:\n---" << std::endl;
 	std::vector<double> av(length), bv(length);
 	double *a = &av.front(), *b = &bv.front();
-	
+
 	std::vector<long> add_times;
 	std::vector<long> mul_times;
 	std::vector<long> div_times;
 	add_times.reserve(loops);
 	mul_times.reserve(loops);
 	div_times.reserve(loops);
-	unsigned long long ignoreit[]{0,0,0};
-	
-	for (size_t i = 0; i < length; i++)
+	auto ignoreit = 0.0;
+
+	for(size_t i = 0; i < length; i++)
 	{
 		av[i] = 8 * (static_cast<double>(rand()) / (RAND_MAX)) + 1;
-		bv[i] = DBL_MIN;
+		bv[i] = DBL_MIN ;
 	}
 
 	//Division
-	
-	for (size_t i = 0; i < loops; i++)
+
+	for(size_t i = 0; i < loops; i++)
 	{
 		auto start = clock();
-		for (size_t j = 0; j < length-1; j++)
+		for(size_t j = 1; j < length; j++)
 		{
-			b[j] = a[j + 1] / a[j];
+			a[j] = a[j] / a[j - 1];
 		}
 		auto finish = clock();
 		div_times.push_back(finish - start);
-		
-		ignoreit[0] += std::accumulate(bv.begin(), bv.end(), 0);
+
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
+		//ignoreit[0] += std::accumulate(bv.begin(), bv.end(), 0);
 	}
-	
+
 	auto div_time = static_cast<double>(std::accumulate(div_times.begin(),
 		div_times.end(), 0));
 	std::cout << "Division:\t\t" << div_time << std::endl;
 	//Multiplication
-	
-	for (size_t i = 0; i < loops; i++)
+
+	for(size_t i = 0; i < loops; i++)
 	{
 		auto start = clock();
-		for (size_t j = 0; j < length - 1; j++)
+		for(size_t j = 1; j < length; j++)
 		{
-			b[j] = a[j + 1] * a[j];
+			a[j] = a[j] * a[j - 1];
 		}
 		auto finish = clock();
 		mul_times.push_back(finish - start);
-		ignoreit[1] += std::accumulate(bv.begin(),bv.end(), 0);
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
 	}
-	
+
 	auto mul_time = static_cast<double>(std::accumulate(mul_times.begin(),
 		mul_times.end(), 0));
 	std::cout << "Multiplication:\t\t" << mul_time << std::endl;
 	//Addition
-	
+
+	for(size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for(size_t j = 1; j < length; j++)
+		{
+			a[j] = a[j] + a[j - 1];
+		}
+		auto finish = clock();
+		add_times.push_back(finish - start);
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
+	}
+
+	auto add_time = static_cast<double>(std::accumulate(add_times.begin(),
+		add_times.end(), 0));
+	std::cout << "Addition:\t\t" << add_time << std::endl;
+
+	std::cout << "Addition faster than multiplication:\t" <<
+		static_cast<double>(mul_time) / static_cast<double>(add_time) <<
+		std::endl;
+	std::cout << "Multiplication faster than division:\t" <<
+		static_cast<double>(div_time) / static_cast<double>(mul_time) <<
+		std::endl;
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
+}
+
+void
+MulVsDiv::ForwardDependendDynamicArrayLoop()
+{
+	const int length = 512;
+	const int loops = 1e6 / 2;
+	std::cout << "Forward dependend dynamic loop:\n---" << std::endl;
+	std::vector<double> av(length), bv(length);
+	double *a = &av.front(), *b = &bv.front();
+
+	std::vector<long> add_times;
+	std::vector<long> mul_times;
+	std::vector<long> div_times;
+	add_times.reserve(loops);
+	mul_times.reserve(loops);
+	div_times.reserve(loops);
+	auto ignoreit = 0.0;
+
+	for(size_t i = 0; i < length; i++)
+	{
+		av[i] = 8 * (static_cast<double>(rand()) / (RAND_MAX)) + 1;
+		bv[i] = DBL_MIN ;
+	}
+
+	//Division
+
+	for(size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for(size_t j = 0; j < length-1; j++)
+		{
+			a[j] = a[j] / a[j + 1];
+		}
+		auto finish = clock();
+		div_times.push_back(finish - start);
+
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
+		//ignoreit[0] += std::accumulate(bv.begin(), bv.end(), 0);
+	}
+
+	auto div_time = static_cast<double>(std::accumulate(div_times.begin(),
+		div_times.end(), 0));
+	std::cout << "Division:\t\t" << div_time << std::endl;
+	//Multiplication
+
+	for(size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 0; j < length - 1; j++)
+		{
+			a[j] = a[j] * a[j + 1];
+		}
+		auto finish = clock();
+		mul_times.push_back(finish - start);
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
+	}
+
+	auto mul_time = static_cast<double>(std::accumulate(mul_times.begin(),
+		mul_times.end(), 0));
+	std::cout << "Multiplication:\t\t" << mul_time << std::endl;
+	//Addition
+
 	for (size_t i = 0; i < loops; i++)
 	{
 		auto start = clock();
 		for (size_t j = 0; j < length - 1; j++)
 		{
-			b[j] = a[j + 1] + a[j];
+			a[j] = a[j]+ a[j + 1];
 		}
 		auto finish = clock();
 		add_times.push_back(finish - start);
-		ignoreit[2] += std::accumulate(bv.begin(), bv.end(), 0);
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
 	}
-	
-	auto add_time = static_cast<double>(std::accumulate(add_times.begin(), 
+
+	auto add_time = static_cast<double>(std::accumulate(add_times.begin(),
 		add_times.end(), 0));
 	std::cout << "Addition:\t\t" << add_time << std::endl;
 
-	std::cout << "Addition faster than multiplication:\t" << 
-		static_cast<double>(mul_time) / static_cast<double>(add_time) << 
+	std::cout << "Addition faster than multiplication:\t" <<
+		static_cast<double>(mul_time) / static_cast<double>(add_time) <<
 		std::endl;
-	std::cout << "Multiplication faster than division:\t" << 
-		static_cast<double>(div_time) / static_cast<double>(mul_time) << 
+	std::cout << "Multiplication faster than division:\t" <<
+		static_cast<double>(div_time) / static_cast<double>(mul_time) <<
 		std::endl;
-	std::cout << "Just ignore it: " << ignoreit[0]<< ignoreit[1]<< ignoreit[2] 
-		<< std::endl << std::endl;
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 }
 
-void MulVsDiv::MemCpy()
+void
+MulVsDiv::DependendDynamicArrayLoop()
+{
+	
+	const int length = 512;
+	const int loops = 1e6 / 4;
+	std::cout << "Dependend dynamic loop:\n---" << std::endl;
+	std::vector<double> av(length);
+	double *a = &av.front();
+
+	std::vector<long> add_times;
+	std::vector<long> mul_times;
+	std::vector<long> div_times;
+	add_times.reserve(2*loops);
+	mul_times.reserve(2*loops);
+	div_times.reserve(2*loops);
+	
+	auto ignoreit = 0.0;
+
+	for (size_t i = 0; i < length; i++)
+	{
+		av[i] = 8 * (static_cast<double>(rand()) / (RAND_MAX)) + 1;
+	}
+	//  Backward  ///////////////////////////////////////////////////////////////////////
+	
+	//Division
+
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 1; j < length; j++)
+		{
+			a[j] = a[j] / a[j - 1];
+		}
+		auto finish = clock();
+		div_times.push_back(finish - start);
+
+		ignoreit += a[(rand() % static_cast<int>(length))] / 16;
+		//ignoreit[0] += std::accumulate(bv.begin(), bv.end(), 0);
+	}
+
+	//Multiplication
+
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 1; j < length; j++)
+		{
+			a[j] = a[j] * a[j - 1];
+		}
+		auto finish = clock();
+		mul_times.push_back(finish - start);
+		ignoreit += a[(rand() % static_cast<int>(length))] / 16;
+	}
+
+	//Addition
+
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 1; j < length; j++)
+		{
+			a[j] = a[j] + a[j - 1];
+		}
+		auto finish = clock();
+		add_times.push_back(finish - start);
+		ignoreit += a[(rand() % static_cast<int>(length))] / 16;
+	}
+
+	//  Forward  ///////////////////////////////////////////////////////////////////////
+
+	for (size_t i = 0; i < length; i++)
+	{
+		av[i] = 8 * (static_cast<double>(rand()) / (RAND_MAX)) + 1;
+		
+	}
+
+	//Division
+
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 0; j < length - 1; j++)
+		{
+			a[j] = a[j] / a[j + 1];
+		}
+		auto finish = clock();
+		div_times.push_back(finish - start);
+
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
+	}
+
+	auto div_time = static_cast<double>(std::accumulate(div_times.begin(),
+		div_times.end(), 0));
+	std::cout << "Division:\t\t" << div_time << std::endl;
+	//Multiplication
+
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 0; j < length - 1; j++)
+		{
+			a[j] = a[j] * a[j + 1];
+		}
+		auto finish = clock();
+		mul_times.push_back(finish - start);
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
+	}
+
+	auto mul_time = static_cast<double>(std::accumulate(mul_times.begin(),
+		mul_times.end(), 0));
+	std::cout << "Multiplication:\t\t" << mul_time << std::endl;
+	//Addition
+
+	for (size_t i = 0; i < loops; i++)
+	{
+		auto start = clock();
+		for (size_t j = 0; j < length - 1; j++)
+		{
+			a[j] = a[j] + a[j + 1];
+		}
+		auto finish = clock();
+		add_times.push_back(finish - start);
+		ignoreit += a[(rand() % static_cast<int>(length))] / 8;
+	}
+
+	auto add_time = static_cast<double>(std::accumulate(add_times.begin(),
+		add_times.end(), 0));
+	std::cout << "Addition:\t\t" << add_time << std::endl;
+
+	std::cout << "Addition faster than multiplication:\t" <<
+		static_cast<double>(mul_time) / static_cast<double>(add_time) <<
+		std::endl;
+	std::cout << "Multiplication faster than division:\t" <<
+		static_cast<double>(div_time) / static_cast<double>(mul_time) <<
+		std::endl;
+	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
+}
+
+
+void
+MulVsDiv::MemCpy()
 {
 #pragma optimize("", off)
 	StopWatch sw;
 	const int length = 512;
 	const int loops = 1e6 / 2;
 	std::cout << "Memory copy loop:\n---" << std::endl;
-	std::vector<double> av(length), bv(length), cv(length*2);
+	std::vector<double> av(length), bv(length), cv(length * 2);
 	double *a = &av.front(), *b = &bv.front(), *c = &cv.front();
 	auto ignoreit = 0.0;
 
@@ -860,42 +1098,43 @@ void MulVsDiv::MemCpy()
 
 	ignoreit /= a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	sw.Start();
-//#pragma optimize("", off)
-	for (size_t l = 0; l < loops; l++)
+	//#pragma optimize("", off)
+	for(size_t l = 0; l < loops; l++)
 	{
 		memcpy(a, b, length);
 	}
-//#pragma optimize("", on)
+	//#pragma optimize("", on)
 	sw.Stop();
 	auto con_time = sw.EllapsedTime();
-	std::cout << "Continuous: " << con_time << std::endl;
-	ignoreit /= a[(rand() % (int)(length))]+b[(rand() % (int)(length))];
+	std::cout << "Continuous:\t\t" << con_time << std::endl;
+	ignoreit /= a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	ResetArrays(length, a, b, ignoreit);
 	ignoreit /= a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 
 	sw.Start();
-	for (size_t l = 0; l < loops; l++)
+	for(size_t l = 0; l < loops; l++)
 	{
-//#pragma optimize("", off)
-		for (int i = 0,k=0; i < length; ++i,k+=2)
+		//#pragma optimize("", off)
+		for(int i = 0, k = 0; i < length; ++i , k += 2)
 		{
 			c[k] = a[i];
 		}
-//#pragma optimize("", on)
+		//#pragma optimize("", on)
 	}
 	sw.Stop();
 	ignoreit /= a[(rand() % (int)(length))] + b[(rand() % (int)(length))];
 	auto uncon_time = sw.EllapsedTime();
-	std::cout << "Uncontinuous: " << uncon_time << std::endl;
+	std::cout << "Uncontinuous:\t\t" << uncon_time << std::endl;
 
 
 	std::cout << "Just ignore it: " << ignoreit << std::endl << std::endl;
 #pragma optimize("", on)
 }
 
-void MulVsDiv::BenchAll()
+void
+MulVsDiv::BenchAll()
 {
-	Loop();
+	//Loop();
 	//ArrayAndNumberLoop();
 	//LoopVectorized();
 	//DynamicArrayLoop();	
@@ -903,7 +1142,9 @@ void MulVsDiv::BenchAll()
 	//DynamicListLoop();
 	MemCpy();
 	//DynamicArrayLoopVectorized();
-	//DependendDynamicArrayLoop();
+	//ForwardDependendDynamicArrayLoop();
+	//BackwardDependendDynamicArrayLoop();
+	DependendDynamicArrayLoop();
 	//CsabaDynamicArrayLoop();
 }
 
