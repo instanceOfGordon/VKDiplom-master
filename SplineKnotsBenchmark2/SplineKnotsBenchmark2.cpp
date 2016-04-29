@@ -156,25 +156,26 @@ int main()
 	bool optimized_tridiagonals = true;
 	while (true)
 	{
-		std::cout << clock();
+		//std::cout << clock();
 		// Console clear ...
 		// ... for Windows, 
 		system("cls");
 		// ... for Linux/Unix. 
 		//system("clear");
-		std::cout << "1: Multiplication vs division benchmark." << std::endl;
+		std::cout << "1: Instructions benchmark." << std::endl;
 		std::cout << "2: Spline curve benchmark." << std::endl;
 		std::cout << "3: Spline surface benchmark." << std::endl;
 		std::cout << "4: Spline surface benchmark (in parallel)." << std::endl;
 		//std::cout << "5: Compare Csaba T. vs. Vilo K. LU decomposition." << 
 			//std::endl;
-		std::cout << "B: Disable/enable optimized LU decomposition in benchmarks." 
-			<< std::endl;
+		//std::cout << "B: Disable/enable optimized LU decomposition in benchmarks." 
+		//	<< std::endl;
 		//std::cout << "B: Enable/disable Vilo Kacala LU decomposition in benchmarks." 
 		//<< std::endl;
 		std::cout << "Q: End program" << std::endl;
 		char input;
 		std::cin >> input;
+		std::cin.get();
 		std::cout << std::endl << "---------------" << std::endl;
 		unsigned int num_iterations;
 		unsigned int num_knots;
@@ -182,7 +183,7 @@ int main()
 		switch (input)
 		{
 		case '1':		
-			std::cout << "Multiplication vs division benchmark" << std::endl <<
+			std::cout << "Instructions benchmark" << std::endl <<
 				std::endl;
 			MulDivBenchmark();
 			break;
@@ -226,7 +227,7 @@ int main()
 		case 'q':
 		case 'Q':
 			return 0;
-		case 'b':
+		/*case 'b':
 		case 'B':
 			optimized_tridiagonals = !optimized_tridiagonals;
 			if(optimized_tridiagonals)
@@ -237,7 +238,7 @@ int main()
 			{
 				std::cout << "Buffering is disabled." << std::endl;
 			}
-			break;
+			break;*/
 		}
 
 		std::cout << "===================" << std::endl;

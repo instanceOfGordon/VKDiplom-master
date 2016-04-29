@@ -43,15 +43,26 @@ public:
 
 	void
 	ForwardDependendDynamicArrayLoop();
+	
 	void
 	DependendDynamicArrayLoop();
+	
 	void
 	MemCpy();
 
+	void
+	ArithmeticInstructionParallelism();
+	
 	void
 	BenchAll();
 
 	MulVsDiv();
 
 	~MulVsDiv();
+
+private:
+	void
+	ArithmeticInstructionParallelismSingleOperand(double* add_time, double* mul_time, double* div_time);
+	void
+	ArithmeticInstructionParallelismTenOperands(double* add_time, double* mul_time, double* div_time);
 };
